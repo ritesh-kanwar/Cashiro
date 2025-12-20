@@ -1,0 +1,50 @@
+> Task :parser-core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :parser-core:compileKotlin UP-TO-DATE
+> Task :parser-core:compileJava NO-SOURCE
+> Task :parser-core:processResources NO-SOURCE
+> Task :parser-core:classes UP-TO-DATE
+> Task :parser-core:jar UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preStandardDebugBuild UP-TO-DATE
+> Task :app:generateStandardDebugBuildConfig
+> Task :app:checkStandardDebugAarMetadata
+> Task :app:processStandardDebugNavigationResources
+> Task :app:compileStandardDebugNavigationResources
+> Task :app:generateStandardDebugResValues
+> Task :app:mapStandardDebugSourceSetPaths
+> Task :app:generateStandardDebugResources
+> Task :app:mergeStandardDebugResources
+> Task :app:packageStandardDebugResources
+> Task :app:createStandardDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksStandardDebug
+> Task :app:parseStandardDebugLocalResources
+
+> Task :app:processStandardDebugMainManifest
+C:\Users\HP\AndroidStudioProjects\pennywiseai-tracker\app\src\main\AndroidManifest.xml:22:5-99 Warning:
+	uses-permission#com.google.android.gms.permission.AD_ID was tagged at AndroidManifest.xml:22 to remove other declarations but no other declaration present
+
+> Task :app:processStandardDebugManifest
+> Task :app:processStandardDebugManifestForPackage
+> Task :app:processStandardDebugResources
+> Task :app:kspStandardDebugKotlin
+> Task :app:compileStandardDebugKotlin
+e: file:///C:/Users/HP/AndroidStudioProjects/pennywiseai-tracker/app/src/main/java/com/ritesh/cashiro/ui/MainScreen.kt:367:62 Unresolved reference 'drawable'.
+
+> Task :app:compileStandardDebugKotlin FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileStandardDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 4m 14s
+20 actionable tasks: 18 executed, 2 up-to-date

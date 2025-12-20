@@ -1,0 +1,207 @@
+package com.ritesh.cashiro.presentation.categories
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import com.ritesh.cashiro.data.database.entity.SubcategoryEntity
+import com.ritesh.cashiro.data.repository.CategoryRepository
+import com.ritesh.cashiro.data.repository.SubcategoryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+
+@HiltViewModel
+class CategoriesViewModel
+@Inject
+constructor(
+        private val categoryRepository: CategoryRepository,
+        private val subcategoryRepository: SubcategoryRepository
+) : ViewModel() {
+
+    // UI State
+    private val _uiState = MutableStateFlow(CategoriesUiState())
+    val uiState: StateFlow<CategoriesUiState> = _uiState.asStateFlow()
+
+    // Subcategories map (category ID -> list of subcategories)
+    private val _subcategories = MutableStateFlow<Map<Long, List<SubcategoryEntity>>>(emptyMap())
+    val subcategories: StateFlow<Map<Long, List<SubcategoryEntity>>> = _subcategories.asStateFlow()
+
+    // Categories list
+    val categories: StateFlow<List<CategoryEntity>> =
+            categoryRepository
+                    .getAllCategories()
+                    .stateIn(
+                            scope = viewModelScope,
+                            started = SharingStarted.WhileSubscribed(5000),
+                            initialValue = emptyList()
+                    )
+
+    init {
+        viewModelScope.launch {
+            subcategoryRepository.initializeDefaultSubcategories()
+
+            // Observe all subcategories
+            categories.collectLatest { categoryList ->
+                categoryList.forEach { category ->
+                    launch {
+                        subcategoryRepository.getSubcategoriesByCategoryId(category.id).collect {
+                                subList ->
+                            _subcategories.update { current -> current + (category.id to subList) }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Dialog states
+    private val _showAddEditDialog = MutableStateFlow(false)
+    val showAddEditDialog: StateFlow<Boolean> = _showAddEditDialog.asStateFlow()
+
+    private val _editingCategory = MutableStateFlow<CategoryEntity?>(null)
+    val editingCategory: StateFlow<CategoryEntity?> = _editingCategory.asStateFlow()
+
+    // Snackbar message
+    private val _snackbarMessage = MutableStateFlow<String?>(null)
+    val snackbarMessage: StateFlow<String?> = _snackbarMessage.asStateFlow()
+
+    // Subcategory Dialog states
+    private val _showSubcategoryDialog = MutableStateFlow(false)
+    val showSubcategoryDialog: StateFlow<Boolean> = _showSubcategoryDialog.asStateFlow()
+
+    private val _editingSubcategory = MutableStateFlow<SubcategoryEntity?>(null)
+    val editingSubcategory: StateFlow<SubcategoryEntity?> = _editingSubcategory.asStateFlow()
+
+    private val _targetCategoryId = MutableStateFlow<Long?>(null)
+    val targetCategoryId: StateFlow<Long?> = _targetCategoryId.asStateFlow()
+
+    fun showAddDialog() {
+        _editingCategory.value = null
+        _showAddEditDialog.value = true
+    }
+
+    fun showEditDialog(category: CategoryEntity) {
+        if (!category.isSystem) {
+            _editingCategory.value = category
+            _showAddEditDialog.value = true
+        } else {
+            _snackbarMessage.value = "System categories cannot be edited"
+        }
+    }
+
+    fun hideDialog() {
+        _showAddEditDialog.value = false
+        _editingCategory.value = null
+    }
+
+    fun showAddSubcategoryDialog(categoryId: Long) {
+        _targetCategoryId.value = categoryId
+        _editingSubcategory.value = null
+        _showSubcategoryDialog.value = true
+    }
+
+    fun showEditSubcategoryDialog(subcategory: SubcategoryEntity) {
+        _targetCategoryId.value = subcategory.categoryId
+        _editingSubcategory.value = subcategory
+        _showSubcategoryDialog.value = true
+    }
+
+    fun hideSubcategoryDialog() {
+        _showSubcategoryDialog.value = false
+        _editingSubcategory.value = null
+        _targetCategoryId.value = null
+    }
+
+    fun saveCategory(name: String, color: String, iconResId: Int, isIncome: Boolean) {
+        viewModelScope.launch {
+            try {
+                val editingCat = _editingCategory.value
+
+                if (editingCat != null) {
+                    // Update existing category
+                    categoryRepository.updateCategory(
+                            editingCat.copy(name = name, color = color, iconResId = iconResId, isIncome = isIncome)
+                    )
+                    _snackbarMessage.value = "Category updated successfully"
+                } else {
+                    // Check if category already exists
+                    if (categoryRepository.categoryExists(name)) {
+                        _snackbarMessage.value = "Category '$name' already exists"
+                        return@launch
+                    }
+
+                    // Create new category
+                    categoryRepository.createCategory(
+                            name = name,
+                            color = color,
+                            iconResId = iconResId,
+                            isIncome = isIncome
+                    )
+                    _snackbarMessage.value = "Category created successfully"
+                }
+
+                hideDialog()
+            } catch (e: Exception) {
+                _snackbarMessage.value = "Error saving category: ${e.message}"
+            }
+        }
+    }
+
+    fun deleteCategory(category: CategoryEntity) {
+        if (category.isSystem) {
+            _snackbarMessage.value = "System categories cannot be deleted"
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val deleted = categoryRepository.deleteCategory(category.id)
+                if (deleted) {
+                    _snackbarMessage.value = "Category deleted successfully"
+                } else {
+                    _snackbarMessage.value = "Cannot delete this category"
+                }
+            } catch (e: Exception) {
+                _snackbarMessage.value = "Error deleting category: ${e.message}"
+            }
+        }
+    }
+
+    fun saveSubcategory(name: String) {
+        val categoryId = _targetCategoryId.value ?: return
+        val editingSub = _editingSubcategory.value
+
+        viewModelScope.launch {
+            try {
+                if (editingSub != null) {
+                    subcategoryRepository.updateSubcategory(editingSub.copy(name = name))
+                    _snackbarMessage.value = "Subcategory updated"
+                } else {
+                    subcategoryRepository.createSubcategory(categoryId, name)
+                    _snackbarMessage.value = "Subcategory added"
+                }
+                hideSubcategoryDialog()
+            } catch (e: Exception) {
+                _snackbarMessage.value = "Error saving subcategory: ${e.message}"
+            }
+        }
+    }
+
+    fun deleteSubcategory(subcategory: SubcategoryEntity) {
+        viewModelScope.launch {
+            try {
+                subcategoryRepository.deleteSubcategory(subcategory)
+                _snackbarMessage.value = "Subcategory deleted"
+            } catch (e: Exception) {
+                _snackbarMessage.value = "Error deleting subcategory: ${e.message}"
+            }
+        }
+    }
+
+    fun clearSnackbarMessage() {
+        _snackbarMessage.value = null
+    }
+}
+
+data class CategoriesUiState(val isLoading: Boolean = false, val errorMessage: String? = null)

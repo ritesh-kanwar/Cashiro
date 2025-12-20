@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pennywiseai.tracker"
+    namespace = "com.ritesh.cashiro"
     compileSdk = 36
     
     buildFeatures {
@@ -18,7 +18,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.pennywiseai.tracker"
+        applicationId = "com.ritesh.cashiro"
         minSdk = 30
         targetSdk = 36
         versionCode = 78
@@ -105,7 +105,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            
+            signingConfig = signingConfigs.getByName("debug")
+
             // Only apply signing config to standard flavor
             for (flavor in productFlavors) {
                 if (flavor.name == "standard") {
@@ -155,12 +156,14 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.material.icons.extended)
     
     // Material Icons Extended
     implementation(libs.androidx.compose.material.icons.extended)
     
     // Color Picker for Compose
     implementation(libs.colorpicker.compose)
+    implementation(libs.haze)
     
     // Splash Screen API
     implementation(libs.androidx.core.splashscreen)
@@ -192,6 +195,7 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.compose.material3)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     
