@@ -26,6 +26,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.ritesh.cashiro.R
 
 /** Hilt module that provides database-related dependencies. */
 @Module
@@ -209,46 +210,187 @@ object DatabaseModule {
     }
 }
 
+// /** Database callback to seed initial data when database is first created */
+// class DatabaseCallback : RoomDatabase.Callback() {
+//     override fun onCreate(db: SupportSQLiteDatabase) {
+//         super.onCreate(db)
+
+//         // Seed default categories for new installations
+//         CoroutineScope(Dispatchers.IO).launch { seedCategories(db) }
+//     }
+
+//     private fun seedCategories(db: SupportSQLiteDatabase) {
+//         val categories =
+//                 listOf(
+//                         Triple("Food & Dining", "#FC8019", false),
+//                         Triple("Groceries", "#5AC85A", false),
+//                         Triple("Transportation", "#000000", false),
+//                         Triple("Shopping", "#FF9900", false),
+//                         Triple("Bills & Utilities", "#4CAF50", false),
+//                         Triple("Entertainment", "#E50914", false),
+//                         Triple("Healthcare", "#10847E", false),
+//                         Triple("Investments", "#00D09C", false),
+//                         Triple("Banking", "#004C8F", false),
+//                         Triple("Personal Care", "#6A4C93", false),
+//                         Triple("Education", "#673AB7", false),
+//                         Triple("Mobile", "#2A3890", false),
+//                         Triple("Fitness", "#FF3278", false),
+//                         Triple("Insurance", "#0066CC", false),
+//                         Triple("Travel", "#00BCD4", false),
+//                         Triple("Salary", "#4CAF50", true),
+//                         Triple("Income", "#4CAF50", true),
+//                         Triple("Others", "#757575", false)
+//                 )
+
+//         categories.forEachIndexed { index, (name, color, isIncome) ->
+//             db.execSQL(
+//                     """
+//                 INSERT OR IGNORE INTO categories (name, color, is_system, is_income, display_order, created_at, updated_at)
+//                 VALUES (?, ?, 1, ?, ?, datetime('now'), datetime('now'))
+//             """.trimIndent(),
+//                     arrayOf<Any>(name, color, if (isIncome) 1 else 0, index + 1)
+//             )
+//         }
+//     }
+// }
 /** Database callback to seed initial data when database is first created */
 class DatabaseCallback : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
-
-        // Seed default categories for new installations
-        CoroutineScope(Dispatchers.IO).launch { seedCategories(db) }
+        // Seed default categories and subcategories for new installations
+        CoroutineScope(Dispatchers.IO).launch { 
+            seedCategories(db)
+            seedSubcategories(db)
+        }
     }
-
     private fun seedCategories(db: SupportSQLiteDatabase) {
-        val categories =
-                listOf(
-                        Triple("Food & Dining", "#FC8019", false),
-                        Triple("Groceries", "#5AC85A", false),
-                        Triple("Transportation", "#000000", false),
-                        Triple("Shopping", "#FF9900", false),
-                        Triple("Bills & Utilities", "#4CAF50", false),
-                        Triple("Entertainment", "#E50914", false),
-                        Triple("Healthcare", "#10847E", false),
-                        Triple("Investments", "#00D09C", false),
-                        Triple("Banking", "#004C8F", false),
-                        Triple("Personal Care", "#6A4C93", false),
-                        Triple("Education", "#673AB7", false),
-                        Triple("Mobile", "#2A3890", false),
-                        Triple("Fitness", "#FF3278", false),
-                        Triple("Insurance", "#0066CC", false),
-                        Triple("Travel", "#00BCD4", false),
-                        Triple("Salary", "#4CAF50", true),
-                        Triple("Income", "#4CAF50", true),
-                        Triple("Others", "#757575", false)
-                )
-
-        categories.forEachIndexed { index, (name, color, isIncome) ->
+        val categories = listOf(
+            CategoryData(
+                name = "Food & Drinks",
+                description = "Eating out, Swiggy, Zomato etc.",
+                iconResId = R.drawable.type_food_stuffed_flatbread,
+                color = "#FC8019",
+                isIncome = false,
+                displayOrder = 1
+            ),
+            CategoryData(
+                name = "Transport",
+                description = "Uber, Ola and other modes of transport.",
+                iconResId = R.drawable.type_travel_transport_luggage,
+                color = "#0066CC",
+                isIncome = false,
+                displayOrder = 2
+            ),
+            CategoryData(
+                name = "Shopping",
+                description = "Clothes, shoes, furnitures etc.",
+                iconResId = R.drawable.type_shopping_shopping_bags,
+                color = "#2A3890",
+                isIncome = false,
+                displayOrder = 3
+            )
+        )
+        categories.forEach { cat ->
             db.execSQL(
-                    """
-                INSERT OR IGNORE INTO categories (name, color, is_system, is_income, display_order, created_at, updated_at)
-                VALUES (?, ?, 1, ?, ?, datetime('now'), datetime('now'))
+                """
+                INSERT OR IGNORE INTO categories (
+                    name, color, icon_res_id, description, is_system, is_income, display_order,
+                    default_name, default_color, default_icon_res_id, default_description,
+                    created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
             """.trimIndent(),
-                    arrayOf<Any>(name, color, if (isIncome) 1 else 0, index + 1)
+                arrayOf<Any>(
+                    cat.name, cat.color, cat.iconResId, cat.description, 
+                    if (cat.isIncome) 1 else 0, cat.displayOrder,
+                    cat.name, cat.color, cat.iconResId, cat.description
+                )
             )
         }
     }
+    private fun seedSubcategories(db: SupportSQLiteDatabase) {
+        // Get category IDs
+        val foodCategoryId = getCategoryId(db, "Food & Drinks")
+        val transportCategoryId = getCategoryId(db, "Transport")
+        val shoppingCategoryId = getCategoryId(db, "Shopping")
+        // Food & Drinks subcategories
+        val foodSubcategories = listOf(
+            "Eating out", "Take Away", "Tea & Coffee", "Fast Food", "Snacks",
+            "Swiggy", "Zomato", "Sweets", "Liquor", "Beverages",
+            "Date", "Pizza", "Tiffin", "Others"
+        )
+        
+        foodSubcategories.forEach { name ->
+            insertSubcategory(
+                db, foodCategoryId, name,
+                R.drawable.type_food_stuffed_flatbread,
+                "#FC8019"
+            )
+        }
+        // Transport subcategories
+        val transportSubcategories = listOf(
+            "Uber", "Rapido", "Auto", "Cab", "Train", "Metro", "Bus", "Bike",
+            "Fuel", "EV Charge", "Flight", "Parking", "FASTag", "Tolls",
+            "Lounge", "Fine", "Others"
+        )
+        
+        transportSubcategories.forEach { name ->
+            insertSubcategory(
+                db, transportCategoryId, name,
+                R.drawable.type_travel_transport_luggage,
+                "#0066CC"
+            )
+        }
+        // Shopping subcategories
+        val shoppingSubcategories = listOf(
+            "Clothes", "Footwear", "Electronics", "Festival", "Video games",
+            "Books", "Plants", "Jewellery", "Furniture", "Appliances",
+            "Utensils", "Vehicle", "Cosmetics", "Toys", "Stationery",
+            "Glasses", "Devotional", "Others"
+        )
+        
+        shoppingSubcategories.forEach { name ->
+            insertSubcategory(
+                db, shoppingCategoryId, name,
+                R.drawable.type_shopping_shopping_bags,
+                "#2A3890"
+            )
+        }
+    }
+    private fun getCategoryId(db: SupportSQLiteDatabase, categoryName: String): Long {
+        val cursor = db.query("SELECT id FROM categories WHERE name = ?", arrayOf(categoryName))
+        return if (cursor.moveToFirst()) {
+            cursor.getLong(0).also { cursor.close() }
+        } else {
+            cursor.close()
+            -1L
+        }
+    }
+    private fun insertSubcategory(
+        db: SupportSQLiteDatabase,
+        categoryId: Long,
+        name: String,
+        iconResId: Int,
+        color: String
+    ) {
+        db.execSQL(
+            """
+            INSERT OR IGNORE INTO subcategories (
+                category_id, name, icon_res_id, color, is_system,
+                default_name, default_icon_res_id, default_color,
+                created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, 1, ?, ?, ?, datetime('now'), datetime('now'))
+        """.trimIndent(),
+            arrayOf<Any>(categoryId, name, iconResId, color, name, iconResId, color)
+        )
+    }
+    private data class CategoryData(
+        val name: String,
+        val description: String,
+        val iconResId: Int,
+        val color: String,
+        val isIncome: Boolean,
+        val displayOrder: Int
+    )
 }

@@ -3,7 +3,9 @@ package com.ritesh.cashiro.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +17,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ritesh.cashiro.data.database.entity.CategoryEntity
 import com.ritesh.cashiro.R
+import androidx.core.graphics.toColorInt
 
 @Composable
 fun CategoryChip(
     category: CategoryEntity,
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     showText: Boolean = true
 ) {
     Row(
@@ -28,30 +32,50 @@ fun CategoryChip(
         horizontalArrangement = Arrangement.Start
     ) {
         val iconResId = if (category.iconResId != 0) category.iconResId else R.drawable.type_food_dining
-        
-        Icon(
-            painter = painterResource(id = iconResId),
-            contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .background(
-                    color = parseColor(category.color),
-                    shape = CircleShape
+        if (onClick != null) {
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier.size(44.dp).
+                background(
+                    color = parseColor(category.color).copy(alpha = 0.2f),
+                    shape = RoundedCornerShape(16.dp)
                 )
-                .padding(4.dp),
-            tint = Color.Unspecified
-        )
+            ) {
+                Icon(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(34.dp)
+                        .padding(4.dp),
+                    tint = Color.Unspecified
+                )
+            }
+        }
+
         
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(16.dp))
         
         // Category name
         if (showText) {
-            Text(
-                text = category.name,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = category.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = category.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
         }
     }
 }
@@ -115,7 +139,7 @@ fun CategoryChip(
 private fun parseColor(colorString: String): Color {
     return try {
         val cleanColor = if (colorString.startsWith("#")) colorString else "#$colorString"
-        Color(android.graphics.Color.parseColor(cleanColor))
+        Color(cleanColor.toColorInt())
     } catch (e: Exception) {
         // Fallback to grey if color parsing fails
         Color(0xFF757575)

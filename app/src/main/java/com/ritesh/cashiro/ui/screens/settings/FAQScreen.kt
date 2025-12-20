@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.components.SectionHeader
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
@@ -186,7 +186,7 @@ fun FAQScreen(
                 faqCategories.forEachIndexed { categoryIndex, category ->
                     SectionHeader(title = category.title)
 
-                    PennyWiseCard(
+                    CashiroCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column {
@@ -275,7 +275,7 @@ fun FAQScreen(
             item {SectionHeader(title = "Still Need Help?")}
             
             item{
-                PennyWiseCard(
+                CashiroCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {

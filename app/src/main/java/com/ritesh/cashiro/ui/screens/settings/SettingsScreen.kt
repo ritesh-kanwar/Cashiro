@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ritesh.cashiro.core.Constants
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.components.SectionHeader
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
@@ -32,7 +32,6 @@ import com.ritesh.cashiro.ui.viewmodel.ThemeViewModel
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.haze
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import dev.chrisbanes.haze.hazeSource
 
@@ -123,7 +122,7 @@ fun SettingsScreen(
             // Theme Settings Section
             SectionHeader(title = "Appearance")
         
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -169,7 +168,7 @@ fun SettingsScreen(
         // Security Section
         SectionHeader(title = "Security")
 
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -254,7 +253,7 @@ fun SettingsScreen(
         SectionHeader(title = "Data Management")
         
         // Manage Accounts
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onNavigateToManageAccounts() }
@@ -298,7 +297,7 @@ fun SettingsScreen(
         }
         
         // Categories
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onNavigateToCategories() }
@@ -342,7 +341,7 @@ fun SettingsScreen(
         }
 
         // Smart Rules
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onNavigateToRules() }
@@ -386,7 +385,7 @@ fun SettingsScreen(
         }
         
         // Export Data
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { settingsViewModel.exportBackup() }
@@ -430,7 +429,7 @@ fun SettingsScreen(
         }
         
         // Import Data
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { 
@@ -476,7 +475,7 @@ fun SettingsScreen(
         }
         
         // SMS Scan Period
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { showSmsScanDialog = true }
@@ -522,7 +521,7 @@ fun SettingsScreen(
         // AI Features Section
         SectionHeader(title = "AI Features")
         
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -683,7 +682,7 @@ fun SettingsScreen(
         if (unreportedCount > 0) {
             SectionHeader(title = "Help Improve PennyWise")
             
-            PennyWiseCard(
+            CashiroCard(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { 
                     Log.d("SettingsScreen", "Navigating to UnrecognizedSms screen")
@@ -733,7 +732,7 @@ fun SettingsScreen(
         // Developer Section
         SectionHeader(title = "Developer")
         
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -767,7 +766,7 @@ fun SettingsScreen(
         
         val context = LocalContext.current
         
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column {

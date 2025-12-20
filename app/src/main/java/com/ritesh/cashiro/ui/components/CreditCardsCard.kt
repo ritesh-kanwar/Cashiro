@@ -46,7 +46,7 @@ fun CreditCardsCard(
         creditCards.take(4)
     }
 
-    PennyWiseCard(
+    CashiroCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Column(

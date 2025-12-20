@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
@@ -353,6 +354,28 @@ private fun ActionForLargeTopAppBar(
                 )
             }
         }
+        if (title == "Categories") {
+            Box(
+                modifier = Modifier
+                    .padding(end = 24.dp)
+                    .size(40.dp)
+                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
+                    .clickable(
+                        onClick = { },
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+
+                        ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.MoreHoriz,
+                    contentDescription = "More option",
+                    tint = MaterialTheme.colorScheme.inverseSurface,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
     }
 }
 
@@ -551,6 +574,29 @@ private fun RegularTopAppBar(
                         Icon(
                             imageVector = Icons.Rounded.Settings,
                             contentDescription = "Edit Profile",
+                            tint = MaterialTheme.colorScheme.inverseSurface,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+
+                if (title == "Categories") {
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 24.dp)
+                            .size(40.dp)
+                            .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
+                            .clickable(
+                                onClick = { },
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+
+                                ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.MoreHoriz,
+                            contentDescription = "More option",
                             tint = MaterialTheme.colorScheme.inverseSurface,
                             modifier = Modifier.size(24.dp)
                         )

@@ -34,7 +34,7 @@ import com.ritesh.cashiro.data.database.entity.TransactionType
 import java.math.BigDecimal
 import com.ritesh.cashiro.ui.components.BrandIcon
 import com.ritesh.cashiro.ui.components.CategoryChip
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
 import com.ritesh.cashiro.utils.CurrencyFormatter
@@ -310,7 +310,7 @@ private fun TransactionHeader(
     primaryCurrency: String,
     convertedAmount: BigDecimal?
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -383,7 +383,7 @@ private fun TransactionHeader(
 
 @Composable
 private fun SmsBodyCard(smsBody: String) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -430,7 +430,7 @@ private fun SmsBodyCard(smsBody: String) {
 
 @Composable
 private fun ExtractedInfoCard(transaction: TransactionEntity) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -509,7 +509,7 @@ private fun ExtractedInfoCard(transaction: TransactionEntity) {
 
 @Composable
 private fun AdditionalDetailsCard(viewModel: TransactionDetailViewModel, transaction: TransactionEntity) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -626,7 +626,7 @@ private fun EditableTransactionHeader(
     transaction: TransactionEntity,
     viewModel: TransactionDetailViewModel
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -768,7 +768,7 @@ private fun EditableExtractedInfoCard(
     existingTransactionCount: Int,
     viewModel: TransactionDetailViewModel
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(

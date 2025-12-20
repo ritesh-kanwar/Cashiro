@@ -49,7 +49,7 @@ import com.ritesh.cashiro.ui.theme.*
 import com.ritesh.cashiro.ui.components.SummaryCard
 import com.ritesh.cashiro.ui.components.ListItemCard
 import com.ritesh.cashiro.ui.components.SectionHeader
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.components.UnifiedAccountsCard
 import com.ritesh.cashiro.ui.components.spotlightTarget
 import com.ritesh.cashiro.utils.CurrencyFormatter
@@ -60,10 +60,7 @@ import java.time.format.DateTimeFormatter
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import android.content.Intent
-import android.net.Uri
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.haze
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
@@ -280,7 +277,7 @@ fun HomeScreen(
                 }
             } else if (uiState.recentTransactions.isEmpty()) {
                 item {
-                    PennyWiseCard(
+                    CashiroCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Box(

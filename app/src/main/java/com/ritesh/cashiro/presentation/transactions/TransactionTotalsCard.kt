@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.theme.*
 import com.ritesh.cashiro.utils.CurrencyFormatter
 import java.math.BigDecimal
@@ -50,7 +50,7 @@ fun TransactionTotalsCard(
         label = "net_alpha"
     )
     
-    PennyWiseCard(
+    CashiroCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Column(

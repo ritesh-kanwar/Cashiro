@@ -14,10 +14,10 @@ import com.ritesh.cashiro.ui.theme.Spacing
  * Base card component with consistent styling
  */
 @Composable
-fun PennyWiseCard(
+fun CashiroCard(
     modifier: Modifier = Modifier,
     containerColor: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
@@ -26,14 +26,16 @@ fun PennyWiseCard(
         Card(
             modifier = modifier,
             onClick = onClick,
-            colors = containerColor
+            colors = containerColor,
+            shape = MaterialTheme.shapes.large
         ) {
             content()
         }
     } else {
         Card(
             modifier = modifier,
-            colors = containerColor
+            colors = containerColor,
+            shape = MaterialTheme.shapes.large
         ) {
             content()
         }
@@ -56,7 +58,7 @@ fun SummaryCard(
     amountColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onPrimaryContainer,
     onClick: (() -> Unit)? = null
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = modifier.fillMaxWidth(),
         containerColor = containerColor,
         onClick = onClick
@@ -106,7 +108,7 @@ fun ListItemCard(
     trailingContent: @Composable (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = modifier.fillMaxWidth(),
         onClick = onClick
     ) {

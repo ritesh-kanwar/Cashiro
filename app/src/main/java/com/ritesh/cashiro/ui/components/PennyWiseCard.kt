@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Shape
 import com.ritesh.cashiro.ui.theme.Spacing
 
 @Composable
-fun PennyWiseCard(
+fun CashiroCard(
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
     colors: CardColors = CardDefaults.cardColors(),

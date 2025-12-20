@@ -59,11 +59,12 @@ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
                         RuleApplicationEntity::class,
                         ExchangeRateEntity::class,
                         SubcategoryEntity::class],
-        version = 29,
+        version = 30,
         exportSchema = true,
         autoMigrations = [
             AutoMigration(from = 27, to = 28),
-            AutoMigration(from = 28, to = 29)
+            AutoMigration(from = 28, to = 29),
+            AutoMigration(from = 29, to = 30, spec = Migration29To30::class)
         ]
 )
 @TypeConverters(Converters::class)
@@ -105,7 +106,8 @@ abstract class CashiroDatabase : RoomDatabase() {
                                                 MIGRATION_14_15,
                                                 MIGRATION_20_21,
                                                 MIGRATION_21_22,
-                                                MIGRATION_22_23
+                                                MIGRATION_22_23,
+                                                MIGRATION_29_30
                                         )
                                         .build()
                         INSTANCE = instance
@@ -516,5 +518,40 @@ class Migration10To11 : AutoMigrationSpec {
                 AND account_number IS NOT NULL
         """.trimIndent()
         )
+    }
+}
+
+/**
+ * Manual migration from version 29 to 30.
+ * Adds new fields to categories and subcategories tables for enhanced functionality.
+ */
+val MIGRATION_29_30 = object : Migration(29, 30) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // Add new columns to categories table
+        db.execSQL("ALTER TABLE categories ADD COLUMN description TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE categories ADD COLUMN default_name TEXT")
+        db.execSQL("ALTER TABLE categories ADD COLUMN default_color TEXT")
+        db.execSQL("ALTER TABLE categories ADD COLUMN default_icon_res_id INTEGER")
+        db.execSQL("ALTER TABLE categories ADD COLUMN default_description TEXT")
+        
+        // Add new columns to subcategories table
+        db.execSQL("ALTER TABLE subcategories ADD COLUMN icon_res_id INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE subcategories ADD COLUMN color TEXT NOT NULL DEFAULT '#757575'")
+        db.execSQL("ALTER TABLE subcategories ADD COLUMN is_system INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE subcategories ADD COLUMN default_name TEXT")
+        db.execSQL("ALTER TABLE subcategories ADD COLUMN default_icon_res_id INTEGER")
+        db.execSQL("ALTER TABLE subcategories ADD COLUMN default_color TEXT")
+    }
+}
+
+/**
+ * Migration from version 29 to 30.
+ * AutoMigrationSpec to handle any post-migration data updates.
+ */
+class Migration29To30 : AutoMigrationSpec {
+    override fun onPostMigrate(db: SupportSQLiteDatabase) {
+        super.onPostMigrate(db)
+        // Post-migration updates if needed
+        // Default values are already set in the entity definitions
     }
 }

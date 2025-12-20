@@ -82,12 +82,9 @@ constructor(
     }
 
     fun showEditDialog(category: CategoryEntity) {
-        if (!category.isSystem) {
-            _editingCategory.value = category
-            _showAddEditDialog.value = true
-        } else {
-            _snackbarMessage.value = "System categories cannot be edited"
-        }
+        // Allow editing system categories now (they can be edited but not deleted)
+        _editingCategory.value = category
+        _showAddEditDialog.value = true
     }
 
     fun hideDialog() {
@@ -113,7 +110,7 @@ constructor(
         _targetCategoryId.value = null
     }
 
-    fun saveCategory(name: String, color: String, iconResId: Int, isIncome: Boolean) {
+    fun saveCategory(name: String, description: String, color: String, iconResId: Int, isIncome: Boolean) {
         viewModelScope.launch {
             try {
                 val editingCat = _editingCategory.value
@@ -121,7 +118,13 @@ constructor(
                 if (editingCat != null) {
                     // Update existing category
                     categoryRepository.updateCategory(
-                            editingCat.copy(name = name, color = color, iconResId = iconResId, isIncome = isIncome)
+                            editingCat.copy(
+                                name = name,
+                                description = description,
+                                color = color,
+                                iconResId = iconResId,
+                                isIncome = isIncome
+                            )
                     )
                     _snackbarMessage.value = "Category updated successfully"
                 } else {
@@ -134,6 +137,7 @@ constructor(
                     // Create new category
                     categoryRepository.createCategory(
                             name = name,
+                            description = description,
                             color = color,
                             iconResId = iconResId,
                             isIncome = isIncome
@@ -144,6 +148,17 @@ constructor(
                 hideDialog()
             } catch (e: Exception) {
                 _snackbarMessage.value = "Error saving category: ${e.message}"
+            }
+        }
+    }
+
+    fun resetCategory(categoryId: Long) {
+        viewModelScope.launch {
+            try {
+                categoryRepository.resetCategoryToDefault(categoryId)
+                _snackbarMessage.value = "Category reset to default"
+            } catch (e: Exception) {
+                _snackbarMessage.value = "Error resetting category: ${e.message}"
             }
         }
     }
@@ -168,17 +183,19 @@ constructor(
         }
     }
 
-    fun saveSubcategory(name: String) {
+    fun saveSubcategory(name: String, iconResId: Int, color: String) {
         val categoryId = _targetCategoryId.value ?: return
         val editingSub = _editingSubcategory.value
 
         viewModelScope.launch {
             try {
                 if (editingSub != null) {
-                    subcategoryRepository.updateSubcategory(editingSub.copy(name = name))
+                    subcategoryRepository.updateSubcategory(
+                        editingSub.copy(name = name, iconResId = iconResId, color = color)
+                    )
                     _snackbarMessage.value = "Subcategory updated"
                 } else {
-                    subcategoryRepository.createSubcategory(categoryId, name)
+                    subcategoryRepository.createSubcategory(categoryId, name, iconResId, color)
                     _snackbarMessage.value = "Subcategory added"
                 }
                 hideSubcategoryDialog()
@@ -188,11 +205,31 @@ constructor(
         }
     }
 
-    fun deleteSubcategory(subcategory: SubcategoryEntity) {
+    fun resetSubcategory(subcategoryId: Long) {
         viewModelScope.launch {
             try {
-                subcategoryRepository.deleteSubcategory(subcategory)
-                _snackbarMessage.value = "Subcategory deleted"
+                subcategoryRepository.resetSubcategoryToDefault(subcategoryId)
+                _snackbarMessage.value = "Subcategory reset to default"
+            } catch (e: Exception) {
+                _snackbarMessage.value = "Error resetting subcategory: ${e.message}"
+            }
+        }
+    }
+
+    fun deleteSubcategory(subcategory: SubcategoryEntity) {
+        if (subcategory.isSystem) {
+            _snackbarMessage.value = "System subcategories cannot be deleted"
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val deleted = subcategoryRepository.deleteSubcategory(subcategory)
+                if (deleted) {
+                    _snackbarMessage.value = "Subcategory deleted"
+                } else {
+                    _snackbarMessage.value = "Cannot delete this subcategory"
+                }
             } catch (e: Exception) {
                 _snackbarMessage.value = "Error deleting subcategory: ${e.message}"
             }

@@ -84,7 +84,6 @@ fun PermissionScreen(
                 .fillMaxSize()
                 .hazeSource(state = hazeState)
                 .overScrollVertical()
-                .verticalScroll(scrollState)
                 .padding(bottom = innerPadding.calculateBottomPadding())
                 .padding(
                     start = Spacing.lg,

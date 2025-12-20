@@ -10,6 +10,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -38,7 +40,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,10 +53,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import com.ritesh.cashiro.R
 import com.ritesh.cashiro.ui.components.SearchBarBox
 
@@ -85,12 +92,48 @@ fun CategoryIconSelector(
                 }
             }
 
+    val labels = listOf("Search Fruits", "Search Shopping", "Search Fitness", "Search Sports")
+    var currentLabelIndex by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(3000)
+            currentLabelIndex = (currentLabelIndex + 1) % labels.size
+        }
+    }
+
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         SearchBarBox(
                 searchQuery = searchQuery,
                 onSearchQueryChange = { searchQuery = it },
-                label = "Search icons...",
-                leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) }
+                label = {
+                    AnimatedContent(
+                            targetState = labels[currentLabelIndex],
+                            transitionSpec = {
+                                (fadeIn(animationSpec = tween(400, delayMillis = 100)) +
+                                        slideInVertically(
+                                                initialOffsetY = { it },
+                                                animationSpec = tween(400, delayMillis = 100)
+                                        ))
+                                        .togetherWith(
+                                                fadeOut(animationSpec = tween(400)) +
+                                                        slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(400))
+                                        )
+                            },
+                            label = "SearchBarLabelAnimation"
+                    ) { labelText ->
+                        Text(
+                                text = labelText,
+                                fontSize = 14.sp,
+                                lineHeight = 14.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.inverseSurface.copy(0.5f),
+                                modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -133,24 +176,18 @@ private fun CategoryIconFlowLayout(
         groupedIcons.forEach { (category, iconsInCategory) ->
             stickyHeader(key = "$category header") {
                 Box(
-                        modifier =
-                                Modifier.fillMaxWidth()
-                                        .background(
-                                                brush =
-                                                        Brush.verticalGradient(
-                                                                colors =
-                                                                        listOf(
-                                                                                themeColors.surface,
-                                                                                themeColors.surface
-                                                                                        .copy(
-                                                                                                alpha =
-                                                                                                        0.9f
-                                                                                        ),
-                                                                                Color.Transparent,
-                                                                        )
-                                                        )
-                                        )
-                                        .padding(vertical = 8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    themeColors.surface,
+                                    themeColors.surface.copy(alpha = 0.9f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                        .padding(vertical = 8.dp)
                 ) {
                     Text(
                             text = category.uppercase(),
@@ -192,32 +229,26 @@ private fun CategoryIconItemView(
 
     val animatedColor by
             infiniteTransition.animateColor(
-                    initialValue = themeColors.primary.copy(alpha = 0.5f),
-                    targetValue = themeColors.secondary.copy(alpha = 0.5f),
-                    animationSpec =
-                            infiniteRepeatable(
-                                    animation = tween(2000, easing = LinearEasing),
-                                    repeatMode = RepeatMode.Reverse
-                            ),
-                    label = "Selected Glow animation"
+                initialValue = themeColors.primary.copy(alpha = 0.5f),
+                targetValue = themeColors.secondary.copy(alpha = 0.5f),
+                animationSpec =
+                    infiniteRepeatable(
+                        animation = tween(2000, easing = LinearEasing),
+                        repeatMode = RepeatMode.Reverse
+                    ),
+                label = "Selected Glow animation"
             )
 
     Box(
         modifier = Modifier
             .then(
                 if (isSelected) {
-                    Modifier.shadow(
-                        8.dp,
-                        RoundedCornerShape(16.dp),
-                        spotColor = animatedColor
-                    )
-                } else { Modifier }
-            )
-            .size(64.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .then(
-                if (isSelected) {
-                    Modifier.border(
+                    Modifier
+                        .shadow(
+                            8.dp,
+                            RoundedCornerShape(16.dp),
+                            spotColor = animatedColor
+                        ).border(
                         2.dp,
                         animatedColor,
                         RoundedCornerShape(16.dp)
@@ -226,12 +257,15 @@ private fun CategoryIconItemView(
                     Modifier
                 }
             )
+            .size(64.dp)
+            .clip(RoundedCornerShape(16.dp))
+
             .clickable(onClick = onClick)
             .background(
-                color =
-                    if (isSelected)
-                        themeColors.primaryContainer.copy(alpha = 0.3f)
-                    else themeColors.surfaceVariant.copy(alpha = 0.5f),
+                color = themeColors.surfaceContainerLow,
+//                    if (isSelected)
+//                        themeColors.primaryContainer.copy(alpha = 0.3f)
+//                    else themeColors.surfaceVariant.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(16.dp)
             )
 

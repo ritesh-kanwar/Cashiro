@@ -154,7 +154,7 @@ private fun ExpandableBalanceChart(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { isExpanded = !isExpanded }
@@ -232,7 +232,7 @@ private fun CurrentBalanceCard(
 ) {
     val isCreditCard = creditLimit != null
     
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -310,7 +310,7 @@ private fun SummaryStatistics(
     primaryCurrency: String,
     hasMultipleCurrencies: Boolean = false
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -541,7 +541,7 @@ private fun TransactionItem(
 
 @Composable
 private fun EmptyTransactionsState() {
-    PennyWiseCard(
+    CashiroCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(

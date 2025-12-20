@@ -37,8 +37,6 @@ import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import androidx.compose.foundation.lazy.rememberLazyListState
-import android.content.Intent
-import android.net.Uri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -405,7 +403,7 @@ private fun EmptyAnalyticsState() {
             .padding(Dimensions.Padding.content),
         contentAlignment = Alignment.Center
     ) {
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(

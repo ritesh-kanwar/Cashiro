@@ -719,7 +719,7 @@ private fun EmptyTransactionsState(
             .padding(Dimensions.Padding.content),
         contentAlignment = Alignment.Center
     ) {
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(

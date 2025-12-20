@@ -5,6 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,15 +28,19 @@ import androidx.core.graphics.toColorInt
 import com.ritesh.cashiro.R
 import com.ritesh.cashiro.data.database.entity.CategoryEntity
 import com.ritesh.cashiro.ui.components.ColorPickerContent
+import com.ritesh.cashiro.ui.effects.overScrollVertical
+import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditCategorySheet(
         category: CategoryEntity?,
         onDismiss: () -> Unit,
-        onSave: (name: String, color: String, iconResId: Int, isIncome: Boolean) -> Unit
+        onSave: (name: String, description: String, color: String, iconResId: Int, isIncome: Boolean) -> Unit,
+        onReset: ((Long) -> Unit)? = null
 ) {
     var name by remember { mutableStateOf(category?.name ?: "") }
+    var description by remember { mutableStateOf(category?.description ?: "") }
     var colorHex by remember { mutableStateOf(category?.color ?: "#33B5E5") }
     var iconResId by remember {
         mutableIntStateOf(category?.iconResId ?: R.drawable.type_food_dining)
@@ -43,11 +49,12 @@ fun EditCategorySheet(
 
     var showIconSelector by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val lazyListState = rememberLazyListState()
 
     if (showIconSelector) {
         ModalBottomSheet(
                 onDismissRequest = { showIconSelector = false },
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+                sheetState = sheetState,
                 dragHandle = { BottomSheetDefaults.DragHandle() },
                 containerColor = MaterialTheme.colorScheme.surface
         ) {
@@ -61,117 +68,182 @@ fun EditCategorySheet(
         }
     }
 
-    Column(
-            modifier =
-                    Modifier.fillMaxWidth()
-                            .navigationBarsPadding()
-                            .padding(16.dp)
-                            .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+    LazyColumn(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .overScrollVertical()
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+        flingBehavior = rememberOverscrollFlingBehavior { lazyListState },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         // Preview Section
-        Column(
+        item{
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Box(
-                    modifier =
-                            Modifier.size(80.dp)
-                                    .clip(CircleShape)
-                                    .background(Color(colorHex.toColorInt()).copy(alpha = 0.2f))
-                                    .clickable { showIconSelector = true },
-                    contentAlignment = Alignment.Center
             ) {
-                Icon(
+                Box(
+                    modifier =
+                        Modifier.size(80.dp)
+                            .clickable { showIconSelector = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier =
+                            Modifier.size(80.dp)
+                                .clip(CircleShape)
+                                .background(Color(colorHex.toColorInt()).copy(alpha = 0.2f))
+                    )
+                    Icon(
                         painter = painterResource(id = iconResId),
                         contentDescription = null,
                         modifier = Modifier.size(40.dp),
                         tint = Color.Unspecified
-                )
+                    )
 
-                // Add icon overlay
-                Box(
-                        modifier =
-                                Modifier.align(Alignment.BottomEnd)
-                                        .size(24.dp)
-                                        .background(MaterialTheme.colorScheme.primary, CircleShape)
-                                        .border(
-                                                2.dp,
-                                                MaterialTheme.colorScheme.surface,
-                                                CircleShape
-                                        ),
+                    // Add icon overlay
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(24.dp)
+                            .background(MaterialTheme.colorScheme.primary, CircleShape)
+                            .border(
+                                2.dp,
+                                MaterialTheme.colorScheme.surface,
+                                CircleShape
+                            ),
                         contentAlignment = Alignment.Center
-                ) {
-                    Icon(
+                    ){
+                        Icon(
                             Icons.Default.Add,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onPrimary
-                    )
+                        )
+                    }
                 }
-            }
-            Text(
+                Text(
                     text = name.ifEmpty { "PREVIEW" },
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = Color(colorHex.toColorInt())
-            )
-        }
-
-        // Category Details Section
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("Category Name") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true
-            )
-
-            // Type SwitchER with TabIndicator effect
-            TypeSwitcher(
-                    isIncome = isIncome,
-                    onTypeChange = { isIncome = it },
-                    modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        // Color Picker Section
-        Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors =
-                        CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                        )
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                ColorPickerContent(
-                        initialColor = colorHex.toColorInt(),
-                        onColorChanged = { colorInt ->
-                            colorHex = String.format("#%06X", 0xFFFFFF and colorInt)
-                        }
                 )
             }
         }
 
-        // Save Button
-        Button(
-                onClick = { onSave(name, colorHex, iconResId, isIncome) },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+        item{
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Type SwitchER with TabIndicator effect
+        item{
+            TypeSwitcher(
+                isIncome = isIncome,
+                onTypeChange = { isIncome = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item{
+            TextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Category Name") },
+                modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                enabled = name.isNotBlank()
-        ) {
-            Text(
-                    text = if (category == null) "Create Category" else "Update Category",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
             )
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        item{
+            TextField(
+                value = description,
+                onValueChange = { description = it },
+                label = { Text("Description") },
+                placeholder = { Text("e.g., Eating out, Swiggy, Zomato etc.") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                maxLines = 2,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+        }
+
+        // Color Picker Section
+        item{
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    )
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    ColorPickerContent(
+                        initialColor = colorHex.toColorInt(),
+                        onColorChanged = { colorInt ->
+                            colorHex = String.format("#%06X", 0xFFFFFF and colorInt)
+                        }
+                    )
+                }
+            }
+        }
+
+        // Reset Button (only for system categories)
+        item{
+            if (category?.isSystem == true && onReset != null) {
+                OutlinedButton(
+                    onClick = {
+                        // Reset to default values
+                        name = category.defaultName ?: category.name
+                        description = category.defaultDescription ?: ""
+                        colorHex = category.defaultColor ?: category.color
+                        iconResId = category.defaultIconResId ?: category.iconResId
+                        onReset(category.id)
+                    },
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text(
+                        text = "Reset to Default",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+
+        // Save Button
+        item{
+            Button(
+                onClick = { onSave(name, description, colorHex, iconResId, isIncome) },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                enabled = name.isNotBlank()
+            ) {
+                Text(
+                    text = if (category == null) "Create Category" else "Update Category",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        item{
+            Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 }
 

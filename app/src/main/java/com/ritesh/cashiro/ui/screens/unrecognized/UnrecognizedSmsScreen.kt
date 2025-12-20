@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
 import java.time.format.DateTimeFormatter
@@ -24,7 +24,6 @@ import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.haze
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -73,7 +72,7 @@ fun UnrecognizedSmsScreen(
             verticalArrangement = Arrangement.spacedBy(Spacing.md)
         ) {
         // Header card with info
-        PennyWiseCard(
+        CashiroCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -250,7 +249,7 @@ private fun UnrecognizedSmsItem(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PennyWiseCard(
+    CashiroCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Column(

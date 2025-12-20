@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,8 +21,9 @@ import com.ritesh.cashiro.data.database.entity.CategoryEntity
 import com.ritesh.cashiro.data.database.entity.SubcategoryEntity
 import com.ritesh.cashiro.ui.components.CategoryChip
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
-import com.ritesh.cashiro.ui.components.PennyWiseCard
+import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.components.SectionHeader
+import com.ritesh.cashiro.ui.effects.BlurredAnimatedVisibility
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import com.ritesh.cashiro.ui.theme.Dimensions
@@ -149,7 +149,7 @@ fun CategoriesScreen(onNavigateBack: () -> Unit, viewModel: CategoriesViewModel 
 
 
 
-    // Add/Edit Bottom Sheet
+    // Add/Edit Category Bottom Sheet
     if (showAddEditDialog) {
         ModalBottomSheet(
             onDismissRequest = { viewModel.hideDialog() },
@@ -160,19 +160,47 @@ fun CategoriesScreen(onNavigateBack: () -> Unit, viewModel: CategoriesViewModel 
             EditCategorySheet(
                 category = editingCategory,
                 onDismiss = { viewModel.hideDialog() },
-                onSave = { name, color, iconResId, isIncome ->
-                    viewModel.saveCategory(name, color, iconResId, isIncome)
-                }
+                onSave = { name, description, color, iconResId, isIncome ->
+                    viewModel.saveCategory(name, description, color, iconResId, isIncome)
+                },
+                onReset = if (editingCategory?.isSystem == true) {
+                    { categoryId -> viewModel.resetCategory(categoryId) }
+                } else null
             )
         }
     }
 
+    // Edit Subcategory Bottom Sheet
     if (showSubcategoryDialog) {
-        SubcategoryEditDialog(
+        val currentCategory = editingSubcategory?.categoryId?.let { catId ->
+            categories.find { it.id == catId }
+        }
+        
+        ModalBottomSheet(
+            onDismissRequest = { viewModel.hideSubcategoryDialog() },
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+            containerColor = MaterialTheme.colorScheme.surface,
+            tonalElevation = 0.dp
+        ) {
+            EditSubcategorySheet(
                 subcategory = editingSubcategory,
+                categoryColor = currentCategory?.color ?: "#757575",
+                categoryIconResId = currentCategory?.iconResId ?: com.ritesh.cashiro.R.drawable.type_food_dining,
                 onDismiss = { viewModel.hideSubcategoryDialog() },
-                onSave = { viewModel.saveSubcategory(it) }
-        )
+                onSave = { name, iconResId, color ->
+                    viewModel.saveSubcategory(name, iconResId, color)
+                },
+                onReset = if (editingSubcategory?.isSystem == true) {
+                    { subcategoryId -> viewModel.resetSubcategory(subcategoryId) }
+                } else null,
+                onDelete = if (editingSubcategory != null) {
+                    { subcategoryId ->
+                        editingSubcategory?.let { viewModel.deleteSubcategory(it) }
+                        viewModel.hideSubcategoryDialog()
+                    }
+                } else null
+            )
+        }
     }
 }
 
@@ -220,7 +248,10 @@ private fun SwipeableCategoryItem(
                     Box(
                             modifier =
                                     Modifier.fillMaxSize()
-                                            .background(color)
+                                            .background(
+                                                color= color,
+                                                shape = MaterialTheme.shapes.large
+                                            )
                                             .padding(horizontal = Dimensions.Padding.content),
                             contentAlignment = Alignment.CenterEnd
                     ) {
@@ -238,7 +269,7 @@ private fun SwipeableCategoryItem(
                 CategoryItem(
                         category = category,
                         subcategories = subcategories,
-                        onClick = if (!category.isSystem) onEdit else null,
+                        onClick = onEdit,
                         onAddSubcategory = onAddSubcategory,
                         onEditSubcategory = onEditSubcategory,
                         onDeleteSubcategory = onDeleteSubcategory
@@ -249,6 +280,7 @@ private fun SwipeableCategoryItem(
     )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun CategoryItem(
         category: CategoryEntity,
@@ -260,38 +292,36 @@ private fun CategoryItem(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    PennyWiseCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
+    CashiroCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
                     modifier = Modifier.fillMaxWidth().padding(Dimensions.Padding.content),
                     verticalAlignment = Alignment.CenterVertically
             ) {
                 // Category with Icon
-                CategoryChip(category = category, showText = true, modifier = Modifier.weight(1f))
+                CategoryChip(category = category, onClick = onClick, showText = true, modifier = Modifier.weight(1f))
 
                 // Subcategory Add/Toggle
-                IconButton(onClick = onAddSubcategory) {
-                    Icon(
+                BlurredAnimatedVisibility(subcategories.isEmpty()) {
+                    IconButton(
+                        onClick = onAddSubcategory,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        shape = MaterialTheme.shapes.largeIncreased
+                    ) {
+                        Icon(
                             Icons.Default.AddCircleOutline,
                             contentDescription = "Add Subcategory",
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp)
-                    )
-                }
-
-                if (subcategories.isNotEmpty()) {
-                    IconButton(onClick = { expanded = !expanded }) {
-                        Icon(
-                                if (expanded) Icons.Default.ExpandLess
-                                else Icons.Default.ExpandMore,
-                                contentDescription = if (expanded) "Collapse" else "Expand",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
 
                 // System badge
-                if (category.isSystem) {
+                BlurredAnimatedVisibility(category.isSystem) {
                     Surface(
                             shape = MaterialTheme.shapes.small,
                             color = MaterialTheme.colorScheme.secondaryContainer,
@@ -308,87 +338,22 @@ private fun CategoryItem(
                                         )
                         )
                     }
-                } else {
-                    // Edit icon for non-system categories
-                    Icon(
-                            Icons.Default.Edit,
-                            contentDescription = "Edit",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(20.dp).padding(start = Spacing.sm)
-                    )
                 }
             }
 
-            if (expanded) {
-                Column(modifier = Modifier.fillMaxWidth().padding(start = 48.dp, bottom = 8.dp)) {
-                    subcategories.forEach { sub ->
-                        Row(
-                                modifier =
-                                        Modifier.fillMaxWidth()
-                                                .padding(vertical = 4.dp, horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                    text = sub.name,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    modifier = Modifier.weight(1f)
-                            )
-                            IconButton(
-                                    onClick = { onEditSubcategory(sub) },
-                                    modifier = Modifier.size(32.dp)
-                            ) {
-                                Icon(
-                                        Icons.Default.Edit,
-                                        contentDescription = "Edit Subcategory",
-                                        modifier = Modifier.size(16.dp),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            IconButton(
-                                    onClick = { onDeleteSubcategory(sub) },
-                                    modifier = Modifier.size(32.dp)
-                            ) {
-                                Icon(
-                                        Icons.Default.Delete,
-                                        contentDescription = "Delete Subcategory",
-                                        modifier = Modifier.size(16.dp),
-                                        tint = MaterialTheme.colorScheme.error
-                                )
-                            }
-                        }
-                    }
-                }
+            // Subcategory Row (horizontal chips)
+            if (subcategories.isNotEmpty()) {
+                SubcategoryRow(
+                    subcategories = subcategories,
+                    onSubcategoryClick = onEditSubcategory,
+                    onAddClick = onAddSubcategory,
+                    modifier = Modifier.padding(bottom = Spacing.xs)
+                )
+            } else {
+                // Show add button if no subcategories
+                Spacer(modifier = Modifier.height(Spacing.xs))
             }
         }
     }
 }
 
-@Composable
-private fun SubcategoryEditDialog(
-        subcategory: SubcategoryEntity?,
-        onDismiss: () -> Unit,
-        onSave: (String) -> Unit
-) {
-    var name by remember { mutableStateOf(subcategory?.name ?: "") }
-
-    AlertDialog(
-            onDismissRequest = onDismiss,
-            title = { Text(if (subcategory == null) "Add Subcategory" else "Edit Subcategory") },
-            text = {
-                OutlinedTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        label = { Text("Subcategory Name") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                )
-            },
-            confirmButton = {
-                TextButton(
-                        onClick = { if (name.isNotBlank()) onSave(name) },
-                        enabled = name.isNotBlank()
-                ) { Text("Save") }
-            },
-            dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
-    )
-}

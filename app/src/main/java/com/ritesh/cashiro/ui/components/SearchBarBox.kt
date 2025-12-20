@@ -27,39 +27,33 @@ fun SearchBarBox(
     onSearchQueryChange: (TextFieldValue) -> Unit,
     leadingIcon: @Composable () -> Unit = {},
     trailingIcon: @Composable () -> Unit = {},
-    label: String,
+    label: @Composable () -> Unit,
 ) {
     val themeColors = MaterialTheme.colorScheme
     TextField(
         value =  searchQuery,
         onValueChange = onSearchQueryChange,
-        placeholder = { Text(
-            text = label,
-            fontSize = 14.sp,
-            lineHeight = 14.sp,
-            fontWeight = FontWeight.SemiBold,
-            fontStyle = FontStyle.Italic,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()) },
+        placeholder = { label() },
         modifier = modifier
             .fillMaxWidth()
             .shadow(
                 elevation = 6.dp,
-                shape = RoundedCornerShape(15.dp)
+                shape = RoundedCornerShape(75.dp)
             )
-            .background(themeColors.surfaceBright, shape = RoundedCornerShape(15.dp)),
+            .background(themeColors.surfaceContainerLow, shape = RoundedCornerShape(75.dp)),
         singleLine = true,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         textStyle = MaterialTheme.typography.bodyMedium,
         colors = TextFieldDefaults.colors(
-            unfocusedPlaceholderColor = themeColors.inverseOnSurface.copy(alpha = 0.5f),
+            unfocusedPlaceholderColor = themeColors.inverseOnSurface,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent,
             focusedLabelColor = themeColors.inverseSurface,
             unfocusedLabelColor = themeColors.inverseSurface,
+//            unfocusedTextColor = themeColors.inverseOnSurface.copy(alpha = 0.7f)
         )
     )
 }

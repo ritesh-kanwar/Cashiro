@@ -34,12 +34,14 @@ class CategoryRepository @Inject constructor(
     
     suspend fun createCategory(
         name: String,
+        description: String = "",
         color: String,
         iconResId: Int = 0,
         isIncome: Boolean = false
     ): Long {
         val category = CategoryEntity(
             name = name,
+            description = description,
             color = color,
             iconResId = iconResId,
             isSystem = false,
@@ -47,6 +49,21 @@ class CategoryRepository @Inject constructor(
             displayOrder = 999
         )
         return categoryDao.insertCategory(category)
+    }
+    
+    suspend fun resetCategoryToDefault(categoryId: Long) {
+        val category = categoryDao.getCategoryById(categoryId)
+        if (category != null && category.isSystem) {
+            // Reset to default values
+            val resetCategory = category.copy(
+                name = category.defaultName ?: category.name,
+                description = category.defaultDescription ?: category.description,
+                color = category.defaultColor ?: category.color,
+                iconResId = category.defaultIconResId ?: category.iconResId,
+                updatedAt = LocalDateTime.now()
+            )
+            categoryDao.updateCategory(resetCategory)
+        }
     }
     
     suspend fun updateCategory(category: CategoryEntity) {

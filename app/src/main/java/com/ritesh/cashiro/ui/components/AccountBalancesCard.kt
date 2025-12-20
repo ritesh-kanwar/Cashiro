@@ -50,7 +50,7 @@ fun AccountBalancesCard(
         regularAccounts.take(4)
     }
 
-    PennyWiseCard(
+    CashiroCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
