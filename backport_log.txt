@@ -63,3 +63,29 @@ Rejected hunk #1.
 Rejected hunk #2.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream a34d257] feat: add Siddhartha Bank parser for Nepal with
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Dec 21 15:30:35 2025 +0530
+ 4 files changed, 126 insertions(+)
+ create mode 100644 CLAUDE.md.rej
+ create mode 100755 auto_backport.sh
+ create mode 100644 backport_log.txt
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0003-feat-enhance-JioPay-parser-to-handle-additional-send.patch
+Applying: feat: enhance JioPay parser to handle additional sender patterns and reject bill notifications, with corresponding unit tests
+Successfully applied via git am
+===================================
+Applying 0004-feat-update-database-schema-to-version-28-adding-acc.patch
+Applying: feat: update database schema to version 28, adding account_type to account_balances and implementing migration logic; enhance transaction handling with account selection for balance updates
+error: corrupt patch at .git/rebase-apply/patch:1272
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: update database schema to version 28, adding account_type to account_balances and implementing migration logic; enhance transaction handling with account selection for balance updates
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0004-feat-update-database-schema-to-version-28-adding-acc.patch:1279
+error: corrupt patch at ../filtered_patches/0004-feat-update-database-schema-to-version-28-adding-acc.patch:1279
