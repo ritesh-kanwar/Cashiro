@@ -1,0 +1,65 @@
+===================================
+Applying 0002-feat-add-Siddhartha-Bank-parser-for-Nepal-with-trans.patch
+Applying: feat: add Siddhartha Bank parser for Nepal with transaction handling and tests, increasing supported banks to 45
+error: patch failed: CLAUDE.md:85
+error: CLAUDE.md: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Using index info to reconstruct a base tree...
+M	CLAUDE.md
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Patch failed at 0001 feat: add Siddhartha Bank parser for Nepal with transaction handling and tests, increasing supported banks to 45
+Conflict detected! Falling back to apply --reject
+error: patch failed: CLAUDE.md:85
+Falling back to direct application...
+error: patch failed: CLAUDE.md:85
+error: CLAUDE.md: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt' with conflicts.
+Checking patch CLAUDE.md...
+error: while searching for:
+- Use `com.ritesh.cashiro.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
+- The mapper handles type conversions between modules
+
+## Supported Banks (44 parsers)
+- Airtel Payments Bank
+- **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+- American Express (AMEX)
+
+error: patch failed: CLAUDE.md:85
+error: while searching for:
+- **Priorbank (Belarus)** - Russian/Belarusian SMS support
+- Punjab National Bank (PNB)
+- Saraswat Co-operative Bank
+- State Bank of India (SBI)
+- Slice
+- South Indian Bank
+
+error: patch failed: CLAUDE.md:123
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        PriorbankParser(),  // Priorbank (Belarus)
+        AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
+        NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
+        MPESAParser(),  // M-PESA (Kenya)
+        CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
+        DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:61
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt: already exists in working directory
+Applying patch CLAUDE.md with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
