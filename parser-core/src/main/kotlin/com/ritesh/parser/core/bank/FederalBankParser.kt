@@ -459,10 +459,16 @@ class FederalBankParser : BankParser() {
 
         return when {
             // Credit card transactions - now using detectIsCard
+<<<<<<< ours
             detectIsCreditCard(message) &&
                     (lowerMessage.contains("spent") ||
                             (lowerMessage.contains("txn") &&
                                     lowerMessage.contains("successful"))) -> TransactionType.CREDIT
+=======
+            detectIsCreditCard(message) && (lowerMessage.contains("spent") ||
+                lowerMessage.contains("was successful") ||
+                lowerMessage.contains("txn of")) -> TransactionType.CREDIT
+>>>>>>> theirs
 
             // E-mandate payments (only successful ones)
             (lowerMessage.contains("e-mandate") || lowerMessage.contains("payment of")) &&

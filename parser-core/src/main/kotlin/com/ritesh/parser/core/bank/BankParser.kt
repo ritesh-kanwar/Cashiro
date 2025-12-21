@@ -308,11 +308,19 @@ abstract class BankParser {
     protected open fun extractAccountLast4(message: String): String? {
         for (pattern in CompiledPatterns.Account.ALL_PATTERNS) {
             pattern.find(message)?.let { match ->
+<<<<<<< ours
                 val rawCapture = match.groupValues[1]
                 val last4 = extractLast4Digits(rawCapture)
 
                 if (last4 != null && isValidAccountLast4(last4, match.value, message)) {
                     return last4
+=======
+                val accountLast4 = match.groupValues[1]
+
+                // Validate that this is actually an account number, not a date or RRN
+                if (isValidAccountLast4(accountLast4, match.value, message)) {
+                    return accountLast4
+>>>>>>> theirs
                 }
             }
         }
@@ -324,7 +332,11 @@ abstract class BankParser {
      * Validates that the extracted 4 digits are actually part of an account number,
      * not a date, RRN, or other numeric field.
      */
+<<<<<<< ours
     protected open fun isValidAccountLast4(last4: String, matchedText: String, fullMessage: String): Boolean {
+=======
+    private fun isValidAccountLast4(last4: String, matchedText: String, fullMessage: String): Boolean {
+>>>>>>> theirs
         // Escape the last4 for safe regex usage
         val escapedLast4 = Regex.escape(last4)
 
@@ -342,6 +354,25 @@ abstract class BankParser {
             }
         }
 
+<<<<<<< ours
+=======
+        // Check if it's part of an RRN (Reference Number) - typically 12 digits
+        val rrnPatterns = listOf(
+            Regex("""RRN\s+(?:No\.?)?(\d{8,16})""", RegexOption.IGNORE_CASE),  // "RRN No.503612315893"
+            Regex("""Ref\s+(?:No\.?)?(\d{8,16})""", RegexOption.IGNORE_CASE)   // "Ref No.503612315893"
+        )
+
+        for (rrnPattern in rrnPatterns) {
+            rrnPattern.find(fullMessage)?.let { rrnMatch ->
+                val rrnNumber = rrnMatch.groupValues[1]
+                // If our last4 is part of this RRN, reject it
+                if (rrnNumber.contains(last4)) {
+                    return false
+                }
+            }
+        }
+
+>>>>>>> theirs
         // Check if it's a standalone year (2024, 2025, etc.)
         if (last4.toIntOrNull() in 2000..2099) {
             // Only reject if it appears to be a year in date context

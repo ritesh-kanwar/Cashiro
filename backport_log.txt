@@ -89,3 +89,81 @@ Patch failed at 0001 feat: update database schema to version 28, adding account_
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0004-feat-update-database-schema-to-version-28-adding-acc.patch:1279
 error: corrupt patch at ../filtered_patches/0004-feat-update-database-schema-to-version-28-adding-acc.patch:1279
+[backport-fixes-upstream b6c2dc1] feat: update database schema to version 28, adding
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Dec 21 19:59:12 2025 +0530
+ 3 files changed, 26 insertions(+), 27 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0005-feat-enhance-account-number-extraction-logic-in-Bank.patch
+Applying: feat: enhance account number extraction logic in BankParser to validate against date and RRN patterns, ensuring accurate identification; update FederalBankParser to recognize additional transaction phrases
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enhance account number extraction logic in BankParser to validate against date and RRN patterns, ensuring accurate identification; update FederalBankParser to recognize additional transaction phrases
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt' with conflicts.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt...
+error: while searching for:
+            RegexOption.IGNORE_CASE
+        )
+        val CARD_WITH_MASK = Regex("""Card\s+(?:XX+)?(\d{4})""", RegexOption.IGNORE_CASE)
+        val GENERIC_ACCOUNT =
+            Regex("""(?:A/c|Account).*?(\d{4})(?:\s|$)""", RegexOption.IGNORE_CASE)
+        val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK, GENERIC_ACCOUNT)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt:24
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt...
+error: while searching for:
+    protected open fun extractAccountLast4(message: String): String? {
+        for (pattern in CompiledPatterns.Account.ALL_PATTERNS) {
+            pattern.find(message)?.let { match ->
+                return match.groupValues[1]
+            }
+        }
+
+        return null
+    }
+
+    /**
+     * Extracts balance after transaction.
+     */
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt:289
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt...
+error: while searching for:
+
+        return when {
+            // Credit card transactions - now using detectIsCard
+            detectIsCreditCard(message) && lowerMessage.contains("spent") -> TransactionType.CREDIT
+
+            // E-mandate payments (only successful ones)
+            (lowerMessage.contains("e-mandate") || lowerMessage.contains("payment of")) &&
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:482
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt with 1 reject...
+Rejected hunk #1.
