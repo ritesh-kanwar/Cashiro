@@ -37,7 +37,7 @@ fun SearchBarBox(
         modifier = modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 6.dp,
+                elevation = 0.dp,
                 shape = RoundedCornerShape(75.dp)
             )
             .background(themeColors.surfaceContainerLow, shape = RoundedCornerShape(75.dp)),

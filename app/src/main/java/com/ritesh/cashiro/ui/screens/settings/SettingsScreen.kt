@@ -31,6 +31,7 @@ import com.ritesh.cashiro.ui.theme.Spacing
 import com.ritesh.cashiro.ui.viewmodel.ThemeViewModel
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.HazeState
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import dev.chrisbanes.haze.hazeSource
@@ -99,6 +100,7 @@ fun SettingsScreen(
                 hazeState = hazeState,
                 hasBackButton = true,
                 onBackClick = onNavigateBack,
+                navigationContent = { NavigationContent(onNavigateBack) }
             )
         }
     ) { paddingValues ->

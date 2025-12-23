@@ -1,5 +1,7 @@
 package com.ritesh.cashiro.ui.components
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -7,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.ritesh.cashiro.ui.effects.BlurredAnimatedVisibility
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
 
@@ -157,22 +160,30 @@ fun ListItemCard(
  */
 @Composable
 fun SectionHeader(
+    visible: Boolean = true,
     title: String,
     modifier: Modifier = Modifier,
     action: @Composable (() -> Unit)? = null
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    BlurredAnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
-        )
-        if (action != null) {
-            action()
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold
+            )
+            if (action != null) {
+                action()
+            }
         }
     }
 }

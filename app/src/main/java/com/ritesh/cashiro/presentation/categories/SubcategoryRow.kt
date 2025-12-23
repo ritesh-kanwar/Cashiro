@@ -57,12 +57,6 @@ private fun SubcategoryChip(
     } catch (e: Exception) {
         MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
     }
-    
-    val contentColor = try {
-        Color(subcategory.color.toColorInt())
-    } catch (e: Exception) {
-        MaterialTheme.colorScheme.onSurfaceVariant
-    }
 
     Row(
             modifier =
@@ -78,7 +72,7 @@ private fun SubcategoryChip(
             Icon(
                     painter = painterResource(id = subcategory.iconResId),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(14.dp),
                     tint = Color.Unspecified
             )
         }
@@ -86,9 +80,9 @@ private fun SubcategoryChip(
         // Name
         Text(
                 text = subcategory.name,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = contentColor
+                color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -97,7 +91,7 @@ private fun SubcategoryChip(
 private fun AddSubcategoryButton(onClick: () -> Unit) {
     Box(
             modifier =
-                    Modifier.size(40.dp)
+                    Modifier.size(28.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                             .clickable(onClick = onClick),
@@ -106,7 +100,7 @@ private fun AddSubcategoryButton(onClick: () -> Unit) {
         Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Add Subcategory",
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(14.dp),
                 tint = MaterialTheme.colorScheme.primary
         )
     }

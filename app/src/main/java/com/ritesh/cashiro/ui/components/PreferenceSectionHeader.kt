@@ -10,19 +10,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ritesh.cashiro.ui.effects.BlurredAnimatedVisibility
 
-@Composable
-fun SectionHeader(visible: Boolean = true,title: String) {
-    BlurredAnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier =
-                Modifier.padding(start = 32.dp, top = 32.dp, bottom = 10.dp)
-        )
-    }
-}
+//@Composable
+//fun SectionHeader(
+//    visible: Boolean = true,
+//    title: String,
+//    modifier: Modifier = Modifier.padding(start = 32.dp, top = 32.dp, bottom = 10.dp)
+//) {
+//    BlurredAnimatedVisibility(
+//        visible = visible,
+//        enter = fadeIn(),
+//        exit = fadeOut()
+//    ) {
+//        Text(
+//            text = title,
+//            style = MaterialTheme.typography.titleSmall,
+//            color = MaterialTheme.colorScheme.primary,
+//            modifier = modifier
+//        )
+//    }
+//}

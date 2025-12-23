@@ -37,6 +37,8 @@ import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.automirrored.filled.TrendingDown
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import android.view.HapticFeedbackConstants
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
 import com.ritesh.cashiro.ui.components.SmsParsingProgressDialog
@@ -65,6 +67,9 @@ import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.rounded.Settings
 import dev.chrisbanes.haze.hazeSource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,6 +172,30 @@ fun HomeScreen(
 //                showSettingsButton = true,
 //                showDiscordButton = true,
                 onNavigateToSettings = onNavigateToSettings,
+                actionContent = {
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 24.dp)
+                            .size(40.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = CircleShape
+                            )
+                            .clickable(
+                                onClick = onNavigateToSettings,
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "Edit Profile",
+                            tint = MaterialTheme.colorScheme.inverseSurface,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
 //                onDiscordClick = {
 //                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/H3xWeMWjKQ"))
 //                    context.startActivity(intent)

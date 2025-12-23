@@ -27,6 +27,7 @@ import dev.chrisbanes.haze.HazeState
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import androidx.compose.foundation.lazy.rememberLazyListState
+import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.hazeSource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +55,8 @@ fun UnrecognizedSmsScreen(
                 scrollBehaviorLarge = scrollBehavior,
                 hazeState = hazeState,
                 hasBackButton = true,
-                onBackClick = onNavigateBack
+                onBackClick = onNavigateBack,
+                navigationContent = { NavigationContent(onNavigateBack)}
             )
         }
     ) { paddingValues ->

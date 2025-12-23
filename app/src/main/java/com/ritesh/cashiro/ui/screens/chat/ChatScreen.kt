@@ -37,8 +37,7 @@ import dev.chrisbanes.haze.haze
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
-import android.content.Intent
-import android.net.Uri
+import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.hazeSource
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -89,6 +88,7 @@ fun ChatScreen(
                 scrollBehaviorLarge = scrollBehavior,
                 hazeState = hazeState,
                 hasBackButton = false,
+                navigationContent = {NavigationContent(onNavigateToSettings)},
 //                showSettingsButton = true,
 //                showDiscordButton = true,
 //                onSettingsClick = onNavigateToSettings,

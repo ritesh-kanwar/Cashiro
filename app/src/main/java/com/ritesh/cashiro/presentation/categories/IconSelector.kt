@@ -26,17 +26,14 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -63,7 +61,7 @@ import kotlinx.coroutines.delay
 import com.ritesh.cashiro.R
 import com.ritesh.cashiro.ui.components.SearchBarBox
 
-data class CategoryIconItem(
+data class IconItem(
         val id: Int,
         val name: String,
         val category: String,
@@ -72,13 +70,13 @@ data class CategoryIconItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryIconSelector(
+fun IconSelector(
         selectedIconId: Int?,
         onIconSelected: (Int) -> Unit,
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val allIcons = remember { getAllCategoryIcons() }
+    val allIcons = remember { getAllIcons() }
 
     val filteredIcons =
             remember(searchQuery.text) {
@@ -102,7 +100,7 @@ fun CategoryIconSelector(
         }
     }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         SearchBarBox(
                 searchQuery = searchQuery,
                 onSearchQueryChange = { searchQuery = it },
@@ -149,7 +147,7 @@ fun CategoryIconSelector(
                 },
                 label = "Filtered Icon animated"
         ) { iconsToDisplay ->
-            CategoryIconFlowLayout(
+            IconFlowLayout(
                     icons = iconsToDisplay,
                     selectedIconId = selectedIconId,
                     onIconSelected = onIconSelected,
@@ -160,16 +158,19 @@ fun CategoryIconSelector(
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
-private fun CategoryIconFlowLayout(
-        icons: List<CategoryIconItem>,
-        selectedIconId: Int?,
-        onIconSelected: (Int) -> Unit,
+private fun IconFlowLayout(
+    icons: List<IconItem>,
+    selectedIconId: Int?,
+    onIconSelected: (Int) -> Unit,
 ) {
     val themeColors = MaterialTheme.colorScheme
     val groupedIcons = icons.groupBy { it.category }
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+
     LazyColumn(
-            modifier = Modifier.fillMaxHeight(0.6f),
+            modifier = Modifier.height(screenHeight),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 32.dp)
     ) {
@@ -206,7 +207,7 @@ private fun CategoryIconFlowLayout(
                         modifier = Modifier.fillMaxWidth(),
                 ) {
                     iconsInCategory.forEach { icon ->
-                        CategoryIconItemView(
+                        IconItemView(
                                 icon = icon,
                                 isSelected = icon.resourceId == selectedIconId,
                                 onClick = { onIconSelected(icon.resourceId) }
@@ -219,10 +220,10 @@ private fun CategoryIconFlowLayout(
 }
 
 @Composable
-private fun CategoryIconItemView(
-        icon: CategoryIconItem,
-        isSelected: Boolean,
-        onClick: () -> Unit,
+private fun IconItemView(
+    icon: IconItem,
+    isSelected: Boolean,
+    onClick: () -> Unit,
 ) {
     val themeColors = MaterialTheme.colorScheme
     val infiniteTransition = rememberInfiniteTransition(label = "Selected Glow animation")
@@ -263,9 +264,6 @@ private fun CategoryIconItemView(
             .clickable(onClick = onClick)
             .background(
                 color = themeColors.surfaceContainerLow,
-//                    if (isSelected)
-//                        themeColors.primaryContainer.copy(alpha = 0.3f)
-//                    else themeColors.surfaceVariant.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(16.dp)
             )
 
@@ -280,12 +278,12 @@ private fun CategoryIconItemView(
     }
 }
 
-private fun getAllCategoryIcons(): List<CategoryIconItem> {
-    val icons = mutableListOf<CategoryIconItem>()
+private fun getAllIcons(): List<IconItem> {
+    val icons = mutableListOf<IconItem>()
 
     // Helper to add icons
     fun addIcon(name: String, category: String, resId: Int) {
-        icons.add(CategoryIconItem(icons.size, name, category, resId))
+        icons.add(IconItem(icons.size, name, category, resId))
     }
 
     // Animals

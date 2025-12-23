@@ -8,12 +8,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
+import com.ritesh.cashiro.presentation.categories.IconSelector
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
 
@@ -139,6 +145,16 @@ fun AddAccountScreen(
                         )
                     }
                 }
+                }
+            }
+            
+            // Icon Selector
+            Text("Account Icon", style = MaterialTheme.typography.labelMedium)
+            Box(modifier = Modifier.height(200.dp).fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)) {
+                 IconSelector(
+                     selectedIconId = formState.iconResId,
+                     onIconSelected = { viewModel.updateIcon(it) }
+                 )
             }
             
             // Account Name
@@ -236,5 +252,4 @@ fun AddAccountScreen(
             
             // Add some bottom padding for better scroll experience
             Spacer(modifier = Modifier.height(16.dp))
-    }
 }

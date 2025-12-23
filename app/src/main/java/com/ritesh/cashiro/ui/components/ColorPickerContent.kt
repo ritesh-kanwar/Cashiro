@@ -12,11 +12,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -24,7 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.*
@@ -47,7 +42,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.ritesh.cashiro.ui.effects.BlurredAnimatedVisibility
 import com.ritesh.cashiro.R
-import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 
 @Composable
 fun ColorPickerContent(
@@ -129,7 +123,7 @@ fun ColorPickerContent(
         remember(selectedColor) {
             val baseHsv = FloatArray(3)
             AndroidColor.colorToHSV(selectedColor, baseHsv)
-            listOf(0.2f, 0.4f, 0.6f, 0.8f, 1.0f).map { v ->
+            listOf(0f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f).map { v ->
                 Color(AndroidColor.HSVToColor(floatArrayOf(baseHsv[0], baseHsv[1], v)))
             }
         }
@@ -137,110 +131,103 @@ fun ColorPickerContent(
     val lazyListState = rememberLazyListState()
 
     Column(
-        modifier = modifier.animateContentSize().fillMaxWidth().clip(MaterialTheme.shapes.large),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier.animateContentSize().fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
 
+        Text(
+            text =  "Colors",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
 
-            Text(
-                text =  "Colors",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-
-
-
-            BlurredAnimatedVisibility(
-                visible = showColors || !showCustomOnly
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            LazyRow(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    LazyRow(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
+                item {
+                    Icon(
+                        painter = painterResource(R.drawable.color_picker),
+                        contentDescription = "color picker button",
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(48.dp)
+                            .clickable(onClick = { showColors = !showColors })
+                    )
+                }
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .height(30.dp)
+                            .width(2.5.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                }
+                items(presetColors) { color ->
+                    val isSelected = color.toArgb() == selectedColor
+                    Box(
+                        modifier = Modifier.size(48.dp).aspectRatio(1f)
+                            .clip(CircleShape)
+                            .background(color)
+                            .clickable {
+                                selectedColor = color.toArgb()
+                                onColorChanged(selectedColor)
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
-                        item {
+                        if (isSelected) {
                             Icon(
-                                painter = painterResource(R.drawable.color_picler),
-                                contentDescription = "color picker button",
-                                tint = Color.Unspecified,
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clickable(onClick = { showColors = !showColors })
-                            )
-                        }
-                        item {
-                            Spacer(
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .height(40.dp)
-                                    .width(2.5.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-                                        shape = RoundedCornerShape(8.dp)
-                                    )
-                            )
-                        }
-                        items(presetColors) { color ->
-                            val isSelected = color.toArgb() == selectedColor
-                            Box(
-                                modifier = Modifier.size(48.dp).aspectRatio(1f)
-                                    .clip(CircleShape)
-                                    .background(color)
-                                    .clickable {
-                                        selectedColor = color.toArgb()
-                                        onColorChanged(selectedColor)
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (isSelected) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Check,
-                                        contentDescription = "Selected",
-                                        tint = Color.White,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // Shade Row
-                    Row(
-                        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        shadeColors.forEach { color ->
-                            val isSelected = color.toArgb() == selectedColor
-                            Box(
-                                modifier = Modifier.size(40.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(color)
-                                    .border(
-                                        width = if (isSelected) 2.dp else 0.dp,
-                                        color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
-                                        shape = RoundedCornerShape(8.dp)
-                                    )
-                                    .clickable {
-                                        selectedColor = color.toArgb()
-                                        onColorChanged(selectedColor)
-                                    }
+                                imageVector = Icons.Rounded.Check,
+                                contentDescription = "Selected",
+                                tint = Color.White,
+                                modifier = Modifier.size(24.dp)
                             )
                         }
                     }
                 }
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
 
+            // Shade Row
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                shadeColors.forEach { color ->
+                    val isSelected = color.toArgb() == selectedColor
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(color)
+                            .border(
+                                width = if (isSelected) 2.dp else 0.dp,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable {
+                                selectedColor = color.toArgb()
+                                onColorChanged(selectedColor)
+                            }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             BlurredAnimatedVisibility(
                 visible = !showColors || showCustomOnly,
-                enter = slideInVertically { it },
-                exit = slideOutVertically { it }
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth()
@@ -349,7 +336,7 @@ fun ColorPickerContent(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Color Preview and Hex input
                     Row(
@@ -370,7 +357,7 @@ fun ColorPickerContent(
                                     MaterialTheme.colorScheme.surfaceContainerHigh,
                                     RoundedCornerShape(8.dp)
                                 )
-                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                                .padding(12.dp)
                         ) {
                             Text(
                                 text = "#",
@@ -404,6 +391,6 @@ fun ColorPickerContent(
                     }
                 }
             }
-
+        }
     }
 }

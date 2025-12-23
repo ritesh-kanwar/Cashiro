@@ -55,6 +55,8 @@ fun CustomTitleTopAppBar(
     onSearchButtonClick: () -> Unit = {},
     onFilterButtonClick: () -> Unit = {},
     hasFilterButton: Boolean = false,
+    actionContent: @Composable () -> Unit = {},
+    navigationContent: @Composable () -> Unit = {},
     greetingCard: @Composable () -> Unit = {},
     profilePhoto: @Composable () -> Unit = {},
     hazeState: HazeState = HazeState(),
@@ -66,11 +68,10 @@ fun CustomTitleTopAppBar(
     LargerTopAppBar(
         scrollBehaviorLarge = scrollBehaviorLarge,
         title = title,
-        onBackClick = onBackClick,
         hasBackButton = hasBackButton,
-        onEditClick = onEditClick,
-        onNavigateToSettings = onNavigateToSettings,
         collapsedFraction = collapsedFraction,
+        actionContent = actionContent,
+        navigationContent = navigationContent,
         greetingCard = greetingCard,
         hazeState = hazeState,
         themeColors = MaterialTheme.colorScheme
@@ -86,6 +87,8 @@ fun CustomTitleTopAppBar(
         onSearchButtonClick = onSearchButtonClick,
         onFilterButtonClick = onFilterButtonClick,
         hasFilterButton = hasFilterButton,
+        actionContent = actionContent,
+        navigationContent = navigationContent,
         collapsedFraction = collapsedFraction,
         profilePhoto = profilePhoto,
         modifier = modifier,
@@ -101,13 +104,15 @@ private fun Modifier.animatedOffsetModifier(
     hasOnlyActionButtons: Boolean = false,
     isProfileScreen: Boolean = false,
     isTransactionScreen : Boolean = false,
-    isHomeScreen: Boolean = false
+    isHomeScreen: Boolean = false,
+    isCategoryScreen: Boolean = false,
 ): Modifier {
     // Define the target offset based on conditions
     val targetOffsetX = when {
         hasBackButton && isProfileScreen-> 0.dp
         isTransactionScreen -> (0).dp
         hasOnlyActionButtons && isHomeScreen-> (26).dp
+        hasBackButton && isCategoryScreen-> 0.dp
         hasBackButton -> (-26).dp
         else -> (-10).dp
     }
@@ -149,12 +154,11 @@ private fun LargerTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehaviorLarge: TopAppBarScrollBehavior,
     title: String,
-    onBackClick : () -> Unit = {},
     hasBackButton: Boolean = false,
-    onEditClick: () -> Unit = {},
-    onNavigateToSettings: () -> Unit = {},
     collapsedFraction: Float,
     greetingCard: @Composable () -> Unit = {} ,
+    actionContent: @Composable () -> Unit = {},
+    navigationContent: @Composable () -> Unit = {},
     hazeState: HazeState,
     themeColors: ColorScheme,
 
@@ -173,15 +177,13 @@ private fun LargerTopAppBar(
         ),
         navigationIcon = {
             NavigationForLargeTopAppBar(
-                onBackClick = onBackClick,
                 hasBackButton = hasBackButton,
+                navigationContent = navigationContent
             )
         },
         actions = {
             ActionForLargeTopAppBar(
-                title = title,
-                onEditClick = onEditClick,
-                onNavigateToSettings = onNavigateToSettings
+                actionContent = actionContent
             )
         },
         collapsedHeight = TopAppBarDefaults.LargeAppBarCollapsedHeight,
@@ -247,135 +249,28 @@ private fun TitleForLargeTopAppBar(
 
 @Composable
 private fun NavigationForLargeTopAppBar(
-    modifier: Modifier = Modifier,
-    onBackClick : () -> Unit = {},
     hasBackButton: Boolean = false,
+    navigationContent: @Composable () -> Unit = {},
 ){
     BlurredAnimatedVisibility(
         visible = hasBackButton,
         enter = fadeIn() + scaleIn(),
         exit = fadeOut() + scaleOut()
     ) {
-        Row(
-            modifier = modifier
-                .animateContentSize()
-                .padding(start = 15.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onBackClick,
-                ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(40.dp)
-                    )
-                    .size(40.dp),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = MaterialTheme.colorScheme.inverseSurface,
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBackIosNew,
-                    contentDescription = "Back Button",
-                    modifier = Modifier.size(14.dp)
-                )
-            }
-        }
+        navigationContent()
     }
 }
 
 @Composable
 private fun ActionForLargeTopAppBar(
-    title: String,
-    onEditClick: () -> Unit = {},
-    onNavigateToSettings: () -> Unit = {},
+    actionContent: @Composable () -> Unit = {},
 ){
     BlurredAnimatedVisibility(
         visible = true,
         enter = fadeIn() + scaleIn(),
         exit = fadeOut() + scaleOut()
     ) {
-        if (title == "Profile") {
-            Row(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .clickable(
-                        onClick = onEditClick,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Edit,
-                    contentDescription = "Edit Profile",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
-                )
-                Text(
-                    text = "Edit",
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily.Default,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Start,
-                )
-
-            }
-        }
-
-        if (title == "Cashiro") {
-            Box(
-                modifier = Modifier
-                    .padding(end = 24.dp)
-                    .size(40.dp)
-                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .clickable(
-                        onClick = onNavigateToSettings,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-
-                        ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Settings,
-                    contentDescription = "More option",
-                    tint = MaterialTheme.colorScheme.inverseSurface,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
-        if (title == "Categories") {
-            Box(
-                modifier = Modifier
-                    .padding(end = 24.dp)
-                    .size(40.dp)
-                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .clickable(
-                        onClick = { },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-
-                        ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.MoreHoriz,
-                    contentDescription = "More option",
-                    tint = MaterialTheme.colorScheme.inverseSurface,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
+        actionContent()
     }
 }
 
@@ -391,6 +286,8 @@ private fun RegularTopAppBar(
     onSearchButtonClick: () -> Unit = {},
     onFilterButtonClick: () -> Unit = {},
     hasFilterButton: Boolean = false,
+    actionContent: @Composable () -> Unit = {},
+    navigationContent: @Composable () -> Unit = {},
     profilePhoto: @Composable () -> Unit = {},
     collapsedFraction: Float,
     hazeState: HazeState,
@@ -417,7 +314,8 @@ private fun RegularTopAppBar(
                         isProfileScreen = isProfileScreen,
                         isTransactionScreen = isTransactionScreen,
                         isHomeScreen = title == "Cashiro",
-                        hasOnlyActionButtons =  title == "Cashiro"
+                        hasOnlyActionButtons =  title == "Cashiro",
+                        isCategoryScreen = title == "Categories"
                     )
                 )
             },
@@ -431,177 +329,179 @@ private fun RegularTopAppBar(
                     enter = fadeIn() + scaleIn(),
                     exit = fadeOut() + scaleOut()
                 ) {
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier
-                            .padding(start = 15.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceContainer,
-                                shape = RoundedCornerShape(40.dp)
-                            )
-                            .size(40.dp),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = Color.Transparent,
-                            contentColor = MaterialTheme.colorScheme.inverseSurface,
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBackIosNew,
-                            contentDescription = "Back Button",
-                            modifier = Modifier.size(14.dp)
-                        )
-                    }
+                    navigationContent()
+//                    IconButton(
+//                        onClick = onBackClick,
+//                        modifier = Modifier
+//                            .padding(start = 16.dp)
+//                            .background(
+//                                color = MaterialTheme.colorScheme.surfaceContainer,
+//                                shape = RoundedCornerShape(40.dp)
+//                            )
+//                            .size(40.dp),
+//                        colors = IconButtonDefaults.iconButtonColors(
+//                            containerColor = Color.Transparent,
+//                            contentColor = MaterialTheme.colorScheme.inverseSurface,
+//                        )
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.ArrowBackIosNew,
+//                            contentDescription = "Back Button",
+//                            modifier = Modifier.size(14.dp)
+//                        )
+//                    }
                 }
 
-                AnimatedVisibility(isTransactionScreen || hasFilterButton) {
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 15.dp)
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(MaterialTheme.colorScheme.surface)
-                            .clickable(onClick = onFilterButtonClick)
-                            .size(40.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        // Filter indicator removed due to missing TransactionFilterState
-
-                        Icon(
-                            imageVector = Icons.Rounded.FilterList,
-                            contentDescription = "Filter transactions",
-                            tint = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-
-                if (title == "Cashiro") {
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 24.dp)
-                    ) {
-                        profilePhoto()
-                    }
-                }
+//                AnimatedVisibility(isTransactionScreen || hasFilterButton) {
+//                    Box(
+//                        modifier = Modifier
+//                            .padding(start = 15.dp)
+//                            .clip(RoundedCornerShape(15.dp))
+//                            .background(MaterialTheme.colorScheme.surface)
+//                            .clickable(onClick = onFilterButtonClick)
+//                            .size(40.dp),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        // Filter indicator removed due to missing TransactionFilterState
+//
+//                        Icon(
+//                            imageVector = Icons.Rounded.FilterList,
+//                            contentDescription = "Filter transactions",
+//                            tint = MaterialTheme.colorScheme.inverseSurface,
+//                            modifier = Modifier.size(20.dp)
+//                        )
+//                    }
+//                }
+//
+//                if (title == "Cashiro") {
+//                    Box(
+//                        modifier = Modifier
+//                            .padding(start = 24.dp)
+//                    ) {
+//                        profilePhoto()
+//                    }
+//                }
             },
             actions = {
+                actionContent()
                 // Add edit button for collapsed view as well
-                if (title == "Profile") {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 16.dp)
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(MaterialTheme.colorScheme.surface)
-                            .clickable(
-                                onClick = onEditClick
-                            )
-                            .size(40.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Contacts,
-                            contentDescription = "Edit Profile",
-                            tint = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-
-                // Transaction screen buttons (search and filter)
-                if (isTransactionScreen || isSearchTransactionScreen) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(end = 16.dp)
-                    ) {
-                        // Filter button (show if hasFilterButton is true)
-                        if (isSearchTransactionScreen && hasFilterButton) {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(15.dp))
-                                    .background(MaterialTheme.colorScheme.surface)
-                                    .clickable(onClick = onFilterButtonClick)
-                                    .size(40.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                // Filter indicator removed
-
-                                Icon(
-                                    imageVector = Icons.Rounded.FilterList,
-                                    contentDescription = "Filter transactions",
-                                    tint = MaterialTheme.colorScheme.inverseSurface,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                        }
-
-                        // Search button (only show for transaction screen, not search screen)
-                        if (isTransactionScreen) {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(15.dp))
-                                    .background(MaterialTheme.colorScheme.surface)
-                                    .clickable(onClick = onSearchButtonClick)
-                                    .size(40.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Search,
-                                    contentDescription = "Search transactions",
-                                    tint = MaterialTheme.colorScheme.inverseSurface,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-
-                if (title == "Cashiro") {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 24.dp)
-                            .size(40.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.surface,
-                                shape = CircleShape
-                            )
-                            .clickable(
-                                onClick = onEditClick,
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Settings,
-                            contentDescription = "Edit Profile",
-                            tint = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-
-                if (title == "Categories") {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 24.dp)
-                            .size(40.dp)
-                            .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                            .clickable(
-                                onClick = { },
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-
-                                ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.MoreHoriz,
-                            contentDescription = "More option",
-                            tint = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
+//                if (title == "Profile") {
+//                    Box(
+//                        modifier = Modifier
+//                            .padding(end = 16.dp)
+//                            .clip(RoundedCornerShape(15.dp))
+//                            .background(MaterialTheme.colorScheme.surface)
+//                            .clickable(
+//                                onClick = onEditClick
+//                            )
+//                            .size(40.dp),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.Contacts,
+//                            contentDescription = "Edit Profile",
+//                            tint = MaterialTheme.colorScheme.inverseSurface,
+//                            modifier = Modifier.size(20.dp)
+//                        )
+//                    }
+//                }
+//
+//                // Transaction screen buttons (search and filter)
+//                if (isTransactionScreen || isSearchTransactionScreen) {
+//                    Row(
+//                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        modifier = Modifier.padding(end = 16.dp)
+//                    ) {
+//                        // Filter button (show if hasFilterButton is true)
+//                        if (isSearchTransactionScreen && hasFilterButton) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .clip(RoundedCornerShape(15.dp))
+//                                    .background(MaterialTheme.colorScheme.surface)
+//                                    .clickable(onClick = onFilterButtonClick)
+//                                    .size(40.dp),
+//                                contentAlignment = Alignment.Center
+//                            ) {
+//                                // Filter indicator removed
+//
+//                                Icon(
+//                                    imageVector = Icons.Rounded.FilterList,
+//                                    contentDescription = "Filter transactions",
+//                                    tint = MaterialTheme.colorScheme.inverseSurface,
+//                                    modifier = Modifier.size(20.dp)
+//                                )
+//                            }
+//                        }
+//
+//                        // Search button (only show for transaction screen, not search screen)
+//                        if (isTransactionScreen) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .clip(RoundedCornerShape(15.dp))
+//                                    .background(MaterialTheme.colorScheme.surface)
+//                                    .clickable(onClick = onSearchButtonClick)
+//                                    .size(40.dp),
+//                                contentAlignment = Alignment.Center
+//                            ) {
+//                                Icon(
+//                                    imageVector = Icons.Rounded.Search,
+//                                    contentDescription = "Search transactions",
+//                                    tint = MaterialTheme.colorScheme.inverseSurface,
+//                                    modifier = Modifier.size(20.dp)
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                if (title == "Cashiro") {
+//                    Box(
+//                        modifier = Modifier
+//                            .padding(end = 24.dp)
+//                            .size(40.dp)
+//                            .background(
+//                                color = MaterialTheme.colorScheme.surface,
+//                                shape = CircleShape
+//                            )
+//                            .clickable(
+//                                onClick = onEditClick,
+//                                interactionSource = remember { MutableInteractionSource() },
+//                                indication = null,
+//                            ),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.Settings,
+//                            contentDescription = "Edit Profile",
+//                            tint = MaterialTheme.colorScheme.inverseSurface,
+//                            modifier = Modifier.size(24.dp)
+//                        )
+//                    }
+//                }
+//
+//                if (title == "Categories") {
+//                    Box(
+//                        modifier = Modifier
+//                            .padding(end = 16.dp)
+//                            .size(40.dp)
+//                            .background(color = MaterialTheme.colorScheme.surfaceContainer, shape = CircleShape)
+//                            .clickable(
+//                                onClick = { },
+//                                interactionSource = remember { MutableInteractionSource() },
+//                                indication = null,
+//
+//                                ),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.MoreHoriz,
+//                            contentDescription = "More option",
+//                            tint = MaterialTheme.colorScheme.inverseSurface,
+//                            modifier = Modifier.size(24.dp)
+//                        )
+//                    }
+//                }
             },
             scrollBehavior = scrollBehaviorSmall,
             windowInsets = WindowInsets(0.dp),

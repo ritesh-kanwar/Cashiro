@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.ritesh.cashiro.data.database.entity.CategoryEntity
 import com.ritesh.cashiro.R
 import androidx.core.graphics.toColorInt
+import com.ritesh.cashiro.ui.effects.BlurredAnimatedVisibility
 
 @Composable
 fun CategoryChip(
@@ -67,13 +68,16 @@ fun CategoryChip(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Text(
-                    text = category.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                BlurredAnimatedVisibility(visible = category.description.isNotEmpty()) {
+                    Text(
+                        text = category.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                        fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
 
         }
