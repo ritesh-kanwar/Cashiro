@@ -395,3 +395,99 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/79.txt cleanly.
+[backport-fixes-upstream 8758742] chore(release): bump version to 2.15.44 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Dec 25 12:35:02 2025 +0530
+ 3 files changed, 61 insertions(+), 7 deletions(-)
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/79.txt
+===================================
+Applying 0012-chore-update-license-from-MIT-to-GNU-Affero-General-.patch
+Applying: chore: update license from MIT to GNU Affero General Public License v3.0, reflecting new terms and conditions; update README to reflect license change
+error: patch failed: LICENSE:1
+error: LICENSE: patch does not apply
+error: patch failed: README.md:1
+error: README.md: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Using index info to reconstruct a base tree...
+M	LICENSE
+M	README.md
+Patch failed at 0001 chore: update license from MIT to GNU Affero General Public License v3.0, reflecting new terms and conditions; update README to reflect license change
+Conflict detected! Falling back to apply --reject
+error: patch failed: LICENSE:1
+Falling back to direct application...
+error: patch failed: LICENSE:1
+error: LICENSE: patch does not apply
+error: patch failed: README.md:1
+Falling back to direct application...
+error: patch failed: README.md:1
+error: README.md: patch does not apply
+Checking patch LICENSE...
+error: while searching for:
+MIT License
+
+Copyright (c) 2025 Cashiro AI contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+error: patch failed: LICENSE:1
+Checking patch README.md...
+error: while searching for:
+<a name="top"></a>
+[![Cashiro AI Banner](banner.png)](https://github.com/sarim2000/cashiroai-tracker)
+[![GitHub stars](https://img.shields.io/github/stars/sarim2000/cashiroai-tracker?style=social)](https://github.com/sarim2000/cashiroai-tracker)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Android](https://img.shields.io/badge/Android-12+-3DDC84)](https://developer.android.com/about/versions/12)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF)](https://kotlinlang.org/)
+[![Privacy](https://img.shields.io/badge/AI-100%25_On--Device-FF6B6B)](https://developers.google.com/mediapipe)
+
+error: patch failed: README.md:1
+error: while searching for:
+Turn bank SMS into a clean, searchable money timeline with on-device AI assistance. 100% private, no cloud processing.
+
+
+⭐ **Star us on GitHub — join 100+ supporters!**
+
+[![Share](https://img.shields.io/badge/share-000000?logo=x&logoColor=white)](https://x.com/intent/tweet?text=Check%20out%20Cashiro%20AI%20-%20Privacy-first%20expense%20tracker%20with%20on-device%20AI:%20https://github.com/sarim2000/cashiroai-tracker%20%23Android%20%23PrivacyFirst%20%23OnDeviceAI)
+[![Share](https://img.shields.io/badge/share-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/sarim2000/cashiroai-tracker)
+
+error: patch failed: README.md:16
+error: while searching for:
+
+## License
+
+MIT License - see [LICENSE](LICENSE)
+
+---
+
+
+error: patch failed: README.md:194
+Applying patch LICENSE with 1 reject...
+Rejected hunk #1.
+Applying patch README.md with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
