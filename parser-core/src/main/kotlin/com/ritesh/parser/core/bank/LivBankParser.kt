@@ -110,6 +110,7 @@ class LivBankParser : UAEBankParser() {
             }
         }
 
+        // Fallback to FAB's multi-currency balance extraction
         return super.extractBalance(message)
     }
 

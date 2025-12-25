@@ -491,3 +491,116 @@ Applying patch README.md with 3 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
+[backport-fixes-upstream 57ee9cf] chore: update license from MIT to GNU Affero General
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Dec 25 12:58:33 2025 +0530
+ 4 files changed, 810 insertions(+), 12 deletions(-)
+ create mode 100644 LICENSE.rej
+ create mode 100644 README.md.rej
+ delete mode 100644 app/build.gradle.kts.rej
+===================================
+Applying 0013-feat-enhance-Liv-Bank-parser-to-support-multi-curren.patch
+Applying: feat: enhance Liv Bank parser to support multi-currency transactions, including extraction of amounts and currencies for USD, EUR, and GBP; update unit tests to validate new functionality
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enhance Liv Bank parser to support multi-currency transactions, including extraction of amounts and currencies for USD, EUR, and GBP; update unit tests to validate new functionality
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:5
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt...
+error: while searching for:
+
+/**
+ * Parser for Liv Bank (UAE) - Digital bank
+ * Handles AED currency transactions
+ *
+ * Example SMS formats:
+ * - Credit: "AED 3,586.96 has been credited to account 095XXX71XXXO1. Current balance is AED 4,377.01."
+ * - Debit: "Purchase of AED 33.00 with Debit Card ending 4878 at JABAL HAFEET HAIRDRESS, Sharjah. Avl Balance is AED 4,344.01."
+ */
+class LivBankParser : BankParser() {
+
+    override fun getBankName() = "Liv Bank"
+
+    override fun getCurrency() = "AED"
+
+    override fun canHandle(sender: String): Boolean {
+        val normalizedSender = sender.uppercase().replace(Regex("\\s+"), "")
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:5
+error: while searching for:
+    }
+
+    override fun extractAmount(message: String): BigDecimal? {
+        // Liv Bank patterns: "AED X,XXX.XX" or "AED XXX.XX"
+        val amountPattern = Regex("""AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        return amountPattern.find(message)?.let {
+            it.groupValues[1].replace(",", "").toBigDecimalOrNull()
+        }
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        val lowerMessage = message.lowercase()
+
+        // Pattern for purchases: "at MERCHANT_NAME, Location."
+        if (lowerMessage.contains("purchase of")) {
+            val merchantPattern = Regex("""at\s+([^,\.]+)""", RegexOption.IGNORE_CASE)
+            merchantPattern.find(message)?.let { match ->
+                val merchant = match.groupValues[1].trim()
+                if (merchant.isNotEmpty()) {
+                    return cleanMerchantName(merchant)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:60
+error: while searching for:
+    }
+
+    override fun extractBalance(message: String): BigDecimal? {
+        // Liv Bank balance patterns
+        val balancePatterns = listOf(
+            // "Current balance is AED X,XXX.XX"
+            Regex("""Current balance is\s+AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+            
+            // "Avl Balance is AED X,XXX.XX"
+            Regex("""Avl Balance is\s+AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+            
+            // Generic "Balance: AED X,XXX.XX"
+            Regex("""Balance:?\s+AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        )
+
+        for (pattern in balancePatterns) {
+            pattern.find(message)?.let { match ->
+                val balanceStr = match.groupValues[1].replace(",", "")
+                return try {
+                    BigDecimal(balanceStr)
+                } catch (e: NumberFormatException) {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:112
+Hunk #4 succeeded at 110 (offset -66 lines).
+error: while searching for:
+        // Liv-specific card indicators
+        return lowerMessage.contains("debit card ending") ||
+                lowerMessage.contains("credit card ending") ||
+                lowerMessage.contains("debit card") ||
+                lowerMessage.contains("credit card") ||
+                super.detectIsCard(message)
+    }
+}
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:164
+Checking patch parser-core/src/test/kotlin/TestLivBankParser.kt...
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Hunk #4 applied cleanly.
+Rejected hunk #5.
+Applied patch parser-core/src/test/kotlin/TestLivBankParser.kt cleanly.
