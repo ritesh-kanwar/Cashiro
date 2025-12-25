@@ -1,0 +1,9 @@
+What's New in v2.15.44
+
+• Added support for older Android devices (Android 8.0+)
+• New bank support: Liv Bank (UAE), Emirates NBD (UAE), AdelFi Credit Union (USA), Siddhartha Bank (Nepal) - now 46 banks!
+• Create custom rules to auto-categorize transactions
+• Improved UPI transfer detection for Slice
+• Better account number recognition
+• Enhanced JioPay transaction parsing
+• Bug fixes and performance improvements
