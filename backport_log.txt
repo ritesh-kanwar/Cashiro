@@ -167,3 +167,41 @@ Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParse
 Rejected hunk #1.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 3d9a9cf] feat: enhance account number extraction logic in
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Dec 22 01:45:17 2025 +0530
+ 7 files changed, 223 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+===================================
+Applying 0006-feat-update-UPI-transfer-parsing-logic-in-SliceParse.patch
+Applying: feat: update UPI transfer parsing logic in SliceParser to allow for additional characters in recipient names, enhancing pattern matching accuracy
+Successfully applied via git am
+===================================
+Applying 0007-feat-add-AdelFi-parser-for-Credit-Union-transactions.patch
+Applying: feat: add AdelFi parser for Credit Union transactions, including message handling, amount extraction, and merchant identification; implement unit tests for validation
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add AdelFi parser for Credit Union transactions, including message handling, amount extraction, and merchant identification; implement unit tests for validation
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt' with conflicts.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt: already exists in working directory
