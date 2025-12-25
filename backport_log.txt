@@ -239,3 +239,76 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesN
 error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt: already exists in working directory
 Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt...
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt: already exists in working directory
+[backport-fixes-upstream 5d387fa] feat: add Emirates NBD parser for UAE transactions,
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Dec 25 12:23:37 2025 +0530
+ 3 files changed, 124 insertions(+)
+===================================
+Applying 0009-feat-add-Liv-Bank-parser-for-UAE-transactions-includ.patch
+Applying: feat: add Liv Bank parser for UAE transactions, including transaction type identification, amount extraction, merchant recognition, and comprehensive unit tests for validation; increase supported banks to 46
+error: sha1 information is lacking or useless (CLAUDE.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Liv Bank parser for UAE transactions, including transaction type identification, amount extraction, merchant recognition, and comprehensive unit tests for validation; increase supported banks to 46
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0009-feat-add-Liv-Bank-parser-for-UAE-transactions-includ.patch:184: trailing whitespace.
+            
+../filtered_patches/0009-feat-add-Liv-Bank-parser-for-UAE-transactions-includ.patch:187: trailing whitespace.
+            
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: CLAUDE.md:85
+error: CLAUDE.md: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt' with conflicts.
+Falling back to direct application...
+../filtered_patches/0009-feat-add-Liv-Bank-parser-for-UAE-transactions-includ.patch:184: trailing whitespace.
+            
+../filtered_patches/0009-feat-add-Liv-Bank-parser-for-UAE-transactions-includ.patch:187: trailing whitespace.
+            
+Checking patch CLAUDE.md...
+error: while searching for:
+- Use `com.ritesh.cashiro.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
+- The mapper handles type conversions between modules
+
+## Supported Banks (45 parsers)
+- Airtel Payments Bank
+- **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+- American Express (AMEX)
+
+error: patch failed: CLAUDE.md:85
+Hunk #2 succeeded at 119 (offset 4 lines).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        BandhanBankParser(),
+        ADCBParser(),  // Abu Dhabi Commercial Bank (UAE)
+        FABParser(),  // First Abu Dhabi Bank (UAE)
+        CitiBankParser(),  // Citi Bank (USA)
+        DiscoverCardParser(),  // Discover Card (USA)
+        OldHickoryParser(),  // Old Hickory Credit Union (USA)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:48
+error: while searching for:
+        MashreqBankParser(),  // Mashreq Bank (UAE)
+        CharlesSchwabParser(),  // Charles Schwab (USA)
+        NavyFederalParser(),  // Navy Federal Credit Union (USA)
+        PriorbankParser(),  // Priorbank (Belarus)
+        AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
+        NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:58
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestLivBankParser.kt...
+Applying patch CLAUDE.md with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch parser-core/src/test/kotlin/TestLivBankParser.kt cleanly.

@@ -119,6 +119,7 @@ Bank parsers are now in the `parser-core` module for reusability across platform
 - Kerala Gramin Bank
 - Kotak Bank
 - LazyPay
+- **Liv Bank (UAE)** - Digital bank
 - Mashreq Bank
 - **M-PESA (Kenya)** - Mobile money service
 - **Navy Federal Credit Union (USA)** - NFCU
