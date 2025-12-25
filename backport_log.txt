@@ -604,3 +604,99 @@ Rejected hunk #3.
 Hunk #4 applied cleanly.
 Rejected hunk #5.
 Applied patch parser-core/src/test/kotlin/TestLivBankParser.kt cleanly.
+[backport-fixes-upstream 0f1ab76] feat: enhance Liv Bank parser to support
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Dec 25 21:47:29 2025 +0530
+ 6 files changed, 362 insertions(+), 714 deletions(-)
+ delete mode 100644 LICENSE.rej
+ delete mode 100644 README.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+===================================
+Applying 0014-feat-enhance-Emirates-NBD-parser-to-support-multi-cu.patch
+Applying: feat: enhance Emirates NBD parser to support multi-currency transactions, including extraction of amounts and currencies for USD, EUR, and GBP; update unit tests to validate new functionality
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enhance Emirates NBD parser to support multi-currency transactions, including extraction of amounts and currencies for USD, EUR, and GBP; update unit tests to validate new functionality
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:5
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt:66
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt: patch does not apply
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt...
+error: while searching for:
+
+/**
+ * Parser for Emirates NBD Bank (UAE) transactions.
+ * Handles credit card and account transactions.
+ */
+class EmiratesNBDParser : BankParser() {
+
+    override fun getBankName() = "Emirates NBD"
+
+    override fun getCurrency() = "AED"
+
+    override fun canHandle(sender: String): Boolean {
+        val normalizedSender = sender.uppercase().replace(Regex("\\s+"), "")
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:5
+error: while searching for:
+    }
+
+    override fun extractAmount(message: String): BigDecimal? {
+        // Pattern: "AED 27.74" or "AED 30,978.13"
+        val amountPattern = Regex("""AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        return amountPattern.find(message)?.let {
+            it.groupValues[1].replace(",", "").toBigDecimalOrNull()
+        }
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:33
+error: while searching for:
+    }
+
+    override fun extractBalance(message: String): BigDecimal? {
+        // Pattern: "Avl Bal is AED X,XXX.XX" or "Available Balance: AED X,XXX.XX"
+        val balancePattern = Regex("""(?:Avl\s+Bal|Available\s+Balance)(?:\s+is)?\s*AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        return balancePattern.find(message)?.let {
+            it.groupValues[1].replace(",", "").toBigDecimalOrNull()
+        }
+    }
+
+    override fun extractAvailableLimit(message: String): BigDecimal? {
+        // Pattern: "Avl Cr. Limit is AED 30,978.13"
+        val limitPattern = Regex("""Avl\s+Cr\.?\s+Limit(?:\s+is)?\s*AED\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        return limitPattern.find(message)?.let {
+            it.groupValues[1].replace(",", "").toBigDecimalOrNull()
+        }
+    }
+
+    override fun extractTransactionType(message: String): TransactionType? {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:76
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt...
+error: while searching for:
+                    merchant = "Mall of Emirates",
+                    accountLast4 = "4321"
+                )
+            )
+        )
+
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt:66
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt with 1 reject...
+Rejected hunk #1.
