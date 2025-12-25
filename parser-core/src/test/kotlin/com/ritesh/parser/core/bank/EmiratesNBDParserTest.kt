@@ -5,15 +5,24 @@ import com.ritesh.parser.core.test.ExpectedTransaction
 import com.ritesh.parser.core.test.ParserTestCase
 import com.ritesh.parser.core.test.ParserTestUtils
 import com.ritesh.parser.core.test.SimpleTestCase
+<<<<<<< ours
 import org.junit.jupiter.api.*
+=======
+import org.junit.jupiter.api.Test
+>>>>>>> theirs
 import java.math.BigDecimal
 
 class EmiratesNBDParserTest {
 
     private val parser = EmiratesNBDParser()
 
+<<<<<<< ours
     @TestFactory
     fun `emirates nbd parser handles key paths`(): List<DynamicTest> {
+=======
+    @Test
+    fun `emirates nbd parser handles key paths`() {
+>>>>>>> theirs
         ParserTestUtils.printTestHeader(
             parserName = "Emirates NBD Bank (UAE)",
             bankName = parser.getBankName(),
@@ -66,6 +75,7 @@ class EmiratesNBDParserTest {
                     merchant = "Mall of Emirates",
                     accountLast4 = "4321"
                 )
+<<<<<<< ours
             ),
             ParserTestCase(
                 name = "Multi-currency Purchase - USD",
@@ -109,6 +119,16 @@ class EmiratesNBDParserTest {
 
     @TestFactory
     fun `factory resolves emirates nbd`(): List<DynamicTest> {
+=======
+            )
+        )
+
+        ParserTestUtils.runTestSuite(parser, cases)
+    }
+
+    @Test
+    fun `factory resolves emirates nbd`() {
+>>>>>>> theirs
         val cases = listOf(
             SimpleTestCase(
                 bankName = "Emirates NBD",
@@ -148,6 +168,10 @@ class EmiratesNBDParserTest {
             )
         )
 
+<<<<<<< ours
         return ParserTestUtils.runFactoryTestSuite(cases, "Factory smoke tests")
+=======
+        ParserTestUtils.runFactoryTestSuite(cases, "Factory smoke tests")
+>>>>>>> theirs
     }
 }
