@@ -312,3 +312,43 @@ Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParse
 Rejected hunk #1.
 Rejected hunk #2.
 Applied patch parser-core/src/test/kotlin/TestLivBankParser.kt cleanly.
+[backport-fixes-upstream bce5b2e] feat: add Liv Bank parser for UAE transactions,
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Dec 25 12:23:45 2025 +0530
+ 5 files changed, 332 insertions(+)
+ create mode 100644 CLAUDE.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestLivBankParser.kt
+===================================
+Applying 0010-chore-update-minSdk-version-from-30-to-26-in-build.g.patch
+Applying: chore: update minSdk version from 30 to 26 in build.gradle.kts to support older devices
+error: patch failed: app/build.gradle.kts:19
+error: app/build.gradle.kts: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Using index info to reconstruct a base tree...
+M	app/build.gradle.kts
+Patch failed at 0001 chore: update minSdk version from 30 to 26 in build.gradle.kts to support older devices
+Conflict detected! Falling back to apply --reject
+error: patch failed: app/build.gradle.kts:19
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:19
+error: app/build.gradle.kts: patch does not apply
+Checking patch app/build.gradle.kts...
+error: while searching for:
+
+    defaultConfig {
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 30
+        targetSdk = 36
+        versionCode = 78
+        versionName = "2.15.43"
+
+error: patch failed: app/build.gradle.kts:19
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
