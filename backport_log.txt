@@ -840,3 +840,342 @@ Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndia
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt cleanly.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UtkarshBankParser.kt cleanly.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/YesBankParser.kt cleanly.
+[backport-fixes-upstream 257fa9c] refactor: Introduce `BaseIndianBankParser` and
+ Author: akshaynexus <akshaycm@hotmail.com>
+ Date: Fri Dec 26 16:34:32 2025 +0800
+ 31 files changed, 238 insertions(+), 606 deletions(-)
+ create mode 100644 AGENTS.md
+ create mode 100644 CLAUDE.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt.rej
+===================================
+Applying 0016-refactor-migrate-parser-test-classes-to-use-JUnit-5-.patch
+Applying: refactor: migrate parser test classes to use JUnit 5 Dynamic Tests and update test standards documentation
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestLivBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 refactor: migrate parser test classes to use JUnit 5 Dynamic Tests and update test standards documentation
+Conflict detected! Falling back to apply --reject
+Applied patch to 'docs/parser-test-standards.md' cleanly.
+error: parser-core/src/test/kotlin/ParserTestUtils.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestADCBParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestAlinmaBankParser.kt: does not exist in index
+error: patch failed: parser-core/src/test/kotlin/TestAllNewParsers.kt:2
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestAxisBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestBandhanBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestBankOfBarodaParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestBankOfIndiaParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestCIBEgyptParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestCharlesSchwabParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestCitiBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestDhanlaxmiBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestDiscoverCardParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestEverestBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestFABParser.kt: does not exist in index
+error: patch failed: parser-core/src/test/kotlin/TestFABXML.kt:3
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/TestFABXML.kt:3
+error: parser-core/src/test/kotlin/TestFABXML.kt: patch does not apply
+error: parser-core/src/test/kotlin/TestFederalBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestHDFCBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestHSBCBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestHuntingtonBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestIndianBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestIndusIndBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestJuspayParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestKeralaGraminBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestKotakBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestLaxmiBankParser.kt: does not exist in index
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestMPESAParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestMashreqBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestNMBBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestNavyFederalParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestOldHickoryParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestPriorbankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestSBIParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestSaraswatBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestSouthIndianBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: does not exist in index
+error: patch failed: parser-core/src/test/kotlin/TestUSParsers.kt:2
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestYesBankParser.kt: does not exist in index
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt:5
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt:5
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt:5
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt: patch does not apply
+Checking patch docs/parser-test-standards.md...
+Checking patch parser-core/src/test/kotlin/ParserTestUtils.kt...
+error: parser-core/src/test/kotlin/ParserTestUtils.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestADCBParser.kt...
+error: parser-core/src/test/kotlin/TestADCBParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestAlinmaBankParser.kt...
+error: parser-core/src/test/kotlin/TestAlinmaBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestAllNewParsers.kt...
+Checking patch parser-core/src/test/kotlin/TestAxisBankParser.kt...
+error: parser-core/src/test/kotlin/TestAxisBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestBandhanBankParser.kt...
+error: parser-core/src/test/kotlin/TestBandhanBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestBankOfBarodaParser.kt...
+error: parser-core/src/test/kotlin/TestBankOfBarodaParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestBankOfIndiaParser.kt...
+error: parser-core/src/test/kotlin/TestBankOfIndiaParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestCIBEgyptParser.kt...
+error: parser-core/src/test/kotlin/TestCIBEgyptParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestCharlesSchwabParser.kt...
+error: parser-core/src/test/kotlin/TestCharlesSchwabParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestCitiBankParser.kt...
+error: parser-core/src/test/kotlin/TestCitiBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestDhanlaxmiBankParser.kt...
+error: parser-core/src/test/kotlin/TestDhanlaxmiBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestDiscoverCardParser.kt...
+error: parser-core/src/test/kotlin/TestDiscoverCardParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestEverestBankParser.kt...
+error: parser-core/src/test/kotlin/TestEverestBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestFABParser.kt...
+error: parser-core/src/test/kotlin/TestFABParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestFABXML.kt...
+error: while searching for:
+import com.ritesh.parser.core.TransactionType
+import com.ritesh.parser.core.test.ParserTestUtils
+import com.ritesh.parser.core.test.SMSData
+import com.ritesh.parser.core.test.TestResult
+import com.ritesh.parser.core.test.XMLTestUtils
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+
+class FABXmlTest {
+
+    @Test
+    fun `fab parser validates XML driven scenarios`() {
+        val parser = FABParser()
+
+        ParserTestUtils.printTestHeader(
+            parserName = "FAB XML Validation",
+            bankName = parser.getBankName(),
+            currency = parser.getCurrency()
+        )
+
+        val handleChecks = listOf(
+            "FAB" to true,
+
+error: patch failed: parser-core/src/test/kotlin/TestFABXML.kt:3
+Hunk #2 succeeded at 27 (offset 4 lines).
+Checking patch parser-core/src/test/kotlin/TestFederalBankParser.kt...
+error: parser-core/src/test/kotlin/TestFederalBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestHDFCBankParser.kt...
+error: parser-core/src/test/kotlin/TestHDFCBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestHSBCBankParser.kt...
+error: parser-core/src/test/kotlin/TestHSBCBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestHuntingtonBankParser.kt...
+error: parser-core/src/test/kotlin/TestHuntingtonBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt...
+error: parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestIndianBankParser.kt...
+error: parser-core/src/test/kotlin/TestIndianBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestIndusIndBankParser.kt...
+error: parser-core/src/test/kotlin/TestIndusIndBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestJuspayParser.kt...
+error: parser-core/src/test/kotlin/TestJuspayParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestKeralaGraminBankParser.kt...
+error: parser-core/src/test/kotlin/TestKeralaGraminBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestKotakBankParser.kt...
+error: parser-core/src/test/kotlin/TestKotakBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestLaxmiBankParser.kt...
+error: parser-core/src/test/kotlin/TestLaxmiBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestLivBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestMPESAParser.kt...
+error: parser-core/src/test/kotlin/TestMPESAParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestMashreqBankParser.kt...
+error: parser-core/src/test/kotlin/TestMashreqBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestNMBBankParser.kt...
+error: parser-core/src/test/kotlin/TestNMBBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestNavyFederalParser.kt...
+error: parser-core/src/test/kotlin/TestNavyFederalParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestOldHickoryParser.kt...
+error: parser-core/src/test/kotlin/TestOldHickoryParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestPriorbankParser.kt...
+error: parser-core/src/test/kotlin/TestPriorbankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestSBIParser.kt...
+error: parser-core/src/test/kotlin/TestSBIParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestSaraswatBankParser.kt...
+error: parser-core/src/test/kotlin/TestSaraswatBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestSouthIndianBankParser.kt...
+error: parser-core/src/test/kotlin/TestSouthIndianBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt...
+error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestUSParsers.kt...
+Checking patch parser-core/src/test/kotlin/TestYesBankParser.kt...
+error: parser-core/src/test/kotlin/TestYesBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt...
+error: while searching for:
+import com.ritesh.parser.core.test.ParserTestCase
+import com.ritesh.parser.core.test.ParserTestUtils
+import com.ritesh.parser.core.test.SimpleTestCase
+import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+
+class AdelFiParserTest {
+
+    private val parser = AdelFiParser()
+
+    @Test
+    fun `adelfi credit union parser handles key paths`() {
+        ParserTestUtils.printTestHeader(
+            parserName = "AdelFi Credit Union (USA)",
+            bankName = parser.getBankName(),
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt:5
+error: while searching for:
+            )
+        )
+
+        ParserTestUtils.runTestSuite(parser, cases)
+    }
+
+    @Test
+    fun `factory resolves adelfi credit union`() {
+        val cases = listOf(
+            SimpleTestCase(
+                bankName = "AdelFi",
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt:47
+error: while searching for:
+            )
+        )
+
+        ParserTestUtils.runFactoryTestSuite(cases, "Factory smoke tests")
+    }
+}
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt:79
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt...
+error: while searching for:
+import com.ritesh.parser.core.test.ParserTestCase
+import com.ritesh.parser.core.test.ParserTestUtils
+import com.ritesh.parser.core.test.SimpleTestCase
+import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+
+class EmiratesNBDParserTest {
+
+    private val parser = EmiratesNBDParser()
+
+    @Test
+    fun `emirates nbd parser handles key paths`() {
+        ParserTestUtils.printTestHeader(
+            parserName = "Emirates NBD Bank (UAE)",
+            bankName = parser.getBankName(),
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt:5
+error: while searching for:
+            )
+        )
+
+        ParserTestUtils.runTestSuite(parser, cases)
+    }
+
+    @Test
+    fun `factory resolves emirates nbd`() {
+        val cases = listOf(
+            SimpleTestCase(
+                bankName = "Emirates NBD",
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt:104
+error: while searching for:
+            )
+        )
+
+        ParserTestUtils.runFactoryTestSuite(cases, "Factory smoke tests")
+    }
+}
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt:148
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/JioPayParserTest.kt...
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt...
+error: while searching for:
+import com.ritesh.parser.core.test.ParserTestCase
+import com.ritesh.parser.core.test.ParserTestUtils
+import com.ritesh.parser.core.test.SimpleTestCase
+import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+
+class SiddharthaBankParserTest {
+
+    private val parser = SiddharthaBankParser()
+
+    @Test
+    fun `siddhartha bank parser handles key paths`() {
+        ParserTestUtils.printTestHeader(
+            parserName = "Siddhartha Bank Limited (Nepal)",
+            bankName = parser.getBankName(),
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt:5
+error: while searching for:
+            )
+        )
+
+        ParserTestUtils.runTestSuite(parser, cases)
+    }
+
+    @Test
+    fun `factory resolves siddhartha bank`() {
+        val cases = listOf(
+            SimpleTestCase(
+                bankName = "Siddhartha Bank",
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt:74
+error: while searching for:
+            )
+        )
+
+        ParserTestUtils.runFactoryTestSuite(cases, "Factory smoke tests")
+    }
+}
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt:118
+Applied patch docs/parser-test-standards.md cleanly.
+Applied patch parser-core/src/test/kotlin/TestAllNewParsers.kt cleanly.
+Applying patch parser-core/src/test/kotlin/TestFABXML.kt with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Applied patch parser-core/src/test/kotlin/TestLivBankParser.kt cleanly.
+Applied patch parser-core/src/test/kotlin/TestUSParsers.kt cleanly.
+Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/JioPayParserTest.kt cleanly.
+Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
