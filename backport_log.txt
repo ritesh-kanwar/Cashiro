@@ -1179,3 +1179,251 @@ Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/Siddharth
 Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
+[backport-fixes-upstream e3c7154] refactor: migrate parser test classes to use JUnit 5
+ Author: akshaynexus <akshaycm@hotmail.com>
+ Date: Fri Dec 26 16:57:34 2025 +0800
+ 13 files changed, 606 insertions(+), 185 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestFABXML.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt.rej
+===================================
+Applying 0017-refactor-centralize-multi-currency-and-amount-extrac.patch
+Applying: refactor: centralize multi-currency and amount extraction into UAEBankParser, removing redundant overrides from EmiratesNBD, Liv, and Mashreq parsers.
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 refactor: centralize multi-currency and amount extraction into UAEBankParser, removing redundant overrides from EmiratesNBD, Liv, and Mashreq parsers.
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:200: trailing whitespace.
+    
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:259: trailing whitespace.
+                    if (upperVal.length == 3 && 
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:260: trailing whitespace.
+                        upperVal.all { it.isLetter() } && 
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:267: trailing whitespace.
+        
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:270: trailing whitespace.
+        simplePattern.find(message)?.let { 
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:5
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:13
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MashreqBankParser.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt:1
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt: patch does not apply
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:200: trailing whitespace.
+    
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:259: trailing whitespace.
+                    if (upperVal.length == 3 && 
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:260: trailing whitespace.
+                        upperVal.all { it.isLetter() } && 
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:267: trailing whitespace.
+        
+../filtered_patches/0017-refactor-centralize-multi-currency-and-amount-extrac.patch:270: trailing whitespace.
+        simplePattern.find(message)?.let { 
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt...
+error: while searching for:
+
+/**
+ * Parser for Emirates NBD Bank (UAE) transactions.
+ * Inherits from FABParser for multi-currency support.
+ * Handles credit card and account transactions in AED and other currencies.
+ */
+class EmiratesNBDParser : FABParser() {
+
+    override fun getBankName() = "Emirates NBD"
+
+    override fun getCurrency() = "AED"  // UAE Dirham (default)
+
+    override fun canHandle(sender: String): Boolean {
+        val normalizedSender = sender.uppercase().replace(Regex("\\s+"), "")
+        return normalizedSender.contains("EMIRATESNBD") ||
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:5
+error: while searching for:
+                lowerMessage.contains("transfer")
+    }
+
+    override fun extractAmount(message: String): BigDecimal? {
+        // Emirates NBD patterns: Support multi-currency - "AED 27.74", "USD 100.00", "EUR 50.00", etc.
+        val patterns = listOf(
+            // Pattern 1: "Purchase of CURRENCY amount"
+            Regex("""purchase of\s+([A-Z]{3})\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+
+            // Pattern 2: Generic "CURRENCY amount" pattern
+            Regex("""([A-Z]{3})\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        )
+
+        for (pattern in patterns) {
+            pattern.find(message)?.let { match ->
+                val currencyCode = match.groupValues[1].uppercase()
+                val amountStr = match.groupValues[2].replace(",", "")
+
+                // Validate currency code (3 letters, not month names)
+                if (currencyCode.length == 3 &&
+                    currencyCode.matches(Regex("""[A-Z]{3}""")) &&
+                    !currencyCode.matches(Regex("""^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)$""", RegexOption.IGNORE_CASE))
+                ) {
+                    return try {
+                        BigDecimal(amountStr)
+                    } catch (e: NumberFormatException) {
+                        null
+                    }
+                }
+            }
+        }
+
+        // Fallback to FAB's multi-currency extraction
+        return super.extractAmount(message)
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        val lowerMessage = message.lowercase()
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt:33
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt...
+error: while searching for:
+ * - Debit: "Purchase of AED 33.00 with Debit Card ending 4878 at JABAL HAFEET HAIRDRESS, Sharjah. Avl Balance is AED 4,344.01."
+ * - Multi-currency: "Purchase of USD 100.00 with Debit Card ending 4878 at AMAZON.COM. Avl Balance is AED 4,244.01."
+ */
+class LivBankParser : FABParser() {
+
+    override fun getBankName() = "Liv Bank"
+
+    override fun getCurrency() = "AED"  // UAE Dirham (default)
+
+    override fun canHandle(sender: String): Boolean {
+        val normalizedSender = sender.uppercase().replace(Regex("\\s+"), "")
+        return normalizedSender == "LIV" ||
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:13
+error: while searching for:
+        return super.isTransactionMessage(message)
+    }
+
+    override fun extractAmount(message: String): BigDecimal? {
+        // Liv Bank patterns: Support multi-currency - "AED 33.00", "USD 100.00", "EUR 50.00", etc.
+        val patterns = listOf(
+            // Pattern 1: "Purchase of CURRENCY amount"
+            Regex("""purchase of\s+([A-Z]{3})\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+
+            // Pattern 2: "CURRENCY amount has been credited"
+            Regex("""([A-Z]{3})\s+([\d,]+(?:\.\d{2})?)\s+has been credited""", RegexOption.IGNORE_CASE),
+
+            // Pattern 3: Generic "CURRENCY amount" pattern
+            Regex("""([A-Z]{3})\s+([\d,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        )
+
+        for (pattern in patterns) {
+            pattern.find(message)?.let { match ->
+                val currencyCode = match.groupValues[1].uppercase()
+                val amountStr = match.groupValues[2].replace(",", "")
+
+                // Validate currency code (3 letters, not month names)
+                if (currencyCode.length == 3 &&
+                    currencyCode.matches(Regex("""[A-Z]{3}""")) &&
+                    !currencyCode.matches(Regex("""^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)$""", RegexOption.IGNORE_CASE))
+                ) {
+                    return try {
+                        BigDecimal(amountStr)
+                    } catch (e: NumberFormatException) {
+                        null
+                    }
+                }
+            }
+        }
+
+        // Fallback to FAB's multi-currency extraction
+        return super.extractAmount(message)
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        val lowerMessage = message.lowercase()
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt:61
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MashreqBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt...
+error: while searching for:
+package com.ritesh.parser.core.bank
+
+import com.ritesh.parser.core.TransactionType
+import java.math.BigDecimal
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt:1
+error: while searching for:
+ */
+abstract class UAEBankParser : BankParser() {
+
+    override fun getCurrency() = "AED"
+
+    /**
+     * Checks if the message contains a credit/debit card purchase pattern.
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt:9
+error: while searching for:
+                message.contains("Debit Card Purchase", ignoreCase = true)
+    }
+
+    override fun extractCurrency(message: String): String? {
+        // Extract currency code from transaction message
+        val currencyPatterns = listOf(
+            Regex("""Amount\s+([A-Z]{3})""", RegexOption.IGNORE_CASE),
+            Regex("""[A-Z]{3}\s+[0-9,]+(?:\.\d{2})?""", RegexOption.IGNORE_CASE)
+        )
+
+        for (pattern in currencyPatterns) {
+            pattern.find(message)?.let { match ->
+                val currencyMatch = Regex("""([A-Z]{3})""").find(match.value)
+                currencyMatch?.let {
+                    return it.groupValues[1].uppercase()
+                }
+            }
+        }
+
+        return "AED"
+    }
+
+    override fun extractTransactionType(message: String): TransactionType? {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt:20
+error: while searching for:
+            lowerMessage.contains("cheque returned") -> TransactionType.EXPENSE
+
+            // ATM withdrawals are expenses
+            lowerMessage.contains("atm cash withdrawal") -> TransactionType.EXPENSE
+
+            // Income transactions
+            lowerMessage.contains("inward remittance") -> TransactionType.INCOME
+            lowerMessage.contains("cash deposit") -> TransactionType.INCOME
+            lowerMessage.contains("has been credited") -> TransactionType.INCOME
+
+            // Outward remittance and payment instructions are expenses
+            lowerMessage.contains("outward remittance") -> TransactionType.EXPENSE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt:52
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MashreqBankParser.kt cleanly.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
