@@ -700,3 +700,143 @@ Rejected hunk #2.
 Rejected hunk #3.
 Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream a0807ab] feat: enhance Emirates NBD parser to support
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Dec 25 21:47:39 2025 +0530
+ 4 files changed, 261 insertions(+), 171 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt.rej
+===================================
+Applying 0015-refactor-Introduce-BaseIndianBankParser-and-migrate-.patch
+Applying: refactor: Introduce `BaseIndianBankParser` and migrate Indian bank parsers to extend it, also adding `UAEBankParser`.
+error: sha1 information is lacking or useless (CLAUDE.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 refactor: Introduce `BaseIndianBankParser` and migrate Indian bank parsers to extend it, also adding `UAEBankParser`.
+Conflict detected! Falling back to apply --reject
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: CLAUDE.md:66
+error: CLAUDE.md: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AxisBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BandhanBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfBarodaParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfIndiaParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CanaraBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CityUnionBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DhanlaxmiBankParser.kt' cleanly.
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FABParser.kt:1
+Falling back to direct application...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndianBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JKBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JuspayParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KeralaGraminBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SaraswatBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UtkarshBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/YesBankParser.kt' cleanly.
+Checking patch AGENTS.md...
+Checking patch CLAUDE.md...
+error: while searching for:
+### When adding new bank parsers:
+1. **Location**: Add to `parser-core/src/main/kotlin/com/ritesh/parser/core/bank/`
+2. **Base Class**: All bank parsers extend `BankParser` abstract class
+3. **Key Methods**:
+   - `getBankName()`: Returns the bank's display name
+   - `canHandle(sender: String)`: Checks if parser can handle SMS from sender
+
+error: patch failed: CLAUDE.md:66
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt...
+Hunk #1 succeeded at 119 (offset 4 lines).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt...
+error: while searching for:
+ *
+ * Sender patterns: XX-AUBANK-S/T, AUSFB, AU-BANK, etc.
+ */
+class AUBankParser : BankParser() {
+
+    override fun getBankName() = "AU Small Finance Bank"
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt:13
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AxisBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BandhanBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfBarodaParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfIndiaParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CanaraBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CityUnionBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DhanlaxmiBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FABParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndianBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JKBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JuspayParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KeralaGraminBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt...
+Hunk #1 succeeded at 8 (offset 1 line).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt...
+Hunk #2 succeeded at 660 (offset 109 lines).
+Hunk #3 succeeded at 678 (offset 115 lines).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SaraswatBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UtkarshBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/YesBankParser.kt...
+Applied patch AGENTS.md cleanly.
+Applying patch CLAUDE.md with 1 reject...
+Rejected hunk #1.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt cleanly.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt with 1 reject...
+Rejected hunk #1.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AxisBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BandhanBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfBarodaParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfIndiaParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CanaraBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CityUnionBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DhanlaxmiBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FABParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndianBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JKBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JuspayParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KeralaGraminBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SaraswatBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UtkarshBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/YesBankParser.kt cleanly.
