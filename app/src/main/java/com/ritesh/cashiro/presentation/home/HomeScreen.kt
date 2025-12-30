@@ -68,6 +68,7 @@ import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.outlined.MarkChatUnread
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Settings
 import dev.chrisbanes.haze.hazeSource
@@ -78,6 +79,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController,
     onNavigateToSettings: () -> Unit = {},
+    onNavigateToChat: () -> Unit = {},
     onNavigateToTransactions: () -> Unit = {},
     onNavigateToTransactionsWithSearch: () -> Unit = {},
     onNavigateToSubscriptions: () -> Unit = {},
@@ -169,8 +171,6 @@ fun HomeScreen(
                 scrollBehaviorLarge = scrollBehavior,
                 hazeState = hazeState,
                 hasBackButton = false,
-//                showSettingsButton = true,
-//                showDiscordButton = true,
                 onNavigateToSettings = onNavigateToSettings,
                 actionContent = {
                     Box(
@@ -182,15 +182,15 @@ fun HomeScreen(
                                 shape = CircleShape
                             )
                             .clickable(
-                                onClick = onNavigateToSettings,
+                                onClick = onNavigateToChat,
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
                             ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.Settings,
-                            contentDescription = "Edit Profile",
+                            imageVector = Icons.Outlined.MarkChatUnread,
+                            contentDescription = "Chat Screen",
                             tint = MaterialTheme.colorScheme.inverseSurface,
                             modifier = Modifier.size(24.dp)
                         )

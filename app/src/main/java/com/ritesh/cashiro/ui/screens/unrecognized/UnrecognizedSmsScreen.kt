@@ -27,6 +27,8 @@ import dev.chrisbanes.haze.HazeState
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.hazeSource
 
@@ -181,6 +183,7 @@ fun UnrecognizedSmsScreen(
                 state = lazyListState,
                 verticalArrangement = Arrangement.spacedBy(Spacing.sm),
                 modifier = Modifier
+                    .clip(RoundedCornerShape(Dimensions.Padding.content))
                     .fillMaxSize()
                     .overScrollVertical(),
                 flingBehavior = rememberOverscrollFlingBehavior { lazyListState }

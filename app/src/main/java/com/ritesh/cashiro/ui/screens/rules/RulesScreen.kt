@@ -1,9 +1,18 @@
 package com.ritesh.cashiro.ui.screens.rules
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -19,6 +28,7 @@ import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.HazeState
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
@@ -57,42 +67,43 @@ fun RulesScreen(
                 hazeState = hazeState,
                 hasBackButton = true,
                 onBackClick = onNavigateBack,
-//                actions = {
-//            // Optional: Add reset button for advanced users
-//            var showResetDialog by remember { mutableStateOf(false) }
-//
-//            IconButton(
-//                onClick = { showResetDialog = true }
-//            ) {
-//                Icon(
-//                    Icons.Default.Refresh,
-//                    contentDescription = "Reset to defaults"
-//                )
-//            }
-//
-//            if (showResetDialog) {
-//                AlertDialog(
-//                    onDismissRequest = { showResetDialog = false },
-//                    title = { Text("Reset Rules") },
-//                    text = { Text("Reset all rules to default settings? Your custom settings will be lost.") },
-//                    confirmButton = {
-//                        TextButton(
-//                            onClick = {
-//                                viewModel.resetToDefaults()
-//                                showResetDialog = false
-//                            }
-//                        ) {
-//                            Text("Reset")
-//                        }
-//                    },
-//                    dismissButton = {
-//                        TextButton(onClick = { showResetDialog = false }) {
-//                            Text("Cancel")
-//                        }
-//                    }
-//                )
-//            }
-//                }
+                navigationContent = { NavigationContent(onNavigateBack) },
+                actionContent = {
+                    // Optional: Add reset button for advanced users
+                    var showResetDialog by remember { mutableStateOf(false) }
+
+                    IconButton(
+                        onClick = { showResetDialog = true }
+                    ) {
+                        Icon(
+                            Icons.Default.Refresh,
+                            contentDescription = "Reset to defaults"
+                        )
+                    }
+
+                    if (showResetDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showResetDialog = false },
+                            title = { Text("Reset Rules") },
+                            text = { Text("Reset all rules to default settings? Your custom settings will be lost.") },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        viewModel.resetToDefaults()
+                                        showResetDialog = false
+                                    }
+                                ) {
+                                    Text("Reset")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { showResetDialog = false }) {
+                                    Text("Cancel")
+                                }
+                            }
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -114,36 +125,38 @@ fun RulesScreen(
                 CircularProgressIndicator()
             }
         } else {
-            val scrollState = rememberScrollState()
+            val lazyListState = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = paddingValues.calculateBottomPadding())
                     .hazeSource(state = hazeState)
                     .overScrollVertical()
-                    .verticalScroll(scrollState)
                     .padding(
                         start = Dimensions.Padding.content,
                         end = Dimensions.Padding.content,
-                        bottom = Dimensions.Padding.content,
+                        bottom = 0.dp,
                         top = Dimensions.Padding.content + paddingValues.calculateTopPadding()
                     ),
-                flingBehavior = rememberOverscrollFlingBehavior { scrollState },
+                state = lazyListState,
+                flingBehavior = rememberOverscrollFlingBehavior { lazyListState },
 
                 verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
                 // Info Card
-                item{Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                ) {
+                item{
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
+                        shape = MaterialTheme.shapes.extraLarge
+                    ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(Dimensions.Padding.content),
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.md)
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             Icons.Default.AutoAwesome,
@@ -160,7 +173,7 @@ fun RulesScreen(
                             Text(
                                 text = "Enable rules to automatically categorize your transactions based on patterns",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.8f)
                             )
                         }
                     }
@@ -203,7 +216,10 @@ fun RulesScreen(
 
                     groupedRules.forEach { (category, categoryRules) ->
                         if (categoryRules.isNotEmpty()) {
-                            SectionHeader(title = category)
+                            SectionHeader(
+                                title = category,
+                                modifier = Modifier.padding(Spacing.md)
+                            )
 
                             categoryRules.forEach { rule ->
                                 RuleCard(
@@ -276,7 +292,7 @@ private fun RuleCard(
                 .fillMaxWidth()
                 .padding(Dimensions.Padding.content),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier.weight(1f),

@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
 import java.math.BigDecimal
@@ -58,59 +57,63 @@ fun NumberPad(
             result = "0"
         }
     }
-    Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(if (doneButtonLabel == "Update Balance")0.8f else 0.7f)) {
+    Box(
+            modifier =
+                    Modifier.fillMaxWidth()
+                            .fillMaxHeight(if (doneButtonLabel == "Update Balance") 0.8f else 0.7f)
+    ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(Spacing.md),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(Spacing.md)
+                modifier = Modifier.fillMaxSize().padding(Spacing.md),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(Spacing.md)
         ) {
             Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
             )
 
             if (bankName != null && accountLast4 != null) {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                    ),
-                    shape = MaterialTheme.shapes.medium
+                        modifier = Modifier.fillMaxWidth(),
+                        colors =
+                                CardDefaults.cardColors(
+                                        containerColor =
+                                                MaterialTheme.colorScheme.surfaceContainerLow
+                                ),
+                        shape = MaterialTheme.shapes.medium
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            modifier =
+                                    Modifier.fillMaxWidth()
+                                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                            modifier = Modifier.size(40.dp)
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                modifier = Modifier.size(40.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
-                                    imageVector = Icons.Default.AccountBalance,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(20.dp),
-                                    tint = MaterialTheme.colorScheme.primary
+                                        imageVector = Icons.Default.AccountBalance,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(20.dp),
+                                        tint = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
                         Column {
                             Text(
-                                text = bankName,
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.SemiBold
+                                    text = bankName,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
                             )
                             Text(
-                                text = "•••• $accountLast4",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    text = "•••• $accountLast4",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -119,111 +122,114 @@ fun NumberPad(
 
             // Display Area
             Column(
-                modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.md),
-                horizontalAlignment = Alignment.End
+                    modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.md),
+                    horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = expression.ifEmpty { "0" },
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.End,
-                    maxLines = 1
+                        text = expression.ifEmpty { "0" },
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.End,
+                        maxLines = 1
                 )
                 Text(
-                    text = result,
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.End,
-                    maxLines = 1
+                        text = result,
+                        style = MaterialTheme.typography.displaySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.End,
+                        maxLines = 1
                 )
             }
 
             // Grid of buttons
             val buttons =
-                listOf(
-                    "AC",
-                    "()",
-                    "%",
-                    "/",
-                    "7",
-                    "8",
-                    "9",
-                    "*",
-                    "4",
-                    "5",
-                    "6",
-                    "-",
-                    "1",
-                    "2",
-                    "3",
-                    "+",
-                    "0",
-                    ".",
-                    "⌫",
-                    "="
-                )
+                    listOf(
+                            "AC",
+                            "()",
+                            "%",
+                            "/",
+                            "7",
+                            "8",
+                            "9",
+                            "*",
+                            "4",
+                            "5",
+                            "6",
+                            "-",
+                            "1",
+                            "2",
+                            "3",
+                            "+",
+                            "0",
+                            ".",
+                            "⌫",
+                            "="
+                    )
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
-                verticalArrangement = Arrangement.spacedBy(Spacing.sm),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
-                modifier = Modifier.fillMaxWidth()
+                    columns = GridCells.Fixed(4),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.sm),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                    modifier = Modifier.fillMaxWidth()
             ) {
                 items(buttons) { btn ->
                     NumberPadButton(
-                        text = btn,
-                        onClick = {
-                            when (btn) {
-                                "AC" -> {
-                                    expression = ""
-                                    result = "0"
-                                }
-
-                                "⌫" ->
-                                    if (expression.isNotEmpty())
-                                        expression = expression.dropLast(1)
-
-                                "=" -> {
-                                    expression = result
-                                }
-
-                                "()" -> {
-                                    val openCount = expression.count { it == '(' }
-                                    val closeCount = expression.count { it == ')' }
-                                    if (openCount == closeCount ||
-                                        expression.lastOrNull() in
-                                        listOf('+', '-', '*', '/', '%', '(')
-                                    ) {
-                                        expression += "("
-                                    } else {
-                                        expression += ")"
+                            text = btn,
+                            onClick = {
+                                when (btn) {
+                                    "AC" -> {
+                                        expression = ""
+                                        result = "0"
                                     }
-                                }
-
-                                else -> {
-                                    if (btn in "0123456789.") {
-                                        expression += btn
-                                    } else {
-                                        if (expression.isNotEmpty() &&
-                                            expression.last() !in "+-*/%."
+                                    "⌫" ->
+                                            if (expression.isNotEmpty())
+                                                    expression = expression.dropLast(1)
+                                    "=" -> {
+                                        expression = result
+                                    }
+                                    "()" -> {
+                                        val openCount = expression.count { it == '(' }
+                                        val closeCount = expression.count { it == ')' }
+                                        if (openCount == closeCount ||
+                                                        expression.lastOrNull() in
+                                                                listOf('+', '-', '*', '/', '%', '(')
                                         ) {
+                                            expression += "("
+                                        } else {
+                                            expression += ")"
+                                        }
+                                    }
+                                    else -> {
+                                        if (btn in "0123456789.") {
                                             expression += btn
+                                        } else {
+                                            if (expression.isNotEmpty() &&
+                                                            expression.last() !in "+-*/%."
+                                            ) {
+                                                expression += btn
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        },
-                        isOperator = btn in listOf("AC", "()", "%", "/", "*", "-", "+", "⌫", "="),
-                        isAction = btn == "="
+                            },
+                            isOperator =
+                                    btn in listOf("AC", "()", "%", "/", "*", "-", "+", "⌫", "="),
+                            isAction = btn == "=",
+                            isError = btn == "AC"
                     )
                 }
             }
         }
         Button(
-            onClick = { onDone(result) },
-            modifier = Modifier.padding(horizontal = Dimensions.Padding.content).fillMaxWidth().align(Alignment.BottomCenter).height(56.dp).padding(top = Spacing.sm),
-            shapes = ButtonDefaults.shapes()
+                onClick = { onDone(result) },
+                modifier =
+                        Modifier.padding(horizontal = Dimensions.Padding.content)
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter)
+                                .height(56.dp)
+                                .padding(top = Spacing.sm),
+                shapes = ButtonDefaults.shapes()
         ) {
             Icon(Icons.Default.Done, contentDescription = null)
             Spacer(Modifier.width(Spacing.sm))
@@ -238,43 +244,47 @@ fun NumberPadButton(
         text: String,
         onClick: () -> Unit,
         isOperator: Boolean = false,
-        isAction: Boolean = false
+        isAction: Boolean = false,
+        isError: Boolean = false
 ) {
     Button(
-        onClick = onClick,
-        modifier = Modifier.size(64.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = when {
-                isAction -> MaterialTheme.colorScheme.primary
-                isOperator -> MaterialTheme.colorScheme.secondaryContainer
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            },
-            contentColor =
-                when {
-                    isAction -> MaterialTheme.colorScheme.onPrimary
-                    isOperator -> MaterialTheme.colorScheme.onSecondaryContainer
-                    else -> MaterialTheme.colorScheme.onSurfaceVariant
-                },
-        ),
-        shapes = ButtonDefaults.shapes(),
+            onClick = onClick,
+            modifier = Modifier.size(64.dp),
+            colors =
+                    ButtonDefaults.buttonColors(
+                            containerColor =
+                                    when {
+                                        isError -> MaterialTheme.colorScheme.errorContainer
+                                        isAction -> MaterialTheme.colorScheme.primary
+                                        isOperator -> MaterialTheme.colorScheme.secondaryContainer
+                                        else -> MaterialTheme.colorScheme.surfaceVariant
+                                    },
+                            contentColor =
+                                    when {
+                                        isError -> MaterialTheme.colorScheme.onErrorContainer
+                                        isAction -> MaterialTheme.colorScheme.onPrimary
+                                        isOperator -> MaterialTheme.colorScheme.onSecondaryContainer
+                                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
+                    ),
+            shapes = ButtonDefaults.shapes(),
     ) {
         Box(contentAlignment = Alignment.Center) {
             if (text == "⌫") {
                 Icon(
-                    Icons.AutoMirrored.Filled.Backspace,
-                    contentDescription = "Backspace",
-                    modifier = Modifier.size(24.dp)
+                        Icons.AutoMirrored.Filled.Backspace,
+                        contentDescription = "Backspace",
+                        modifier = Modifier.size(24.dp)
                 )
             } else {
                 Text(
-                    text = text,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold
+                        text = text,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold
                 )
             }
         }
     }
-
 }
 
 private object SimpleMathEvaluator {

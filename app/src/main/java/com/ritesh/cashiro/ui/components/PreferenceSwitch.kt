@@ -2,6 +2,7 @@ package com.ritesh.cashiro.ui.components
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
@@ -23,8 +24,8 @@ fun PreferenceSwitch(
     subtitle: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    showLeadingIcon: Boolean = false,
-    leadingIcon: Int? = null,
+    leadingIcon: @Composable () -> Unit = {},
+    padding: PaddingValues = listItemPadding,
     isFirst: Boolean = false,
     isLast: Boolean = false,
     isSingle: Boolean = false
@@ -38,12 +39,7 @@ fun PreferenceSwitch(
             headline = { Text(title) },
             supporting = { Text(subtitle) },
             leading = {
-                if (showLeadingIcon) {
-                    Icon(
-                        painter = painterResource(leadingIcon ?: R.drawable.ic_discord),
-                        contentDescription = null
-                    )
-                }
+                leadingIcon()
             },
             trailing = {
                 Switch(
@@ -63,7 +59,7 @@ fun PreferenceSwitch(
                 else if (isLast) ListItemPosition.Bottom.toShape()
                 else if (isSingle) ListItemPosition.Single.toShape()
                 else ListItemPosition.Middle.toShape(),
-            padding = listItemPadding
+            padding = padding
         )
     }
 }

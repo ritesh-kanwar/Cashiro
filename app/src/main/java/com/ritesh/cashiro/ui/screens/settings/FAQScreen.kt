@@ -6,8 +6,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
@@ -26,10 +25,13 @@ import com.ritesh.cashiro.ui.theme.Spacing
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
+import dev.chrisbanes.haze.hazeSource
+import androidx.core.net.toUri
 
 data class FAQItem(
     val question: String,
@@ -144,6 +146,8 @@ fun FAQScreen(
     var expandedCategories by remember { mutableStateOf(setOf<Int>()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollBehaviorSmall = TopAppBarDefaults.pinnedScrollBehavior()
+
+    val lazyListState = rememberLazyListState()
     val hazeState = remember { HazeState() }
 
     Scaffold(
@@ -155,36 +159,35 @@ fun FAQScreen(
                 scrollBehaviorLarge = scrollBehavior,
                 hazeState = hazeState,
                 hasBackButton = true,
-                onBackClick = onNavigateBack
+                onBackClick = onNavigateBack,
+                navigationContent = { NavigationContent(onNavigateBack) },
             )
         }
     ) { paddingValues ->
-        Surface(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(bottom = paddingValues.calculateBottomPadding()),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            val scrollState = rememberScrollState()
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .haze(state = hazeState)
+                    .hazeSource(state = hazeState)
                     .overScrollVertical()
-                    .verticalScroll(scrollState).padding(
+                    .padding(
                         start = Dimensions.Padding.content,
                         end = Dimensions.Padding.content,
-                        bottom = Dimensions.Padding.content,
+                        bottom = 0.dp,
                         top = Dimensions.Padding.content + paddingValues.calculateTopPadding()
                     ),
-                flingBehavior = rememberOverscrollFlingBehavior { scrollState },
+                state = lazyListState,
+                flingBehavior = rememberOverscrollFlingBehavior { lazyListState },
 
                 verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
             // FAQ Categories
             item{
                 faqCategories.forEachIndexed { categoryIndex, category ->
-                    SectionHeader(title = category.title)
+                    SectionHeader(
+                        title = category.title,
+                        modifier = Modifier.padding(Spacing.md)
+                    )
 
                     CashiroCard(
                         modifier = Modifier.fillMaxWidth()
@@ -272,14 +275,18 @@ fun FAQScreen(
             }
             
             // Still need help section
-            item {SectionHeader(title = "Still Need Help?")}
+            item {SectionHeader(
+                title = "Still Need Help?",
+                modifier = Modifier.padding(start = Spacing.md, bottom = Spacing.md)
+            )}
             
             item{
                 CashiroCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sarim2000/pennywiseai-tracker/issues/new/choose"))
+                            val intent = Intent(Intent.ACTION_VIEW,
+                                "https://github.com/sarim2000/pennywiseai-tracker/issues/new/choose".toUri())
                             context.startActivity(intent)
                         }
                 ) {
@@ -323,8 +330,8 @@ fun FAQScreen(
                 }
             }
             
-            item{
-                Spacer(modifier = Modifier.height(Spacing.lg))
+            item{ Spacer(modifier = Modifier.height(Spacing.lg)) }
             }
-            }
-}}}
+        }
+
+}

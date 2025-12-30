@@ -81,25 +81,25 @@ open class NavPage(
     val route: String,
     val arguments: List<NamedNavArgument> = emptyList(),
     val argSaver: Saver<*, out Any>? = null,
-    val content: @Composable (AnimatedContentScope.() -> Unit),
+    val content: @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit),
 )
 
-inline fun <reified Arg> navPage(
+inline fun <reified Arg> navPageWithArg(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     argSaver: Saver<Arg, out Any>? = null,
     crossinline content: @Composable (AnimatedContentScope.(Arg) -> Unit),
 ) =
-    NavPage(route, arguments, argSaver) {
+    NavPage(route, arguments, argSaver) { entry ->
         val arg = LocalNavControllerWithArgs.current?.getArg(route)
-        if (arg !is Arg) throw Exception("Incorrect route arg type! Route: $route")
+        if (arg !is Arg) throw Exception("Incorrect route arg type! Route: $route\nExpected: ${Arg::class.simpleName}\nActual: ${arg?.let { it::class.simpleName } ?: "null"}")
         content(arg)
     }
 
 fun navPage(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
-    content: @Composable (AnimatedContentScope.() -> Unit),
+    content: @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit),
 ) = NavPage(route, arguments, content = content)
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -150,7 +150,7 @@ fun AnimatedNavHost(
                                     )
                                     .background(color = MaterialTheme.colorScheme.background)
 
-                            ) { with(page) { content() } }
+                            ) { with(page) { content(it) } }
                         }
                     }
                 }

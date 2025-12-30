@@ -134,7 +134,7 @@ fun EditAccountSheet(
                     // Icon Button
                     Box(
                         modifier = Modifier
-                            .size(56.dp)
+                            .size(58.dp)
                             .background(
                                 color = Color(colorHex.toColorInt()).copy(alpha = 0.2f),
                                 shape = MaterialTheme.shapes.large
@@ -145,7 +145,7 @@ fun EditAccountSheet(
                         Icon(
                             painter = painterResource(id = iconResId),
                             contentDescription = null,
-                            modifier = Modifier.size(32.dp),
+                            modifier = Modifier.size(34.dp),
                             tint = Color.Unspecified // Keep original icon colors as per
                         )
                         // Edit badge
