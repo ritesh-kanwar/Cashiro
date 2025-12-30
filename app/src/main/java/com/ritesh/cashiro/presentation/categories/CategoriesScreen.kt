@@ -141,7 +141,6 @@ fun CategoriesScreen(onNavigateBack: () -> Unit, viewModel: CategoriesViewModel 
                     state = lazyListState,
                     modifier =
                             Modifier.fillMaxSize()
-                                .animateContentSize()
                                     .overScrollVertical()
                                     .hazeSource(state = hazeState),
                     flingBehavior = rememberOverscrollFlingBehavior { lazyListState },

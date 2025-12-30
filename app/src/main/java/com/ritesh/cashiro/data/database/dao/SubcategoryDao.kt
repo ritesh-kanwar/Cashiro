@@ -9,6 +9,9 @@ interface SubcategoryDao {
     @Query("SELECT * FROM subcategories WHERE category_id = :categoryId ORDER BY name ASC")
     fun getSubcategoriesByCategoryId(categoryId: Long): Flow<List<SubcategoryEntity>>
 
+    @Query("SELECT * FROM subcategories ORDER BY name ASC")
+    fun getAllSubcategories(): Flow<List<SubcategoryEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSubcategory(subcategory: SubcategoryEntity): Long
 

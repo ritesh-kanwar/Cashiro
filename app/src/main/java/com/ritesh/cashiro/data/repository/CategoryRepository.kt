@@ -2,15 +2,28 @@ package com.ritesh.cashiro.data.repository
 
 import com.ritesh.cashiro.data.database.dao.CategoryDao
 import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import com.ritesh.cashiro.di.ApplicationScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CategoryRepository @Inject constructor(
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    @ApplicationScope private val externalScope: CoroutineScope
 ) {
+    
+    val categories: StateFlow<List<CategoryEntity>> = categoryDao.getAllCategories()
+        .stateIn(
+            scope = externalScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList()
+        )
     
     fun getAllCategories(): Flow<List<CategoryEntity>> {
         return categoryDao.getAllCategories()

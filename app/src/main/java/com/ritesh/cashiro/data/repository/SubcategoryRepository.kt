@@ -4,7 +4,13 @@ package com.ritesh.cashiro.data.repository
 import com.ritesh.cashiro.data.database.dao.SubcategoryDao
 import com.ritesh.cashiro.data.database.dao.CategoryDao
 import com.ritesh.cashiro.data.database.entity.SubcategoryEntity
+import com.ritesh.cashiro.di.ApplicationScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,10 +18,22 @@ import javax.inject.Singleton
 @Singleton
 class SubcategoryRepository @Inject constructor(
     private val subcategoryDao: SubcategoryDao,
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    @ApplicationScope private val externalScope: CoroutineScope
 ) {
+    val subcategoriesMap: StateFlow<Map<Long, List<SubcategoryEntity>>> = subcategoryDao.getAllSubcategories()
+        .map { allSubs -> allSubs.groupBy { it.categoryId } }
+        .stateIn(
+            scope = externalScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyMap()
+        )
     fun getSubcategoriesByCategoryId(categoryId: Long): Flow<List<SubcategoryEntity>> {
         return subcategoryDao.getSubcategoriesByCategoryId(categoryId)
+    }
+
+    fun getAllSubcategories(): Flow<List<SubcategoryEntity>> {
+        return subcategoryDao.getAllSubcategories()
     }
 
     suspend fun createSubcategory(

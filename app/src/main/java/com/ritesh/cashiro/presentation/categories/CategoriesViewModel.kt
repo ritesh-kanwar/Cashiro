@@ -23,36 +23,16 @@ constructor(
     private val _uiState = MutableStateFlow(CategoriesUiState())
     val uiState: StateFlow<CategoriesUiState> = _uiState.asStateFlow()
 
-    // Subcategories map (category ID -> list of subcategories)
-    private val _subcategories = MutableStateFlow<Map<Long, List<SubcategoryEntity>>>(emptyMap())
-    val subcategories: StateFlow<Map<Long, List<SubcategoryEntity>>> = _subcategories.asStateFlow()
-
     // Categories list
-    val categories: StateFlow<List<CategoryEntity>> =
-            categoryRepository
-                    .getAllCategories()
-                    .stateIn(
-                            scope = viewModelScope,
-                            started = SharingStarted.WhileSubscribed(5000),
-                            initialValue = emptyList()
-                    )
+    val categories: StateFlow<List<CategoryEntity>> = categoryRepository.categories
+
+    // Subcategories map (category ID -> list of subcategories)
+    val subcategories: StateFlow<Map<Long, List<SubcategoryEntity>>> = 
+        subcategoryRepository.subcategoriesMap
 
     init {
-        viewModelScope.launch {
-            subcategoryRepository.initializeDefaultSubcategories()
-
-            // Observe all subcategories
-            categories.collectLatest { categoryList ->
-                categoryList.forEach { category ->
-                    launch {
-                        subcategoryRepository.getSubcategoriesByCategoryId(category.id).collect {
-                                subList ->
-                            _subcategories.update { current -> current + (category.id to subList) }
-                        }
-                    }
-                }
-            }
-        }
+        // No longer need to launch separate collections for each category
+        // or initialize defaults here as it's done in DatabaseModule
     }
 
     // Dialog states

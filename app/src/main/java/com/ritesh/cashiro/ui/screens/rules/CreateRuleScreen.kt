@@ -144,15 +144,15 @@ fun CreateRuleScreen(
                     .fillMaxSize()
                     .animateContentSize()
                     .hazeSource(state = hazeState)
-//                    .imePadding() // Push content up when keyboard appears
-                    .overScrollVertical()
-                    .padding(
-                        start = Dimensions.Padding.content,
-                        end = Dimensions.Padding.content,
-                        top = Dimensions.Padding.content + paddingValues.calculateTopPadding(),
-                        bottom = 0.dp
-                    ),
+                    .imePadding() // Push content up when keyboard appears
+                    .overScrollVertical(),
                 state = lazyListState,
+                contentPadding = PaddingValues(
+                    start = Dimensions.Padding.content,
+                    end = Dimensions.Padding.content,
+                    top = Dimensions.Padding.content + paddingValues.calculateTopPadding(),
+                    bottom = 0.dp
+                ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.lg),
                 flingBehavior = rememberOverscrollFlingBehavior { lazyListState }
             ) {

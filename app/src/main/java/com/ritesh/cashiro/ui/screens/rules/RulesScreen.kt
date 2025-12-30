@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -130,13 +131,13 @@ fun RulesScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .hazeSource(state = hazeState)
-                    .overScrollVertical()
-                    .padding(
-                        start = Dimensions.Padding.content,
-                        end = Dimensions.Padding.content,
-                        bottom = 0.dp,
-                        top = Dimensions.Padding.content + paddingValues.calculateTopPadding()
-                    ),
+                    .overScrollVertical(),
+                contentPadding = PaddingValues(
+                    start = Dimensions.Padding.content,
+                    end = Dimensions.Padding.content,
+                    top = Dimensions.Padding.content + paddingValues.calculateTopPadding(),
+                    bottom = 0.dp
+                ),
                 state = lazyListState,
                 flingBehavior = rememberOverscrollFlingBehavior { lazyListState },
 

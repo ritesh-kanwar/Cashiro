@@ -169,13 +169,13 @@ fun FAQScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .hazeSource(state = hazeState)
-                    .overScrollVertical()
-                    .padding(
-                        start = Dimensions.Padding.content,
-                        end = Dimensions.Padding.content,
-                        bottom = 0.dp,
-                        top = Dimensions.Padding.content + paddingValues.calculateTopPadding()
-                    ),
+                    .overScrollVertical(),
+                contentPadding = PaddingValues(
+                    start = Dimensions.Padding.content,
+                    end = Dimensions.Padding.content,
+                    top = Dimensions.Padding.content + paddingValues.calculateTopPadding(),
+                    bottom = 0.dp
+                ),
                 state = lazyListState,
                 flingBehavior = rememberOverscrollFlingBehavior { lazyListState },
 
