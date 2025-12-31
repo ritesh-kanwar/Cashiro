@@ -8,6 +8,7 @@ import com.ritesh.cashiro.data.database.entity.CardEntity
 import com.ritesh.cashiro.data.database.entity.CardType
 import com.ritesh.cashiro.data.repository.AccountBalanceRepository
 import com.ritesh.cashiro.data.repository.CardRepository
+import com.ritesh.cashiro.data.repository.TransactionRepository
 import com.ritesh.cashiro.utils.CurrencyFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -53,7 +54,8 @@ class ManageAccountsViewModel
 constructor(
         @ApplicationContext private val context: Context,
         private val accountBalanceRepository: AccountBalanceRepository,
-        private val cardRepository: CardRepository
+        private val cardRepository: CardRepository,
+        private val transactionRepository: TransactionRepository
 ) : ViewModel() {
 
     private val sharedPrefs = context.getSharedPreferences("account_prefs", Context.MODE_PRIVATE)
@@ -514,6 +516,71 @@ constructor(
                 _uiState.update { it.copy(successMessage = null) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Failed to update account: ${e.message}") }
+            }
+        }
+    }
+
+    fun mergeAccounts(
+            targetAccount: AccountBalanceEntity,
+            sourceAccounts: List<AccountBalanceEntity>,
+            newBalance: BigDecimal?
+    ) {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isLoading = true) }
+
+                // 1. Reassign transactions
+                sourceAccounts.forEach { source ->
+                    transactionRepository.updateAccountForTransactions(
+                            oldBankName = source.bankName,
+                            oldAccountNumber = source.accountLast4,
+                            newBankName = targetAccount.bankName,
+                            newAccountNumber = targetAccount.accountLast4
+                    )
+                }
+
+                // 2. Update target balance if requested
+                if (newBalance != null) {
+                    accountBalanceRepository.insertBalance(
+                            AccountBalanceEntity(
+                                    bankName = targetAccount.bankName,
+                                    accountLast4 = targetAccount.accountLast4,
+                                    balance = newBalance,
+                                    creditLimit = targetAccount.creditLimit,
+                                    timestamp = LocalDateTime.now(),
+                                    isCreditCard = targetAccount.isCreditCard,
+                                    sourceType = "MERGE",
+                                    iconResId = targetAccount.iconResId
+                            )
+                    )
+                }
+
+                // 3. Delete source accounts
+                sourceAccounts.forEach { source ->
+                    // Unlink cards
+                    val linkedCards = _uiState.value.linkedCards[source.accountLast4] ?: emptyList()
+                    linkedCards.forEach { card -> cardRepository.unlinkCard(card.id) }
+
+                    // Delete account balances
+                    accountBalanceRepository.deleteAccount(source.bankName, source.accountLast4)
+                }
+
+                // 4. Reload data
+                loadAccounts()
+                loadCards()
+
+                _uiState.update {
+                    it.copy(isLoading = false, successMessage = "Accounts merged successfully")
+                }
+                delay(3000)
+                _uiState.update { it.copy(successMessage = null) }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                            isLoading = false,
+                            errorMessage = "Failed to merge accounts: ${e.message}"
+                    )
+                }
             }
         }
     }

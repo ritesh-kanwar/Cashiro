@@ -87,15 +87,8 @@ fun ChatScreen(
                 scrollBehaviorSmall = scrollBehaviorSmall,
                 scrollBehaviorLarge = scrollBehavior,
                 hazeState = hazeState,
-                hasBackButton = false,
+                hasBackButton = true,
                 navigationContent = {NavigationContent(onNavigateToSettings)},
-//                showSettingsButton = true,
-//                showDiscordButton = true,
-//                onSettingsClick = onNavigateToSettings,
-//                onDiscordClick = {
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/H3xWeMWjKQ"))
-//                    context.startActivity(intent)
-//                }
             )
         }
     ) { paddingValues ->
@@ -150,7 +143,7 @@ fun ChatScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .haze(state = hazeState)
+                                .hazeSource(state = hazeState)
                                 .overScrollVertical(),
                             flingBehavior = rememberOverscrollFlingBehavior { listState },
                             contentPadding = PaddingValues(

@@ -19,6 +19,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.ritesh.cashiro.domain.model.rule.*
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -212,10 +214,10 @@ fun CreateRuleScreen(
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(
-                                topStart = 16.dp,
-                                topEnd = 16.dp,
-                                bottomStart = 4.dp,
-                                bottomEnd = 4.dp
+                                topStart = Dimensions.Radius.md,
+                                topEnd = Dimensions.Radius.md,
+                                bottomStart = Dimensions.Radius.xs,
+                                bottomEnd = Dimensions.Radius.xs
                             ),
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -248,10 +250,10 @@ fun CreateRuleScreen(
                             maxLines = 3,
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(
-                                topStart = 4.dp,
-                                topEnd = 4.dp,
-                                bottomStart = 16.dp,
-                                bottomEnd = 16.dp
+                                topStart = Dimensions.Radius.xs,
+                                topEnd = Dimensions.Radius.xs,
+                                bottomStart = Dimensions.Radius.md,
+                                bottomEnd = Dimensions.Radius.md
                             ),
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -334,28 +336,60 @@ fun CreateRuleScreen(
                                             expanded = fieldDropdownExpanded
                                         )
                                     },
+                                    shape = MaterialTheme.shapes.largeIncreased,
                                     modifier = Modifier.fillMaxWidth()
-                                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                                 )
                                 ExposedDropdownMenu(
                                     expanded = fieldDropdownExpanded,
-                                    onDismissRequest = { fieldDropdownExpanded = false }
+                                    onDismissRequest = { fieldDropdownExpanded = false },
+                                    containerColor = Color.Transparent,
+                                    shadowElevation = 0.dp
                                 ) {
-                                    listOf(
+
+                                    val menuItems = listOf(
                                         TransactionField.AMOUNT to "Amount",
                                         TransactionField.TYPE to "Transaction Type",
                                         TransactionField.CATEGORY to "Category",
                                         TransactionField.MERCHANT to "Merchant",
                                         TransactionField.SMS_TEXT to "SMS Text",
                                         TransactionField.BANK_NAME to "Bank Name"
-                                    ).forEach { (field, label) ->
+                                    )
+                                    menuItems.forEachIndexed { index, (field, label) ->
+                                        val isFirstItem = index == 0
+                                        val isLastItem = index == menuItems.lastIndex
+                                        val isMiddleItem = !isFirstItem && !isLastItem
+
+                                        val shape = when {
+                                            isFirstItem -> RoundedCornerShape(
+                                                topStart = Dimensions.Radius.md,
+                                                topEnd = Dimensions.Radius.md,
+                                                bottomStart = Dimensions.Radius.xs,
+                                                bottomEnd = Dimensions.Radius.xs
+                                            )
+                                            isLastItem -> RoundedCornerShape(
+                                                topStart = Dimensions.Radius.xs,
+                                                topEnd = Dimensions.Radius.xs,
+                                                bottomStart = Dimensions.Radius.md,
+                                                bottomEnd = Dimensions.Radius.md
+                                            )
+                                            else -> RoundedCornerShape(Dimensions.Radius.xs) // Middle items
+                                        }
+
                                         DropdownMenuItem(
                                             text = { Text(label) },
                                             onClick = {
                                                 selectedField = field
                                                 fieldDropdownExpanded = false
-                                            }
+                                            },
+                                            modifier = Modifier
+                                                .background(color= MaterialTheme.colorScheme.surfaceContainer,shape = shape)
                                         )
+
+                                        // Add a Spacer for middle items
+                                        if (isMiddleItem || (isFirstItem && menuItems.size > 2) ) {
+                                            Spacer(modifier = Modifier.height(1.5.dp))
+                                        }
                                     }
                                 }
                             }
@@ -454,6 +488,7 @@ fun CreateRuleScreen(
                                         } else {
                                             KeyboardOptions.Default
                                         },
+                                        shape = MaterialTheme.shapes.largeIncreased,
                                         modifier = Modifier.fillMaxWidth(),
                                         singleLine = true
                                     )
@@ -525,18 +560,41 @@ fun CreateRuleScreen(
                                             expanded = actionTypeDropdownExpanded
                                         )
                                     },
+                                    shape = MaterialTheme.shapes.largeIncreased,
                                     modifier = Modifier.fillMaxWidth()
-                                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                                 )
                                 ExposedDropdownMenu(
                                     expanded = actionTypeDropdownExpanded,
-                                    onDismissRequest = { actionTypeDropdownExpanded = false }
+                                    onDismissRequest = { actionTypeDropdownExpanded = false },
+                                    containerColor = Color.Transparent,
+                                    shadowElevation = 0.dp
                                 ) {
-                                    listOf(
+                                    val menuItems = listOf(
                                         ActionType.BLOCK to "Block Transaction",
                                         ActionType.SET to "Set Field",
                                         ActionType.CLEAR to "Clear Field"
-                                    ).forEach { (type, label) ->
+                                    )
+                                    menuItems.forEachIndexed { index, (type, label) ->
+                                        val isFirstItem = index == 0
+                                        val isLastItem = index == menuItems.lastIndex
+                                        val isMiddleItem = !isFirstItem && !isLastItem
+
+                                        val shape = when {
+                                            isFirstItem -> RoundedCornerShape(
+                                                topStart = Dimensions.Radius.md,
+                                                topEnd = Dimensions.Radius.md,
+                                                bottomStart = Dimensions.Radius.xs,
+                                                bottomEnd = Dimensions.Radius.xs
+                                            )
+                                            isLastItem -> RoundedCornerShape(
+                                                topStart = Dimensions.Radius.xs,
+                                                topEnd = Dimensions.Radius.xs,
+                                                bottomStart = Dimensions.Radius.md,
+                                                bottomEnd = Dimensions.Radius.md
+                                            )
+                                            else -> RoundedCornerShape(Dimensions.Radius.xs) // Middle items
+                                        }
                                         DropdownMenuItem(
                                             text = { Text(label) },
                                             onClick = {
@@ -545,8 +603,14 @@ fun CreateRuleScreen(
                                                 if (type == ActionType.BLOCK) {
                                                     actionValue = "" // Clear value for BLOCK action
                                                 }
-                                            }
+                                            },
+                                            modifier = Modifier
+                                                .background(color= MaterialTheme.colorScheme.surfaceContainer,shape = shape)
                                         )
+                                        // Add a Spacer for middle items
+                                        if (isMiddleItem || (isFirstItem && menuItems.size > 2) ) {
+                                            Spacer(modifier = Modifier.height(1.5.dp))
+                                        }
                                     }
                                 }
                             }
@@ -614,19 +678,42 @@ fun CreateRuleScreen(
                                                 0.7f
                                             )
                                         ),
+                                        shape = MaterialTheme.shapes.largeIncreased,
                                         modifier = Modifier.fillMaxWidth()
-                                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                                     )
                                     ExposedDropdownMenu(
                                         expanded = actionFieldDropdownExpanded,
-                                        onDismissRequest = { actionFieldDropdownExpanded = false }
+                                        onDismissRequest = { actionFieldDropdownExpanded = false },
+                                        containerColor = Color.Transparent,
+                                        shadowElevation = 0.dp
                                     ) {
-                                        listOf(
+                                        val menuItems = listOf(
                                             TransactionField.CATEGORY to "Set Category",
                                             TransactionField.MERCHANT to "Set Merchant Name",
                                             TransactionField.TYPE to "Set Transaction Type",
                                             TransactionField.NARRATION to "Set Description"
-                                        ).forEach { (field, label) ->
+                                        )
+                                        menuItems.forEachIndexed { index, (field, label) ->
+                                            val isFirstItem = index == 0
+                                            val isLastItem = index == menuItems.lastIndex
+                                            val isMiddleItem = !isFirstItem && !isLastItem
+
+                                            val shape = when {
+                                                isFirstItem -> RoundedCornerShape(
+                                                    topStart = Dimensions.Radius.md,
+                                                    topEnd = Dimensions.Radius.md,
+                                                    bottomStart = Dimensions.Radius.xs,
+                                                    bottomEnd = Dimensions.Radius.xs
+                                                )
+                                                isLastItem -> RoundedCornerShape(
+                                                    topStart = Dimensions.Radius.xs,
+                                                    topEnd = Dimensions.Radius.xs,
+                                                    bottomStart = Dimensions.Radius.md,
+                                                    bottomEnd = Dimensions.Radius.md
+                                                )
+                                                else -> RoundedCornerShape(Dimensions.Radius.xs) // Middle items
+                                            }
                                             DropdownMenuItem(
                                                 text = { Text(label) },
                                                 onClick = {
@@ -634,8 +721,14 @@ fun CreateRuleScreen(
                                                     actionFieldDropdownExpanded = false
                                                     actionValue =
                                                         "" // Reset value when changing field
-                                                }
+                                                },
+                                                modifier = Modifier
+                                                    .background(color= MaterialTheme.colorScheme.surfaceContainer,shape = shape)
                                             )
+                                            // Add a Spacer for middle items
+                                            if (isMiddleItem || (isFirstItem && menuItems.size > 2) ) {
+                                                Spacer(modifier = Modifier.height(1.5.dp))
+                                            }
                                         }
                                     }
                                 }
@@ -684,6 +777,7 @@ fun CreateRuleScreen(
                                                     0.7f
                                                 )
                                             ),
+                                            shape = MaterialTheme.shapes.largeIncreased,
                                             modifier = Modifier.fillMaxWidth(),
                                             singleLine = true
                                         )
@@ -762,6 +856,8 @@ fun CreateRuleScreen(
                                                     0.7f
                                                 )
                                             ),
+
+                                            shape = MaterialTheme.shapes.largeIncreased,
                                             modifier = Modifier.fillMaxWidth(),
                                             singleLine = true
                                         )
@@ -784,6 +880,8 @@ fun CreateRuleScreen(
                                                     0.7f
                                                 )
                                             ),
+
+                                            shape = MaterialTheme.shapes.largeIncreased,
                                             modifier = Modifier.fillMaxWidth(),
                                             minLines = 2,
                                             maxLines = 3
@@ -808,6 +906,7 @@ fun CreateRuleScreen(
                                                 )
                                             ),
                                             modifier = Modifier.fillMaxWidth(),
+                                            shape = MaterialTheme.shapes.largeIncreased,
                                             singleLine = true
                                         )
                                     }

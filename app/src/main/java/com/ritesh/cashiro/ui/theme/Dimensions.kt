@@ -15,6 +15,14 @@ object Dimensions {
         val empty = 32.dp        // Empty state padding
         val fab = 16.dp          // FAB padding
     }
+    object Radius {
+        val xs = 4.dp
+        val sm = 8.dp
+        val md = 16.dp
+        val lg = 24.dp
+        val xl = 32.dp
+        val xxl = 48.dp
+    }
     
     // Elevation values
     object Elevation {

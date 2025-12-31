@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.filled.CheckCircle
@@ -32,14 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.CardEntity
-import com.ritesh.cashiro.presentation.categories.IconSelector
 import com.ritesh.cashiro.presentation.categories.NavigationContent
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import com.ritesh.cashiro.ui.components.SectionHeader
@@ -146,7 +143,7 @@ fun ManageAccountsScreen(
                                                 containerColor =
                                                         MaterialTheme.colorScheme
                                                                 .secondaryContainer,
-                                                shape = MaterialTheme.shapes.large,
+                                                shape = MaterialTheme.shapes.large
                                         )
                                 }
                         )
@@ -262,7 +259,6 @@ fun ManageAccountsScreen(
                                                                         )
                                                         )
                                                 }
-
                                                 items(visibleRegularAccounts) { account ->
                                                         AccountItem(
                                                                 account = account,
@@ -314,7 +310,6 @@ fun ManageAccountsScreen(
                                                         )
                                                 }
                                         }
-
                                         // Orphaned Cards Section
                                         if (uiState.orphanedCards.isNotEmpty()) {
                                                 item {
@@ -338,7 +333,6 @@ fun ManageAccountsScreen(
                                                                         )
                                                         )
                                                 }
-
                                                 items(uiState.orphanedCards) { card ->
                                                         OrphanedCardItem(
                                                                 card = card,
@@ -355,7 +349,6 @@ fun ManageAccountsScreen(
                                                         )
                                                 }
                                         }
-
                                         // Credit Cards Section (Visible Only)
                                         if (visibleCreditCards.isNotEmpty()) {
                                                 item {
@@ -379,7 +372,6 @@ fun ManageAccountsScreen(
                                                                         )
                                                         )
                                                 }
-
                                                 items(visibleCreditCards) { card ->
                                                         CreditCardItem(
                                                                 card = card,
@@ -516,7 +508,7 @@ fun ManageAccountsScreen(
                                                                                 tint =
                                                                                         MaterialTheme
                                                                                                 .colorScheme
-                                                                                                        .onSurfaceVariant
+                                                                                                .onSurfaceVariant
                                                                         )
                                                                 }
                                                         }
@@ -576,8 +568,7 @@ fun ManageAccountsScreen(
                                                                         onEditAccount = {
                                                                                 accountToEdit =
                                                                                         account
-                                                                                showEditSheet =
-                                                                                        true
+                                                                                showEditSheet = true
                                                                         }
                                                                 )
                                                         }
@@ -622,10 +613,10 @@ fun ManageAccountsScreen(
                                                                                 showDeleteConfirmDialog =
                                                                                         true
                                                                         },
-                                                                         onEditAccount = {
-                                                                                 accountToEdit = card
-                                                                                 showEditSheet = true
-                                                                         }
+                                                                        onEditAccount = {
+                                                                                accountToEdit = card
+                                                                                showEditSheet = true
+                                                                        }
                                                                 )
                                                         }
                                                 }
@@ -640,96 +631,99 @@ fun ManageAccountsScreen(
         // Update Balance Dialog
         // Update Balance Sheet
         if (showUpdateDialog && selectedAccount != null && selectedAccountEntity != null) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showUpdateDialog = false
-                    selectedAccount = null
-                    selectedAccountEntity = null
-                },
-                containerColor = MaterialTheme.colorScheme.surface,
-                dragHandle = { BottomSheetDefaults.DragHandle() }
-            ) {
-                if (selectedAccountEntity!!.isCreditCard) {
-                    // For Credit Card, we still use a dedicated layout but in a sheet?
-                    // Or just use NumberPad for outstanding balance.
-                    // Given the goal is "enhanced NumberPad", let's use it for balance.
-                    NumberPad(
-                        initialValue = selectedAccountEntity!!.balance.toPlainString(),
-                        title = "Update Outstanding",
-                        bankName = selectedAccount!!.first,
-                        accountLast4 = selectedAccount!!.second,
-                        doneButtonLabel = "Update Balance",
-                        onDone = { newValue ->
-                            newValue.toBigDecimalOrNull()?.let { newBalance ->
-                                viewModel.updateCreditCard(
-                                    selectedAccount!!.first,
-                                    selectedAccount!!.second,
-                                    newBalance,
-                                    selectedAccountEntity!!.creditLimit ?: BigDecimal.ZERO
+                ModalBottomSheet(
+                        onDismissRequest = {
+                                showUpdateDialog = false
+                                selectedAccount = null
+                                selectedAccountEntity = null
+                        },
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        dragHandle = { BottomSheetDefaults.DragHandle() }
+                ) {
+                        if (selectedAccountEntity!!.isCreditCard) {
+                                // For Credit Card, we still use a dedicated layout but in a sheet?
+                                // Or just use NumberPad for outstanding balance.
+                                // Given the goal is "enhanced NumberPad", let's use it for balance.
+                                NumberPad(
+                                        initialValue =
+                                                selectedAccountEntity!!.balance.toPlainString(),
+                                        title = "Update Outstanding",
+                                        bankName = selectedAccount!!.first,
+                                        accountLast4 = selectedAccount!!.second,
+                                        doneButtonLabel = "Update Balance",
+                                        onDone = { newValue ->
+                                                newValue.toBigDecimalOrNull()?.let { newBalance ->
+                                                        viewModel.updateCreditCard(
+                                                                selectedAccount!!.first,
+                                                                selectedAccount!!.second,
+                                                                newBalance,
+                                                                selectedAccountEntity!!.creditLimit
+                                                                        ?: BigDecimal.ZERO
+                                                        )
+                                                }
+                                                showUpdateDialog = false
+                                                selectedAccount = null
+                                                selectedAccountEntity = null
+                                        }
                                 )
-                            }
-                            showUpdateDialog = false
-                            selectedAccount = null
-                            selectedAccountEntity = null
-                        }
-                    )
-                } else {
-                    NumberPad(
-                        initialValue = selectedAccountEntity!!.balance.toPlainString(),
-                        title = "Update Balance",
-                        bankName = selectedAccount!!.first,
-                        accountLast4 = selectedAccount!!.second,
-                        doneButtonLabel = "Update Balance",
-                        onDone = { newValue ->
-                            newValue.toBigDecimalOrNull()?.let { newBalance ->
-                                viewModel.updateAccountBalance(
-                                    selectedAccount!!.first,
-                                    selectedAccount!!.second,
-                                    newBalance
+                        } else {
+                                NumberPad(
+                                        initialValue =
+                                                selectedAccountEntity!!.balance.toPlainString(),
+                                        title = "Update Balance",
+                                        bankName = selectedAccount!!.first,
+                                        accountLast4 = selectedAccount!!.second,
+                                        doneButtonLabel = "Update Balance",
+                                        onDone = { newValue ->
+                                                newValue.toBigDecimalOrNull()?.let { newBalance ->
+                                                        viewModel.updateAccountBalance(
+                                                                selectedAccount!!.first,
+                                                                selectedAccount!!.second,
+                                                                newBalance
+                                                        )
+                                                }
+                                                showUpdateDialog = false
+                                                selectedAccount = null
+                                                selectedAccountEntity = null
+                                        }
                                 )
-                            }
-                            showUpdateDialog = false
-                            selectedAccount = null
-                            selectedAccountEntity = null
                         }
-                    )
                 }
-            }
         }
 
         // Balance History Dialog
         // Balance History Sheet
         if (showHistoryDialog && historyAccount != null) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showHistoryDialog = false
-                    historyAccount = null
-                    viewModel.clearBalanceHistory()
-                },
-                containerColor = MaterialTheme.colorScheme.surface,
-                dragHandle = { BottomSheetDefaults.DragHandle() }
-            ) {
-                HistorySheet(
-                    bankName = historyAccount!!.first,
-                    accountLast4 = historyAccount!!.second,
-                    balanceHistory = uiState.balanceHistory,
-                    onDeleteBalance = { id ->
-                        viewModel.deleteBalanceRecord(
-                            id,
-                            historyAccount!!.first,
-                            historyAccount!!.second
+                ModalBottomSheet(
+                        onDismissRequest = {
+                                showHistoryDialog = false
+                                historyAccount = null
+                                viewModel.clearBalanceHistory()
+                        },
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        dragHandle = { BottomSheetDefaults.DragHandle() }
+                ) {
+                        HistorySheet(
+                                bankName = historyAccount!!.first,
+                                accountLast4 = historyAccount!!.second,
+                                balanceHistory = uiState.balanceHistory,
+                                onDeleteBalance = { id ->
+                                        viewModel.deleteBalanceRecord(
+                                                id,
+                                                historyAccount!!.first,
+                                                historyAccount!!.second
+                                        )
+                                },
+                                onUpdateBalance = { id, newBalance ->
+                                        viewModel.updateBalanceRecord(
+                                                id,
+                                                newBalance,
+                                                historyAccount!!.first,
+                                                historyAccount!!.second
+                                        )
+                                }
                         )
-                    },
-                    onUpdateBalance = { id, newBalance ->
-                        viewModel.updateBalanceRecord(
-                            id,
-                            newBalance,
-                            historyAccount!!.first,
-                            historyAccount!!.second
-                        )
-                    }
-                )
-            }
+                }
         }
 
         // Delete Account Confirmation Dialog
@@ -755,60 +749,68 @@ fun ManageAccountsScreen(
         // Edit Account Sheet
         if (showEditSheet && accountToEdit != null) {
                 ModalBottomSheet(
-                    onDismissRequest = {
-                        showEditSheet = false
-                        accountToEdit = null
-                    },
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    dragHandle = { BottomSheetDefaults.DragHandle() }
-                ) {
-                    EditAccountSheet(
-                        account = accountToEdit!!,
-                        onDismiss = {
-                            showEditSheet = false
-                            accountToEdit = null
+                        onDismissRequest = {
+                                showEditSheet = false
+                                accountToEdit = null
                         },
-                        onSave = { bankName, balance, last4, icon, color ->
-                            viewModel.editAccount(
-                                oldBankName = accountToEdit!!.bankName,
-                                accountLast4 = accountToEdit!!.accountLast4,
-                                newBankName = bankName,
-                                newBalance = balance,
-                                newCreditLimit = accountToEdit!!.creditLimit, // Preserve limit for now
-                                isCreditCard = accountToEdit!!.isCreditCard,
-                                newIconResId = icon
-                            )
-                            showEditSheet = false
-                            accountToEdit = null
-                        }
-                    )
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        dragHandle = { BottomSheetDefaults.DragHandle() }
+                ) {
+                        EditAccountSheet(
+                                account = accountToEdit!!,
+                                allAccounts = uiState.accounts,
+                                onDismiss = {
+                                        showEditSheet = false
+                                        accountToEdit = null
+                                },
+                                onMerge = { targetAccount, sourceAccounts, newBalance ->
+                                        viewModel.mergeAccounts(
+                                                targetAccount,
+                                                sourceAccounts,
+                                                newBalance
+                                        )
+                                },
+                                onSave = { bankName, balance, last4, icon, color ->
+                                        viewModel.editAccount(
+                                                oldBankName = accountToEdit!!.bankName,
+                                                accountLast4 = accountToEdit!!.accountLast4,
+                                                newBankName = bankName,
+                                                newBalance = balance,
+                                                newCreditLimit = accountToEdit!!.creditLimit,
+                                                isCreditCard = accountToEdit!!.isCreditCard,
+                                                newIconResId = icon
+                                        )
+                                        showEditSheet = false
+                                        accountToEdit = null
+                                }
+                        )
                 }
         }
 
         // Add Account Sheet
         if (showAddSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showAddSheet = false },
-                containerColor = MaterialTheme.colorScheme.surface,
-                dragHandle = { BottomSheetDefaults.DragHandle() }
-            ) {
-                EditAccountSheet(
-                    onDismiss = { showAddSheet = false },
-                    onSave = { bankName, balance, last4, icon, color ->
-                        viewModel.addAccount(
-                            bankName = bankName,
-                            balance = balance,
-                            accountLast4 = last4,
-                            iconResId = icon,
-                            colorHex = color
+                ModalBottomSheet(
+                        onDismissRequest = { showAddSheet = false },
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        dragHandle = { BottomSheetDefaults.DragHandle() }
+                ) {
+                        EditAccountSheet(
+                                allAccounts = uiState.accounts,
+                                onDismiss = { showAddSheet = false },
+                                onSave = { bankName, balance, last4, icon, color ->
+                                        viewModel.addAccount(
+                                                bankName = bankName,
+                                                balance = balance,
+                                                accountLast4 = last4,
+                                                iconResId = icon,
+                                                colorHex = color
+                                        )
+                                        showAddSheet = false
+                                }
                         )
-                        showAddSheet = false
-                    }
-                )
-            }
+                }
         }
-    }
-
+}
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -1466,8 +1468,6 @@ private fun AccountItem(
         }
 }
 
-
-
 @Composable
 private fun OrphanedCardItem(
         card: com.ritesh.cashiro.data.database.entity.CardEntity,
@@ -1825,4 +1825,3 @@ private fun DeleteAccountConfirmDialog(
                 dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
         )
 }
-

@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.ui.screens.rules
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -28,6 +30,8 @@ import com.ritesh.cashiro.domain.usecase.BatchApplyResult
 import com.ritesh.cashiro.ui.components.CashiroCard
 import com.ritesh.cashiro.ui.components.CustomTitleTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.ritesh.cashiro.presentation.categories.NavigationContent
 import dev.chrisbanes.haze.HazeState
@@ -39,7 +43,7 @@ import com.ritesh.cashiro.ui.theme.Spacing
 import com.ritesh.cashiro.ui.viewmodel.RulesViewModel
 import dev.chrisbanes.haze.hazeSource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun RulesScreen(
     onNavigateBack: () -> Unit,
@@ -74,7 +78,12 @@ fun RulesScreen(
                     var showResetDialog by remember { mutableStateOf(false) }
 
                     IconButton(
-                        onClick = { showResetDialog = true }
+                        onClick = { showResetDialog = true },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            contentColor = MaterialTheme.colorScheme.onBackground
+                        ),
+                        shapes =  IconButtonDefaults.shapes()
                     ) {
                         Icon(
                             Icons.Default.Refresh,
@@ -378,8 +387,20 @@ private fun RuleCard(
 
                         DropdownMenu(
                             expanded = showActionsMenu,
-                            onDismissRequest = { showActionsMenu = false }
+                            onDismissRequest = { showActionsMenu = false },
+                            containerColor = Color.Transparent,
+                            shadowElevation = 0.dp
                         ) {
+                            val shape = if(rule.isSystemTemplate) {
+                                RoundedCornerShape(Dimensions.Radius.xl)
+                            } else {
+                                RoundedCornerShape(
+                                    topStart = Dimensions.Radius.md,
+                                    topEnd = Dimensions.Radius.md,
+                                    bottomStart = Dimensions.Radius.xs,
+                                    bottomEnd = Dimensions.Radius.xs
+                                )
+                            }
                             // Apply to past transactions
                             DropdownMenuItem(
                                 text = { Text("Apply to Past Transactions") },
@@ -389,24 +410,57 @@ private fun RuleCard(
                                 onClick = {
                                     showActionsMenu = false
                                     onApplyToPast()
-                                }
+                                },
+                                colors = MenuDefaults.itemColors(
+                                    textColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                ),
+                                modifier = Modifier
+                                    .clip(shape)
+                                    .background(
+                                        MaterialTheme.colorScheme.surfaceContainer,
+                                        shape
+                                    )
                             )
+                            Spacer(Modifier.height(1.5.dp))
 
                             // Only show delete for custom rules
                             if (!rule.isSystemTemplate) {
                                 DropdownMenuItem(
-                                    text = { Text("Delete Rule") },
+                                    text = {
+                                        Text(
+                                            text = "Delete",
+                                            color = MaterialTheme.colorScheme.onErrorContainer
+                                        )
+                                    },
                                     leadingIcon = {
                                         Icon(
-                                            Icons.Default.Delete,
+                                            imageVector = Icons.Default.Delete,
                                             contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.error
+                                            tint = MaterialTheme.colorScheme.onErrorContainer
                                         )
                                     },
                                     onClick = {
                                         showActionsMenu = false
                                         showDeleteDialog = true
-                                    }
+                                    },
+                                    modifier = Modifier
+                                        .clip(
+                                            RoundedCornerShape(
+                                                topStart = Dimensions.Radius.xs,
+                                                topEnd = Dimensions.Radius.xs,
+                                                bottomStart = Dimensions.Radius.md,
+                                                bottomEnd = Dimensions.Radius.md
+                                            )
+                                        )
+                                        .background(
+                                            MaterialTheme.colorScheme.errorContainer,
+                                            RoundedCornerShape(
+                                                topStart = Dimensions.Radius.xs,
+                                                topEnd = Dimensions.Radius.xs,
+                                                bottomStart = Dimensions.Radius.md,
+                                                bottomEnd = Dimensions.Radius.md
+                                            )
+                                        )
                                 )
                             }
                         }
