@@ -77,275 +77,195 @@ fun MainScreen(
         Scaffold() { paddingValues ->
             Box(modifier = Modifier.fillMaxSize()) {
                 AnimatedNavHost(
-                        navController = navController,
-                        startDestination = "home",
-                        modifier =
-                                Modifier.padding(
-                                        start =
-                                                paddingValues.calculateLeftPadding(
-                                                        LayoutDirection.Ltr
-                                                ),
-                                        end =
-                                                paddingValues.calculateRightPadding(
-                                                        LayoutDirection.Rtl
-                                                )
+                    navController = navController,
+                    startDestination = "home",
+                    modifier = Modifier
+                        .padding(
+                            start = paddingValues.calculateLeftPadding(
+                                    LayoutDirection.Ltr
                                 ),
-                        pages =
-                                arrayOf(
-                                        navPage("home") {
-                                            val homeViewModel: HomeViewModel = hiltViewModel()
-                                            HomeScreen(
-                                                    viewModel = homeViewModel,
-                                                    navController = rootNavController
-                                                                    ?: navController,
-                                                    onNavigateToSettings = {
-                                                        navController.navigate("settings")
-                                                    },
-                                                    onNavigateToChat = {
-                                                        navController.navigate("chat")
-                                                    },
-                                                    onNavigateToTransactions = {
-                                                        navController.navigate("transactions")
-                                                    },
-                                                    onNavigateToTransactionsWithSearch = {
-                                                        navController.navigate(
-                                                                "transactions?focusSearch=true"
-                                                        )
-                                                    },
-                                                    onNavigateToSubscriptions = {
-                                                        navController.navigate("subscriptions")
-                                                    },
-                                                    onNavigateToAddScreen = {
-                                                        rootNavController?.navigate(AddTransaction)
-                                                    },
-                                                    onTransactionClick = { transactionId ->
-                                                        rootNavController?.navigate(
-                                                                TransactionDetail(transactionId)
-                                                        )
-                                                    },
-                                                    onFabPositioned = { position ->
-                                                        spotlightViewModel.updateFabPosition(
-                                                                position
-                                                        )
-                                                    }
-                                            )
-                                        },
-                                        navPage(
-                                                route =
-                                                        "transactions?category={category}&merchant={merchant}&period={period}&currency={currency}&focusSearch={focusSearch}",
-                                                arguments =
-                                                        listOf(
-                                                                navArgument("category") {
-                                                                    type = NavType.StringType
-                                                                    nullable = true
-                                                                    defaultValue = null
-                                                                },
-                                                                navArgument("merchant") {
-                                                                    type = NavType.StringType
-                                                                    nullable = true
-                                                                    defaultValue = null
-                                                                },
-                                                                navArgument("period") {
-                                                                    type = NavType.StringType
-                                                                    nullable = true
-                                                                    defaultValue = null
-                                                                },
-                                                                navArgument("currency") {
-                                                                    type = NavType.StringType
-                                                                    nullable = true
-                                                                    defaultValue = null
-                                                                },
-                                                                navArgument("focusSearch") {
-                                                                    type = NavType.BoolType
-                                                                    defaultValue = false
-                                                                }
-                                                        )
-                                        ) { backStackEntry: NavBackStackEntry ->
-                                            val category =
-                                                    backStackEntry.arguments?.getString("category")
-                                            val merchant =
-                                                    backStackEntry.arguments?.getString("merchant")
-                                            val period =
-                                                    backStackEntry.arguments?.getString("period")
-                                            val currency =
-                                                    backStackEntry.arguments?.getString("currency")
-                                            val focusSearch =
-                                                    backStackEntry.arguments?.getBoolean(
-                                                            "focusSearch"
-                                                    )
-                                                            ?: false
-
-                                            TransactionsScreen(
-                                                    initialCategory = category,
-                                                    initialMerchant = merchant,
-                                                    initialPeriod = period,
-                                                    initialCurrency = currency,
-                                                    focusSearch = focusSearch,
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    },
-                                                    onTransactionClick = { transactionId ->
-                                                        rootNavController?.navigate(
-                                                                TransactionDetail(transactionId)
-                                                        )
-                                                    },
-                                                    onAddTransactionClick = {
-                                                        rootNavController?.navigate(AddTransaction)
-                                                    },
-                                                    onNavigateToSettings = {
-                                                        navController.navigate("settings")
-                                                    }
-                                            )
-                                        },
-                                        navPage("subscriptions") {
-                                            SubscriptionsScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    },
-                                                    onAddSubscriptionClick = {
-                                                        rootNavController?.navigate(AddTransaction)
-                                                    }
-                                            )
-                                        },
-                                        navPage("analytics") {
-                                            AnalyticsScreen(
-                                                    onNavigateToChat = {
-                                                        navController.navigate("chat")
-                                                    },
-                                                    onNavigateToTransactions = {
-                                                            category,
-                                                            merchant,
-                                                            period,
-                                                            currency ->
-                                                        val route = buildString {
-                                                            append("transactions")
-                                                            val params = mutableListOf<String>()
-                                                            category?.let {
-                                                                val encoded =
-                                                                        java.net.URLEncoder.encode(
-                                                                                it,
-                                                                                "UTF-8"
-                                                                        )
-                                                                params.add("category=$encoded")
-                                                            }
-                                                            merchant?.let {
-                                                                val encoded =
-                                                                        java.net.URLEncoder.encode(
-                                                                                it,
-                                                                                "UTF-8"
-                                                                        )
-                                                                params.add("merchant=$encoded")
-                                                            }
-                                                            period?.let { params.add("period=$it") }
-                                                            currency?.let {
-                                                                params.add("currency=$it")
-                                                            }
-                                                            if (params.isNotEmpty()) {
-                                                                append("?")
-                                                                append(params.joinToString("&"))
-                                                            }
-                                                        }
-                                                        navController.navigate(route)
-                                                    },
-                                                    onNavigateToSettings = {
-                                                        navController.navigate("settings")
-                                                    }
-                                            )
-                                        },
-                                        navPage("chat") {
-                                            ChatScreen(
-                                                    modifier = Modifier.imePadding(),
-                                                    onNavigateToSettings = {
-                                                        navController.navigate("settings")
-                                                    }
-                                            )
-                                        },
-                                        navPage("settings") {
-                                            SettingsScreen(
-                                                    themeViewModel = themeViewModel,
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    },
-                                                    onNavigateToCategories = {
-                                                        navController.navigate("categories")
-                                                    },
-                                                    onNavigateToUnrecognizedSms = {
-                                                        navController.navigate("unrecognized_sms")
-                                                    },
-                                                    onNavigateToManageAccounts = {
-                                                        navController.navigate("manage_accounts")
-                                                    },
-                                                    onNavigateToFaq = {
-                                                        navController.navigate("faq")
-                                                    },
-                                                    onNavigateToRules = {
-                                                        navController.navigate("rules")
-                                                    }
-                                            )
-                                        },
-                                        navPage("categories") {
-                                            CategoriesScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    }
-                                            )
-                                        },
-                                        navPage("unrecognized_sms") {
-                                            UnrecognizedSmsScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    }
-                                            )
-                                        },
-                                        navPage("faq") {
-                                            FAQScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    }
-                                            )
-                                        },
-                                        navPage("manage_accounts") {
-                                            ManageAccountsScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    },
-                                                    onNavigateToAddAccount = {
-                                                        navController.navigate("add_account")
-                                                    }
-                                            )
-                                        },
-                                        navPage("add_account") {
-                                            AddAccountScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    }
-                                            )
-                                        },
-                                        navPage("rules") {
-                                            RulesScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    },
-                                                    onNavigateToCreateRule = {
-                                                        navController.navigate("create_rule")
-                                                    }
-                                            )
-                                        },
-                                        navPage("create_rule") {
-                                            val rulesViewModel:
-                                                    RulesViewModel =
-                                                    hiltViewModel()
-                                            CreateRuleScreen(
-                                                    onNavigateBack = {
-                                                        navController.popBackStack()
-                                                    },
-                                                    onSaveRule = { rule ->
-                                                        rulesViewModel.createRule(rule)
-                                                        navController.popBackStack()
-                                                    }
-                                            )
-                                        },
+                            end = paddingValues.calculateRightPadding(
+                                    LayoutDirection.Rtl
                                 )
+                        ),
+                    pages = arrayOf(
+                        navPage("home") {
+                            val homeViewModel: HomeViewModel = hiltViewModel()
+                            HomeScreen(
+                                viewModel = homeViewModel,
+                                navController = rootNavController ?: navController,
+                                onNavigateToSettings = { navController.navigate("settings") },
+                                onNavigateToChat = { navController.navigate("chat") },
+                                onNavigateToTransactions = { navController.navigate("transactions") },
+                                onNavigateToTransactionsWithSearch = {
+                                    navController.navigate(
+                                        "transactions?focusSearch=true"
+                                    ) },
+                                onNavigateToSubscriptions = {
+                                    navController.navigate("subscriptions") },
+                                onNavigateToAddScreen ={
+                                    rootNavController?.navigate(AddTransaction) },
+                                onTransactionClick = { transactionId ->
+                                    rootNavController?.navigate(
+                                        TransactionDetail(transactionId)
+                                    ) },
+                                onFabPositioned = { position ->
+                                    spotlightViewModel.updateFabPosition(
+                                        position
+                                    )
+                                }
+                            ) },
+
+                        navPage(
+                            route = "transactions?category={category}&merchant={merchant}&period={period}&currency={currency}&focusSearch={focusSearch}",
+                            arguments = listOf(
+                                navArgument("category") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                    defaultValue = null },
+
+                                navArgument("merchant") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                    defaultValue = null },
+
+                                navArgument("period") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                    defaultValue = null },
+
+                                navArgument("currency") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                    defaultValue = null },
+
+                                navArgument("focusSearch") {
+                                    type = NavType.BoolType
+                                    defaultValue = false
+                                }
+                            )
+                        ) { backStackEntry: NavBackStackEntry ->
+                            val category = backStackEntry.arguments?.getString("category")
+                            val merchant = backStackEntry.arguments?.getString("merchant")
+                            val period = backStackEntry.arguments?.getString("period")
+                            val currency = backStackEntry.arguments?.getString("currency")
+                            val focusSearch = backStackEntry.arguments?.getBoolean(
+                                "focusSearch"
+                            ) ?: false
+                            TransactionsScreen(
+                                initialCategory = category,
+                                initialMerchant = merchant,
+                                initialPeriod = period,
+                                initialCurrency = currency,
+                                focusSearch = focusSearch,
+                                onNavigateBack = { navController.popBackStack() },
+                                onTransactionClick = { transactionId ->
+                                    rootNavController?.navigate(
+                                        TransactionDetail(transactionId)
+                                    ) },
+                                onAddTransactionClick = { rootNavController?.navigate(AddTransaction) },
+                                onNavigateToSettings = { navController.navigate("settings") }
+                            )
+                          },
+
+                        navPage("subscriptions") {
+                            SubscriptionsScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                onAddSubscriptionClick = { rootNavController?.navigate(AddTransaction) }
+                            ) },
+
+                        navPage("analytics") {
+                            AnalyticsScreen(
+                                onNavigateToChat = { navController.navigate("chat") },
+                                onNavigateToTransactions = { category, merchant, period, currency ->
+                                    val route = buildString {
+                                        append("transactions")
+                                        val params = mutableListOf<String>()
+                                        category?.let {
+                                            val encoded = java.net.URLEncoder.encode(
+                                                it,
+                                                "UTF-8"
+                                            )
+                                            params.add("category=$encoded")
+                                        }
+                                        merchant?.let {
+                                            val encoded = java.net.URLEncoder.encode(
+                                                it,
+                                                "UTF-8"
+                                            )
+                                            params.add("merchant=$encoded")
+                                        }
+                                        period?.let { params.add("period=$it") }
+                                        currency?.let { params.add("currency=$it") }
+                                        if (params.isNotEmpty()) {
+                                            append("?")
+                                            append(params.joinToString("&"))
+                                        }
+                                    }
+                                    navController.navigate(route) },
+                                onNavigateToSettings = { navController.navigate("settings") }
+                            ) },
+
+                        navPage("chat") {
+                            ChatScreen(
+                                modifier = Modifier.imePadding(),
+                                onNavigateToSettings = { navController.navigate("settings") }
+                            ) },
+
+                        navPage("settings") {
+                            SettingsScreen(
+                                themeViewModel = themeViewModel,
+                                onNavigateBack = { navController.popBackStack() },
+                                onNavigateToCategories = { navController.navigate("categories") },
+                                onNavigateToUnrecognizedSms = { navController.navigate("unrecognized_sms") },
+                                onNavigateToManageAccounts = { navController.navigate("manage_accounts") },
+                                onNavigateToFaq = { navController.navigate("faq") },
+                                onNavigateToRules = { navController.navigate("rules") }
+                            ) },
+
+                        navPage("categories") {
+                            CategoriesScreen(
+                                onNavigateBack = { navController.popBackStack() }
+                            ) },
+
+                        navPage("unrecognized_sms") {
+                            UnrecognizedSmsScreen(
+                                onNavigateBack = { navController.popBackStack() }
+                            ) },
+
+                        navPage("faq") {
+                            FAQScreen(
+                                onNavigateBack = { navController.popBackStack() }
+                            ) },
+
+                        navPage("manage_accounts") {
+                            ManageAccountsScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                onNavigateToAddAccount = { navController.navigate("add_account") }
+                            ) },
+
+                        navPage("add_account") {
+                            AddAccountScreen(
+                                onNavigateBack = { navController.popBackStack() }
+                            ) },
+
+                        navPage("rules") {
+                            RulesScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                onNavigateToCreateRule = { navController.navigate("create_rule") }
+                            ) },
+
+                        navPage("create_rule") {
+                            val rulesViewModel: RulesViewModel =
+                                hiltViewModel()
+                            CreateRuleScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                onSaveRule = { rule ->
+                                    rulesViewModel.createRule(rule)
+                                    navController.popBackStack()
+                                }
+                            ) },
+                        )
                 )
 
                 // HorizontalFloatingToolbar

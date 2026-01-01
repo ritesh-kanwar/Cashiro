@@ -64,13 +64,12 @@ fun UnrecognizedSmsScreen(
     ) { paddingValues ->
         Column(
             modifier = modifier
-                        .fillMaxSize()
-                        .padding(bottom = paddingValues.calculateBottomPadding())
+                .fillMaxSize()
                 .hazeSource(state = hazeState)
                 .padding(
                     start = Dimensions.Padding.content,
                     end = Dimensions.Padding.content,
-                    bottom = Dimensions.Padding.content,
+                    bottom = 0.dp,
                     top = Dimensions.Padding.content + paddingValues.calculateTopPadding()
                 ),
             verticalArrangement = Arrangement.spacedBy(Spacing.md)

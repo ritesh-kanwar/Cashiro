@@ -22,11 +22,22 @@ val transfer_dark = Color(0xFFBA68C8)  // Light purple for transfers - readable 
 val investment_light = Color(0xFF00695C) // Teal for investments - good on white
 val investment_dark = Color(0xFF4DB6AC)  // Light teal for investments - readable on dark
 
-// Category Colors (matching the owl theme)
-val category_food = Color(0xFFFF7043)  // Coral
-val category_transport = Color(0xFF5C6BC0)  // Indigo
-val category_shopping = Color(0xFFAB47BC)  // Purple
-val category_bills = Color(0xFF42A5F5)  // Light Blue
-val category_entertainment = Color(0xFFEC407A)  // Pink
-val category_health = Color(0xFF26A69A)  // Teal
-val category_other = Color(0xFF78909C)  // Blue Grey
+
+val cyan_light = Color(0xFFbee7fd)
+val cyan_dark = Color(0xFF003f56)
+val blue_light = Color(0xFFcee3fe)
+val blue_dark = Color(0xFF002c89)
+val red_light = Color(0xFFffd9f0)
+val red_dark = Color(0xFF8a0050)
+val orange_light = Color(0xFFffdbc3)
+val orange_dark = Color(0xFF723504)
+val yellow_light = Color(0xFFfbde79)
+val yellow_dark = Color(0xFF674003)
+val green_light = Color(0xFFbbefba)
+val green_dark = Color(0xFF03512c)
+val purple_light = Color(0xFFf3d9ff)
+val purple_dark = Color(0xFF3C3249)
+val pink_light = Color(0xFFffe8f3)
+val pink_dark = Color(0xFF3f001a)
+val grey_light = Color(0xFFe1e1e1)
+val grey_dark = Color(0xFF454545)

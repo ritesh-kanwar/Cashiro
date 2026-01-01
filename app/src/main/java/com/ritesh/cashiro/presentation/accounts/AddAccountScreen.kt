@@ -39,217 +39,217 @@ fun AddAccountScreen(
             .padding(Dimensions.Padding.content),
         verticalArrangement = Arrangement.spacedBy(Spacing.md)
     ) {
-            // Info Card
+        // Info Card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(20.dp)
+                )
+                Text(
+                    text = "Add accounts not tracked via SMS like cash, wallets, or investment accounts.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
+
+        // Error Message
+        formState.errorMessage?.let { error ->
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                    containerColor = MaterialTheme.colorScheme.errorContainer
                 )
             ) {
                 Row(
                     modifier = Modifier.padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        Icons.Default.Info,
+                        Icons.Default.Error,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
-                        text = "Add accounts not tracked via SMS like cash, wallets, or investment accounts.",
+                        text = error,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onErrorContainer
                     )
                 }
             }
-            
-            // Error Message
-            formState.errorMessage?.let { error ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier.padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Error,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onErrorContainer,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = error,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                    }
-                }
-            }
-            
-            // Account Type Dropdown
-            ExposedDropdownMenuBox(
-                expanded = showTypeDropdown,
-                onExpandedChange = { showTypeDropdown = it }
-            ) {
-                OutlinedTextField(
-                    value = formState.accountType.name.lowercase()
-                        .replaceFirstChar { it.uppercase() },
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Account Type") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showTypeDropdown) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = when (formState.accountType) {
-                                AccountType.SAVINGS, AccountType.CURRENT -> Icons.Default.AccountBalance
-                                AccountType.CREDIT -> Icons.Default.CreditCard
-                            },
-                            contentDescription = null
-                        )
-                    }
-                )
-                
-                ExposedDropdownMenu(
-                    expanded = showTypeDropdown,
-                    onDismissRequest = { showTypeDropdown = false }
-                ) {
-                    AccountType.values().forEach { type ->
-                        DropdownMenuItem(
-                            text = { 
-                                Text(
-                                    type.name.lowercase().replaceFirstChar { it.uppercase() }
-                                )
-                            },
-                            onClick = {
-                                viewModel.updateAccountType(type)
-                                showTypeDropdown = false
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = when (type) {
-                                        AccountType.SAVINGS, AccountType.CURRENT -> Icons.Default.AccountBalance
-                                        AccountType.CREDIT -> Icons.Default.CreditCard
-                                    },
-                                    contentDescription = null
-                                )
-                            }
-                        )
-                    }
-                }
-                }
-            }
-            
-            // Icon Selector
-            Text("Account Icon", style = MaterialTheme.typography.labelMedium)
-            Box(modifier = Modifier.height(200.dp).fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)) {
-                 IconSelector(
-                     selectedIconId = formState.iconResId,
-                     onIconSelected = { viewModel.updateIcon(it) }
-                 )
-            }
-            
-            // Account Name
+        }
+
+        // Account Type Dropdown
+        ExposedDropdownMenuBox(
+            expanded = showTypeDropdown,
+            onExpandedChange = { showTypeDropdown = it }
+        ) {
             OutlinedTextField(
-                value = formState.bankName,
-                onValueChange = viewModel::updateBankName,
-                label = { Text("Account Name *") },
-                placeholder = { 
-                    Text(
-                        when (formState.accountType) {
-                            AccountType.SAVINGS, AccountType.CURRENT -> "e.g., HDFC Bank"
-                            AccountType.CREDIT -> "e.g., HDFC Credit Card"
+                value = formState.accountType.name.lowercase()
+                    .replaceFirstChar { it.uppercase() },
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Account Type") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showTypeDropdown) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true),
+                leadingIcon = {
+                    Icon(
+                        imageVector = when (formState.accountType) {
+                            AccountType.SAVINGS, AccountType.CURRENT -> Icons.Default.AccountBalance
+                            AccountType.CREDIT -> Icons.Default.CreditCard
+                        },
+                        contentDescription = null
+                    )
+                }
+            )
+
+            ExposedDropdownMenu(
+                expanded = showTypeDropdown,
+                onDismissRequest = { showTypeDropdown = false }
+            ) {
+                AccountType.values().forEach { type ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                type.name.lowercase().replaceFirstChar { it.uppercase() }
+                            )
+                        },
+                        onClick = {
+                            viewModel.updateAccountType(type)
+                            showTypeDropdown = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = when (type) {
+                                    AccountType.SAVINGS, AccountType.CURRENT -> Icons.Default.AccountBalance
+                                    AccountType.CREDIT -> Icons.Default.CreditCard
+                                },
+                                contentDescription = null
+                            )
                         }
                     )
-                },
-                leadingIcon = {
-                    Icon(Icons.Default.Business, contentDescription = null)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words
-                )
-            )
-            
-            // Last 4 Digits
-            OutlinedTextField(
-                value = formState.accountLast4,
-                onValueChange = viewModel::updateAccountLast4,
-                label = { Text("Last 4 Digits *") },
-                placeholder = { Text("e.g., 1234") },
-                leadingIcon = {
-                    Icon(Icons.Default.Tag, contentDescription = null)
-                },
-                supportingText = {
-                    Text("Enter last 4 digits of account/card")
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                )
-            )
-            
-            // Current Balance
-            OutlinedTextField(
-                value = formState.balance,
-                onValueChange = viewModel::updateBalance,
-                label = { Text("Current Balance *") },
-                placeholder = { Text("0.00") },
-                leadingIcon = {
-                    Icon(Icons.Default.CurrencyRupee, contentDescription = null)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal
-                )
-            )
-            
-            // Credit Limit (only for credit cards)
-            if (formState.accountType == AccountType.CREDIT) {
-                OutlinedTextField(
-                    value = formState.creditLimit,
-                    onValueChange = viewModel::updateCreditLimit,
-                    label = { Text("Credit Limit") },
-                    placeholder = { Text("0.00") },
-                    leadingIcon = {
-                        Icon(Icons.Default.CreditScore, contentDescription = null)
-                    },
-                    supportingText = {
-                        Text("Optional: Set credit limit for utilization tracking")
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Decimal
-                    )
-                )
+                }
             }
-            
-            // Save Button
-            Button(
-                onClick = {
-                    viewModel.addAccount()
-                    if (formState.errorMessage == null) {
-                        onNavigateBack()
-                    }
-                },
-                enabled = formState.isValid,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Save Account")
+        }
+    }
+
+    // Icon Selector
+    Text("Account Icon", style = MaterialTheme.typography.labelMedium)
+    Box(modifier = Modifier.height(200.dp).fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)) {
+        IconSelector(
+            selectedIconId = formState.iconResId,
+            onIconSelected = { viewModel.updateIcon(it) }
+        )
+    }
+
+    // Account Name
+    OutlinedTextField(
+        value = formState.bankName,
+        onValueChange = viewModel::updateBankName,
+        label = { Text("Account Name *") },
+        placeholder = {
+            Text(
+                when (formState.accountType) {
+                    AccountType.SAVINGS, AccountType.CURRENT -> "e.g., HDFC Bank"
+                    AccountType.CREDIT -> "e.g., HDFC Credit Card"
+                }
+            )
+        },
+        leadingIcon = {
+            Icon(Icons.Default.Business, contentDescription = null)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Words
+        )
+    )
+
+    // Last 4 Digits
+    OutlinedTextField(
+        value = formState.accountLast4,
+        onValueChange = viewModel::updateAccountLast4,
+        label = { Text("Last 4 Digits *") },
+        placeholder = { Text("e.g., 1234") },
+        leadingIcon = {
+            Icon(Icons.Default.Tag, contentDescription = null)
+        },
+        supportingText = {
+            Text("Enter last 4 digits of account/card")
+        },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        )
+    )
+
+    // Current Balance
+    OutlinedTextField(
+        value = formState.balance,
+        onValueChange = viewModel::updateBalance,
+        label = { Text("Current Balance *") },
+        placeholder = { Text("0.00") },
+        leadingIcon = {
+            Icon(Icons.Default.CurrencyRupee, contentDescription = null)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        )
+    )
+
+    // Credit Limit (only for credit cards)
+    if (formState.accountType == AccountType.CREDIT) {
+        OutlinedTextField(
+            value = formState.creditLimit,
+            onValueChange = viewModel::updateCreditLimit,
+            label = { Text("Credit Limit") },
+            placeholder = { Text("0.00") },
+            leadingIcon = {
+                Icon(Icons.Default.CreditScore, contentDescription = null)
+            },
+            supportingText = {
+                Text("Optional: Set credit limit for utilization tracking")
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            )
+        )
+    }
+
+    // Save Button
+    Button(
+        onClick = {
+            viewModel.addAccount()
+            if (formState.errorMessage == null) {
+                onNavigateBack()
             }
-            
-            // Add some bottom padding for better scroll experience
-            Spacer(modifier = Modifier.height(16.dp))
+        },
+        enabled = formState.isValid,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text("Save Account")
+    }
+
+    // Add some bottom padding for better scroll experience
+    Spacer(modifier = Modifier.height(16.dp))
 }

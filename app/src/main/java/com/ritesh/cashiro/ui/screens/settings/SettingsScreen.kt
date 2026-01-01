@@ -1,29 +1,81 @@
 package com.ritesh.cashiro.ui.screens.settings
 
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.DeveloperMode
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.SaveAlt
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Badge
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ritesh.cashiro.core.Constants
@@ -34,18 +86,33 @@ import com.ritesh.cashiro.ui.components.ListItem
 import com.ritesh.cashiro.ui.components.ListItemPosition
 import com.ritesh.cashiro.ui.components.PreferenceSwitch
 import com.ritesh.cashiro.ui.components.SectionHeader
-import com.ritesh.cashiro.ui.components.listItemPadding
 import com.ritesh.cashiro.ui.components.toShape
+import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.theme.Dimensions
 import com.ritesh.cashiro.ui.theme.Spacing
+import com.ritesh.cashiro.ui.theme.blue_dark
+import com.ritesh.cashiro.ui.theme.blue_light
+import com.ritesh.cashiro.ui.theme.cyan_dark
+import com.ritesh.cashiro.ui.theme.cyan_light
+import com.ritesh.cashiro.ui.theme.green_dark
+import com.ritesh.cashiro.ui.theme.green_light
+import com.ritesh.cashiro.ui.theme.grey_dark
+import com.ritesh.cashiro.ui.theme.grey_light
+import com.ritesh.cashiro.ui.theme.orange_dark
+import com.ritesh.cashiro.ui.theme.orange_light
+import com.ritesh.cashiro.ui.theme.pink_dark
+import com.ritesh.cashiro.ui.theme.pink_light
+import com.ritesh.cashiro.ui.theme.purple_dark
+import com.ritesh.cashiro.ui.theme.purple_light
+import com.ritesh.cashiro.ui.theme.red_dark
+import com.ritesh.cashiro.ui.theme.red_light
+import com.ritesh.cashiro.ui.theme.yellow_dark
+import com.ritesh.cashiro.ui.theme.yellow_light
 import com.ritesh.cashiro.ui.viewmodel.ThemeViewModel
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
-import com.ritesh.cashiro.R
-import androidx.core.net.toUri
-import com.ritesh.cashiro.ui.effects.overScrollVertical
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsScreen(
     themeViewModel: ThemeViewModel,
@@ -78,7 +145,6 @@ fun SettingsScreen(
     var showSmsScanDialog by remember { mutableStateOf(false) }
     var showExportOptionsDialog by remember { mutableStateOf(false) }
     var showTimeoutDialog by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
     // File picker for import
     val importLauncher =
@@ -97,6 +163,7 @@ fun SettingsScreen(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollBehaviorSmall = TopAppBarDefaults.pinnedScrollBehavior()
     val hazeState = remember { HazeState() }
+
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -200,11 +267,21 @@ fun SettingsScreen(
                             appLockViewModel.setAppLockEnabled(enabled)
                         },
                         leadingIcon = {
-                            Icon(
-                                Icons.Default.Lock,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = green_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Lock,
+                                    contentDescription = null,
+                                    tint = green_dark
+                                )
+                            }
                         },
                         padding = PaddingValues(0.dp),
                         isSingle = !appLockUiState.isLockEnabled,
@@ -267,11 +344,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.AccountBalance,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = red_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.AccountBalance,
+                                    contentDescription = null,
+                                    tint = red_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -302,11 +389,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.Category,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = purple_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Category,
+                                    contentDescription = null,
+                                    tint = purple_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -337,11 +434,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.AutoAwesome,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = orange_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.AutoAwesome,
+                                    contentDescription = null,
+                                    tint = orange_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -372,11 +479,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.Upload,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = yellow_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Upload,
+                                    contentDescription = null,
+                                    tint = yellow_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -407,11 +524,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.Download,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = green_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Download,
+                                    contentDescription = null,
+                                    tint = green_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -444,18 +571,42 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.Schedule,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = cyan_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Schedule,
+                                    contentDescription = null,
+                                    tint = cyan_dark,
+                                )
+                            }
                         },
                         trailing = {
-                            Text(
-                                text = if (smsScanAllTime) "All Time" else "$smsScanMonths months",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape = MaterialTheme.shapes.large
+                                    )
+                                    .clickable(
+                                        onClick = { showSmsScanDialog = true }
+                                    )
+                                    .padding(Spacing.md)
+                                ,
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = if (smsScanAllTime) "All Time" else "$smsScanMonths months",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
                         },
                         onClick = { showSmsScanDialog = true },
                         shape = ListItemPosition.Bottom.toShape(),
@@ -628,7 +779,7 @@ fun SettingsScreen(
 
                 if (unreportedCount > 0) {
                     SectionHeader(
-                        title = "Help Improve PennyWise",
+                        title = "Help Improve Cashiro",
                         modifier = Modifier.padding(start = Spacing.md)
                     )
 
@@ -689,11 +840,21 @@ fun SettingsScreen(
                     checked = isDeveloperModeEnabled,
                     onCheckedChange = { settingsViewModel.toggleDeveloperMode(it) },
                     leadingIcon = {
-                        Icon(
-                            Icons.Default.DeveloperMode,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        ) },
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(
+                                    color = grey_light,
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.DeveloperMode,
+                                contentDescription = null,
+                                tint = grey_dark
+                            )
+                        } },
                     padding = PaddingValues(0.dp),
                     isSingle = true
                 )
@@ -726,11 +887,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.Help,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = pink_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.Help,
+                                    contentDescription = null,
+                                    tint = pink_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -759,11 +930,21 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Icon(
-                                Icons.Default.BugReport,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = blue_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.BugReport,
+                                    contentDescription = null,
+                                    tint = blue_dark
+                                )
+                            }
                         },
                         trailing = {
                             Icon(
@@ -811,32 +992,22 @@ fun SettingsScreen(
                         val options = listOf(-1) + listOf(1, 2, 3, 6, 12, 24)
                         options.forEach { months ->
                             Row(
-                                modifier =
-                                    Modifier.fillMaxWidth()
-                                        .clickable {
-                                            if (months == -1) {
-                                                settingsViewModel
-                                                    .updateSmsScanAllTime(
-                                                        true
-                                                    )
-                                                showSmsScanDialog = false
-                                            } else {
-                                                settingsViewModel
-                                                    .updateSmsScanMonths(
-                                                        months
-                                                    )
-                                                settingsViewModel
-                                                    .updateSmsScanAllTime(
-                                                        false
-                                                    )
-                                                showSmsScanDialog = false
-                                            }
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        if (months == -1) {
+                                            settingsViewModel.updateSmsScanAllTime(true)
+                                            showSmsScanDialog = false
+                                        } else {
+                                            settingsViewModel.updateSmsScanMonths(months)
+                                            settingsViewModel.updateSmsScanAllTime(false)
+                                            showSmsScanDialog = false
                                         }
-                                        .padding(vertical = Spacing.sm),
+                                    }
+                                    .padding(vertical = Spacing.sm),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                val isSelected =
-                                    if (months == -1) smsScanAllTime
+                                val isSelected = if (months == -1) smsScanAllTime
                                     else smsScanMonths == months && !smsScanAllTime
                                 RadioButton(
                                     selected = isSelected,
@@ -845,12 +1016,8 @@ fun SettingsScreen(
                                             settingsViewModel.updateSmsScanAllTime(true)
                                             showSmsScanDialog = false
                                         } else {
-                                            settingsViewModel.updateSmsScanMonths(
-                                                months
-                                            )
-                                            settingsViewModel.updateSmsScanAllTime(
-                                                false
-                                            )
+                                            settingsViewModel.updateSmsScanMonths(months)
+                                            settingsViewModel.updateSmsScanAllTime(false)
                                             showSmsScanDialog = false
                                         }
                                     }
@@ -910,7 +1077,7 @@ fun SettingsScreen(
                             "yyyy_MM_dd_HHmmss"
                         )
                     )
-            val fileName = "PennyWise_Backup_$timestamp.pennywisebackup"
+            val fileName = "Cashiro_Backup_$timestamp.cashirobackup"
 
             AlertDialog(
                 onDismissRequest = {

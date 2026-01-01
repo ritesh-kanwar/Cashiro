@@ -83,7 +83,8 @@ fun RulesScreen(
                             containerColor = MaterialTheme.colorScheme.surfaceContainer,
                             contentColor = MaterialTheme.colorScheme.onBackground
                         ),
-                        shapes =  IconButtonDefaults.shapes()
+                        shapes =  IconButtonDefaults.shapes(),
+                        modifier = Modifier.padding(end = 16.dp)
                     ) {
                         Icon(
                             Icons.Default.Refresh,

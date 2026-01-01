@@ -20,26 +20,26 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 data class ManageAccountsUiState(
-        val accounts: List<AccountBalanceEntity> = emptyList(),
-        val hiddenAccounts: Set<String> = emptySet(),
-        val balanceHistory: List<AccountBalanceEntity> = emptyList(),
-        val linkedCards: Map<String, List<CardEntity>> =
-                emptyMap(), // accountLast4 -> List of cards
-        val orphanedCards: List<CardEntity> = emptyList(),
-        val isLoading: Boolean = false,
-        val errorMessage: String? = null,
-        val successMessage: String? = null
+    val accounts: List<AccountBalanceEntity> = emptyList(),
+    val hiddenAccounts: Set<String> = emptySet(),
+    val balanceHistory: List<AccountBalanceEntity> = emptyList(),
+    val linkedCards: Map<String, List<CardEntity>> =
+        emptyMap(), // accountLast4 -> List of cards
+    val orphanedCards: List<CardEntity> = emptyList(),
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val successMessage: String? = null
 )
 
 data class AccountFormState(
-        val bankName: String = "",
-        val accountLast4: String = "",
-        val balance: String = "",
-        val creditLimit: String = "",
-        val accountType: AccountType = AccountType.SAVINGS,
-        val iconResId: Int = 0,
-        val isValid: Boolean = false,
-        val errorMessage: String? = null
+    val bankName: String = "",
+    val accountLast4: String = "",
+    val balance: String = "",
+    val creditLimit: String = "",
+    val accountType: AccountType = AccountType.SAVINGS,
+    val iconResId: Int = 0,
+    val isValid: Boolean = false,
+    val errorMessage: String? = null
 )
 
 enum class AccountType {
@@ -52,10 +52,10 @@ enum class AccountType {
 class ManageAccountsViewModel
 @Inject
 constructor(
-        @ApplicationContext private val context: Context,
-        private val accountBalanceRepository: AccountBalanceRepository,
-        private val cardRepository: CardRepository,
-        private val transactionRepository: TransactionRepository
+    @ApplicationContext private val context: Context,
+    private val accountBalanceRepository: AccountBalanceRepository,
+    private val cardRepository: CardRepository,
+    private val transactionRepository: TransactionRepository
 ) : ViewModel() {
 
     private val sharedPrefs = context.getSharedPreferences("account_prefs", Context.MODE_PRIVATE)
@@ -120,8 +120,8 @@ constructor(
         if (last4.length <= 4) {
             _formState.update {
                 it.copy(
-                        accountLast4 = last4,
-                        isValid = validateForm(it.bankName, last4, it.balance)
+                    accountLast4 = last4,
+                    isValid = validateForm(it.bankName, last4, it.balance)
                 )
             }
         }
@@ -132,8 +132,8 @@ constructor(
         if (balance.isEmpty() || balance.matches(Regex("^\\d*\\.?\\d*$"))) {
             _formState.update {
                 it.copy(
-                        balance = balance,
-                        isValid = validateForm(it.bankName, it.accountLast4, balance)
+                    balance = balance,
+                    isValid = validateForm(it.bankName, it.accountLast4, balance)
                 )
             }
         }
@@ -162,13 +162,13 @@ constructor(
     }
 
     fun addAccount(
-            bankName: String,
-            balance: BigDecimal,
-            accountLast4: String,
-            iconResId: Int,
-            colorHex: String,
-            isCreditCard: Boolean = false,
-            creditLimit: BigDecimal? = null
+        bankName: String,
+        balance: BigDecimal,
+        accountLast4: String,
+        iconResId: Int,
+        colorHex: String,
+        isCreditCard: Boolean = false,
+        creditLimit: BigDecimal? = null
     ) {
         viewModelScope.launch {
             // Check for duplicates
@@ -184,15 +184,15 @@ constructor(
             }
 
             accountBalanceRepository.insertBalance(
-                    AccountBalanceEntity(
-                            bankName = bankName,
-                            accountLast4 = accountLast4,
-                            balance = balance,
-                            creditLimit = creditLimit,
-                            timestamp = LocalDateTime.now(),
-                            isCreditCard = isCreditCard,
-                            iconResId = iconResId
-                    )
+                AccountBalanceEntity(
+                    bankName = bankName,
+                    accountLast4 = accountLast4,
+                    balance = balance,
+                    creditLimit = creditLimit,
+                    timestamp = LocalDateTime.now(),
+                    isCreditCard = isCreditCard,
+                    iconResId = iconResId
+                )
             )
 
             _uiState.update { it.copy(successMessage = "Account added successfully") }
@@ -211,13 +211,13 @@ constructor(
                 } else null
 
         addAccount(
-                bankName = state.bankName,
-                balance = BigDecimal(state.balance),
-                accountLast4 = state.accountLast4,
-                iconResId = state.iconResId,
-                colorHex = "#33B5E5", // Default or handle color
-                isCreditCard = (state.accountType == AccountType.CREDIT),
-                creditLimit = creditLimit
+            bankName = state.bankName,
+            balance = BigDecimal(state.balance),
+            accountLast4 = state.accountLast4,
+            iconResId = state.iconResId,
+            colorHex = "#33B5E5", // Default or handle color
+            isCreditCard = (state.accountType == AccountType.CREDIT),
+            creditLimit = creditLimit
         )
 
         // Clear form
@@ -229,15 +229,14 @@ constructor(
             // Get the latest balance to preserve credit limit
             val latestBalance = accountBalanceRepository.getLatestBalance(bankName, accountLast4)
 
-            accountBalanceRepository.insertBalance(
-                    AccountBalanceEntity(
-                            bankName = bankName,
-                            accountLast4 = accountLast4,
-                            balance = newBalance,
-                            creditLimit = latestBalance?.creditLimit,
-                            timestamp = LocalDateTime.now(),
-                            iconResId = latestBalance?.iconResId ?: 0
-                    )
+            accountBalanceRepository.insertBalance(AccountBalanceEntity(
+                bankName = bankName,
+                accountLast4 = accountLast4,
+                balance = newBalance,
+                creditLimit = latestBalance?.creditLimit,
+                timestamp = LocalDateTime.now(),
+                iconResId = latestBalance?.iconResId ?: 0
+            )
             )
         }
     }
@@ -250,14 +249,14 @@ constructor(
     ) {
         viewModelScope.launch {
             accountBalanceRepository.insertBalance(
-                    AccountBalanceEntity(
-                            bankName = bankName,
-                            accountLast4 = accountLast4,
-                            balance = newBalance,
-                            creditLimit = newLimit,
-                            timestamp = LocalDateTime.now(),
-                            isCreditCard = true
-                    )
+                AccountBalanceEntity(
+                    bankName = bankName,
+                    accountLast4 = accountLast4,
+                    balance = newBalance,
+                    creditLimit = newLimit,
+                    timestamp = LocalDateTime.now(),
+                    isCreditCard = true
+                )
             )
         }
     }
@@ -478,9 +477,9 @@ constructor(
                 // Update bank name if changed
                 if (newBankName != oldBankName) {
                     accountBalanceRepository.updateAccountBankName(
-                            oldBankName,
-                            accountLast4,
-                            newBankName
+                        oldBankName,
+                        accountLast4,
+                        newBankName
                     )
 
                     // Update hidden accounts preference if bank name changed
@@ -497,16 +496,16 @@ constructor(
 
                 // Insert new balance record with updated values
                 accountBalanceRepository.insertBalance(
-                        AccountBalanceEntity(
-                                bankName = newBankName,
-                                accountLast4 = accountLast4,
-                                balance = newBalance,
-                                creditLimit = newCreditLimit,
-                                timestamp = LocalDateTime.now(),
-                                isCreditCard = isCreditCard,
-                                sourceType = "MANUAL",
-                                iconResId = newIconResId
-                        )
+                    AccountBalanceEntity(
+                        bankName = newBankName,
+                        accountLast4 = accountLast4,
+                        balance = newBalance,
+                        creditLimit = newCreditLimit,
+                        timestamp = LocalDateTime.now(),
+                        isCreditCard = isCreditCard,
+                        sourceType = "MANUAL",
+                        iconResId = newIconResId
+                    )
                 )
 
                 _uiState.update { it.copy(successMessage = "Account updated successfully") }
@@ -520,10 +519,7 @@ constructor(
         }
     }
 
-    fun mergeAccounts(
-            targetAccount: AccountBalanceEntity,
-            sourceAccounts: List<AccountBalanceEntity>,
-            newBalance: BigDecimal?
+    fun mergeAccounts(targetAccount: AccountBalanceEntity, sourceAccounts: List<AccountBalanceEntity>, newBalance: BigDecimal?
     ) {
         viewModelScope.launch {
             try {
@@ -532,26 +528,24 @@ constructor(
                 // 1. Reassign transactions
                 sourceAccounts.forEach { source ->
                     transactionRepository.updateAccountForTransactions(
-                            oldBankName = source.bankName,
-                            oldAccountNumber = source.accountLast4,
-                            newBankName = targetAccount.bankName,
-                            newAccountNumber = targetAccount.accountLast4
+                        oldBankName = source.bankName,
+                        oldAccountNumber = source.accountLast4,
+                        newBankName = targetAccount.bankName,newAccountNumber = targetAccount.accountLast4
                     )
                 }
 
                 // 2. Update target balance if requested
                 if (newBalance != null) {
-                    accountBalanceRepository.insertBalance(
-                            AccountBalanceEntity(
-                                    bankName = targetAccount.bankName,
-                                    accountLast4 = targetAccount.accountLast4,
-                                    balance = newBalance,
-                                    creditLimit = targetAccount.creditLimit,
-                                    timestamp = LocalDateTime.now(),
-                                    isCreditCard = targetAccount.isCreditCard,
-                                    sourceType = "MERGE",
-                                    iconResId = targetAccount.iconResId
-                            )
+                    accountBalanceRepository.insertBalance(AccountBalanceEntity(
+                        bankName = targetAccount.bankName,
+                        accountLast4 = targetAccount.accountLast4,
+                        balance = newBalance,
+                        creditLimit = targetAccount.creditLimit,
+                        timestamp = LocalDateTime.now(),
+                        isCreditCard = targetAccount.isCreditCard,
+                        sourceType = "MERGE",
+                        iconResId = targetAccount.iconResId
+                    )
                     )
                 }
 
@@ -577,8 +571,8 @@ constructor(
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                            isLoading = false,
-                            errorMessage = "Failed to merge accounts: ${e.message}"
+                        isLoading = false,
+                        errorMessage = "Failed to merge accounts: ${e.message}"
                     )
                 }
             }
