@@ -597,7 +597,7 @@ fun SettingsScreen(
                                     .clickable(
                                         onClick = { showSmsScanDialog = true }
                                     )
-                                    .padding(Spacing.md)
+                                    .padding(horizontal = Spacing.md, vertical = Spacing.sm)
                                 ,
                                 contentAlignment = Alignment.Center
                             ) {

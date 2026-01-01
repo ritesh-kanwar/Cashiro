@@ -102,36 +102,36 @@ fun IconSelector(
 
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         SearchBarBox(
-                searchQuery = searchQuery,
-                onSearchQueryChange = { searchQuery = it },
-                label = {
-                    AnimatedContent(
-                            targetState = labels[currentLabelIndex],
-                            transitionSpec = {
-                                (fadeIn(animationSpec = tween(400, delayMillis = 100)) +
-                                        slideInVertically(
-                                                initialOffsetY = { it },
-                                                animationSpec = tween(400, delayMillis = 100)
-                                        ))
-                                        .togetherWith(
-                                                fadeOut(animationSpec = tween(400)) +
-                                                        slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(400))
-                                        )
-                            },
-                            label = "SearchBarLabelAnimation"
-                    ) { labelText ->
-                        Text(
-                                text = labelText,
-                                fontSize = 14.sp,
-                                lineHeight = 14.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                fontStyle = FontStyle.Italic,
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.inverseSurface.copy(0.5f),
-                                modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+            searchQuery = searchQuery,
+            onSearchQueryChange = { searchQuery = it },
+            label = {
+                AnimatedContent(
+                    targetState = labels[currentLabelIndex],
+                    transitionSpec = {
+                        (fadeIn(animationSpec = tween(400, delayMillis = 100)) +
+                                slideInVertically(
+                                    initialOffsetY = { it },
+                                    animationSpec = tween(400, delayMillis = 100)
+                                ))
+                            .togetherWith(
+                                fadeOut(animationSpec = tween(400)) +
+                                        slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(400))
+                            )
+                    },
+                    label = "SearchBarLabelAnimation"
+                ) { labelText ->
+                    Text(
+                        text = labelText,
+                        fontSize = 14.sp,
+                        lineHeight = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        fontStyle = FontStyle.Italic,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.inverseSurface.copy(0.5f),
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -345,6 +345,50 @@ private fun getAllIcons(): List<IconItem> {
     addIcon("Game", "Entertainment", R.drawable.type_tool_electronic_video_game)
     addIcon("Movie", "Entertainment", R.drawable.type_tool_electronic_movie_camera)
     addIcon("Music", "Entertainment", R.drawable.type_tool_electronic_headphone)
+
+    // Brands
+    addIcon("1mg", "Brand", R.drawable.ic_brand_1mg)
+    addIcon("5paisa", "Brand", R.drawable.ic_brand_5paisa)
+    addIcon("99acres", "Brand", R.drawable.ic_brand_99acres)
+    addIcon("abhibus", "Brand", R.drawable.ic_brand_abhibus)
+    addIcon("acko", "Brand", R.drawable.ic_brand_acko)
+    addIcon("adani electricity", "Brand", R.drawable.ic_brand_adani_electricity)
+    addIcon("air india", "Brand", R.drawable.ic_brand_air_india)
+    addIcon("airtel", "Brand", R.drawable.ic_brand_airtel)
+    addIcon("ajio", "Brand", R.drawable.ic_brand_ajio)
+    addIcon("amazon", "Brand", R.drawable.ic_brand_amazon)
+    addIcon("amazon pay", "Brand", R.drawable.ic_brand_amazon_pay)
+    addIcon("amazon prime", "Brand", R.drawable.ic_brand_amazon_prime)
+    addIcon("angel one", "Brand", R.drawable.ic_brand_angel_one)
+    addIcon("anytime fitness", "Brand", R.drawable.ic_brand_anytime_fitness)
+    addIcon("apollo pharmacy", "Brand", R.drawable.ic_brand_apollo_pharmacy)
+    addIcon("apple music", "Brand", R.drawable.ic_brand_apple_music)
+    addIcon("axis", "Brand", R.drawable.ic_brand_axis_bank)
+    addIcon("bajaj allianz", "Brand", R.drawable.ic_brand_bajaj_allianz)
+    addIcon("bandhan bank", "Brand", R.drawable.ic_brand_bandhan_bank)
+    addIcon("bank of baroda", "Brand", R.drawable.ic_brand_bank_of_baroda)
+    addIcon("barbeque nation", "Brand", R.drawable.ic_brand_barbeque_nation)
+    addIcon("bhim upi", "Brand", R.drawable.ic_brand_bhim)
+    addIcon("bigbasket", "Brand", R.drawable.ic_brand_bigbasket)
+    addIcon("blinkit", "Brand", R.drawable.ic_brand_blinkit)
+    addIcon("blu smart", "Brand", R.drawable.ic_brand_blu_smart)
+    addIcon("bookmyshowt", "Brand", R.drawable.ic_brand_bookmyshow)
+    addIcon("bounce", "Brand", R.drawable.ic_brand_bounce)
+    addIcon("bses", "Brand", R.drawable.ic_brand_bses)
+    addIcon("burger king", "Brand", R.drawable.ic_brand_burger_king)
+    addIcon("byjus", "Brand", R.drawable.ic_brand_byjus)
+    addIcon("cafe coffee day", "Brand", R.drawable.ic_brand_cafe_coffee_day)
+    addIcon("canara bank", "Brand", R.drawable.ic_brand_canara_bank)
+    addIcon("cinepolis", "Brand", R.drawable.ic_brand_cinepolis)
+    addIcon("cleartrip", "Brand", R.drawable.ic_brand_cleartrip)
+    addIcon("coin", "Brand", R.drawable.ic_brand_coin)
+    addIcon("coursera", "Brand", R.drawable.ic_brand_coursera)
+    addIcon("cred", "Brand", R.drawable.ic_brand_cred)
+    addIcon("cultfit", "Brand", R.drawable.ic_brand_cultfit)
+    addIcon("curefit", "Brand", R.drawable.ic_brand_curefit)
+    addIcon("dish tv", "Brand", R.drawable.ic_brand_dish_tv)
+
+
 
     return icons
 }

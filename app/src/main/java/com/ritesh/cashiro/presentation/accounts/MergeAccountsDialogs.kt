@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MergeType
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
@@ -274,7 +275,7 @@ fun MergeOptionItem(title: String, description: String, icon: ImageVector, onCli
 fun MergeConfirmationDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Filled.MergeType, contentDescription = null) },
+        icon = { Icon(Icons.AutoMirrored.Filled.MergeType, contentDescription = null) },
         title = { Text(text = "Final Confirmation") },
         text = {
             Text(

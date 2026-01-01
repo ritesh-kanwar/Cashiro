@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.presentation.accounts
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -7,14 +8,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MergeType
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Merge
+import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
@@ -34,6 +45,7 @@ fun EditAccountSheet(
     onDismiss: () -> Unit,
     onMerge: (AccountBalanceEntity, List<AccountBalanceEntity>, BigDecimal?) -> Unit =
         { _, _, _ -> },
+    onDelete: (() -> Unit)? = null,
     onSave: (bankName: String,
         balance: BigDecimal,
         accountLast4: String,
@@ -368,34 +380,12 @@ fun EditAccountSheet(
                         )
                     }
                 }
-
-                // Merge Button (Only for existing accounts)
-                if (account != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = { showMergeSelection = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
-                            contentColor = MaterialTheme.colorScheme.onSecondary
-
-                        ),
-                        shapes = ButtonDefaults.shapes(),
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.MergeType, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Merge Account",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.height(80.dp))
         }
 
+        var checked by remember { mutableStateOf(false) }
         // Action Button at Bottom
         Box(
             modifier = Modifier
@@ -409,22 +399,178 @@ fun EditAccountSheet(
                             MaterialTheme.colorScheme.surface
                         )
                     )
-                )
-                .padding(Spacing.md)
+                ),
+            contentAlignment = Alignment.BottomCenter
         ) {
-            Button(
-                onClick = { onSave(bankName, balance, accountLast4, iconResId, colorHex) },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shapes = ButtonDefaults.shapes(),
-                enabled = bankName.isNotBlank() && accountLast4.length == 4
+
+            SplitButtonLayout(
+                leadingButton = {
+                    SplitButtonDefaults.LeadingButton(
+                        onClick = { onSave(bankName, balance, accountLast4, iconResId, colorHex) },
+                        enabled = bankName.isNotBlank() && accountLast4.length == 4,
+                        modifier = Modifier.height(56.dp)
+                    ) {
+                        Text(
+                            text = if (account == null) "Add Account" else "Save Changes",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
+                },
+                trailingButton = {
+                    val description = "Toggle Button"
+                    // Icon-only trailing button should have a tooltip for a11y.
+                    TooltipBox(
+                        positionProvider =
+                            TooltipDefaults.rememberTooltipPositionProvider(
+                                TooltipAnchorPosition.Above
+                            ),
+                        tooltip = { PlainTooltip { Text(description) } },
+                        state = rememberTooltipState(),
+                    ) {
+                        SplitButtonDefaults.TrailingButton(
+                            checked = checked,
+                            onCheckedChange = { checked = it },
+                            modifier =
+                                Modifier
+                                    .height(56.dp)
+                                    .semantics {
+                                        stateDescription = if (checked) "Expanded" else "Collapsed"
+                                        contentDescription = description
+                                    },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        ) {
+                            val rotation: Float by
+                            animateFloatAsState(
+                                targetValue = if (checked) 90f else 0f,
+                                label = "Trailing Icon Rotation",
+                            )
+                            Icon(
+                                Icons.Filled.MoreVert,
+                                modifier =
+                                    Modifier
+                                        .size(SplitButtonDefaults.TrailingIconSize)
+                                        .weight(0.2f)
+                                        .graphicsLayer {
+                                            this.rotationZ = rotation
+                                        },
+                                contentDescription = "Localized description",
+                            )
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .height(56.dp),
+            )
+            DropdownMenu(
+                expanded = checked,
+                onDismissRequest = { checked = false },
+                containerColor = Color.Transparent,
+                shadowElevation = 0.dp,
+                modifier = Modifier.padding(8.dp),
+                offset = DpOffset(100.dp, 0.dp),
+                shape = MaterialTheme.shapes.large
             ) {
-                Text(
-                    text = if (account == null) "Add Account" else "Save Changes",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                if (account != null) {
+                    DropdownMenuItem(
+                        text = { Text("Merge Account") },
+                        onClick = {
+                            checked = false
+                            showMergeSelection = true
+                        },
+                        leadingIcon = { Icon(Icons.Outlined.Merge, contentDescription = null) },
+                        modifier = Modifier
+                            .shadow(
+                                elevation = 2.dp,
+                                shape = RoundedCornerShape(
+                                    topStart = 16.dp,
+                                    topEnd = 16.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                )
+                            )
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(
+                                    topStart = 16.dp,
+                                    topEnd = 16.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                )
+                            ),
+                    )
+                    Spacer(modifier = Modifier.height(1.5.dp))
+                    DropdownMenuItem(
+                        text = { Text("Delete Account", color = MaterialTheme.colorScheme.error) },
+                        onClick = {
+                            checked = false
+                            onDelete?.invoke()
+                        },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete Account",
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        },
+                        modifier = Modifier
+                            .shadow(
+                                elevation = 2.dp,
+                                shape = RoundedCornerShape(
+                                    topStart = 4.dp,
+                                    topEnd = 4.dp,
+                                    bottomStart = 16.dp,
+                                    bottomEnd = 16.dp
+                                )
+                            )
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(
+                                    topStart = 4.dp,
+                                    topEnd = 4.dp,
+                                    bottomStart = 16.dp,
+                                    bottomEnd = 16.dp
+                                )
+                            ),
+                    )
+                }
             }
         }
+
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .align(Alignment.BottomCenter)
+//                .background(
+//                    brush = Brush.verticalGradient(
+//                        colors = listOf(
+//                            Color.Transparent,
+//                            MaterialTheme.colorScheme.surface,
+//                            MaterialTheme.colorScheme.surface
+//                        )
+//                    )
+//                )
+//                .padding(Spacing.md)
+//        ) {
+//            Button(
+//                onClick = { onSave(bankName, balance, accountLast4, iconResId, colorHex) },
+//                modifier = Modifier.fillMaxWidth().height(56.dp),
+//                shapes = ButtonDefaults.shapes(),
+//                enabled = bankName.isNotBlank() && accountLast4.length == 4
+//            ) {
+//                Text(
+//                    text = if (account == null) "Add Account" else "Save Changes",
+//                    fontSize = 16.sp,
+//                    fontWeight = FontWeight.Bold
+//                )
+//            }
+//        }
     }
 }
 

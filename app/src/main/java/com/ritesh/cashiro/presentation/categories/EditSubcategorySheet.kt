@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -29,6 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,13 +41,13 @@ import com.ritesh.cashiro.ui.components.ColorPickerContent
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun EditSubcategorySheet(
-        subcategory: SubcategoryEntity?,
-        categoryColor: String,
-        categoryIconResId: Int,
-        onDismiss: () -> Unit,
-        onSave: (name: String, iconResId: Int, color: String) -> Unit,
-        onReset: ((Long) -> Unit)? = null,
-        onDelete: ((Long) -> Unit)? = null
+    subcategory: SubcategoryEntity?,
+    categoryColor: String,
+    categoryIconResId: Int,
+    onDismiss: () -> Unit,
+    onSave: (name: String, iconResId: Int, color: String) -> Unit,
+    onReset: ((Long) -> Unit)? = null,
+    onDelete: ((Long) -> Unit)? = null
 ) {
     var name by remember { mutableStateOf(subcategory?.name ?: "") }
     var colorHex by remember { mutableStateOf(subcategory?.color ?: categoryColor) }
@@ -59,17 +61,17 @@ fun EditSubcategorySheet(
 
     if (showIconSelector) {
         ModalBottomSheet(
-                onDismissRequest = { showIconSelector = false },
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-                dragHandle = { BottomSheetDefaults.DragHandle() },
-                containerColor = MaterialTheme.colorScheme.surface
+            onDismissRequest = { showIconSelector = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             IconSelector(
-                    selectedIconId = iconResId,
-                    onIconSelected = {
-                        iconResId = it
-                        showIconSelector = false
-                    }
+                selectedIconId = iconResId,
+                onIconSelected = {
+                    iconResId = it
+                    showIconSelector = false
+                }
             )
         }
     }
@@ -79,8 +81,8 @@ fun EditSubcategorySheet(
     ) {
         LazyColumn(
             modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                .fillMaxSize()
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
@@ -92,16 +94,16 @@ fun EditSubcategorySheet(
                 ) {
 
                     Box(
-                        modifier =
-                            Modifier.size(80.dp)
-                                .clickable { showIconSelector = true },
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clickable { showIconSelector = true },
                         contentAlignment = Alignment.Center
                     ) {
                         Box(
-                            modifier =
-                                Modifier.size(80.dp)
-                                    .clip(CircleShape)
-                                    .background(Color(colorHex.toColorInt()).copy(alpha = 0.2f))
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(CircleShape)
+                                .background(Color(colorHex.toColorInt()).copy(alpha = 0.2f))
                         )
                         Icon(
                             painter = painterResource(id = iconResId),
@@ -171,10 +173,9 @@ fun EditSubcategorySheet(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(24.dp),
-                    colors =
-                        CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                        )
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    )
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         ColorPickerContent(
@@ -220,7 +221,8 @@ fun EditSubcategorySheet(
                             text = if (subcategory == null) "Create Subcategory" else "Update Subcategory",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth(0.5f)
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(0.8f)
                         )
                     }
                 },
@@ -230,7 +232,7 @@ fun EditSubcategorySheet(
                     TooltipBox(
                         positionProvider =
                             TooltipDefaults.rememberTooltipPositionProvider(
-                                TooltipAnchorPosition.Above
+                                TooltipAnchorPosition.End
                             ),
                         tooltip = { PlainTooltip { Text(description) } },
                         state = rememberTooltipState(),
@@ -260,6 +262,7 @@ fun EditSubcategorySheet(
                                 modifier =
                                     Modifier
                                         .size(SplitButtonDefaults.TrailingIconSize)
+                                        .weight(0.2f)
                                         .graphicsLayer {
                                             this.rotationZ = rotation
                                         },
@@ -275,8 +278,10 @@ fun EditSubcategorySheet(
             DropdownMenu(
                 expanded = checked,
                 onDismissRequest = { checked = false },
-                modifier = Modifier.align(Alignment.BottomCenter),
-                offset = DpOffset(50.dp, 0.dp),
+                containerColor = Color.Transparent,
+                shadowElevation = 0.dp,
+                offset = DpOffset(100.dp, 0.dp),
+                modifier = Modifier.padding(8.dp),
                 shape = MaterialTheme.shapes.large
             ) {
                 if (subcategory?.isSystem == true && onReset != null) {
@@ -290,8 +295,28 @@ fun EditSubcategorySheet(
                             onReset(subcategory.id)
                         },
                         leadingIcon = { Icon(Icons.Outlined.RestartAlt, contentDescription = null) },
+                        modifier = Modifier
+                            .shadow(
+                                elevation = 2.dp,
+                                shape = RoundedCornerShape(
+                                    topStart = 16.dp,
+                                    topEnd = 16.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                )
+                            )
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(
+                                    topStart = 16.dp,
+                                    topEnd = 16.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                )
+                            ),
                     )
                 }
+                Spacer(modifier = Modifier.height(1.5.dp))
                 if (subcategory != null && onDelete != null) {
                     DropdownMenuItem(
                         text = { Text(
@@ -303,7 +328,26 @@ fun EditSubcategorySheet(
                             }
                         },
                         leadingIcon = { Icon(Icons.Outlined.Delete, contentDescription = null) },
-                        enabled = !subcategory.isSystem
+                        enabled = !subcategory.isSystem,
+                        modifier = Modifier
+                            .shadow(
+                                elevation = 2.dp,
+                                shape = RoundedCornerShape(
+                                    topStart = 4.dp,
+                                    topEnd = 4.dp,
+                                    bottomStart = 16.dp,
+                                    bottomEnd = 16.dp
+                                )
+                            )
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(
+                                    topStart = 4.dp,
+                                    topEnd = 4.dp,
+                                    bottomStart = 16.dp,
+                                    bottomEnd = 16.dp
+                                )
+                            ),
                     )
                 }
             }

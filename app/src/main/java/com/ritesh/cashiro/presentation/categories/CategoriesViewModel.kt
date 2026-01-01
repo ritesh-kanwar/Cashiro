@@ -35,6 +35,37 @@ constructor(
         // or initialize defaults here as it's done in DatabaseModule
     }
 
+    // Search Query
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
+    // Filtered categories
+    val filteredCategories: StateFlow<List<CategoryEntity>> = combine(
+        categories,
+        subcategories,
+        _searchQuery
+    ) { categories, subcategoriesMap, query ->
+        if (query.isBlank()) {
+            categories
+        } else {
+            categories.filter { category ->
+                val categoryMatches = category.name.contains(query, ignoreCase = true)
+                val subcategoriesMatch = subcategoriesMap[category.id]?.any {
+                    it.name.contains(query, ignoreCase = true)
+                } == true
+                categoryMatches || subcategoriesMatch
+            }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
     // Dialog states
     private val _showAddEditDialog = MutableStateFlow(false)
     val showAddEditDialog: StateFlow<Boolean> = _showAddEditDialog.asStateFlow()

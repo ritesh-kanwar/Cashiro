@@ -616,6 +616,12 @@ fun ManageAccountsScreen(
                             newBalance
                         )
                     },
+                    onDelete = {
+                        accountToDelete = accountToEdit!!.bankName to accountToEdit!!.accountLast4
+                        showEditSheet = false
+                        accountToEdit = null
+                        showDeleteConfirmDialog = true
+                    },
                     onSave = { bankName, balance, last4, icon, color ->
                         viewModel.editAccount(
                             oldBankName = accountToEdit!!.bankName,
@@ -1418,8 +1424,8 @@ private fun DeleteAccountConfirmDialog(
                 )
                 Card(
                     colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(Spacing.sm),
