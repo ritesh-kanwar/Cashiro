@@ -51,6 +51,7 @@ import com.ritesh.cashiro.ui.screens.analytics.AnalyticsScreen
 import com.ritesh.cashiro.ui.screens.chat.ChatScreen
 import com.ritesh.cashiro.ui.screens.rules.CreateRuleScreen
 import com.ritesh.cashiro.ui.screens.rules.RulesScreen
+import com.ritesh.cashiro.ui.screens.settings.AppearanceScreen
 import com.ritesh.cashiro.ui.screens.settings.FAQScreen
 import com.ritesh.cashiro.ui.screens.settings.SettingsScreen
 import com.ritesh.cashiro.ui.screens.unrecognized.UnrecognizedSmsScreen
@@ -221,7 +222,8 @@ fun MainScreen(
                                 onNavigateToUnrecognizedSms = { navController.navigate("unrecognized_sms") },
                                 onNavigateToManageAccounts = { navController.navigate("manage_accounts") },
                                 onNavigateToFaq = { navController.navigate("faq") },
-                                onNavigateToRules = { navController.navigate("rules") }
+                                onNavigateToRules = { navController.navigate("rules") },
+                                onNavigateToAppearance = {navController.navigate("appearance") }
                             ) },
 
                         navPage("categories") {
@@ -265,6 +267,13 @@ fun MainScreen(
                                     rulesViewModel.createRule(rule)
                                     navController.popBackStack()
                                 }
+                            ) },
+                        navPage("appearance") {
+                            val rulesViewModel: RulesViewModel =
+                                hiltViewModel()
+                            AppearanceScreen(
+                                onNavigateBack = { navController.popBackStack() },
+                                themeViewModel = themeViewModel
                             ) },
                         )
                 )

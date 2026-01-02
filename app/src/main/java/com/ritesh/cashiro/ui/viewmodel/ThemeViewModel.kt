@@ -21,7 +21,8 @@ class ThemeViewModel @Inject constructor(
             ThemeUiState(
                 isDarkTheme = preferences.isDarkThemeEnabled,
                 isDynamicColorEnabled = preferences.isDynamicColorEnabled,
-                hasSkippedSmsPermission = preferences.hasSkippedSmsPermission
+                hasSkippedSmsPermission = preferences.hasSkippedSmsPermission,
+                isAmoledMode = preferences.isAmoledMode
             )
         }
         .stateIn(
@@ -41,10 +42,17 @@ class ThemeViewModel @Inject constructor(
             userPreferencesRepository.updateDynamicColorEnabled(enabled)
         }
     }
+
+    fun updateAmoledMode(enabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateAmoledMode(enabled)
+        }
+    }
 }
 
 data class ThemeUiState(
     val isDarkTheme: Boolean? = null, // null = follow system
     val isDynamicColorEnabled: Boolean = false, // Default to custom theme colors
-    val hasSkippedSmsPermission: Boolean = false
+    val hasSkippedSmsPermission: Boolean = false,
+    val isAmoledMode: Boolean = false
 )

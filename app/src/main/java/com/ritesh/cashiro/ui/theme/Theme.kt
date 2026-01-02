@@ -13,6 +13,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -20,21 +21,30 @@ import androidx.core.view.WindowCompat
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CashiroTheme(
-        darkTheme: Boolean = isSystemInDarkTheme(),
-        // Dynamic color is available on Android 12+
-        dynamicColor: Boolean = true,
-        content: @Composable () -> Unit
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Dynamic color is available on Android 12+
+    dynamicColor: Boolean = true,
+    isAmoledMode: Boolean = false,
+    content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
-    val colorScheme =
-            when {
-                dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                    if (darkTheme) dynamicDarkColorScheme(context)
-                    else dynamicLightColorScheme(context)
-                }
-                darkTheme -> darkColorScheme()
-                else -> lightColorScheme()
+    var colorScheme =
+        when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                if (darkTheme) dynamicDarkColorScheme(context)
+                else dynamicLightColorScheme(context)
             }
+            darkTheme -> darkColorScheme()
+            else -> lightColorScheme()
+        }
+
+    // Apply Amoled Black if enabled in Dark Mode
+    if (darkTheme && isAmoledMode) {
+        colorScheme = colorScheme.copy(
+            background = Color.Black,
+            surface = Color.Black,
+        )
+    }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -44,6 +54,7 @@ fun CashiroTheme(
             WindowCompat.setDecorFitsSystemWindows(window, false)
 
             // Enforce transparent system bars for edge-to-edge on O+
+            // In Amoled mode, we want them completely transparent to show the black background
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 window.navigationBarColor = android.graphics.Color.TRANSPARENT
                 window.statusBarColor = android.graphics.Color.TRANSPARENT
@@ -61,10 +72,10 @@ fun CashiroTheme(
     }
 
     MaterialExpressiveTheme(
-            colorScheme = colorScheme,
-            typography = Typography,
-            shapes = Shapes,
-            content = content
+        colorScheme = colorScheme,
+        typography = Typography,
+        shapes = Shapes,
+        content = content
     )
 }
 

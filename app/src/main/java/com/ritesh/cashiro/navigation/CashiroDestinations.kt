@@ -47,3 +47,9 @@ object Rules
 
 @Serializable
 object CreateRule
+
+@Serializable
+object Appearance
+
+@Serializable
+object ManageAccounts

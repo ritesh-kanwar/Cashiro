@@ -17,6 +17,7 @@ import com.ritesh.cashiro.presentation.transactions.TransactionDetailScreen
 import com.ritesh.cashiro.ui.MainScreen
 import com.ritesh.cashiro.ui.screens.AppLockScreen
 import com.ritesh.cashiro.ui.screens.PermissionScreen
+import com.ritesh.cashiro.ui.screens.settings.AppearanceScreen
 import com.ritesh.cashiro.ui.screens.settings.FAQScreen
 import com.ritesh.cashiro.ui.screens.settings.SettingsScreen
 import com.ritesh.cashiro.ui.screens.unrecognized.UnrecognizedSmsScreen
@@ -74,18 +75,27 @@ fun CashiroNavHost(
         ) { MainScreen(rootNavController = navController) }
 
         composable<Settings>(
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { ExitTransition.None }
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
         ) {
             SettingsScreen(
-                    themeViewModel = themeViewModel,
-                    onNavigateBack = { navController.popBackStack() },
-                    onNavigateToCategories = { navController.navigate(Categories) },
-                    onNavigateToUnrecognizedSms = { navController.navigate(UnrecognizedSms) },
-                    onNavigateToFaq = { navController.navigate(Faq) },
-                    onNavigateToRules = { navController.navigate(Rules) }
+                themeViewModel = themeViewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToCategories = { navController.navigate(Categories) },
+                onNavigateToUnrecognizedSms = { navController.navigate(UnrecognizedSms) },
+                onNavigateToManageAccounts = { navController.navigate(ManageAccounts) },
+                onNavigateToRules = { navController.navigate(Rules) },
+                onNavigateToFaq = { navController.navigate(Faq) },
+                onNavigateToAppearance = { navController.navigate(Appearance) }
+            )
+        }
+
+        composable<Appearance> {
+            AppearanceScreen(
+                onNavigateBack = { navController.popBackStack() },
+                themeViewModel = themeViewModel
             )
         }
 

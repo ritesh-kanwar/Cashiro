@@ -20,8 +20,7 @@ fun CashiroCard(
         Card(
             onClick = onClick,
             modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = Spacing.md, vertical = Spacing.xs),
+                .fillMaxWidth(),
             shape = shape,
             colors = colors,
             elevation = elevation
@@ -35,8 +34,7 @@ fun CashiroCard(
     } else {
         Card(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = Spacing.md, vertical = Spacing.xs),
+                .fillMaxWidth(),
             shape = shape,
             colors = colors,
             elevation = elevation

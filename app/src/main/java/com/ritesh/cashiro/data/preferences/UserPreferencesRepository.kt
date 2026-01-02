@@ -37,6 +37,9 @@ constructor(@ApplicationContext private val context: Context) {
         val LAST_SCAN_PERIOD = intPreferencesKey("last_scan_period")
         val BASE_CURRENCY = stringPreferencesKey("base_currency")
 
+        // Theme preferences
+        val IS_AMOLED_MODE = booleanPreferencesKey("is_amoled_mode")
+
         // App Lock preferences
         val APP_LOCK_ENABLED = booleanPreferencesKey("app_lock_enabled")
         val APP_LOCK_TIMEOUT_MINUTES = intPreferencesKey("app_lock_timeout_minutes")
@@ -65,7 +68,8 @@ constructor(@ApplicationContext private val context: Context) {
                         smsScanAllTime = preferences[PreferencesKeys.SMS_SCAN_ALL_TIME]
                                         ?: false, // Default to false
                         baseCurrency = preferences[PreferencesKeys.BASE_CURRENCY]
-                                        ?: "INR" // Default to INR
+                                        ?: "INR", // Default to INR
+                        isAmoledMode = preferences[PreferencesKeys.IS_AMOLED_MODE] ?: false
                 )
             }
 
@@ -92,6 +96,12 @@ constructor(@ApplicationContext private val context: Context) {
     suspend fun updateDynamicColorEnabled(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.DYNAMIC_COLOR_ENABLED] = enabled
+        }
+    }
+
+    suspend fun updateAmoledMode(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_AMOLED_MODE] = enabled
         }
     }
 
@@ -365,5 +375,6 @@ data class UserPreferences(
         val hasShownScanTutorial: Boolean = false,
         val smsScanMonths: Int = 3, // Default to 3 months
         val smsScanAllTime: Boolean = false, // Default to false
-        val baseCurrency: String = "INR" // Default to INR
+        val baseCurrency: String = "INR", // Default to INR
+        val isAmoledMode: Boolean = false
 )

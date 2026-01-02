@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SaveAlt
 import androidx.compose.material.icons.filled.Schedule
@@ -123,6 +124,7 @@ fun SettingsScreen(
     onNavigateToManageAccounts: () -> Unit = {},
     onNavigateToFaq: () -> Unit = {},
     onNavigateToRules: () -> Unit = {},
+    onNavigateToAppearance: () -> Unit = {},
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     appLockViewModel: com.ritesh.cashiro.ui.viewmodel.AppLockViewModel = hiltViewModel()
 ) {
@@ -198,52 +200,55 @@ fun SettingsScreen(
                     ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
-                // Theme Settings Section
+                // Appearance Section
                 SectionHeader(
-                    title = "Appearance",
+                    title = "Personalization",
                     modifier = Modifier.padding(start = Spacing.md)
                 )
 
-                CashiroCard(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.padding(Dimensions.Padding.content),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.md)
-                    ) {
-                        // Theme Mode Selection
-                        Column {
-                            Text(
-                                text = "Theme",
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Medium
+                ListItem(
+                    headline = {
+                        Text(
+                            text = "Appearances",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium
+                        )
+                    },
+                    supporting = {
+                        Text(
+                            text = "App's personalization settings",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    leading = {
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(
+                                    color = orange_light,
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Palette,
+                                contentDescription = null,
+                                tint = orange_dark
                             )
-                            Spacer(modifier = Modifier.height(Spacing.xs))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
-                            ) {
-                                FilterChip(
-                                    selected = themeUiState.isDarkTheme == null,
-                                    onClick = { themeViewModel.updateDarkTheme(null) },
-                                    label = { Text("System") },
-                                    modifier = Modifier.weight(1f)
-                                )
-                                FilterChip(
-                                    selected = themeUiState.isDarkTheme == false,
-                                    onClick = { themeViewModel.updateDarkTheme(false) },
-                                    label = { Text("Light") },
-                                    modifier = Modifier.weight(1f)
-                                )
-                                FilterChip(
-                                    selected = themeUiState.isDarkTheme == true,
-                                    onClick = { themeViewModel.updateDarkTheme(true) },
-                                    label = { Text("Dark") },
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
                         }
-                    }
-                }
+                    },
+                    trailing = {
+                        Icon(
+                            Icons.Default.ChevronRight,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    onClick = { onNavigateToAppearance() },
+                    shape = ListItemPosition.Single.toShape(),
+                    padding = PaddingValues(0.dp)
+                )
 
                 // Security Section
                 SectionHeader(
