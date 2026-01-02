@@ -32,6 +32,10 @@ import com.ritesh.cashiro.ui.effects.overScrollVertical
 import com.ritesh.cashiro.ui.effects.rememberOverscrollFlingBehavior
 import dev.chrisbanes.haze.hazeSource
 import androidx.core.net.toUri
+import com.ritesh.cashiro.ui.components.ListItem
+import com.ritesh.cashiro.ui.components.ListItemPosition
+import com.ritesh.cashiro.ui.components.toShape
+import com.ritesh.cashiro.ui.effects.BlurredAnimatedVisibility
 
 data class FAQItem(
     val question: String,
@@ -56,7 +60,7 @@ fun FAQScreen(
         listOf(
             FAQCategory(
                 title = "Transaction Types",
-                icon = { Icon(Icons.Default.SwapHoriz, contentDescription = null) },
+                icon = { Icon(Icons.Default.SwapHoriz, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 items = listOf(
                     FAQItem(
                         question = "Why are wallet transactions marked as Credit?",
@@ -78,7 +82,7 @@ fun FAQScreen(
             ),
             FAQCategory(
                 title = "SMS Parsing",
-                icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = null) },
+                icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 items = listOf(
                     FAQItem(
                         question = "Why aren't my bank SMS being detected?",
@@ -96,7 +100,7 @@ fun FAQScreen(
             ),
             FAQCategory(
                 title = "Privacy & Data",
-                icon = { Icon(Icons.Default.Security, contentDescription = null) },
+                icon = { Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 items = listOf(
                     FAQItem(
                         question = "Is my financial data secure?",
@@ -114,7 +118,7 @@ fun FAQScreen(
             ),
             FAQCategory(
                 title = "AI Features",
-                icon = { Icon(Icons.Default.Psychology, contentDescription = null) },
+                icon = { Icon(Icons.Default.Psychology, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 items = listOf(
                     FAQItem(
                         question = "Why do I need to download the AI model?",
@@ -128,7 +132,7 @@ fun FAQScreen(
             ),
             FAQCategory(
                 title = "Account Management",
-                icon = { Icon(Icons.Default.AccountBalance, contentDescription = null) },
+                icon = { Icon(Icons.Default.AccountBalance, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 items = listOf(
                     FAQItem(
                         question = "What are manual accounts?",
@@ -186,91 +190,80 @@ fun FAQScreen(
                 faqCategories.forEachIndexed { categoryIndex, category ->
                     SectionHeader(
                         leading = {
-
+                            Box(
+                                modifier = Modifier.size(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                category.icon()
+                            }
                         },
                         title = category.title,
                         modifier = Modifier.padding(Spacing.md)
                     )
-
-                    CashiroCard(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column {
-                            category.items.forEachIndexed { itemIndex, faqItem ->
-                                val isExpanded = expandedCategories.contains(categoryIndex * 100 + itemIndex)
-
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            expandedCategories = if (isExpanded) {
-                                                expandedCategories - (categoryIndex * 100 + itemIndex)
-                                            } else {
-                                                expandedCategories + (categoryIndex * 100 + itemIndex)
-                                            }
-                                        }
-                                        .padding(Dimensions.Padding.content)
-                                ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.Top
+                    Column {
+                        category.items.forEachIndexed { itemIndex, faqItem ->
+                            val isExpanded =
+                                expandedCategories.contains(categoryIndex * 100 + itemIndex)
+                            ListItem(
+                                headline = {
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth()
                                     ) {
                                         Row(
-                                            modifier = Modifier.weight(1f),
-                                            horizontalArrangement = Arrangement.spacedBy(Spacing.md)
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.Top
                                         ) {
-                                            if (itemIndex == 0) {
-                                                Box(
-                                                    modifier = Modifier.size(24.dp),
-                                                    contentAlignment = Alignment.Center
-                                                ) {
-                                                    category.icon()
-                                                }
-                                            } else {
-                                                Spacer(modifier = Modifier.width(24.dp))
+                                            Row(
+                                                modifier = Modifier.weight(1f),
+                                                horizontalArrangement = Arrangement.spacedBy(Spacing.md)
+                                            ) {
+                                                Text(
+                                                    text = faqItem.question,
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    fontWeight = FontWeight.Medium,
+                                                    color = MaterialTheme.colorScheme.onSurface
+                                                )
                                             }
 
-                                            Text(
-                                                text = faqItem.question,
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                fontWeight = FontWeight.Medium,
-                                                color = MaterialTheme.colorScheme.onSurface
+                                            Icon(
+                                                imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                                                contentDescription = if (isExpanded) "Collapse" else "Expand",
+                                                tint = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
 
-                                        Icon(
-                                            imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                                            contentDescription = if (isExpanded) "Collapse" else "Expand",
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-
-                                    AnimatedVisibility(
-                                        visible = isExpanded,
-                                        enter = expandVertically() + fadeIn(),
-                                        exit = shrinkVertically() + fadeOut()
-                                    ) {
-                                        Spacer(modifier = Modifier.height(Spacing.sm))
-                                        Row(
-                                            horizontalArrangement = Arrangement.spacedBy(Spacing.md)
+                                        BlurredAnimatedVisibility(
+                                            visible = isExpanded,
+                                            enter = expandVertically() + fadeIn(),
+                                            exit = shrinkVertically() + fadeOut()
                                         ) {
-                                            Spacer(modifier = Modifier.width(24.dp))
-                                            Text(
-                                                text = faqItem.answer,
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                modifier = Modifier.padding(top = Spacing.sm)
-                                            )
+                                            Spacer(modifier = Modifier.height(Spacing.sm))
+                                            Row(
+                                                horizontalArrangement = Arrangement.spacedBy(Spacing.md)
+                                            ) {
+                                                Text(
+                                                    text = faqItem.answer,
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    modifier = Modifier.padding(top = Spacing.sm)
+                                                )
+                                            }
                                         }
                                     }
-                                }
-
-                                if (itemIndex < category.items.size - 1) {
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(horizontal = Dimensions.Padding.content)
-                                    )
-                                }
+                                },
+                                onClick = {
+                                    expandedCategories = if (isExpanded) {
+                                        expandedCategories - (categoryIndex * 100 + itemIndex)
+                                    } else {
+                                        expandedCategories + (categoryIndex * 100 + itemIndex) } },
+                                padding = PaddingValues(0.dp),
+                                shape = if (itemIndex == 0)ListItemPosition.Top.toShape()
+                                else if (itemIndex < category.items.size - 1) ListItemPosition.Middle.toShape()
+                                else ListItemPosition.Bottom.toShape(),
+                            )
+                            if (itemIndex < category.items.size - 1) {
+                                Spacer(modifier = Modifier.height(1.5.dp))
                             }
                         }
                     }
