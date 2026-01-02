@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ritesh.cashiro"
-        minSdk = 30
+        minSdk = 26
         targetSdk = 36
         versionCode = 78
         versionName = "2.15.43"
@@ -128,6 +128,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -145,6 +146,9 @@ ksp {
 }
 
 dependencies {
+    // Core Library Desugaring
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     // Local modules
     implementation(project(":parser-core"))
 

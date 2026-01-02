@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -273,9 +274,10 @@ fun MainScreen(
                     HorizontalFloatingToolbar(
                             modifier =
                                     Modifier.align(Alignment.BottomCenter)
-                                            .padding(
-                                                    bottom = 24.dp
-                                            ) // paddingValues.calculateBottomPadding() + 8.dp
+                                        .navigationBarsPadding()
+//                                            .padding(
+//                                                    bottom = 24.dp
+//                                            ) // paddingValues.calculateBottomPadding() + 8.dp
                                             // ideally, but we have no bottom bar
                                             .shadow(
                                                     elevation = 16.dp,

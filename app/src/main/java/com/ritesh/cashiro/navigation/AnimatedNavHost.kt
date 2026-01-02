@@ -146,7 +146,6 @@ fun AnimatedNavHost(
                                     .fillMaxSize()
                                     .shadow(
                                         elevation = 16.dp,
-                                        shape = MaterialTheme.shapes.extraLarge
                                     )
                                     .background(color = MaterialTheme.colorScheme.background)
 

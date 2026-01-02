@@ -36,6 +36,7 @@ visionInternalVkp = "18.2.3"
 workVersion = "2.10.5"
 haze = "1.7.1"
 material3Version = "1.4.0"
+desugarJdkLibs = "2.1.2"
 
 [libraries]
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
@@ -89,6 +90,7 @@ vision-internal-vkp = { group = "com.google.mlkit", name = "vision-internal-vkp"
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -185,6 +185,9 @@ fun FAQScreen(
             item{
                 faqCategories.forEachIndexed { categoryIndex, category ->
                     SectionHeader(
+                        leading = {
+
+                        },
                         title = category.title,
                         modifier = Modifier.padding(Spacing.md)
                     )

@@ -160,10 +160,11 @@ fun ListItemCard(
  */
 @Composable
 fun SectionHeader(
+    modifier: Modifier = Modifier,
     visible: Boolean = true,
     title: String,
-    modifier: Modifier = Modifier,
-    action: @Composable (() -> Unit)? = null
+    action: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null
 ) {
     BlurredAnimatedVisibility(
         visible = visible,
@@ -175,6 +176,9 @@ fun SectionHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if (leading != null) {
+                leading()
+            }
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
