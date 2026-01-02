@@ -43,6 +43,12 @@ fun CashiroTheme(
             // Enable edge-to-edge display
             WindowCompat.setDecorFitsSystemWindows(window, false)
 
+            // Enforce transparent system bars for edge-to-edge on O+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                window.navigationBarColor = android.graphics.Color.TRANSPARENT
+                window.statusBarColor = android.graphics.Color.TRANSPARENT
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 window.isNavigationBarContrastEnforced = false
             }
