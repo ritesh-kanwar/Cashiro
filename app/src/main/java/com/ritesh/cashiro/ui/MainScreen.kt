@@ -5,9 +5,11 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
@@ -269,8 +272,6 @@ fun MainScreen(
                                 }
                             ) },
                         navPage("appearance") {
-                            val rulesViewModel: RulesViewModel =
-                                hiltViewModel()
                             AppearanceScreen(
                                 onNavigateBack = { navController.popBackStack() },
                                 themeViewModel = themeViewModel
@@ -280,26 +281,34 @@ fun MainScreen(
 
                 // HorizontalFloatingToolbar
                 if (currentRoute in listOf("home", "analytics", "settings")) {
-                    HorizontalFloatingToolbar(
-                            modifier =
-                                    Modifier.align(Alignment.BottomCenter)
-                                        .navigationBarsPadding()
-//                                            .padding(
-//                                                    bottom = 24.dp
-//                                            ) // paddingValues.calculateBottomPadding() + 8.dp
-                                            // ideally, but we have no bottom bar
-                                            .shadow(
-                                                    elevation = 16.dp,
-                                                    shape = MaterialTheme.shapes.extraLarge
-                                            ),
-                            expanded = true,
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.surface
+                                )
+                            )
+                        ),
+                        contentAlignment = Alignment.BottomCenter
                     ) {
-                        navigationItems.forEach { item ->
-                            val selected =
-                                    currentDestination?.hierarchy?.any { it.route == item.route } ==
-                                            true
+                        HorizontalFloatingToolbar(
+                            modifier =
+                                Modifier.align(Alignment.BottomCenter)
+                                    .navigationBarsPadding()
+                                    .shadow(
+                                        elevation = 16.dp,
+                                        shape = MaterialTheme.shapes.extraLarge
+                                    ),
+                            expanded = true,
+                        ) {
+                            navigationItems.forEach { item ->
+                                val selected =
+                                    currentDestination?.hierarchy?.any { it.route == item.route } == true
 
-                            TonalToggleButton(
+                                TonalToggleButton(
                                     checked = selected,
                                     onCheckedChange = {
                                         navController.navigate(item.route) {
@@ -311,27 +320,22 @@ fun MainScreen(
                                         }
                                     },
                                     modifier = Modifier.padding(horizontal = 4.dp)
-                            ) {
-                                Icon(imageVector = item.icon, contentDescription = item.title)
-                                AnimatedVisibility(
-                                        visible = selected,
-                                        enter =
-                                                fadeIn() +
-                                                        expandHorizontally(
-                                                                MaterialTheme.motionScheme
-                                                                        .fastSpatialSpec()
-                                                        ),
-                                        exit =
-                                                fadeOut() +
-                                                        shrinkHorizontally(
-                                                                MaterialTheme.motionScheme
-                                                                        .fastSpatialSpec()
-                                                        )
                                 ) {
-                                    Text(
+                                    Icon(imageVector = item.icon, contentDescription = item.title)
+                                    AnimatedVisibility(
+                                        visible = selected,
+                                        enter = fadeIn() + expandHorizontally(
+                                            MaterialTheme.motionScheme.fastSpatialSpec()
+                                        ),
+                                        exit = fadeOut() + shrinkHorizontally(
+                                            MaterialTheme.motionScheme.fastSpatialSpec()
+                                        )
+                                    ) {
+                                        Text(
                                             text = item.title,
                                             modifier = Modifier.padding(start = 8.dp)
-                                    )
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -342,75 +346,18 @@ fun MainScreen(
 
         // Spotlight Tutorial overlay - outside Scaffold to overlay everything
         if (currentRoute == "home" &&
-                        spotlightState.showTutorial &&
-                        spotlightState.fabPosition != null
+            spotlightState.showTutorial &&
+            spotlightState.fabPosition != null
         ) {
-            val homeViewModel: com.ritesh.cashiro.presentation.home.HomeViewModel? =
-                    navController.currentBackStackEntry?.let { hiltViewModel(it) }
+            val homeViewModel: HomeViewModel? = navController.currentBackStackEntry?.let { hiltViewModel(it) }
 
             SpotlightTutorial(
-                    isVisible = true,
-                    targetPosition = spotlightState.fabPosition,
-                    message = "Tap here to scan your SMS messages for transactions",
-                    onDismiss = { spotlightViewModel.dismissTutorial() },
-                    onTargetClick = { homeViewModel?.scanSmsMessages() }
+                isVisible = true,
+                targetPosition = spotlightState.fabPosition,
+                message = "Tap here to scan your SMS messages for transactions",
+                onDismiss = { spotlightViewModel.dismissTutorial() },
+                onTargetClick = { homeViewModel?.scanSmsMessages() }
             )
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CashiroTopAppBar(
-        title: String,
-        showBackButton: Boolean = false,
-        showSettingsButton: Boolean = true,
-        showDiscordButton: Boolean = true,
-        onBackClick: () -> Unit = {},
-        onSettingsClick: () -> Unit = {},
-        onDiscordClick: () -> Unit = {}
-) {
-    Column {
-        TopAppBar(
-                title = { Text(title) },
-                colors =
-                        TopAppBarDefaults.topAppBarColors(
-                                containerColor =
-                                        MaterialTheme.colorScheme.background.copy(alpha = 0.95f)
-                        ),
-                navigationIcon = {
-                    if (showBackButton) {
-                        IconButton(onClick = onBackClick) {
-                            Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Back"
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    if (showDiscordButton) {
-                        IconButton(onClick = onDiscordClick) {
-                            Icon(
-                                    painter = painterResource(id = R.drawable.ic_discord),
-                                    contentDescription = "Join Discord Community",
-                                    tint = Color(0xFF5865F2) // Discord brand color
-                            )
-                        }
-                    }
-                    if (showSettingsButton) {
-                        IconButton(onClick = onSettingsClick) {
-                            Icon(
-                                    imageVector = Icons.Default.Settings,
-                                    contentDescription = "Settings"
-                            )
-                        }
-                    }
-                }
-        )
-        HorizontalDivider(
-                thickness = 0.5.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
-        )
     }
 }

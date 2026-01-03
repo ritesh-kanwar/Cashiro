@@ -542,35 +542,6 @@ fun EditAccountSheet(
                 }
             }
         }
-
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .align(Alignment.BottomCenter)
-//                .background(
-//                    brush = Brush.verticalGradient(
-//                        colors = listOf(
-//                            Color.Transparent,
-//                            MaterialTheme.colorScheme.surface,
-//                            MaterialTheme.colorScheme.surface
-//                        )
-//                    )
-//                )
-//                .padding(Spacing.md)
-//        ) {
-//            Button(
-//                onClick = { onSave(bankName, balance, accountLast4, iconResId, colorHex) },
-//                modifier = Modifier.fillMaxWidth().height(56.dp),
-//                shapes = ButtonDefaults.shapes(),
-//                enabled = bankName.isNotBlank() && accountLast4.length == 4
-//            ) {
-//                Text(
-//                    text = if (account == null) "Add Account" else "Save Changes",
-//                    fontSize = 16.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//            }
-//        }
     }
 }
 

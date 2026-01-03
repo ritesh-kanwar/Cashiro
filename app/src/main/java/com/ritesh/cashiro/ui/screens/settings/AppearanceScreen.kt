@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -118,10 +119,14 @@ fun AppearanceScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .size(64.dp)
-                                    .clip(RoundedCornerShape(Dimensions.Radius.lg))
+                                    .shadow(
+                                        elevation = 4.dp,
+                                        shape = RoundedCornerShape(Dimensions.Radius.md)
+                                    )
+                                    .clip(RoundedCornerShape(Dimensions.Radius.md))
                                     .background(
                                         color = if(themeUiState.isDarkTheme == null) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
-                                        shape = RoundedCornerShape(Dimensions.Radius.lg)
+                                        shape = RoundedCornerShape(Dimensions.Radius.md)
                                     )
                                     .clickable{
                                         themeViewModel.updateDarkTheme(null)
@@ -150,10 +155,14 @@ fun AppearanceScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .size(64.dp)
-                                    .clip(RoundedCornerShape(Dimensions.Radius.lg))
+                                    .shadow(
+                                        elevation = 4.dp,
+                                        shape = RoundedCornerShape(Dimensions.Radius.md)
+                                    )
+                                    .clip(RoundedCornerShape(Dimensions.Radius.md))
                                     .background(
-                                        color = if(themeUiState.isDarkTheme == false) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
-                                        shape = RoundedCornerShape(Dimensions.Radius.lg)
+                                        color = if(themeUiState.isDarkTheme == false) MaterialTheme.colorScheme.surfaceContainerLowest else MaterialTheme.colorScheme.surfaceVariant,
+                                        shape = RoundedCornerShape(Dimensions.Radius.md)
                                     )
                                     .clickable{
                                         themeViewModel.updateDarkTheme(false)
@@ -181,10 +190,14 @@ fun AppearanceScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .size(64.dp)
-                                    .clip(RoundedCornerShape(Dimensions.Radius.lg))
+                                    .shadow(
+                                        elevation = 4.dp,
+                                        shape = RoundedCornerShape(Dimensions.Radius.md)
+                                    )
+                                    .clip(RoundedCornerShape(Dimensions.Radius.md))
                                     .background(
                                         color = if(themeUiState.isDarkTheme == true) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
-                                        shape = RoundedCornerShape(Dimensions.Radius.lg)
+                                        shape = RoundedCornerShape(Dimensions.Radius.md)
                                     )
                                     .clickable{
                                         themeViewModel.updateDarkTheme(true)
