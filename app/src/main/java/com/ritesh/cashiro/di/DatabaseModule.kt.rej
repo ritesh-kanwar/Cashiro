@@ -1,0 +1,48 @@
+diff a/app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt b/app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt	(rejected hunks)
+@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
+ import androidx.sqlite.db.SupportSQLiteDatabase
+ import com.ritesh.cashiro.data.database.CashiroDatabase
+ import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
++import com.ritesh.cashiro.data.database.dao.BudgetDao
+ import com.ritesh.cashiro.data.database.dao.CardDao
+ import com.ritesh.cashiro.data.database.dao.CategoryDao
+ import com.ritesh.cashiro.data.database.dao.ChatDao
+@@ -15,6 +16,7 @@ import com.ritesh.cashiro.data.database.dao.RuleApplicationDao
+ import com.ritesh.cashiro.data.database.dao.RuleDao
+ import com.ritesh.cashiro.data.database.dao.SubscriptionDao
+ import com.ritesh.cashiro.data.database.dao.TransactionDao
++import com.ritesh.cashiro.data.database.dao.TransactionSplitDao
+ import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+ import dagger.Module
+ import dagger.Provides
+@@ -204,6 +206,30 @@ object DatabaseModule {
+     fun provideExchangeRateDao(database: CashiroDatabase): ExchangeRateDao {
+         return database.exchangeRateDao()
+     }
++
++    /**
++     * Provides the BudgetDao from the database.
++     *
++     * @param database The CashiroDatabase instance
++     * @return BudgetDao for accessing budget data
++     */
++    @Provides
++    @Singleton
++    fun provideBudgetDao(database: CashiroDatabase): BudgetDao {
++        return database.budgetDao()
++    }
++
++    /**
++     * Provides the TransactionSplitDao from the database.
++     *
++     * @param database The CashiroDatabase instance
++     * @return TransactionSplitDao for accessing transaction split data
++     */
++    @Provides
++    @Singleton
++    fun provideTransactionSplitDao(database: CashiroDatabase): TransactionSplitDao {
++        return database.transactionSplitDao()
++    }
+ }
+ 
+ /**

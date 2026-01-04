@@ -1474,3 +1474,152 @@ Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/Transac
 error: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionSplitEntity.kt: already exists in working directory
 Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt...
 error: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt: already exists in working directory
+[backport-fixes-upstream 3ae7f589] feat(splits): add transaction split database entities
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 4 21:44:53 2026 +0530
+ 9 files changed, 650 insertions(+), 251 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionSplitEntity.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt.rej
+===================================
+Applying 0019-feat-splits-integrate-transaction-splits-into-databa.patch
+Applying: feat(splits): integrate transaction splits into database and DI
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(splits): integrate transaction splits into database and DI
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:19
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:1
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:1
+error: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:6
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:6
+error: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+Hunk #1 succeeded at 11 (offset 1 line).
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.RuleDao
+import com.ritesh.cashiro.data.database.dao.SubscriptionDao
+import com.ritesh.cashiro.data.database.dao.TransactionDao
+import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.CardEntity
+import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import com.ritesh.cashiro.data.database.entity.ChatMessage
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:19
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.RuleEntity
+import com.ritesh.cashiro.data.database.entity.SubscriptionEntity
+import com.ritesh.cashiro.data.database.entity.TransactionEntity
+import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:30
+error: while searching for:
+ * @property autoMigrations List of automatic migrations between versions.
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class],
+    version = 28,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:43
+error: while searching for:
+        AutoMigration(from = 24, to = 25),
+        AutoMigration(from = 25, to = 26),
+        AutoMigration(from = 26, to = 27),
+        AutoMigration(from = 27, to = 28, spec = Migration27To28::class)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:70
+error: while searching for:
+    abstract fun ruleDao(): RuleDao
+    abstract fun ruleApplicationDao(): RuleApplicationDao
+    abstract fun exchangeRateDao(): ExchangeRateDao
+    
+    companion object {
+        const val DATABASE_NAME = "cashiro_database"
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:86
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt...
+error: while searching for:
+package com.ritesh.cashiro.data.database.converter
+
+import androidx.room.TypeConverter
+import com.ritesh.cashiro.data.database.entity.SubscriptionState
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import java.math.BigDecimal
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:1
+error: while searching for:
+    fun fromSubscriptionState(value: SubscriptionState): String {
+        return value.name
+    }
+    
+    @TypeConverter
+    fun toSubscriptionState(value: String): SubscriptionState {
+        return SubscriptionState.valueOf(value)
+    }
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:77
+Checking patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt...
+error: while searching for:
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.ritesh.cashiro.data.database.CashiroDatabase
+import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.CardDao
+import com.ritesh.cashiro.data.database.dao.CategoryDao
+import com.ritesh.cashiro.data.database.dao.ChatDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:6
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.RuleDao
+import com.ritesh.cashiro.data.database.dao.SubscriptionDao
+import com.ritesh.cashiro.data.database.dao.TransactionDao
+import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+import dagger.Module
+import dagger.Provides
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:15
+error: while searching for:
+    fun provideExchangeRateDao(database: CashiroDatabase): ExchangeRateDao {
+        return database.exchangeRateDao()
+    }
+}
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:204
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 5 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.

@@ -1,0 +1,52 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt b/app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt	(rejected hunks)
+@@ -19,8 +20,11 @@ import com.ritesh.cashiro.data.database.dao.RuleApplicationDao
+ import com.ritesh.cashiro.data.database.dao.RuleDao
+ import com.ritesh.cashiro.data.database.dao.SubscriptionDao
+ import com.ritesh.cashiro.data.database.dao.TransactionDao
++import com.ritesh.cashiro.data.database.dao.TransactionSplitDao
+ import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+ import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
++import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
++import com.ritesh.cashiro.data.database.entity.BudgetEntity
+ import com.ritesh.cashiro.data.database.entity.CardEntity
+ import com.ritesh.cashiro.data.database.entity.CategoryEntity
+ import com.ritesh.cashiro.data.database.entity.ChatMessage
+@@ -30,6 +34,7 @@ import com.ritesh.cashiro.data.database.entity.RuleApplicationEntity
+ import com.ritesh.cashiro.data.database.entity.RuleEntity
+ import com.ritesh.cashiro.data.database.entity.SubscriptionEntity
+ import com.ritesh.cashiro.data.database.entity.TransactionEntity
++import com.ritesh.cashiro.data.database.entity.TransactionSplitEntity
+ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+ 
+ /**
+@@ -43,8 +48,8 @@ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+  * @property autoMigrations List of automatic migrations between versions.
+  */
+ @Database(
+-    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class],
+-    version = 28,
++    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class],
++    version = 30,
+     exportSchema = true,
+     autoMigrations = [
+         AutoMigration(from = 1, to = 2),
+@@ -70,7 +75,9 @@ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+         AutoMigration(from = 24, to = 25),
+         AutoMigration(from = 25, to = 26),
+         AutoMigration(from = 26, to = 27),
+-        AutoMigration(from = 27, to = 28, spec = Migration27To28::class)
++        AutoMigration(from = 27, to = 28, spec = Migration27To28::class),
++        AutoMigration(from = 28, to = 29),
++        AutoMigration(from = 29, to = 30)
+     ]
+ )
+ @TypeConverters(Converters::class)
+@@ -86,6 +93,8 @@ abstract class CashiroDatabase : RoomDatabase() {
+     abstract fun ruleDao(): RuleDao
+     abstract fun ruleApplicationDao(): RuleApplicationDao
+     abstract fun exchangeRateDao(): ExchangeRateDao
++    abstract fun budgetDao(): BudgetDao
++    abstract fun transactionSplitDao(): TransactionSplitDao
+     
+     companion object {
+         const val DATABASE_NAME = "cashiro_database"
