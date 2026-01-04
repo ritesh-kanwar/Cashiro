@@ -1720,3 +1720,29 @@ Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetC
 error: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryEntity.kt: already exists in working directory
 Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt...
 error: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt: already exists in working directory
+[backport-fixes-upstream eb70e582] feat(budgets): add budget database entities and DAO
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 4 21:49:50 2026 +0530
+ 5 files changed, 210 insertions(+), 107 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryEntity.kt
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+===================================
+Applying 0025-feat-budgets-add-BudgetRepository-with-spending-calc.patch
+Applying: feat(budgets): add BudgetRepository with spending calculations
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt
+CONFLICT (add/add): Merge conflict in app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(budgets): add BudgetRepository with spending calculations
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt' with conflicts.
+U app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt: already exists in working directory
