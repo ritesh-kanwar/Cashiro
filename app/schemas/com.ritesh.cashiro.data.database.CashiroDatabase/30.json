@@ -2,11 +2,19 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
+<<<<<<< ours
     "identityHash": "1af5e36054db84aad910e3ff0ee24fc3",
     "entities": [
       {
         "tableName": "transactions",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` TEXT NOT NULL, `merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `subcategory` TEXT, `transaction_type` TEXT NOT NULL, `date_time` TEXT NOT NULL, `description` TEXT, `sms_body` TEXT, `bank_name` TEXT, `sms_sender` TEXT, `account_number` TEXT, `balance_after` TEXT, `transaction_hash` TEXT NOT NULL DEFAULT '', `is_recurring` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL DEFAULT 0, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR', `from_account` TEXT, `to_account` TEXT)",
+=======
+    "identityHash": "44b029735d16055fc97653febd5d46c1",
+    "entities": [
+      {
+        "tableName": "transactions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` TEXT NOT NULL, `merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `transaction_type` TEXT NOT NULL, `date_time` TEXT NOT NULL, `description` TEXT, `sms_body` TEXT, `bank_name` TEXT, `sms_sender` TEXT, `account_number` TEXT, `balance_after` TEXT, `transaction_hash` TEXT NOT NULL DEFAULT '', `is_recurring` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL DEFAULT 0, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR', `from_account` TEXT, `to_account` TEXT)",
+>>>>>>> theirs
         "fields": [
           {
             "fieldPath": "id",
@@ -33,11 +41,14 @@
             "notNull": true
           },
           {
+<<<<<<< ours
             "fieldPath": "subcategory",
             "columnName": "subcategory",
             "affinity": "TEXT"
           },
           {
+=======
+>>>>>>> theirs
             "fieldPath": "transactionType",
             "columnName": "transaction_type",
             "affinity": "TEXT",
@@ -149,7 +160,11 @@
       },
       {
         "tableName": "subscriptions",
+<<<<<<< ours
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `merchant_name` TEXT NOT NULL, `amount` TEXT NOT NULL, `next_payment_date` TEXT, `state` TEXT NOT NULL, `bank_name` TEXT, `umn` TEXT, `category` TEXT, `subcategory` TEXT, `sms_body` TEXT, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR')",
+=======
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `merchant_name` TEXT NOT NULL, `amount` TEXT NOT NULL, `next_payment_date` TEXT, `state` TEXT NOT NULL, `bank_name` TEXT, `umn` TEXT, `category` TEXT, `sms_body` TEXT, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR')",
+>>>>>>> theirs
         "fields": [
           {
             "fieldPath": "id",
@@ -196,11 +211,14 @@
             "affinity": "TEXT"
           },
           {
+<<<<<<< ours
             "fieldPath": "subcategory",
             "columnName": "subcategory",
             "affinity": "TEXT"
           },
           {
+=======
+>>>>>>> theirs
             "fieldPath": "smsBody",
             "columnName": "sms_body",
             "affinity": "TEXT"
@@ -313,7 +331,11 @@
       },
       {
         "tableName": "categories",
+<<<<<<< ours
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `color` TEXT NOT NULL, `icon_res_id` INTEGER NOT NULL DEFAULT 0, `description` TEXT NOT NULL DEFAULT '', `is_system` INTEGER NOT NULL, `is_income` INTEGER NOT NULL, `display_order` INTEGER NOT NULL, `default_name` TEXT, `default_color` TEXT, `default_icon_res_id` INTEGER, `default_description` TEXT, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL)",
+=======
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `color` TEXT NOT NULL, `is_system` INTEGER NOT NULL, `is_income` INTEGER NOT NULL, `display_order` INTEGER NOT NULL, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL)",
+>>>>>>> theirs
         "fields": [
           {
             "fieldPath": "id",
@@ -334,6 +356,7 @@
             "notNull": true
           },
           {
+<<<<<<< ours
             "fieldPath": "iconResId",
             "columnName": "icon_res_id",
             "affinity": "INTEGER",
@@ -348,6 +371,8 @@
             "defaultValue": "''"
           },
           {
+=======
+>>>>>>> theirs
             "fieldPath": "isSystem",
             "columnName": "is_system",
             "affinity": "INTEGER",
@@ -366,6 +391,7 @@
             "notNull": true
           },
           {
+<<<<<<< ours
             "fieldPath": "defaultName",
             "columnName": "default_name",
             "affinity": "TEXT"
@@ -386,6 +412,8 @@
             "affinity": "TEXT"
           },
           {
+=======
+>>>>>>> theirs
             "fieldPath": "createdAt",
             "columnName": "created_at",
             "affinity": "TEXT",
@@ -418,7 +446,11 @@
       },
       {
         "tableName": "account_balances",
+<<<<<<< ours
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bank_name` TEXT NOT NULL, `account_last4` TEXT NOT NULL, `balance` TEXT NOT NULL, `timestamp` TEXT NOT NULL, `transaction_id` INTEGER, `credit_limit` TEXT, `is_credit_card` INTEGER NOT NULL DEFAULT 0, `sms_source` TEXT, `source_type` TEXT, `created_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR')",
+=======
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bank_name` TEXT NOT NULL, `account_last4` TEXT NOT NULL, `balance` TEXT NOT NULL, `timestamp` TEXT NOT NULL, `transaction_id` INTEGER, `credit_limit` TEXT, `is_credit_card` INTEGER NOT NULL DEFAULT 0, `sms_source` TEXT, `source_type` TEXT, `account_type` TEXT, `created_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR')",
+>>>>>>> theirs
         "fields": [
           {
             "fieldPath": "id",
@@ -478,6 +510,14 @@
             "affinity": "TEXT"
           },
           {
+<<<<<<< ours
+=======
+            "fieldPath": "accountType",
+            "columnName": "account_type",
+            "affinity": "TEXT"
+          },
+          {
+>>>>>>> theirs
             "fieldPath": "createdAt",
             "columnName": "created_at",
             "affinity": "TEXT",
@@ -1024,8 +1064,13 @@
         ]
       },
       {
+<<<<<<< ours
         "tableName": "subcategories",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `category_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `icon_res_id` INTEGER NOT NULL DEFAULT 0, `color` TEXT NOT NULL DEFAULT '#757575', `is_system` INTEGER NOT NULL DEFAULT 0, `default_name` TEXT, `default_icon_res_id` INTEGER, `default_color` TEXT, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+=======
+        "tableName": "budgets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `limit_amount` TEXT NOT NULL, `period_type` TEXT NOT NULL, `start_date` TEXT NOT NULL, `end_date` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR', `is_active` INTEGER NOT NULL DEFAULT 1, `include_all_categories` INTEGER NOT NULL DEFAULT 0, `color` TEXT NOT NULL DEFAULT '#1565C0', `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL)",
+>>>>>>> theirs
         "fields": [
           {
             "fieldPath": "id",
@@ -1034,6 +1079,7 @@
             "notNull": true
           },
           {
+<<<<<<< ours
             "fieldPath": "categoryId",
             "columnName": "category_id",
             "affinity": "INTEGER",
@@ -1042,12 +1088,59 @@
           {
             "fieldPath": "name",
             "columnName": "name",
+=======
+            "fieldPath": "name",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
+            "fieldPath": "limitAmount",
+            "columnName": "limit_amount",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "periodType",
+            "columnName": "period_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "start_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "end_date",
+>>>>>>> theirs
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+<<<<<<< ours
             "fieldPath": "iconResId",
             "columnName": "icon_res_id",
+=======
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'INR'"
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "includeAllCategories",
+            "columnName": "include_all_categories",
+>>>>>>> theirs
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
@@ -1057,6 +1150,7 @@
             "columnName": "color",
             "affinity": "TEXT",
             "notNull": true,
+<<<<<<< ours
             "defaultValue": "'#757575'"
           },
           {
@@ -1084,6 +1178,12 @@
           {
             "fieldPath": "createdAt",
             "columnName": "created_at",
+=======
+            "defaultValue": "'#1565C0'"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1102,6 +1202,139 @@
         },
         "indices": [
           {
+            "name": "index_budgets_name",
+            "unique": false,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_budgets_name` ON `${TABLE_NAME}` (`name`)"
+          },
+          {
+            "name": "index_budgets_is_active",
+            "unique": false,
+            "columnNames": [
+              "is_active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_budgets_is_active` ON `${TABLE_NAME}` (`is_active`)"
+          }
+        ]
+      },
+      {
+        "tableName": "budget_categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `budget_id` INTEGER NOT NULL, `category_name` TEXT NOT NULL, FOREIGN KEY(`budget_id`) REFERENCES `budgets`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "budgetId",
+            "columnName": "budget_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryName",
+            "columnName": "category_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_budget_categories_budget_id",
+            "unique": false,
+            "columnNames": [
+              "budget_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_budget_categories_budget_id` ON `${TABLE_NAME}` (`budget_id`)"
+          },
+          {
+            "name": "index_budget_categories_budget_id_category_name",
+            "unique": true,
+            "columnNames": [
+              "budget_id",
+              "category_name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_budget_categories_budget_id_category_name` ON `${TABLE_NAME}` (`budget_id`, `category_name`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "budgets",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "budget_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "transaction_splits",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `transaction_id` INTEGER NOT NULL, `category` TEXT NOT NULL, `amount` TEXT NOT NULL, `created_at` TEXT NOT NULL, FOREIGN KEY(`transaction_id`) REFERENCES `transactions`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transactionId",
+            "columnName": "transaction_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+>>>>>>> theirs
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+<<<<<<< ours
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+=======
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+>>>>>>> theirs
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+<<<<<<< ours
             "name": "index_subcategories_category_id",
             "unique": false,
             "columnNames": [
@@ -1109,15 +1342,32 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_subcategories_category_id` ON `${TABLE_NAME}` (`category_id`)"
+=======
+            "name": "index_transaction_splits_transaction_id",
+            "unique": false,
+            "columnNames": [
+              "transaction_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_transaction_splits_transaction_id` ON `${TABLE_NAME}` (`transaction_id`)"
+>>>>>>> theirs
           }
         ],
         "foreignKeys": [
           {
+<<<<<<< ours
             "table": "categories",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "category_id"
+=======
+            "table": "transactions",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "transaction_id"
+>>>>>>> theirs
             ],
             "referencedColumns": [
               "id"
@@ -1128,7 +1378,11 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+<<<<<<< ours
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1af5e36054db84aad910e3ff0ee24fc3')"
+=======
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '44b029735d16055fc97653febd5d46c1')"
+>>>>>>> theirs
     ]
   }
 }

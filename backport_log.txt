@@ -1427,3 +1427,50 @@ Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
 Rejected hunk #4.
+[backport-fixes-upstream 5640084] refactor: centralize multi-currency and amount
+ Author: akshaynexus <akshaycm@hotmail.com>
+ Date: Fri Dec 26 17:22:19 2025 +0800
+ 9 files changed, 503 insertions(+), 200 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UAEBankParser.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/TestFABXML.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AdelFiParserTest.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParserTest.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParserTest.kt.rej
+===================================
+Applying 0018-feat-splits-add-transaction-split-database-entities-.patch
+Applying: feat(splits): add transaction split database entities and DAO
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/29.json
+CONFLICT (add/add): Merge conflict in app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/29.json
+Auto-merging app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/30.json
+CONFLICT (add/add): Merge conflict in app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/30.json
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(splits): add transaction split database entities and DAO
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/29.json' with conflicts.
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/30.json' with conflicts.
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+U app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/29.json
+U app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/30.json
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/29.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/29.json: already exists in working directory
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/30.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/30.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionSplitEntity.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionSplitEntity.kt: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt: already exists in working directory
