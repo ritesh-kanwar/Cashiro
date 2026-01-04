@@ -1682,3 +1682,41 @@ Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionR
 Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
+[backport-fixes-upstream 5a659b6c] feat(splits): add split transaction logic to
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 4 21:47:02 2026 +0530
+ 5 files changed, 166 insertions(+), 131 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+===================================
+Applying 0024-feat-budgets-add-budget-database-entities-and-DAO.patch
+Applying: feat(budgets): add budget database entities and DAO
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt
+CONFLICT (add/add): Merge conflict in app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt
+Auto-merging app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt
+CONFLICT (add/add): Merge conflict in app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(budgets): add budget database entities and DAO
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt' with conflicts.
+Falling back to direct application...
+Performing three-way merge...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt' with conflicts.
+U app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt
+U app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryEntity.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryEntity.kt: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt: already exists in working directory
