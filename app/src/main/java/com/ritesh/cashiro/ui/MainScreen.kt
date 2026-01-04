@@ -47,6 +47,7 @@ import com.ritesh.cashiro.presentation.categories.CategoriesScreen
 import com.ritesh.cashiro.presentation.home.HomeScreen
 import com.ritesh.cashiro.presentation.home.HomeViewModel
 import com.ritesh.cashiro.presentation.navigation.BottomNavItem
+import com.ritesh.cashiro.presentation.profile.ProfileScreen
 import com.ritesh.cashiro.presentation.subscriptions.SubscriptionsScreen
 import com.ritesh.cashiro.presentation.transactions.TransactionsScreen
 import com.ritesh.cashiro.ui.components.SpotlightTutorial
@@ -226,7 +227,8 @@ fun MainScreen(
                                 onNavigateToManageAccounts = { navController.navigate("manage_accounts") },
                                 onNavigateToFaq = { navController.navigate("faq") },
                                 onNavigateToRules = { navController.navigate("rules") },
-                                onNavigateToAppearance = {navController.navigate("appearance") }
+                                onNavigateToAppearance = {navController.navigate("appearance") },
+                                onNavigateToProfile = {navController.navigate("profile")}
                             ) },
 
                         navPage("categories") {
@@ -275,6 +277,10 @@ fun MainScreen(
                             AppearanceScreen(
                                 onNavigateBack = { navController.popBackStack() },
                                 themeViewModel = themeViewModel
+                            ) },
+                        navPage("profile") {
+                            ProfileScreen(
+                                onNavigateBack = { navController.popBackStack() },
                             ) },
                         )
                 )

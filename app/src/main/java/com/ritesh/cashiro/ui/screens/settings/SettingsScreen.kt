@@ -11,7 +11,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +39,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Refresh
@@ -53,7 +53,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -125,6 +124,7 @@ fun SettingsScreen(
     onNavigateToFaq: () -> Unit = {},
     onNavigateToRules: () -> Unit = {},
     onNavigateToAppearance: () -> Unit = {},
+    onNavigateToProfile: () -> Unit = {},
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     appLockViewModel: com.ritesh.cashiro.ui.viewmodel.AppLockViewModel = hiltViewModel()
 ) {
@@ -166,7 +166,6 @@ fun SettingsScreen(
     val scrollBehaviorSmall = TopAppBarDefaults.pinnedScrollBehavior()
     val hazeState = remember { HazeState() }
 
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -196,65 +195,105 @@ fun SettingsScreen(
                         start = Dimensions.Padding.content,
                         end = Dimensions.Padding.content,
                         top = Dimensions.Padding.content +
-                                    paddingValues.calculateTopPadding()
+                                paddingValues.calculateTopPadding()
                     ),
-                verticalArrangement = Arrangement.spacedBy(Spacing.md)
+            verticalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
-                // Appearance Section
-                SectionHeader(
-                    title = "Personalization",
-                    modifier = Modifier.padding(start = Spacing.md)
-                )
 
-                ListItem(
-                    headline = {
-                        Text(
-                            text = "Appearances",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    supporting = {
-                        Text(
-                            text = "App's personalization settings",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    leading = {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(
-                                    color = orange_light,
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.Palette,
-                                contentDescription = null,
-                                tint = orange_dark
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(1.5.dp)
+                ) {
+                    ListItem(
+                        headline = {
+                            Text(
+                                text = "Profile",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
                             )
-                        }
-                    },
-                    trailing = {
-                        Icon(
-                            Icons.Default.ChevronRight,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    onClick = { onNavigateToAppearance() },
-                    shape = ListItemPosition.Single.toShape(),
-                    padding = PaddingValues(0.dp)
-                )
+                        },
+                        supporting = {
+                            Text(
+                                text = "User profile settings",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        leading = {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = red_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Face,
+                                    contentDescription = null,
+                                    tint = red_dark
+                                )
+                            }
+                        },
+                        trailing = {
+                            Icon(
+                                Icons.Default.ChevronRight,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        onClick = { onNavigateToProfile() },
+                        shape = ListItemPosition.Top.toShape(),
+                        padding = PaddingValues(0.dp)
+                    )
 
+                    ListItem(
+                        headline = {
+                            Text(
+                                text = "Appearances",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
+                        supporting = {
+                            Text(
+                                text = "App's personalization settings",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        leading = {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = orange_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Palette,
+                                    contentDescription = null,
+                                    tint = orange_dark
+                                )
+                            }
+                        },
+                        trailing = {
+                            Icon(
+                                Icons.Default.ChevronRight,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        onClick = { onNavigateToAppearance() },
+                        shape = ListItemPosition.Bottom.toShape(),
+                        padding = PaddingValues(0.dp)
+                    )
+                }
                 // Security Section
-                SectionHeader(
-                    title = "Security",
-                    modifier = Modifier.padding(start = Spacing.md)
-                )
+                SectionHeader(title = "Security", modifier = Modifier.padding(start = Spacing.md))
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(1.5.dp)
@@ -300,9 +339,7 @@ fun SettingsScreen(
                             supporting = {
                                 Text(
                                     when (appLockUiState.timeoutMinutes) {
-                                        0 ->
-                                            "Lock immediately when app goes to background"
-
+                                        0 -> "Lock immediately when app goes to background"
                                         1 -> "Lock after 1 minute in background"
                                         else ->
                                             "Lock after ${appLockUiState.timeoutMinutes} minutes in background"
@@ -602,12 +639,16 @@ fun SettingsScreen(
                                     .clickable(
                                         onClick = { showSmsScanDialog = true }
                                     )
-                                    .padding(horizontal = Spacing.md, vertical = Spacing.sm)
-                                ,
+                                    .padding(
+                                        horizontal = Spacing.md,
+                                        vertical = Spacing.sm
+                                    ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = if (smsScanAllTime) "All Time" else "$smsScanMonths months",
+                                    text =
+                                        if (smsScanAllTime) "All Time"
+                                        else "$smsScanMonths months",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onPrimary
                                 )
@@ -652,7 +693,8 @@ fun SettingsScreen(
                                             DownloadState.COMPLETED -> "Qwen ready for chat"
                                             DownloadState.FAILED -> "Download failed"
                                             DownloadState.ERROR_INSUFFICIENT_SPACE ->
-                                                "Not enough storage space" },
+                                                "Not enough storage space"
+                                        },
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -684,7 +726,8 @@ fun SettingsScreen(
                                 }
                                 DownloadState.COMPLETED -> {
                                     Row(
-                                        horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                                        horizontalArrangement =
+                                            Arrangement.spacedBy(Spacing.sm),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Icon(
@@ -701,11 +744,9 @@ fun SettingsScreen(
                                 DownloadState.FAILED -> {
                                     Button(
                                         onClick = { settingsViewModel.startModelDownload() },
-                                        colors =
-                                            ButtonDefaults.buttonColors(
-                                                containerColor =
-                                                    MaterialTheme.colorScheme.error
-                                            )
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.error
+                                        )
                                     ) {
                                         Icon(Icons.Default.Refresh, contentDescription = null)
                                         Spacer(modifier = Modifier.width(Spacing.xs))
@@ -749,10 +790,11 @@ fun SettingsScreen(
                                     )
                                 }
 
-                                Button(onClick = { settingsViewModel.cancelDownload() }, modifier = Modifier.fillMaxWidth(), colors =
-                                    ButtonDefaults.buttonColors(
-                                        containerColor =
-                                            MaterialTheme.colorScheme.error
+                                Button(
+                                    onClick = { settingsViewModel.cancelDownload() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(
+                                           containerColor = MaterialTheme.colorScheme.error
                                     )
                                 ) {
                                     Icon(Icons.Default.Cancel, contentDescription = null)
@@ -764,7 +806,7 @@ fun SettingsScreen(
 
                         // Info about AI features
                         if (downloadState == DownloadState.NOT_DOWNLOADED ||
-                                        downloadState == DownloadState.ERROR_INSUFFICIENT_SPACE
+                            downloadState == DownloadState.ERROR_INSUFFICIENT_SPACE
                         ) {
                             HorizontalDivider()
                             Text(
@@ -780,7 +822,7 @@ fun SettingsScreen(
 
                 // Unrecognized Messages Section (only show if count > 0)
                 val unreportedCount by
-                        settingsViewModel.unreportedSmsCount.collectAsStateWithLifecycle()
+                settingsViewModel.unreportedSmsCount.collectAsStateWithLifecycle()
 
                 if (unreportedCount > 0) {
                     SectionHeader(
@@ -788,15 +830,16 @@ fun SettingsScreen(
                         modifier = Modifier.padding(start = Spacing.md)
                     )
 
-                    CashiroCard(modifier = Modifier.fillMaxWidth(), onClick = {
-                        Log.d("SettingsScreen", "Navigating to UnrecognizedSms screen")
-                        onNavigateToUnrecognizedSms()
-                    }
+                    CashiroCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            Log.d("SettingsScreen", "Navigating to UnrecognizedSms screen")
+                            onNavigateToUnrecognizedSms()
+                        }
                     ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(Dimensions.Padding.content),
+                            modifier =
+                                Modifier.fillMaxWidth().padding(Dimensions.Padding.content),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -807,8 +850,9 @@ fun SettingsScreen(
                                     fontWeight = FontWeight.Medium
                                 )
                                 Text(
-                                    text = "$unreportedCount message${if (unreportedCount > 1) "s"
-                                    else ""} from potential banks",
+                                    text =
+                                        "$unreportedCount message${if (unreportedCount > 1) "s"
+                                        else ""} from potential banks",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -833,11 +877,7 @@ fun SettingsScreen(
                 }
 
                 // Developer Section
-                SectionHeader(
-                    title = "Developer",
-                    modifier = Modifier.padding(start = Spacing.md)
-                )
-
+                SectionHeader(title = "Developer", modifier = Modifier.padding(start = Spacing.md))
 
                 PreferenceSwitch(
                     title = "Developer Mode",
@@ -859,7 +899,8 @@ fun SettingsScreen(
                                 contentDescription = null,
                                 tint = grey_dark
                             )
-                        } },
+                        }
+                    },
                     padding = PaddingValues(0.dp),
                     isSingle = true
                 )
@@ -892,13 +933,12 @@ fun SettingsScreen(
                             )
                         },
                         leading = {
-                            Box(
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .background(
-                                        color = pink_light,
-                                        shape = CircleShape
-                                    ),
+                            Box(modifier = Modifier
+                                .size(48.dp)
+                                .background(
+                                    color = pink_light,
+                                    shape = CircleShape
+                                ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
@@ -940,8 +980,7 @@ fun SettingsScreen(
                                     .size(48.dp)
                                     .background(
                                         color = blue_light,
-                                        shape = CircleShape
-                                    ),
+                                        shape = CircleShape),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
@@ -973,9 +1012,7 @@ fun SettingsScreen(
                     )
                 }
 
-                Spacer(
-                    modifier = Modifier.height(110.dp)
-                )
+                Spacer(modifier = Modifier.height(110.dp))
             }
         }
         // SMS Scan Period Dialog
@@ -997,22 +1034,26 @@ fun SettingsScreen(
                         val options = listOf(-1) + listOf(1, 2, 3, 6, 12, 24)
                         options.forEach { months ->
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        if (months == -1) {
-                                            settingsViewModel.updateSmsScanAllTime(true)
-                                            showSmsScanDialog = false
-                                        } else {
-                                            settingsViewModel.updateSmsScanMonths(months)
-                                            settingsViewModel.updateSmsScanAllTime(false)
-                                            showSmsScanDialog = false
+                                modifier =
+                                    Modifier.fillMaxWidth()
+                                        .clickable {
+                                            if (months == -1) {
+                                                settingsViewModel
+                                                    .updateSmsScanAllTime(true)
+                                                showSmsScanDialog = false
+                                            } else {
+                                                settingsViewModel
+                                                    .updateSmsScanMonths(months)
+                                                settingsViewModel
+                                                    .updateSmsScanAllTime(false)
+                                                showSmsScanDialog = false
+                                            }
                                         }
-                                    }
-                                    .padding(vertical = Spacing.sm),
+                                        .padding(vertical = Spacing.sm),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                val isSelected = if (months == -1) smsScanAllTime
+                                val isSelected =
+                                    if (months == -1) smsScanAllTime
                                     else smsScanMonths == months && !smsScanAllTime
                                 RadioButton(
                                     selected = isSelected,
@@ -1065,9 +1106,9 @@ fun SettingsScreen(
                     title = { Text("Backup Status") },
                     text = { Text(message) },
                     confirmButton = {
-                        TextButton(
-                            onClick = { settingsViewModel.clearImportExportMessage() }
-                        ) { Text("OK") }
+                        TextButton(onClick = { settingsViewModel.clearImportExportMessage() }) {
+                            Text("OK")
+                        }
                     }
                 )
             }
@@ -1077,11 +1118,9 @@ fun SettingsScreen(
         if (showExportOptionsDialog && exportedBackupFile != null) {
             val timestamp =
                 java.time.LocalDateTime.now()
-                    .format(
-                        java.time.format.DateTimeFormatter.ofPattern(
-                            "yyyy_MM_dd_HHmmss"
-                        )
-                    )
+                    .format(java.time.format.DateTimeFormatter.ofPattern(
+                        "yyyy_MM_dd_HHmmss"
+                    ))
             val fileName = "Cashiro_Backup_$timestamp.cashirobackup"
 
             AlertDialog(
@@ -1162,15 +1201,13 @@ fun SettingsScreen(
 
                         timeoutOptions.forEach { (minutes, label) ->
                             Row(
-                                modifier =
-                                    Modifier.fillMaxWidth()
-                                        .clickable {
-                                            appLockViewModel.setTimeoutMinutes(
-                                                minutes
-                                            )
-                                            showTimeoutDialog = false
-                                        }
-                                        .padding(vertical = Spacing.sm),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        appLockViewModel.setTimeoutMinutes(minutes)
+                                        showTimeoutDialog = false
+                                    }
+                                    .padding(vertical = Spacing.sm),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 RadioButton(
@@ -1181,10 +1218,7 @@ fun SettingsScreen(
                                     }
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.sm))
-                                Text(
-                                    text = label,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                                Text(text = label, style = MaterialTheme.typography.bodyMedium)
                             }
                         }
                     }

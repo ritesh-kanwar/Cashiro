@@ -49,6 +49,12 @@ constructor(@ApplicationContext private val context: Context) {
         val FIRST_LAUNCH_TIME = longPreferencesKey("first_launch_time")
         val HAS_SHOWN_REVIEW_PROMPT = booleanPreferencesKey("has_shown_review_prompt")
         val LAST_REVIEW_PROMPT_TIME = longPreferencesKey("last_review_prompt_time")
+
+        // Profile preferences
+        val USER_NAME = stringPreferencesKey("user_name")
+        val PROFILE_IMAGE_URI = stringPreferencesKey("profile_image_uri")
+        val PROFILE_BACKGROUND_COLOR = intPreferencesKey("profile_background_color")
+        val BANNER_IMAGE_URI = stringPreferencesKey("banner_image_uri")
     }
 
     val userPreferences: Flow<UserPreferences> =
@@ -69,7 +75,12 @@ constructor(@ApplicationContext private val context: Context) {
                                         ?: false, // Default to false
                         baseCurrency = preferences[PreferencesKeys.BASE_CURRENCY]
                                         ?: "INR", // Default to INR
-                        isAmoledMode = preferences[PreferencesKeys.IS_AMOLED_MODE] ?: false
+                        isAmoledMode = preferences[PreferencesKeys.IS_AMOLED_MODE] ?: false,
+                        userName = preferences[PreferencesKeys.USER_NAME] ?: "User",
+                        profileImageUri = preferences[PreferencesKeys.PROFILE_IMAGE_URI],
+                        profileBackgroundColor =
+                                preferences[PreferencesKeys.PROFILE_BACKGROUND_COLOR] ?: 0,
+                        bannerImageUri = preferences[PreferencesKeys.BANNER_IMAGE_URI]
                 )
             }
 
@@ -365,6 +376,36 @@ constructor(@ApplicationContext private val context: Context) {
             context.dataStore.data.map { preferences ->
                 preferences[PreferencesKeys.LAST_AUTH_TIMESTAMP] ?: 0L
             }
+
+    suspend fun updateUserName(name: String) {
+        context.dataStore.edit { preferences -> preferences[PreferencesKeys.USER_NAME] = name }
+    }
+
+    suspend fun updateProfileImageUri(uri: String?) {
+        context.dataStore.edit { preferences ->
+            if (uri == null) {
+                preferences.remove(PreferencesKeys.PROFILE_IMAGE_URI)
+            } else {
+                preferences[PreferencesKeys.PROFILE_IMAGE_URI] = uri
+            }
+        }
+    }
+
+    suspend fun updateProfileBackgroundColor(color: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROFILE_BACKGROUND_COLOR] = color
+        }
+    }
+
+    suspend fun updateBannerImageUri(uri: String?) {
+        context.dataStore.edit { preferences ->
+            if (uri == null) {
+                preferences.remove(PreferencesKeys.BANNER_IMAGE_URI)
+            } else {
+                preferences[PreferencesKeys.BANNER_IMAGE_URI] = uri
+            }
+        }
+    }
 }
 
 data class UserPreferences(
@@ -376,5 +417,9 @@ data class UserPreferences(
         val smsScanMonths: Int = 3, // Default to 3 months
         val smsScanAllTime: Boolean = false, // Default to false
         val baseCurrency: String = "INR", // Default to INR
-        val isAmoledMode: Boolean = false
+        val isAmoledMode: Boolean = false,
+        val userName: String = "User",
+        val profileImageUri: String? = null,
+        val profileBackgroundColor: Int = 0,
+        val bannerImageUri: String? = null
 )

@@ -38,6 +38,9 @@ haze = "1.7.1"
 material3Version = "1.4.0"
 desugarJdkLibs = "2.1.2"
 
+coilCompose = "3.1.0"
+coilGif = "3.2.0"
+
 [libraries]
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -91,6 +94,10 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+#Coil
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coilGif" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

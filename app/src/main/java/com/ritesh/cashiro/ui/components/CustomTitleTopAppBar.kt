@@ -65,17 +65,19 @@ fun CustomTitleTopAppBar(
     val displayTitle = remember { mutableStateOf(previousScreenTitle.ifEmpty { title }) }
 
     // LargeTopAppBar
-    LargerTopAppBar(
-        scrollBehaviorLarge = scrollBehaviorLarge,
-        title = title,
-        hasBackButton = hasBackButton,
-        collapsedFraction = collapsedFraction,
-        actionContent = actionContent,
-        navigationContent = navigationContent,
-        greetingCard = greetingCard,
-        hazeState = hazeState,
-        themeColors = MaterialTheme.colorScheme
-    )
+    if(scrollBehaviorLarge != scrollBehaviorSmall) {
+        LargerTopAppBar(
+            scrollBehaviorLarge = scrollBehaviorLarge,
+            title = title,
+            hasBackButton = hasBackButton,
+            collapsedFraction = collapsedFraction,
+            actionContent = actionContent,
+            navigationContent = navigationContent,
+            greetingCard = greetingCard,
+            hazeState = hazeState,
+            themeColors = MaterialTheme.colorScheme
+        )
+    }
 
     // Regular TopAppBar
     RegularTopAppBar(
@@ -89,7 +91,7 @@ fun CustomTitleTopAppBar(
         hasFilterButton = hasFilterButton,
         actionContent = actionContent,
         navigationContent = navigationContent,
-        collapsedFraction = collapsedFraction,
+        collapsedFraction = if(scrollBehaviorLarge != scrollBehaviorSmall)collapsedFraction else 1f,
         profilePhoto = profilePhoto,
         modifier = modifier,
         hazeState = hazeState

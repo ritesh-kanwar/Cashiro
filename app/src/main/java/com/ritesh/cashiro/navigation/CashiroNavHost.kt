@@ -13,6 +13,7 @@ import androidx.navigation.toRoute
 import com.ritesh.cashiro.presentation.accounts.AccountDetailScreen
 import com.ritesh.cashiro.presentation.add.AddScreen
 import com.ritesh.cashiro.presentation.categories.CategoriesScreen
+import com.ritesh.cashiro.presentation.profile.ProfileScreen
 import com.ritesh.cashiro.presentation.transactions.TransactionDetailScreen
 import com.ritesh.cashiro.ui.MainScreen
 import com.ritesh.cashiro.ui.screens.AppLockScreen
@@ -75,27 +76,35 @@ fun CashiroNavHost(
         ) { MainScreen(rootNavController = navController) }
 
         composable<Settings>(
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
-            popExitTransition = { ExitTransition.None }
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { ExitTransition.None }
         ) {
             SettingsScreen(
-                themeViewModel = themeViewModel,
+                    themeViewModel = themeViewModel,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToCategories = { navController.navigate(Categories) },
+                    onNavigateToUnrecognizedSms = { navController.navigate(UnrecognizedSms) },
+                    onNavigateToManageAccounts = { navController.navigate(ManageAccounts) },
+                    onNavigateToRules = { navController.navigate(Rules) },
+                    onNavigateToFaq = { navController.navigate(Faq) },
+                    onNavigateToAppearance = { navController.navigate(Appearance) },
+                    onNavigateToProfile = { navController.navigate(Profile) }
+            )
+        }
+
+        composable<Profile> {
+            ProfileScreen(
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToCategories = { navController.navigate(Categories) },
-                onNavigateToUnrecognizedSms = { navController.navigate(UnrecognizedSms) },
-                onNavigateToManageAccounts = { navController.navigate(ManageAccounts) },
-                onNavigateToRules = { navController.navigate(Rules) },
-                onNavigateToFaq = { navController.navigate(Faq) },
-                onNavigateToAppearance = { navController.navigate(Appearance) }
+                profileViewModel = hiltViewModel()
             )
         }
 
         composable<Appearance> {
             AppearanceScreen(
-                onNavigateBack = { navController.popBackStack() },
-                themeViewModel = themeViewModel
+                    onNavigateBack = { navController.popBackStack() },
+                    themeViewModel = themeViewModel
             )
         }
 

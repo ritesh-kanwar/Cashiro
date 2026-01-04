@@ -3,53 +3,38 @@ package com.ritesh.cashiro.navigation
 import kotlinx.serialization.Serializable
 
 // Define navigation destinations using Kotlin Serialization
-@Serializable
-object AppLock
+@Serializable object AppLock
 
-@Serializable
-object Permission
+@Serializable object Permission
 
-@Serializable
-object Home
+@Serializable object Home
 
-@Serializable
-object Transactions
+@Serializable object Transactions
 
-@Serializable
-object Settings
+@Serializable object Settings
 
-@Serializable
-object Categories
+@Serializable object Categories
 
-@Serializable
-object Analytics
+@Serializable object Analytics
 
-@Serializable
-object Chat
+@Serializable object Chat
 
-@Serializable
-data class TransactionDetail(val transactionId: Long)
+@Serializable data class TransactionDetail(val transactionId: Long)
 
-@Serializable
-object AddTransaction
+@Serializable object AddTransaction
 
-@Serializable
-data class AccountDetail(val bankName: String, val accountLast4: String)
+@Serializable data class AccountDetail(val bankName: String, val accountLast4: String)
 
-@Serializable
-object UnrecognizedSms
+@Serializable object UnrecognizedSms
 
-@Serializable
-object Faq
+@Serializable object Faq
 
-@Serializable
-object Rules
+@Serializable object Rules
 
-@Serializable
-object CreateRule
+@Serializable object CreateRule
 
-@Serializable
-object Appearance
+@Serializable object Appearance
 
-@Serializable
-object ManageAccounts
+@Serializable object ManageAccounts
+
+@Serializable object Profile

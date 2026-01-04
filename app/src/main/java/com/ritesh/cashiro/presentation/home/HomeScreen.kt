@@ -196,10 +196,6 @@ fun HomeScreen(
                         )
                     }
                 }
-//                onDiscordClick = {
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/H3xWeMWjKQ"))
-//                    context.startActivity(intent)
-//                }
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }

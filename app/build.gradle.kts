@@ -243,4 +243,9 @@ dependencies {
     // OpenCSV for CSV export
     implementation(libs.opencsv)
     testImplementation(kotlin("test"))
+
+    // coil for images and gif
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.gif)
 }
