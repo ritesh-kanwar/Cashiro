@@ -1746,3 +1746,62 @@ Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRep
 U app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt
 Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt...
 error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetRepository.kt: already exists in working directory
+[backport-fixes-upstream 027e3558] feat(budgets): add BudgetRepository with spending
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 4 22:15:05 2026 +0530
+ 2 files changed, 348 insertions(+)
+===================================
+Applying 0031-fix-hsbc-detect-outgoing-NEFT-as-transfer-not-income.patch
+Applying: fix(hsbc): detect outgoing NEFT as transfer, not income
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix(hsbc): detect outgoing NEFT as transfer, not income
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt' with conflicts.
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt...
+error: while searching for:
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        // Pattern 1: "from CHAS A/c ***6983 of John Doe" (Issue #118 - NEFT/Credit transactions)
+        // Extract everything after "from" until " ." or end of sentence
+        val neftCreditPattern = Regex(
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt:97
+error: while searching for:
+                else TransactionType.CREDIT
+            }
+
+            // Standard transaction patterns
+            lowerMessage.contains("is paid from") -> TransactionType.EXPENSE
+            lowerMessage.contains("is debited") -> TransactionType.EXPENSE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt:290
+error: while searching for:
+        }
+    }
+
+    override fun isTransactionMessage(message: String): Boolean {
+        val lowerMessage = message.lowercase()
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt:300
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
