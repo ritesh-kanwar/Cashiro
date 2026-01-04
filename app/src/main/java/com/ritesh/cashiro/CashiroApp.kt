@@ -18,8 +18,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.ritesh.cashiro.navigation.AppLock
 import com.ritesh.cashiro.navigation.Home
-import com.ritesh.cashiro.navigation.Permission
 import com.ritesh.cashiro.navigation.CashiroNavHost
+import com.ritesh.cashiro.navigation.OnBoarding
 import com.ritesh.cashiro.ui.theme.CashiroTheme
 import com.ritesh.cashiro.ui.viewmodel.AppLockViewModel
 import com.ritesh.cashiro.ui.viewmodel.ThemeViewModel
@@ -63,7 +63,7 @@ fun CashiroApp(
 
         // Note: We can't check app lock or hasSkippedPermission here because they're async from DataStore
         // App lock will be checked after initial load via LaunchedEffect
-        if (hasSmsPermission) Home else Permission
+        if (hasSmsPermission) Home else OnBoarding
     }
 
     // Observe lock state changes and navigate to lock screen if needed
