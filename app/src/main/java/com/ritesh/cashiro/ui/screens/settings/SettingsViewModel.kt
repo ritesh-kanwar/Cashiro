@@ -39,9 +39,19 @@ class SettingsViewModel @Inject constructor(
     private val modelRepository: ModelRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val unrecognizedSmsRepository: UnrecognizedSmsRepository,
+    private val transactionRepository: com.ritesh.cashiro.data.repository.TransactionRepository,
     private val backupExporter: BackupExporter,
     private val backupImporter: BackupImporter
 ) : ViewModel() {
+
+    val userPreferences = userPreferencesRepository.userPreferences
+
+    val totalTransactions = transactionRepository.getTransactionCount()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0
+        )
     
     private val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     

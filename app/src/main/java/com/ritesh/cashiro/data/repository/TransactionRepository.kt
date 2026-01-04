@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.map
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
     fun getAllTransactions(): Flow<List<TransactionEntity>> = transactionDao.getAllTransactions()
 
+    fun getTransactionCount(): Flow<Int> = transactionDao.getTransactionCount()
+
     suspend fun getTransactionById(id: Long): TransactionEntity? =
             transactionDao.getTransactionById(id)
 

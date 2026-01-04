@@ -9,6 +9,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -71,10 +72,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.ritesh.cashiro.R
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -128,7 +136,6 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     appLockViewModel: com.ritesh.cashiro.ui.viewmodel.AppLockViewModel = hiltViewModel()
 ) {
-    val themeUiState by themeViewModel.themeUiState.collectAsStateWithLifecycle()
     val appLockUiState by appLockViewModel.uiState.collectAsStateWithLifecycle()
     val downloadState by settingsViewModel.downloadState.collectAsStateWithLifecycle()
     val downloadProgress by settingsViewModel.downloadProgress.collectAsStateWithLifecycle()
@@ -144,6 +151,9 @@ fun SettingsScreen(
             settingsViewModel.smsScanAllTime.collectAsStateWithLifecycle(initialValue = false)
     val importExportMessage by settingsViewModel.importExportMessage.collectAsStateWithLifecycle()
     val exportedBackupFile by settingsViewModel.exportedBackupFile.collectAsStateWithLifecycle()
+    val userPreferences by settingsViewModel.userPreferences.collectAsStateWithLifecycle(initialValue = null)
+    val totalTransactionsCount by settingsViewModel.totalTransactions.collectAsStateWithLifecycle()
+
     var showSmsScanDialog by remember { mutableStateOf(false) }
     var showExportOptionsDialog by remember { mutableStateOf(false) }
     var showTimeoutDialog by remember { mutableStateOf(false) }
@@ -204,47 +214,61 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(1.5.dp)
                 ) {
+                    val profileImageUri = userPreferences?.profileImageUri?.toUri()
+                    val profileBackgroundColor = Color(userPreferences?.profileBackgroundColor ?: Color.Transparent.toArgb())
+
                     ListItem(
                         headline = {
                             Text(
-                                text = "Profile",
+                                text = userPreferences?.userName ?: "User",
                                 style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         },
                         supporting = {
                             Text(
-                                text = "User profile settings",
+                                text = "$totalTransactionsCount Transactions",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.8f)
                             )
                         },
                         leading = {
                             Box(
                                 modifier = Modifier
                                     .size(48.dp)
-                                    .background(
-                                        color = red_light,
-                                        shape = CircleShape
-                                    ),
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                                    .background(profileBackgroundColor),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(
-                                    Icons.Default.Face,
-                                    contentDescription = null,
-                                    tint = red_dark
-                                )
+                                if (profileImageUri != null) {
+                                    AsyncImage(
+                                        model = profileImageUri,
+                                        contentDescription = "Profile",
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                } else {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.avatar_1),
+                                        contentDescription = "Profile",
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
                             }
                         },
                         trailing = {
                             Icon(
                                 Icons.Default.ChevronRight,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         },
                         onClick = { onNavigateToProfile() },
                         shape = ListItemPosition.Top.toShape(),
+                        listColor = MaterialTheme.colorScheme.primaryContainer,
                         padding = PaddingValues(0.dp)
                     )
 
