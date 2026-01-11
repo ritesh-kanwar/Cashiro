@@ -491,6 +491,18 @@ class FederalBankParser : BaseIndianBankParser() {
         }
     }
 
+    /**
+     * Detects "[Company] has received Rs X from your A/c" pattern
+     * This indicates money going OUT of the user's account to a company
+     */
+    private fun isOutgoingHasReceivedPattern(message: String): Boolean {
+        val pattern = Regex(
+            """has\s+received\s+Rs\s+[\d,.]+\s+from\s+your\s+A/c""",
+            RegexOption.IGNORE_CASE
+        )
+        return pattern.containsMatchIn(message)
+    }
+
     fun isMandateCreationNotification(message: String): Boolean {
         val lowerMessage = message.lowercase()
 

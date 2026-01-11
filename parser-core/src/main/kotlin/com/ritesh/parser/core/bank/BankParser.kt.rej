@@ -1,0 +1,10 @@
+diff a/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt b/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt	(rejected hunks)
+@@ -243,6 +243,8 @@ abstract class BankParser {
+             "folio",                        // Mutual fund folio
+             "demat",
+             "stockbroker",
++            "digital gold",                 // Digital Gold investments
++            "sovereign gold",               // Sovereign Gold Bonds
+ 
+             // Stock exchanges
+             "nse",                          // National Stock Exchange

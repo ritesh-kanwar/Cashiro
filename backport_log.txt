@@ -1805,3 +1805,92 @@ Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankP
 Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
+[backport-fixes-upstream 8ae149e8] fix(hsbc): detect outgoing NEFT as transfer, not
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Jan 5 00:26:54 2026 +0530
+ 4 files changed, 250 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt.rej
+===================================
+Applying 0032-feat-parser-enhance-CentralBankOfIndiaParser-to-supp.patch
+Applying: feat(parser): enhance CentralBankOfIndiaParser to support NEFT credits with "By." prefix and add unit tests
+Successfully applied via git am
+===================================
+Applying 0033-feat-parser-enhance-FederalBankParser-to-support-out.patch
+Applying: feat(parser): enhance FederalBankParser to support outgoing transfer patterns
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): enhance FederalBankParser to support outgoing transfer patterns
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt:63
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt' with conflicts.
+Falling back to direct application...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt...
+error: while searching for:
+            "folio",                        // Mutual fund folio
+            "demat",
+            "stockbroker",
+
+            // Stock exchanges
+            "nse",                          // National Stock Exchange
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt:243
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt...
+error: while searching for:
+            "folio",                        // Mutual fund folio
+            "demat",
+            "stockbroker",
+
+            // Stock exchanges
+            "nse",                          // National Stock Exchange
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt:63
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt...
+error: while searching for:
+            }
+        }
+
+        // Pattern 7: withdrawn Rs 500
+        val withdrawnPattern = Regex(
+            """withdrawn\s+Rs\s+([0-9,]+(?:\.\d{2})?)""",
+            RegexOption.IGNORE_CASE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:171
+error: while searching for:
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        // Priority 1: IMPS credits - show "IMPS Credit" instead of parsing description
+        if (message.contains("credited to your A/c", ignoreCase = true) &&
+            message.contains("via IMPS", ignoreCase = true)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:189
+error: while searching for:
+        val lowerMessage = message.lowercase()
+
+        return when {
+            // Credit card transactions - now using detectIsCard
+            detectIsCreditCard(message) && (lowerMessage.contains("spent") ||
+                lowerMessage.contains("was successful") ||
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:481
+Hunk #4 succeeded at 491 (offset -57 lines).
+Checking patch parser-core/src/test/kotlin/TestFederalBankOutgoingParser.kt...
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Hunk #4 applied cleanly.
+Applied patch parser-core/src/test/kotlin/TestFederalBankOutgoingParser.kt cleanly.
