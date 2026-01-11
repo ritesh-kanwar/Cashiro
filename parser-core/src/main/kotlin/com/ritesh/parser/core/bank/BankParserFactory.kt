@@ -72,7 +72,10 @@ object BankParserFactory {
         NMBBankParser(),  // NMB Bank (Nepal)
         ManjushreeFinanceParser(), // Manjushree Finance (Nepal)
         SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
+<<<<<<< ours
         PrimeCommercialBankParser(),  // Prime Commercial Bank (Nepal)
+=======
+>>>>>>> theirs
         MPesaTanzaniaParser(),  // M-Pesa Tanzania (must be before Kenya M-PESA)
         MPESAParser(),  // M-PESA (Kenya)
         SelcomPesaParser(),  // Selcom Pesa (Tanzania)

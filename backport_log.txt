@@ -1894,3 +1894,72 @@ Rejected hunk #2.
 Rejected hunk #3.
 Hunk #4 applied cleanly.
 Applied patch parser-core/src/test/kotlin/TestFederalBankOutgoingParser.kt cleanly.
+[backport-fixes-upstream 2d080bce] feat(parser): enhance FederalBankParser to support
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 11 17:46:19 2026 +0530
+ 7 files changed, 243 insertions(+), 76 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestFederalBankOutgoingParser.kt
+===================================
+Applying 0034-feat-parser-implement-E-Mandate-and-UPI-Mandate-pars.patch
+Applying: feat(parser): implement E-Mandate and UPI-Mandate parsing for HDFC and SBI banks
+Successfully applied via git am
+===================================
+Applying 0035-feat-parser-add-Tanzanian-mobile-money-parsers-for-M.patch
+Applying: feat(parser): add Tanzanian mobile money parsers for M-Pesa, Selcom, and Tigo
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MPesaTanzaniaParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MPesaTanzaniaParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TigoPesaParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TigoPesaParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): add Tanzanian mobile money parsers for M-Pesa, Selcom, and Tigo
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MPesaTanzaniaParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TigoPesaParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/TanzaniaParserTest.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MPesaTanzaniaParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TigoPesaParser.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
+        NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
+        SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
+        MPESAParser(),  // M-PESA (Kenya)
+        CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
+        DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+        HuntingtonBankParser(),  // Huntington Bank (USA)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:65
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MPesaTanzaniaParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MPesaTanzaniaParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TigoPesaParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TigoPesaParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/TanzaniaParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/TanzaniaParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
