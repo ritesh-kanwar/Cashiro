@@ -2111,3 +2111,29 @@ Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndB
 Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
+[backport-fixes-upstream d3882e6b] feat(parser): refine account number extraction
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 18 18:16:52 2026 +0530
+ 8 files changed, 382 insertions(+), 42 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt.rej
+===================================
+Applying 0037-feat-parser-enhance-IDFCFirstBankParser-with-new-tra.patch
+Applying: feat(parser): enhance IDFCFirstBankParser with new transaction patterns
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): enhance IDFCFirstBankParser with new transaction patterns
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt' cleanly.
+error: parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt...
+error: parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt cleanly.
