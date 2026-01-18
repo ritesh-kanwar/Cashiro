@@ -1963,3 +1963,151 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/TanzaniaP
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/TanzaniaParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream ff50e358] feat(parser): add Tanzanian mobile money parsers for
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 11 19:22:48 2026 +0530
+ 9 files changed, 426 insertions(+), 85 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+===================================
+Applying 0036-feat-parser-refine-account-number-extraction-pattern.patch
+Applying: feat(parser): refine account number extraction patterns for ICICI and IndusInd banks
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): refine account number extraction patterns for ICICI and IndusInd banks
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt...
+error: while searching for:
+
+    object Account {
+        val AC_WITH_MASK = Regex(
+            """(?:A/c|Account|Acct)(?:\s+No)?\.?\s+(?:XX+)?(\d{4})""",
+            RegexOption.IGNORE_CASE
+        )
+        val CARD_WITH_MASK = Regex("""Card\s+(?:XX+)?(\d{4})""", RegexOption.IGNORE_CASE)
+        // Keep original pattern for backward compatibility, validation will filter false positives
+        val GENERIC_ACCOUNT =
+            Regex("""(?:A/c|Account).*?(\d{4})(?:\s|$)""", RegexOption.IGNORE_CASE)
+        val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK, GENERIC_ACCOUNT)
+    }
+
+    object Balance {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt:20
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt...
+error: while searching for:
+            }
+        }
+
+        // Pattern 2: "ICICI Bank Account XXNNNN" or "ICICI Bank Account XX566"
+        val accountPattern = Regex(
+            """ICICI\s+Bank\s+Account\s+([X\*]*\d+)""",
+            RegexOption.IGNORE_CASE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt:306
+error: while searching for:
+            val digitsOnly = accountStr.filter { it.isDigit() }
+            return if (digitsOnly.length >= 4) {
+                digitsOnly.takeLast(4)
+            } else {
+                digitsOnly
+            }
+        }
+
+        // Pattern 3: "Acct XXNNNN" - extract everything after Acct
+        val acctPattern = Regex(
+            """Acct\s+([X\*]*\d+)""",
+            RegexOption.IGNORE_CASE
+        )
+        acctPattern.find(message)?.let { match ->
+            val accountStr = match.groupValues[1]
+            val digitsOnly = accountStr.filter { it.isDigit() }
+            return if (digitsOnly.length >= 4) {
+                digitsOnly.takeLast(4)
+            } else {
+                digitsOnly
+            }
+        }
+
+        // Pattern 4: "ICICI Bank Acct XXNNNN"
+        val bankAcctPattern = Regex(
+            """ICICI\s+Bank\s+Acct\s+([X\*]*\d+)""",
+            RegexOption.IGNORE_CASE
+        )
+        bankAcctPattern.find(message)?.let { match ->
+            val accountStr = match.groupValues[1]
+            val digitsOnly = accountStr.filter { it.isDigit() }
+            return if (digitsOnly.length >= 4) {
+                digitsOnly.takeLast(4)
+            } else {
+                digitsOnly
+            }
+        }
+
+        // Fall back to base class
+        return super.extractAccountLast4(message)
+    }
+
+    override fun extractBalance(message: String): BigDecimal? {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt:316
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt...
+error: while searching for:
+    }
+
+    override fun extractAccountLast4(message: String): String? {
+        // IndusInd balance/alerts often mask accounts like: "A/C 2134***12345"
+        val maskedPattern = Regex(
+            """A/?C\s+([0-9]{2,})[\*xX#]+(\d{4,})""",
+            RegexOption.IGNORE_CASE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt:211
+error: while searching for:
+            return if (trailing.length >= 4) trailing.takeLast(4) else trailing
+        }
+
+        // Pattern: "A/c *XX1234" -> capture trailing digits after masked Xs or *
+        val starMaskPattern = Regex(
+            """A/?c\s+\*?X+\s*(\d{4,6})""",
+            RegexOption.IGNORE_CASE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt:222
+error: while searching for:
+        if (lower.contains("ach db") || lower.contains("ach cr") || lower.contains("nach")) {
+            return null
+        }
+        // Fallback to base implementation (generic last-4 extraction)
+        return super.extractAccountLast4(message)
+    }
+
+    override fun extractBalance(message: String): java.math.BigDecimal? {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt:237
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.

@@ -20,6 +20,7 @@ object CompiledPatterns {
 
     object Account {
         val AC_WITH_MASK = Regex(
+<<<<<<< ours
             """(?:A/c|Account|Acct)(?:\s+No)?\.?\s+(?:[Xx\*]*\**)?(\d+)""",
             RegexOption.IGNORE_CASE
         )
@@ -32,6 +33,17 @@ object CompiledPatterns {
         val GENERIC_ACCOUNT =
             Regex("""(?:A/c|Account).*?(\d+)(?:\s|$)""", RegexOption.IGNORE_CASE)
         val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK, GENERIC_ACCOUNT)
+=======
+            """(?:A/c|Account|Acct)(?:\s+No)?\.?\s+(?:XX+|\*+)?(\d{3,4})""",
+            RegexOption.IGNORE_CASE
+        )
+        val CARD_WITH_MASK = Regex("""Card\s+(?:XX+|\*+)?(\d{4})""", RegexOption.IGNORE_CASE)
+        // GENERIC_ACCOUNT removed - it was too loose and caused false positives
+        // by capturing dates, amounts, and reference numbers as account numbers.
+        // Bank-specific parsers should define their own patterns instead.
+        // Only use specific masked patterns that require XX or * prefix
+        val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK)
+>>>>>>> theirs
     }
 
     object Balance {
