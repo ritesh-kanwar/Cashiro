@@ -2277,3 +2277,145 @@ Applied patch cashiro-web/server/src/main/kotlin/feedback/FeedbackRouting.kt cle
 Applied patch cashiro-web/server/src/main/kotlin/feedback/FeedbackService.kt cleanly.
 Applied patch cashiro-web/server/src/main/kotlin/feedback/FingerprintService.kt cleanly.
 Applied patch cashiro-web/server/src/main/resources/db/migration/V2__create_feedback_tables.sql cleanly.
+[backport-fixes-upstream ca636ead] feat(ui): UX audit fixes and What's New post-update
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Jan 24 10:24:57 2026 +0530
+ 15 files changed, 1160 insertions(+), 6 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ create mode 100644 cashiro-web/server/src/main/kotlin/feedback/FeedbackModels.kt
+ create mode 100644 cashiro-web/server/src/main/kotlin/feedback/FeedbackRouting.kt
+ create mode 100644 cashiro-web/server/src/main/kotlin/feedback/FeedbackService.kt
+ create mode 100644 cashiro-web/server/src/main/kotlin/feedback/FingerprintService.kt
+ create mode 100644 cashiro-web/server/src/main/resources/db/migration/V2__create_feedback_tables.sql
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestEquitasBankParser.kt
+===================================
+Applying 0039-feat-database-introduce-monthly-budget-management-fe.patch
+Applying: feat(database): introduce monthly budget management features
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(database): introduce monthly budget management features
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/31.json' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:25
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt' with conflicts.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:7
+error: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt: patch does not apply
+Falling back to direct application...
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/31.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/31.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+Hunk #1 succeeded at 12 (offset 1 line).
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
+import com.ritesh.cashiro.data.database.entity.BudgetEntity
+import com.ritesh.cashiro.data.database.entity.CardEntity
+import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import com.ritesh.cashiro.data.database.entity.ChatMessage
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:25
+error: while searching for:
+ * @property autoMigrations List of automatic migrations between versions.
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class],
+    version = 30,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:48
+error: while searching for:
+        AutoMigration(from = 26, to = 27),
+        AutoMigration(from = 27, to = 28, spec = Migration27To28::class),
+        AutoMigration(from = 28, to = 29),
+        AutoMigration(from = 29, to = 30)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:77
+error: while searching for:
+    abstract fun exchangeRateDao(): ExchangeRateDao
+    abstract fun budgetDao(): BudgetDao
+    abstract fun transactionSplitDao(): TransactionSplitDao
+    
+    companion object {
+        const val DATABASE_NAME = "cashiro_database"
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:95
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/CategoryBudgetLimitDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/CategoryBudgetLimitEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+error: while searching for:
+
+        // What's New feature
+        val LAST_SEEN_APP_VERSION = stringPreferencesKey("last_seen_app_version")
+    }
+
+    val userPreferences: Flow<UserPreferences> = context.dataStore.data
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:51
+error: while searching for:
+            preferences[PreferencesKeys.LAST_SEEN_APP_VERSION] = version
+        }
+    }
+}
+
+data class UserPreferences(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:362
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.CashiroDatabase
+import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.BudgetDao
+import com.ritesh.cashiro.data.database.dao.CardDao
+import com.ritesh.cashiro.data.database.dao.CategoryDao
+import com.ritesh.cashiro.data.database.dao.ChatDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:7
+error: while searching for:
+    fun provideTransactionSplitDao(database: CashiroDatabase): TransactionSplitDao {
+        return database.transactionSplitDao()
+    }
+}
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:230
+Checking patch docs/planned-features.md...
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 4 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/CategoryBudgetLimitDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/CategoryBudgetLimitEntity.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch docs/planned-features.md cleanly.

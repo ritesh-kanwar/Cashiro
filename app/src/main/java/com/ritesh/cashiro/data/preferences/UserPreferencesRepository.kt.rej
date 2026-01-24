@@ -1,44 +1,32 @@
 diff a/app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt b/app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt	(rejected hunks)
-@@ -45,6 +45,12 @@ class UserPreferencesRepository @Inject constructor(
-         val FIRST_LAUNCH_TIME = longPreferencesKey("first_launch_time")
-         val HAS_SHOWN_REVIEW_PROMPT = booleanPreferencesKey("has_shown_review_prompt")
-         val LAST_REVIEW_PROMPT_TIME = longPreferencesKey("last_review_prompt_time")
+@@ -51,6 +51,9 @@ class UserPreferencesRepository @Inject constructor(
+ 
+         // What's New feature
+         val LAST_SEEN_APP_VERSION = stringPreferencesKey("last_seen_app_version")
 +
-+        // Feature discovery
-+        val HAS_USED_FULL_RESYNC = booleanPreferencesKey("has_used_full_resync")
-+
-+        // What's New feature
-+        val LAST_SEEN_APP_VERSION = stringPreferencesKey("last_seen_app_version")
++        // Monthly Budget
++        val MONTHLY_BUDGET_LIMIT = stringPreferencesKey("monthly_budget_limit")
      }
  
      val userPreferences: Flow<UserPreferences> = context.dataStore.data
-@@ -331,6 +337,31 @@ class UserPreferencesRepository @Inject constructor(
-         .map { preferences ->
-             preferences[PreferencesKeys.LAST_AUTH_TIMESTAMP] ?: 0L
+@@ -362,6 +365,22 @@ class UserPreferencesRepository @Inject constructor(
+             preferences[PreferencesKeys.LAST_SEEN_APP_VERSION] = version
          }
+     }
 +
-+    // Feature discovery - Full resync hint
-+    val hasUsedFullResync: Flow<Boolean> = context.dataStore.data
++    // Monthly Budget
++    val monthlyBudgetLimit: Flow<java.math.BigDecimal?> = context.dataStore.data
 +        .map { preferences ->
-+            preferences[PreferencesKeys.HAS_USED_FULL_RESYNC] ?: false
++            preferences[PreferencesKeys.MONTHLY_BUDGET_LIMIT]?.let { java.math.BigDecimal(it) }
 +        }
 +
-+    suspend fun markFullResyncUsed() {
++    suspend fun updateMonthlyBudgetLimit(amount: java.math.BigDecimal?) {
 +        context.dataStore.edit { preferences ->
-+            preferences[PreferencesKeys.HAS_USED_FULL_RESYNC] = true
-+        }
-+    }
-+
-+    // What's New feature
-+    suspend fun getLastSeenAppVersion(): String? {
-+        return context.dataStore.data
-+            .map { preferences -> preferences[PreferencesKeys.LAST_SEEN_APP_VERSION] }
-+            .first()
-+    }
-+
-+    suspend fun setLastSeenAppVersion(version: String) {
-+        context.dataStore.edit { preferences ->
-+            preferences[PreferencesKeys.LAST_SEEN_APP_VERSION] = version
++            if (amount == null) {
++                preferences.remove(PreferencesKeys.MONTHLY_BUDGET_LIMIT)
++            } else {
++                preferences[PreferencesKeys.MONTHLY_BUDGET_LIMIT] = amount.toPlainString()
++            }
 +        }
 +    }
  }
