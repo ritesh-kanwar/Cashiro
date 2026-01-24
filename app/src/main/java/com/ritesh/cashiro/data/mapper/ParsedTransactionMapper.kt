@@ -27,6 +27,7 @@ fun ParsedTransaction.toEntity(): TransactionEntity {
         com.ritesh.parser.core.TransactionType.CREDIT -> TransactionType.CREDIT
         com.ritesh.parser.core.TransactionType.TRANSFER -> TransactionType.TRANSFER
         com.ritesh.parser.core.TransactionType.INVESTMENT -> TransactionType.INVESTMENT
+        com.ritesh.parser.core.TransactionType.BALANCE_UPDATE -> TransactionType.EXPENSE
     }
 
     return TransactionEntity(
@@ -103,5 +104,6 @@ fun com.ritesh.parser.core.TransactionType.toEntityType(): TransactionType {
         com.ritesh.parser.core.TransactionType.CREDIT -> TransactionType.CREDIT
         com.ritesh.parser.core.TransactionType.TRANSFER -> TransactionType.TRANSFER
         com.ritesh.parser.core.TransactionType.INVESTMENT -> TransactionType.INVESTMENT
+        com.ritesh.parser.core.TransactionType.BALANCE_UPDATE -> TransactionType.EXPENSE
     }
 }

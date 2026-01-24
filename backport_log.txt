@@ -2137,3 +2137,143 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirst
 Checking patch parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt...
 error: parser-core/src/test/kotlin/TestIDFCFirstBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IDFCFirstBankParser.kt cleanly.
+[backport-fixes-upstream 8947c813] feat(parser): enhance IDFCFirstBankParser with new
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 18 18:19:56 2026 +0530
+ 5 files changed, 52 insertions(+), 162 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/IndusIndBankParser.kt.rej
+===================================
+Applying 0038-feat-ui-UX-audit-fixes-and-What-s-New-post-update-di.patch
+Applying: feat(ui): UX audit fixes and What's New post-update dialog
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(ui): UX audit fixes and What's New post-update dialog
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:143
+error: app/build.gradle.kts: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt:28
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/TransactionType.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EquitasBankParser.kt' with conflicts.
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:1
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:352
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt' cleanly.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestFederalBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: does not exist in index
+error: cashiro-web/server/src/main/kotlin/Databases.kt: does not exist in index
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: cashiro-web/server/src/main/resources/application.yaml: does not exist in index
+Falling back to direct application...
+error: cashiro-web/wrangler.jsonc: does not exist in index
+Checking patch app/build.gradle.kts...
+error: while searching for:
+    arg("room.generateKotlin", "true")
+}
+
+dependencies {
+    // Local modules
+    implementation(project(":parser-core"))
+
+error: patch failed: app/build.gradle.kts:143
+Checking patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt...
+Hunk #1 succeeded at 27 (offset -1 lines).
+Hunk #2 succeeded at 104 (offset -1 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+error: while searching for:
+        val FIRST_LAUNCH_TIME = longPreferencesKey("first_launch_time")
+        val HAS_SHOWN_REVIEW_PROMPT = booleanPreferencesKey("has_shown_review_prompt")
+        val LAST_REVIEW_PROMPT_TIME = longPreferencesKey("last_review_prompt_time")
+    }
+
+    val userPreferences: Flow<UserPreferences> = context.dataStore.data
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:45
+error: while searching for:
+        .map { preferences ->
+            preferences[PreferencesKeys.LAST_AUTH_TIMESTAMP] ?: 0L
+        }
+}
+
+data class UserPreferences(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:331
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/TransactionType.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
+        DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+        HuntingtonBankParser(),  // Huntington Bank (USA)
+        StandardCharteredBankParser()  // Standard Chartered Bank (India)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:72
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EquitasBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EquitasBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt...
+error: while searching for:
+            }
+        }
+
+        // Priority 8: ATM transactions
+        if (message.contains("ATM", ignoreCase = true) ||
+            message.contains("withdrawn", ignoreCase = true)
+        ) {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt:352
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestEquitasBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestFederalBankParser.kt...
+error: parser-core/src/test/kotlin/TestFederalBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
+Checking patch cashiro-web/server/src/main/kotlin/Databases.kt...
+error: cashiro-web/server/src/main/kotlin/Databases.kt: No such file or directory
+Checking patch cashiro-web/server/src/main/kotlin/feedback/FeedbackModels.kt...
+Checking patch cashiro-web/server/src/main/kotlin/feedback/FeedbackRouting.kt...
+Checking patch cashiro-web/server/src/main/kotlin/feedback/FeedbackService.kt...
+Checking patch cashiro-web/server/src/main/kotlin/feedback/FingerprintService.kt...
+Checking patch cashiro-web/server/src/main/resources/application.yaml...
+error: cashiro-web/server/src/main/resources/application.yaml: No such file or directory
+Checking patch cashiro-web/server/src/main/resources/db/migration/V2__create_feedback_tables.sql...
+Checking patch cashiro-web/wrangler.jsonc...
+error: cashiro-web/wrangler.jsonc: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/TransactionType.kt cleanly.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt with 1 reject...
+Hunk #1 applied cleanly.
+Hunk #2 applied cleanly.
+Rejected hunk #3.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
+Applied patch parser-core/src/test/kotlin/TestEquitasBankParser.kt cleanly.
+Applied patch cashiro-web/server/src/main/kotlin/feedback/FeedbackModels.kt cleanly.
+Applied patch cashiro-web/server/src/main/kotlin/feedback/FeedbackRouting.kt cleanly.
+Applied patch cashiro-web/server/src/main/kotlin/feedback/FeedbackService.kt cleanly.
+Applied patch cashiro-web/server/src/main/kotlin/feedback/FingerprintService.kt cleanly.
+Applied patch cashiro-web/server/src/main/resources/db/migration/V2__create_feedback_tables.sql cleanly.
