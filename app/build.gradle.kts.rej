@@ -1,13 +1,21 @@
 diff a/app/build.gradle.kts b/app/build.gradle.kts	(rejected hunks)
-@@ -163,6 +163,11 @@ tasks.matching { it.name.startsWith("merge") && it.name.contains("Assets") }.con
-     dependsOn("copyChangelog")
- }
+@@ -21,8 +21,8 @@ android {
+         applicationId = "com.ritesh.cashiro"
+         minSdk = 26
+         targetSdk = 36
+-        versionCode = 79
+-        versionName = "2.15.44"
++        versionCode = 80
++        versionName = "2.15.45"
  
-+// Lint tasks also need to depend on copyChangelog since they analyze generated assets
-+tasks.matching { it.name.contains("lint") || it.name.contains("Lint") }.configureEach {
-+    dependsOn("copyChangelog")
-+}
-+
- dependencies {
-     // Local modules
-     implementation(project(":parser-core"))
+         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+         
+@@ -147,7 +147,7 @@ ksp {
+ val generatedAssetsDir = layout.buildDirectory.dir("generated/assets/changelog")
+ 
+ tasks.register<Copy>("copyChangelog") {
+-    val versionCode = android.defaultConfig.versionCode
++    val versionCode = 80
+     val changelogDir = rootProject.file("fastlane/metadata/android/en-US/changelogs")
+     val changelogFile = file("$changelogDir/$versionCode.txt")
+     val defaultFile = file("$changelogDir/default.txt")

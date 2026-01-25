@@ -1,0 +1,8 @@
+What's New in v2.15.45
+
+• New Budget Widget: Track monthly budgets right from your home screen
+• Transaction Splits: Divide expenses across multiple categories
+• Tanzanian Support: M-Pesa, Selcom & Tigo mobile money now supported
+• Enhanced Parsers: Better detection for Federal Bank, ICICI, IDFC First, HDFC, SBI & Central Bank of India
+• Multi-currency: Emirates NBD & Liv Bank now handle USD, EUR & GBP transactions
+• UX improvements and bug fixes
