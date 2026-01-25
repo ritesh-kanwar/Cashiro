@@ -592,6 +592,9 @@ class SmsReaderWorker @AssistedInject constructor(
                 } catch (e: Exception) {
                     Log.e(TAG, "Error updating system prompt: ${e.message}")
                 }
+
+                // Update budget widget
+                com.ritesh.cashiro.widget.BudgetWidgetUpdateWorker.enqueueOneShot(applicationContext)
             }
             
             Result.success()
