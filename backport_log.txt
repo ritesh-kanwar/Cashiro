@@ -2560,3 +2560,38 @@ Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
+[backport-fixes-upstream 16d308dd] feat(parser): update FederalBankParser and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Jan 25 09:57:07 2026 +0530
+ 5 files changed, 118 insertions(+), 25 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 gradle/libs.versions.toml.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+===================================
+Applying 0042-fix-build-ensure-lint-tasks-depend-on-copyChangelog-.patch
+Applying: fix(build): ensure lint tasks depend on copyChangelog for accurate asset analysis
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix(build): ensure lint tasks depend on copyChangelog for accurate asset analysis
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:163
+error: app/build.gradle.kts: patch does not apply
+Checking patch app/build.gradle.kts...
+error: while searching for:
+    dependsOn("copyChangelog")
+}
+
+dependencies {
+    // Local modules
+    implementation(project(":parser-core"))
+
+error: patch failed: app/build.gradle.kts:163
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
