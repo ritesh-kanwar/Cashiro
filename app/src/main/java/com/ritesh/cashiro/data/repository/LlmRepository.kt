@@ -7,7 +7,7 @@ import com.ritesh.cashiro.data.database.entity.TransactionType
 import com.ritesh.cashiro.data.model.ChatContext
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import com.ritesh.cashiro.domain.service.LlmService
-import com.ritesh.cashiro.utils.CurrencyUtils
+import com.ritesh.cashiro.utils.CurrencyFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.first
@@ -215,34 +215,35 @@ class LlmRepository @Inject constructor(
         return contextBuilder.toString()
     }
     
-    private fun buildSystemPrompt(context: ChatContext): String {
+    private suspend fun buildSystemPrompt(context: ChatContext): String {
         val monthSummary = context.monthSummary
         val topCategories = context.topCategories
         val activeSubs = context.activeSubscriptions
         val stats = context.quickStats
-        
+        val currency = userPreferencesRepository.baseCurrency.first()
+
         val totalSubAmount = activeSubs.sumOf { it.amount.toDouble() }.toBigDecimal()
         val upcomingPayments = activeSubs.filter { it.nextPaymentDays <= 7 }
-        
+
         return """
         You are Cashiro AI, a friendly financial assistant helping users track expenses and manage money.
-        
+
         Current Financial Overview (${context.currentDate}):
-        - This month: ${CurrencyUtils.formatCurrency(monthSummary.totalExpense)} spent, ${CurrencyUtils.formatCurrency(monthSummary.totalIncome)} income
+        - This month: ${CurrencyFormatter.formatCurrency(monthSummary.totalExpense, currency)} spent, ${CurrencyFormatter.formatCurrency(monthSummary.totalIncome, currency)} income
         - ${monthSummary.transactionCount} transactions (Day ${monthSummary.currentDay}/${monthSummary.daysInMonth})
-        - Daily average: ${CurrencyUtils.formatCurrency(stats.avgDailySpending)}
-        
+        - Daily average: ${CurrencyFormatter.formatCurrency(stats.avgDailySpending, currency)}
+
         Top spending categories:
-        ${topCategories.joinToString("\n") { "- ${it.category}: ${CurrencyUtils.formatCurrency(it.amount)} (${it.percentage.toInt()}%)" }}
-        
-        Active subscriptions: ${activeSubs.size} services (${CurrencyUtils.formatCurrency(totalSubAmount)}/month)
+        ${topCategories.joinToString("\n") { "- ${it.category}: ${CurrencyFormatter.formatCurrency(it.amount, currency)} (${it.percentage.toInt()}%)" }}
+
+        Active subscriptions: ${activeSubs.size} services (${CurrencyFormatter.formatCurrency(totalSubAmount, currency)}/month)
         ${if (upcomingPayments.isNotEmpty()) "⚠️ ${upcomingPayments.size} payments due in next 7 days" else ""}
-        
+
         Recent Transactions (Last 14 days):
         ${context.recentTransactions.take(10).joinToString("\n") { transaction ->
             val dateStr = transaction.dateTime.format(java.time.format.DateTimeFormatter.ofPattern("MMM d, h:mm a"))
             val typeStr = if (transaction.transactionType == TransactionType.INCOME) "+" else "-"
-            "- $dateStr: ${transaction.merchantName} ${typeStr}${CurrencyUtils.formatCurrency(transaction.amount)} (${transaction.category})"
+            "- $dateStr: ${transaction.merchantName} ${typeStr}${CurrencyFormatter.formatCurrency(transaction.amount, currency)} (${transaction.category})"
         }}
         
         ${if (stats.mostFrequentMerchant != null) "Most visited: ${stats.mostFrequentMerchant} (${stats.mostFrequentMerchantCount} times)" else ""}
@@ -250,7 +251,7 @@ class LlmRepository @Inject constructor(
         Guidelines:
         - Be helpful and non-judgmental about spending
         - Provide actionable insights when asked
-        - Use ₹ symbol for amounts
+        - Use the appropriate currency symbol for amounts (match the currency shown in the data above)
         - Reference actual data when answering
         - Keep responses concise and relevant
         - Use plain text formatting only - no markdown, no special characters

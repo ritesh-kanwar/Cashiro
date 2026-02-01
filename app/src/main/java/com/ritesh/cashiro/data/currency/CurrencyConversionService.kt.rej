@@ -1,0 +1,36 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt b/app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt	(rejected hunks)
+@@ -179,17 +180,23 @@ class CurrencyConversionService @Inject constructor(
+                         }
+ 
+                         if (rate != null) {
+-                            val entity = ExchangeRateEntity(
+-                                fromCurrency = fromCurrency,
+-                                toCurrency = toCurrency,
+-                                rate = rate,
+-                                provider = response.provider,
+-                                updatedAt = lastUpdateTime,
+-                                updatedAtUnix = response.lastUpdateTimeUnix,
+-                                expiresAt = nextUpdateTime, // Use the API's next update time
+-                                expiresAtUnix = response.nextUpdateTimeUnix
+-                            )
+-                            exchangeRateDao.insertExchangeRate(entity)
++                            // Skip overwriting custom rates set by user
++                            val existing = exchangeRateDao.getExchangeRateIgnoringExpiry(fromCurrency, toCurrency)
++                            if (existing?.isCustomRate == true) {
++                                // Don't overwrite user's custom rate
++                            } else {
++                                val entity = ExchangeRateEntity(
++                                    fromCurrency = fromCurrency,
++                                    toCurrency = toCurrency,
++                                    rate = rate,
++                                    provider = response.provider,
++                                    updatedAt = lastUpdateTime,
++                                    updatedAtUnix = response.lastUpdateTimeUnix,
++                                    expiresAt = nextUpdateTime,
++                                    expiresAtUnix = response.nextUpdateTimeUnix
++                                )
++                                exchangeRateDao.insertExchangeRate(entity)
++                            }
+                         }
+                     }
+                 }

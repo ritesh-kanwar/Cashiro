@@ -2672,3 +2672,277 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBank
 Checking patch parser-core/src/test/kotlin/TestKotakBankParser.kt...
 error: parser-core/src/test/kotlin/TestKotakBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBankParser.kt cleanly.
+[backport-fixes-upstream 971ac430] feat(parser): add credit card SMS support to
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 1 13:02:51 2026 +0530
+ 3 files changed, 96 insertions(+), 21 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+===================================
+Applying 0046-feat-icons-add-new-bank-icons-and-color-mappings-for.patch
+Applying: feat(icons): add new bank icons and color mappings for various international banks
+Successfully applied via git am
+===================================
+Applying 0047-feat-database-introduce-unified-currency-mode-and-cu.patch
+Applying: feat(database): introduce unified currency mode and custom exchange rate features
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(database): introduce unified currency mode and custom exchange rate features
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/32.json' with conflicts.
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt:5
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt:179
+error: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:51
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRateDao.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/entity/ExchangeRateEntity.kt' cleanly.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt' with conflicts.
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt:7
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:319
+error: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt' with conflicts.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt:27
+error: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt' cleanly.
+Falling back to direct application...
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/32.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/32.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt...
+error: while searching for:
+                        }
+
+                        if (rate != null) {
+                            val entity = ExchangeRateEntity(
+                                fromCurrency = fromCurrency,
+                                toCurrency = toCurrency,
+                                rate = rate,
+                                provider = response.provider,
+                                updatedAt = lastUpdateTime,
+                                updatedAtUnix = response.lastUpdateTimeUnix,
+                                expiresAt = nextUpdateTime, // Use the API's next update time
+                                expiresAtUnix = response.nextUpdateTimeUnix
+                            )
+                            exchangeRateDao.insertExchangeRate(entity)
+                        }
+                    }
+                }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt:179
+Hunk #3 succeeded at 362 (offset -4 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+error: while searching for:
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class, CategoryBudgetLimitEntity::class],
+    version = 31,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:51
+error: while searching for:
+        AutoMigration(from = 27, to = 28, spec = Migration27To28::class),
+        AutoMigration(from = 28, to = 29),
+        AutoMigration(from = 29, to = 30),
+        AutoMigration(from = 30, to = 31)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:80
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRateDao.kt...
+Hunk #1 succeeded at 54 (offset 2 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/ExchangeRateEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+error: while searching for:
+
+        // Monthly Budget
+        val MONTHLY_BUDGET_LIMIT = stringPreferencesKey("monthly_budget_limit")
+    }
+
+    val userPreferences: Flow<UserPreferences> = context.dataStore.data
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:54
+error: while searching for:
+                hasShownScanTutorial = preferences[PreferencesKeys.HAS_SHOWN_SCAN_TUTORIAL] ?: false,
+                smsScanMonths = preferences[PreferencesKeys.SMS_SCAN_MONTHS] ?: 3, // Default to 3 months
+                smsScanAllTime = preferences[PreferencesKeys.SMS_SCAN_ALL_TIME] ?: false, // Default to false
+                baseCurrency = preferences[PreferencesKeys.BASE_CURRENCY] ?: "INR" // Default to INR
+            )
+        }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:66
+error: while searching for:
+            preferences[PreferencesKeys.BASE_CURRENCY] ?: "INR"
+        }
+
+    val isDeveloperModeEnabled: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[PreferencesKeys.DEVELOPER_MODE_ENABLED] ?: false
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:75
+error: while searching for:
+        }
+    }
+
+    // Monthly Budget
+    val monthlyBudgetLimit: Flow<java.math.BigDecimal?> = context.dataStore.data
+        .map { preferences ->
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:366
+error: while searching for:
+    val hasShownScanTutorial: Boolean = false,
+    val smsScanMonths: Int = 3, // Default to 3 months
+    val smsScanAllTime: Boolean = false, // Default to false
+    val baseCurrency: String = "INR" // Default to INR
+)
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:391
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt...
+Hunk #2 succeeded at 215 (offset -4 lines).
+Hunk #3 succeeded at 251 (offset -4 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt...
+error: while searching for:
+            currency
+        )
+
+    /**
+     * Gets a transaction with its splits synchronously.
+     */
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:319
+Checking patch app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt...
+error: while searching for:
+        return TransactionRule(
+            id = UUID.randomUUID().toString(),
+            name = "Small Payments to Food",
+            description = "Categorize small expense payments (under ₹200) as Food & Dining",
+            priority = 100,
+            conditions = listOf(
+                RuleCondition(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt:19
+error: while searching for:
+        return TransactionRule(
+            id = UUID.randomUUID().toString(),
+            name = "UPI Cashback",
+            description = "Identify small UPI receipts (under ₹10) from NPCI as cashback",
+            priority = 50,
+            conditions = listOf(
+                RuleCondition(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt:51
+Checking patch app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt...
+error: while searching for:
+        category: String,
+        autoRenewal: Boolean = true,
+        paymentReminder: Boolean = true,
+        notes: String? = null
+    ): Long {
+        Log.d("AddSubscriptionUseCase", "Creating subscription entity...")
+        
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt:20
+error: while searching for:
+            state = SubscriptionState.ACTIVE, // Always active for manually added subscriptions
+            bankName = "Manual Entry",
+            category = category,
+            smsBody = notes, // Store user notes in smsBody field
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt:31
+Checking patch app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt...
+error: while searching for:
+        notes: String? = null,
+        isRecurring: Boolean = false,
+        bankName: String? = null,
+        accountLast4: String? = null
+    ) {
+        // Generate a unique hash for manual transactions
+        val transactionHash = generateManualTransactionHash(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt:27
+error: while searching for:
+            balanceAfter = null,
+            transactionHash = transactionHash,
+            isRecurring = isRecurring,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt:51
+error: while searching for:
+                state = SubscriptionState.ACTIVE,
+                bankName = "Manual Entry",
+                category = category,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            )
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt:81
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt...
+error: while searching for:
+        return CURRENCY_SYMBOLS[currencyCode] ?: currencyCode
+    }
+
+    /**
+     * Gets the base currency for a bank using the BankParserFactory
+     * Returns INR as default for unknown banks
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:123
+Checking patch docs/prd-unified-currency.md...
+Applying patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRateDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/ExchangeRateEntity.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 5 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt with 1 reject...
+Rejected hunk #1.
+Applied patch docs/prd-unified-currency.md cleanly.
