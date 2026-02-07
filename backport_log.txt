@@ -2946,3 +2946,58 @@ Rejected hunk #3.
 Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt with 1 reject...
 Rejected hunk #1.
 Applied patch docs/prd-unified-currency.md cleanly.
+[backport-fixes-upstream 421e5da] feat(database): introduce unified currency mode and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Feb 2 00:29:04 2026 +0530
+ 16 files changed, 995 insertions(+), 15 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ create mode 100644 docs/prd-unified-currency.md
+===================================
+Applying 0048-feat-allow-for-changing-default-currency.patch
+Applying: feat: allow for changing default currency
+Using index info to reconstruct a base tree...
+M	app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt
+M	app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt
+Falling back to patching base and 3-way merge...
+Auto-merging app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt
+CONFLICT (content): Merge conflict in app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt
+Auto-merging app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: allow for changing default currency
+Conflict detected! Falling back to apply --reject
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt' with conflicts.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt' cleanly.
+U app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+error: while searching for:
+            }
+        }
+    }
+}
+
+data class UserPreferences(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:381
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt...
+error: while searching for:
+            }
+        }
+    }
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt:83
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt with 1 reject...
+Rejected hunk #1.
