@@ -3074,3 +3074,42 @@ Checking patch parser-core/src/test/kotlin/TestZemenBankParser.kt...
 error: parser-core/src/test/kotlin/TestZemenBankParser.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 75c3782c] feat: add support for Telebirr wallet, Zemen Bank,
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Sat Feb 7 13:14:11 2026 +0300
+ 11 files changed, 777 insertions(+), 47 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestDashenBankParser.kt
+ create mode 100644 parser-core/src/test/kotlin/TestTelebirrParser.kt
+ create mode 100644 parser-core/src/test/kotlin/TestZemenBankParser.kt
+===================================
+Applying 0050-chore-update-README.patch
+Applying: chore: update README
+error: sha1 information is lacking or useless (README.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore: update README
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:83
+error: README.md: patch does not apply
+Checking patch README.md...
+error: while searching for:
+- **Laxmi Sunrise Bank**, **Everest Bank**, **NMB Bank (Nabil Bank)**
+
+### 🇪🇹 Ethiopia (1 bank) - ETB ብር
+- **Commercial Bank of Ethiopia (CBE)**
+
+### 🇨🇴 Colombia (1 bank) - COP $
+- **Bancolombia**
+
+error: patch failed: README.md:83
+Applying patch README.md with 1 reject...
+Rejected hunk #1.
