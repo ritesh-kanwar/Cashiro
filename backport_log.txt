@@ -3001,3 +3001,76 @@ Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPrefere
 Rejected hunk #1.
 Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 088b97b9] feat: allow for changing default currency
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Sat Feb 7 13:09:02 2026 +0300
+ 12 files changed, 525 insertions(+), 220 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/domain/service/RuleTemplateService.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/domain/usecase/AddSubscriptionUseCase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/domain/usecase/AddTransactionUseCase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt.rej
+===================================
+Applying 0049-feat-add-support-for-Telebirr-wallet-Zemen-Bank-and-.patch
+Applying: feat: add support for Telebirr wallet, Zemen Bank, and Dashen Bank
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add support for Telebirr wallet, Zemen Bank, and Dashen Bank
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt' with conflicts.
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+        HuntingtonBankParser(),  // Huntington Bank (USA)
+        StandardCharteredBankParser(),  // Standard Chartered Bank (India)
+        EquitasBankParser()  // Equitas Small Finance Bank (India)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:73
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestDashenBankParser.kt...
+error: parser-core/src/test/kotlin/TestDashenBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestTelebirrParser.kt...
+error: parser-core/src/test/kotlin/TestTelebirrParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestZemenBankParser.kt...
+error: parser-core/src/test/kotlin/TestZemenBankParser.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.

@@ -83,6 +83,7 @@ object BankParserFactory {
         CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
         DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
         HuntingtonBankParser(),  // Huntington Bank (USA)
+<<<<<<< ours
         StandardCharteredBankParser(),  // Standard Chartered Bank (India and Pakistan)
         EquitasBankParser(),  // Equitas Small Finance Bank (India)
         TelebirrParser(),  // Telebirr (Ethiopia)
@@ -116,6 +117,13 @@ object BankParserFactory {
         STCBankParser(),  // STC Bank (Saudi Arabia)
         SabbBankParser(),  // SABB / Saudi Awwal Bank (Saudi Arabia)
         SparkasseRheinMaasParser()  // Sparkasse Rhein-Maas (Germany)
+=======
+        StandardCharteredBankParser(),  // Standard Chartered Bank (India)
+        EquitasBankParser(),  // Equitas Small Finance Bank (India)
+        TelebirrParser(),  // Telebirr (Ethiopia)
+        ZemenBankParser(),  // Zemen Bank (Ethiopia)
+        DashenBankParser()  // Dashen Bank (Ethiopia)
+>>>>>>> theirs
         // Add more bank parsers here as we implement them
     )
 
