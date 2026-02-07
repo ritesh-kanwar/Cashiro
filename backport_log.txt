@@ -3113,3 +3113,164 @@ error: while searching for:
 error: patch failed: README.md:83
 Applying patch README.md with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 160acece] chore: update README
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Sat Feb 7 13:26:56 2026 +0300
+ 3 files changed, 50 insertions(+), 13 deletions(-)
+ create mode 100644 README.md.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0051-feat-database-implement-budget-group-management-feat.patch
+Applying: feat(database): implement budget group management features
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(database): implement budget group management features
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/33.json' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:51
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:1
+error: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt:3
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt:47
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt: patch does not apply
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/export/CsvExporter.kt' cleanly.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt' with conflicts.
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/33.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/33.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+error: while searching for:
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class, CategoryBudgetLimitEntity::class],
+    version = 32,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:51
+error: while searching for:
+        AutoMigration(from = 28, to = 29),
+        AutoMigration(from = 29, to = 30),
+        AutoMigration(from = 30, to = 31),
+        AutoMigration(from = 31, to = 32)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:81
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt...
+error: while searching for:
+package com.ritesh.cashiro.data.database.converter
+
+import androidx.room.TypeConverter
+import com.ritesh.cashiro.data.database.entity.BudgetPeriodType
+import com.ritesh.cashiro.data.database.entity.SubscriptionState
+import com.ritesh.cashiro.data.database.entity.TransactionType
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:1
+error: while searching for:
+    fun toBudgetPeriodType(value: String): BudgetPeriodType {
+        return BudgetPeriodType.valueOf(value)
+    }
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt:93
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt...
+error: while searching for:
+import androidx.room.*
+import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
+import com.ritesh.cashiro.data.database.entity.BudgetEntity
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt:3
+error: while searching for:
+
+    @Query("DELETE FROM budgets")
+    suspend fun deleteAllBudgets()
+}
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt:93
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt...
+error: while searching for:
+    @ColumnInfo(name = "color", defaultValue = "#1565C0")
+    val color: String = "#1565C0",
+
+    @ColumnInfo(name = "created_at")
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt:47
+error: while searching for:
+    MONTHLY,
+    CUSTOM
+}
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt:59
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetWithCategories.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/export/CsvExporter.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+error: while searching for:
+        // Unified Currency Mode
+        val UNIFIED_CURRENCY_MODE = booleanPreferencesKey("unified_currency_mode")
+        val DISPLAY_CURRENCY = stringPreferencesKey("display_currency")
+    }
+
+    val userPreferences: Flow<UserPreferences> = context.dataStore.data
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:58
+Hunk #2 succeeded at 1095 (offset 695 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupModels.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+Hunk #1 succeeded at 1330 (offset 10 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt...
+Hunk #1 succeeded at 524 (offset 21 lines).
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryEntity.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetWithCategories.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/export/CsvExporter.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupModels.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt cleanly.

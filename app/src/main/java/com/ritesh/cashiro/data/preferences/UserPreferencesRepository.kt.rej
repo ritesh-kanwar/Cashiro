@@ -1,0 +1,11 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt b/app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt	(rejected hunks)
+@@ -58,6 +58,9 @@ class UserPreferencesRepository @Inject constructor(
+         // Unified Currency Mode
+         val UNIFIED_CURRENCY_MODE = booleanPreferencesKey("unified_currency_mode")
+         val DISPLAY_CURRENCY = stringPreferencesKey("display_currency")
++
++        // Budget Groups Migration
++        val HAS_MIGRATED_TO_BUDGET_GROUPS = booleanPreferencesKey("has_migrated_to_budget_groups")
+     }
+ 
+     val userPreferences: Flow<UserPreferences> = context.dataStore.data

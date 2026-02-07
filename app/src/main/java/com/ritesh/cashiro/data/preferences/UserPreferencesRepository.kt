@@ -1095,6 +1095,18 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
+    // Budget Groups Migration
+    val hasMigratedToBudgetGroups: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[PreferencesKeys.HAS_MIGRATED_TO_BUDGET_GROUPS] ?: false
+        }
+
+    suspend fun setHasMigratedToBudgetGroups(migrated: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.HAS_MIGRATED_TO_BUDGET_GROUPS] = migrated
+        }
+    }
+
     // Monthly Budget
     val monthlyBudgetLimit: Flow<java.math.BigDecimal?> = context.dataStore.data
         .map { preferences ->
