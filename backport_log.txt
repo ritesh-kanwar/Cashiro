@@ -3369,3 +3369,45 @@ Rejected hunk #1.
 Applying patch scripts/release.sh with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 1075ce9d] fix(build.gradle.kts): update versionCode retrieval
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 8 21:41:15 2026 +0530
+ 3 files changed, 104 insertions(+)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 scripts/release.sh.rej
+===================================
+Applying 0054-chore-release-bump-version-to-2.15.46-skip-ci.patch
+Applying: chore(release): bump version to 2.15.46 [skip ci]
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore(release): bump version to 2.15.46 [skip ci]
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:21
+error: app/build.gradle.kts: patch does not apply
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: does not exist in index
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 80
+        versionName = "2.15.45"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+
+error: patch failed: app/build.gradle.kts:21
+Checking patch fastlane/metadata/android/en-US/changelogs/81.txt...
+Checking patch fastlane/metadata/android/en-US/changelogs/default.txt...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/changelogs/81.txt cleanly.

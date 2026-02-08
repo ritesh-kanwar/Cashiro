@@ -1,0 +1,7 @@
+What's New in v2.15.46
+
+• Added support for Ethiopian banks: Telebirr, Zemen Bank, and Dashen Bank
+• New budget group management with category spending tracking and drag-to-reorder
+• Unified currency mode with custom exchange rates for multi-currency tracking
+• Improved Kotak Bank credit card SMS parsing
+• Enhanced navigation with category filters from home screen
