@@ -3274,3 +3274,30 @@ Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupMo
 Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt cleanly.
 Applied patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt cleanly.
 Applied patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt cleanly.
+[backport-fixes-upstream 18a9d7ea] feat(database): implement budget group management
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Feb 7 21:13:57 2026 +0530
+ 15 files changed, 760 insertions(+), 17 deletions(-)
+ delete mode 100644 README.md.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetWithCategories.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupModels.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt
+===================================
+Applying 0052-feat-budget-enhance-budget-group-management-with-cat.patch
+Applying: feat(budget): enhance budget group management with category spending tracking and reordering functionality
+error: corrupt patch at .git/rebase-apply/patch:42
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(budget): enhance budget group management with category spending tracking and reordering functionality
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0052-feat-budget-enhance-budget-group-management-with-cat.patch:53
+error: corrupt patch at ../filtered_patches/0052-feat-budget-enhance-budget-group-management-with-cat.patch:53
