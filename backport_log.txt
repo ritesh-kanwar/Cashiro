@@ -3301,3 +3301,71 @@ Patch failed at 0001 feat(budget): enhance budget group management with category
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0052-feat-budget-enhance-budget-group-management-with-cat.patch:53
 error: corrupt patch at ../filtered_patches/0052-feat-budget-enhance-budget-group-management-with-cat.patch:53
+[backport-fixes-upstream 9341a3c0] feat(budget): enhance budget group management with
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 8 14:07:46 2026 +0530
+ 6 files changed, 27 insertions(+), 126 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/converter/Converters.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetEntity.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+===================================
+Applying 0053-fix-build.gradle.kts-update-versionCode-retrieval-in.patch
+Applying: fix(build.gradle.kts): update versionCode retrieval in copyChangelog task and release script
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix(build.gradle.kts): update versionCode retrieval in copyChangelog task and release script
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:147
+error: app/build.gradle.kts: patch does not apply
+Applied patch to 'scripts/release.sh' with conflicts.
+Checking patch app/build.gradle.kts...
+error: while searching for:
+val generatedAssetsDir = layout.buildDirectory.dir("generated/assets/changelog")
+
+tasks.register<Copy>("copyChangelog") {
+    val versionCode = 80
+    val changelogDir = rootProject.file("fastlane/metadata/android/en-US/changelogs")
+    val changelogFile = file("$changelogDir/$versionCode.txt")
+    val defaultFile = file("$changelogDir/default.txt")
+
+error: patch failed: app/build.gradle.kts:147
+Checking patch scripts/release.sh...
+error: while searching for:
+
+# 1. Get current version
+CURRENT_VERSION=$(grep "versionName = " app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+CURRENT_CODE=$(grep "versionCode = " app/build.gradle.kts | sed 's/[^0-9]*//g')
+echo "Current version: $CURRENT_VERSION (code: $CURRENT_CODE)"
+
+# 2. Calculate next version
+
+error: patch failed: scripts/release.sh:47
+error: while searching for:
+
+# 5. Update version (versionName and versionCode)
+# Use sed -i '' for macOS, sed -i for Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s/versionName = \".*\"/versionName = \"$NEXT_VERSION\"/" app/build.gradle.kts
+    sed -i '' "s/versionCode = .*/versionCode = $NEXT_CODE/" app/build.gradle.kts
+else
+    sed -i "s/versionName = \".*\"/versionName = \"$NEXT_VERSION\"/" app/build.gradle.kts
+    sed -i "s/versionCode = .*/versionCode = $NEXT_CODE/" app/build.gradle.kts
+fi
+CHANGES_MADE=true  # Mark that we've made changes
+echo -e "${GREEN}✅ Version updated: $NEXT_VERSION (code: $NEXT_CODE)${NC}"
+
+error: patch failed: scripts/release.sh:175
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applying patch scripts/release.sh with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
