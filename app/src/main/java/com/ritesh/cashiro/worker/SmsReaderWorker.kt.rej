@@ -1,0 +1,10 @@
+diff a/app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt	(rejected hunks)
+@@ -333,6 +333,8 @@ class SmsReaderWorker @AssistedInject constructor(
+                                 savedCount++
+                                 Log.d(TAG, "Saved new transaction with ID: $rowId${if (finalEntity.isRecurring) " (Recurring)" else ""}")
+ 
++                                com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(applicationContext)
++
+                                 // Save rule applications if any rules were applied
+                                 if (ruleApplications.isNotEmpty()) {
+                                     ruleRepository.saveRuleApplications(ruleApplications)

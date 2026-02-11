@@ -3435,3 +3435,57 @@ Patch failed at 0001 feat: Add recent transactions widget with add shortcut and 
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0056-feat-Add-recent-transactions-widget-with-add-shortcu.patch:126
 error: corrupt patch at ../filtered_patches/0056-feat-Add-recent-transactions-widget-with-add-shortcu.patch:126
+[backport-fixes-upstream 2167ce5a] feat: Add recent transactions widget with add
+ Author: Azwar <azwarhabib66@gmail.com>
+ Date: Thu Feb 12 01:17:51 2026 +0500
+ 2 files changed, 24 insertions(+), 12 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+===================================
+Applying 0057-feat-Refresh-recent-widget-on-transaction-and-curren.patch
+Applying: feat: Refresh recent widget on transaction and currency changes
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: Refresh recent widget on transaction and currency changes
+Conflict detected! Falling back to apply --reject
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/manager/SmsTransactionProcessor.kt:1
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:1100
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt:333
+error: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/manager/SmsTransactionProcessor.kt...
+Hunk #4 succeeded at 184 (offset 4 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+                "Saved new transaction with ID: $rowId${if (finalEntity.isRecurring) " (Recurring)" else ""}"
+            )
+
+            // Save rule applications if any rules were applied
+            if (ruleApplications.isNotEmpty()) {
+                ruleRepository.saveRuleApplications(ruleApplications)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:1100
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt...
+error: while searching for:
+                                savedCount++
+                                Log.d(TAG, "Saved new transaction with ID: $rowId${if (finalEntity.isRecurring) " (Recurring)" else ""}")
+
+                                // Save rule applications if any rules were applied
+                                if (ruleApplications.isNotEmpty()) {
+                                    ruleRepository.saveRuleApplications(ruleApplications)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt:333
+Applied patch app/src/main/java/com/ritesh/cashiro/data/manager/SmsTransactionProcessor.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt with 1 reject...
+Rejected hunk #1.

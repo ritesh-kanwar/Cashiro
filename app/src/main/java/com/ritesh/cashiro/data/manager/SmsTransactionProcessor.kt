@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.data.manager
 
+import android.content.Context
 import android.util.Log
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.bank.BankParserFactory
@@ -20,6 +21,7 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,6 +31,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class SmsTransactionProcessor @Inject constructor(
+    @ApplicationContext private val appContext: Context,
     private val transactionRepository: TransactionRepository,
     private val accountBalanceRepository: AccountBalanceRepository,
     private val cardRepository: CardRepository,
@@ -180,6 +183,9 @@ class SmsTransactionProcessor @Inject constructor(
 
                 // Process balance updates
                 processBalanceUpdate(parsedTransaction, finalEntity, rowId)
+
+                // Trigger widget refresh for recent transactions
+                com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(appContext)
 
                 return ProcessingResult(true, transactionId = rowId)
             } else {
