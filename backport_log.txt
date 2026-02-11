@@ -3411,3 +3411,27 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/81.txt cleanly.
+[backport-fixes-upstream 342e2ed9] chore(release): bump version to 2.15.46 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 8 21:48:05 2026 +0530
+ 4 files changed, 59 insertions(+), 34 deletions(-)
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/81.txt
+ delete mode 100644 scripts/release.sh.rej
+===================================
+Applying 0055-fix-refactor-transactions-and-default-currency-setti.patch
+Applying: fix: refactor transactions and default currency settings after merge
+Successfully applied via git am
+===================================
+Applying 0056-feat-Add-recent-transactions-widget-with-add-shortcu.patch
+Applying: feat: Add recent transactions widget with add shortcut and UI
+error: corrupt patch at .git/rebase-apply/patch:120
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: Add recent transactions widget with add shortcut and UI
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0056-feat-Add-recent-transactions-widget-with-add-shortcu.patch:126
+error: corrupt patch at ../filtered_patches/0056-feat-Add-recent-transactions-widget-with-add-shortcu.patch:126
