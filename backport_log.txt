@@ -3489,3 +3489,78 @@ Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWor
 Rejected hunk #1.
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 9342b272] feat: Refresh recent widget on transaction and
+ Author: Azwar <azwarhabib66@gmail.com>
+ Date: Thu Feb 12 01:18:04 2026 +0500
+ 4 files changed, 80 insertions(+)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt.rej
+===================================
+Applying 0059-feat-parser-add-Pakistani-bank-support-Faysal-Bank-S.patch
+Applying: feat(parser): add Pakistani bank support (Faysal Bank + Standard Chartered Pakistan)
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): add Pakistani bank support (Faysal Bank + Standard Chartered Pakistan)
+Conflict detected! Falling back to apply --reject
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FaysalBankParser.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt' cleanly.
+error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: does not exist in index
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/FaysalBankParserTest.kt' cleanly.
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt...
+error: while searching for:
+     */
+    private val CURRENCY_SYMBOLS = mapOf(
+        "INR" to "₹",
+        "USD" to "$",
+        "EUR" to "€",
+        "GBP" to "£",
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:18
+Hunk #2 succeeded at 30 (offset -20 lines).
+error: while searching for:
+     * Formats a BigDecimal amount as currency with the specified currency code
+     */
+    fun formatCurrency(amount: BigDecimal, currencyCode: String = "INR"): String {
+        return try {
+            val locale = CURRENCY_LOCALES[currencyCode] ?: INDIAN_LOCALE
+            val formatter = NumberFormat.getCurrencyInstance(locale)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:61
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
+        DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+        HuntingtonBankParser(),  // Huntington Bank (USA)
+        StandardCharteredBankParser(),  // Standard Chartered Bank (India)
+        EquitasBankParser(),  // Equitas Small Finance Bank (India)
+        TelebirrParser(),  // Telebirr (Ethiopia)
+        ZemenBankParser(),  // Zemen Bank (Ethiopia)
+        DashenBankParser()  // Dashen Bank (Ethiopia)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:72
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FaysalBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FaysalBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt...
+error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/FaysalBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/FaysalBankParserTest.kt: already exists in working directory
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt with 2 rejects...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Rejected hunk #3.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt cleanly.

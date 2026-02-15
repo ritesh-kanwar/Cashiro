@@ -30,6 +30,7 @@ object CurrencyFormatter {
         "AUD" to Locale.Builder().setLanguage("en").setRegion("AU").build(),
         "JPY" to Locale.JAPAN,
         "CNY" to Locale.CHINA,
+        "PKR" to Locale.Builder().setLanguage("en").setRegion("PK").build(),
         "NPR" to Locale.Builder().setLanguage("ne").setRegion("NP").build(),
         "ETB" to Locale.Builder().setLanguage("am").setRegion("ET").build(),
         "THB" to Locale.Builder().setLanguage("th").setRegion("TH").build(),

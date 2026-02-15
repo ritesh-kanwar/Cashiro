@@ -1,0 +1,16 @@
+diff a/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt b/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt	(rejected hunks)
+@@ -72,11 +72,12 @@ object BankParserFactory {
+         CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
+         DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+         HuntingtonBankParser(),  // Huntington Bank (USA)
+-        StandardCharteredBankParser(),  // Standard Chartered Bank (India)
++        StandardCharteredBankParser(),  // Standard Chartered Bank (India and Pakistan)
+         EquitasBankParser(),  // Equitas Small Finance Bank (India)
+         TelebirrParser(),  // Telebirr (Ethiopia)
+         ZemenBankParser(),  // Zemen Bank (Ethiopia)
+-        DashenBankParser()  // Dashen Bank (Ethiopia)
++        DashenBankParser(),  // Dashen Bank (Ethiopia)
++        FaysalBankParser()  // Faysal Bank (Pakistan)
+         // Add more bank parsers here as we implement them
+     )
+ 
