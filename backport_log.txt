@@ -3564,3 +3564,99 @@ Rejected hunk #3.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt cleanly.
+[backport-fixes-upstream fb98c4c6] feat(parser): add Pakistani bank support (Faysal Bank
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 15 10:55:11 2026 +0530
+ 7 files changed, 318 insertions(+), 41 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0060-feat-parser-add-Iranian-bank-support-Melli-Bank-Pars.patch
+Applying: feat(parser): add Iranian bank support (Melli Bank + Parsian Bank)
+error: sha1 information is lacking or useless (README.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): add Iranian bank support (Melli Bank + Parsian Bank)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:52
+error: README.md: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIranianBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MelliBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ParsianBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/MelliBankParserTest.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ParsianBankParserTest.kt' cleanly.
+Checking patch README.md...
+error: while searching for:
+
+## Supported Banks & Countries
+
+Supporting **47+ banks** across **10 countries** with **multi-currency** capabilities:
+
+### 🇮🇳 India (35 banks) - INR ₹
+- **HDFC Bank**, **State Bank of India (SBI)**, **ICICI Bank**
+
+error: patch failed: README.md:52
+error: while searching for:
+### 🇨🇴 Colombia (1 bank) - COP $
+- **Bancolombia**
+
+### 🇰🇪 Kenya (1 service) - KES Ksh
+- **M-PESA** - Mobile money service
+
+
+error: patch failed: README.md:89
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt...
+error: while searching for:
+        "AUD" to "A$",
+        "JPY" to "¥",
+        "CNY" to "¥",
+        "NPR" to "₨",
+        "ETB" to "ብር",
+        "THB" to "฿",
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:28
+Hunk #2 succeeded at 31 (offset -21 lines).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        TelebirrParser(),  // Telebirr (Ethiopia)
+        ZemenBankParser(),  // Zemen Bank (Ethiopia)
+        DashenBankParser(),  // Dashen Bank (Ethiopia)
+        FaysalBankParser()  // Faysal Bank (Pakistan)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:77
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIranianBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIranianBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MelliBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MelliBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ParsianBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ParsianBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/MelliBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/MelliBankParserTest.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ParsianBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ParsianBankParserTest.kt: already exists in working directory
+Applying patch README.md with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.

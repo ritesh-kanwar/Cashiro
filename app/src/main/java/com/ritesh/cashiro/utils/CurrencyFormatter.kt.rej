@@ -1,19 +1,9 @@
 diff a/app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt b/app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt	(rejected hunks)
-@@ -18,6 +18,7 @@ object CurrencyFormatter {
-      */
-     private val CURRENCY_SYMBOLS = mapOf(
-         "INR" to "₹",
-+        "PKR" to "Rs",
-         "USD" to "$",
-         "EUR" to "€",
-         "GBP" to "£",
-@@ -61,6 +63,9 @@ object CurrencyFormatter {
-      * Formats a BigDecimal amount as currency with the specified currency code
-      */
-     fun formatCurrency(amount: BigDecimal, currencyCode: String = "INR"): String {
-+        if (currencyCode == "PKR") {
-+            return "${CURRENCY_SYMBOLS["PKR"]}${formatAmount(amount)}"
-+        }
-         return try {
-             val locale = CURRENCY_LOCALES[currencyCode] ?: INDIAN_LOCALE
-             val formatter = NumberFormat.getCurrencyInstance(locale)
+@@ -28,6 +28,7 @@ object CurrencyFormatter {
+         "AUD" to "A$",
+         "JPY" to "¥",
+         "CNY" to "¥",
++        "IRR" to "﷼",
+         "NPR" to "₨",
+         "ETB" to "ብር",
+         "THB" to "฿",
