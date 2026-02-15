@@ -3660,3 +3660,31 @@ Rejected hunk #1.
 Hunk #2 applied cleanly.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 4210fd26] feat(parser): add Iranian bank support (Melli Bank +
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 15 11:07:14 2026 +0530
+ 5 files changed, 131 insertions(+), 28 deletions(-)
+ create mode 100644 README.md.rej
+===================================
+Applying 0061-fix-parser-handle-SBI-Card-Unicode-Math-Sans-Serif-S.patch
+Applying: fix(parser): handle SBI Card Unicode Math Sans-Serif SMS (#171)
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix(parser): handle SBI Card Unicode Math Sans-Serif SMS (#171)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestSBIParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt...
+Hunk #3 succeeded at 37 (offset 2 lines).
+Hunk #4 succeeded at 673 (offset 109 lines).
+Hunk #5 succeeded at 696 (offset 109 lines).
+Hunk #6 succeeded at 711 (offset 115 lines).
+Checking patch parser-core/src/test/kotlin/TestSBIParser.kt...
+error: parser-core/src/test/kotlin/TestSBIParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt cleanly.

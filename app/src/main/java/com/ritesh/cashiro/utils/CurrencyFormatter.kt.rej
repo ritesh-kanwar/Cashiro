@@ -1,9 +1,0 @@
-diff a/app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt b/app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt	(rejected hunks)
-@@ -28,6 +28,7 @@ object CurrencyFormatter {
-         "AUD" to "A$",
-         "JPY" to "¥",
-         "CNY" to "¥",
-+        "IRR" to "﷼",
-         "NPR" to "₨",
-         "ETB" to "ብር",
-         "THB" to "฿",
