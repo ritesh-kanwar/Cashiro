@@ -3688,3 +3688,115 @@ Hunk #6 succeeded at 711 (offset 115 lines).
 Checking patch parser-core/src/test/kotlin/TestSBIParser.kt...
 error: parser-core/src/test/kotlin/TestSBIParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt cleanly.
+[backport-fixes-upstream 317b7289] fix(parser): handle SBI Card Unicode Math Sans-Serif
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 15 11:34:36 2026 +0530
+ 5 files changed, 89 insertions(+), 61 deletions(-)
+ delete mode 100644 README.md.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0062-feat-parser-add-Thai-bank-support-11-banks.patch
+Applying: feat(parser): add Thai bank support (11 banks)
+error: sha1 information is lacking or useless (README.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(parser): add Thai bank support (11 banks)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:52
+error: README.md: patch does not apply
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BAACBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BangkokBankParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseThailandBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CIMBThaiParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GSBBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KTCCreditCardParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KasikornBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KrungThaiBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KrungsriBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiamCommercialBankParser.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TTBBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UOBThailandParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ThailandBankParsersTest.kt' with conflicts.
+Checking patch README.md...
+error: while searching for:
+
+## Supported Banks & Countries
+
+Supporting **49+ banks** across **11 countries** with **multi-currency** capabilities:
+
+### 🇮🇳 India (35 banks) - INR ₹
+- **HDFC Bank**, **State Bank of India (SBI)**, **ICICI Bank**
+
+error: patch failed: README.md:52
+error: while searching for:
+### 🇮🇷 Iran (2 banks) - IRR ﷼
+- **Melli Bank (بانک ملی)**, **Parsian Bank (بانک پارسیان)** - Persian SMS support
+
+### 🇰🇪 Kenya (1 service) - KES Ksh
+- **M-PESA** - Mobile money service
+
+
+error: patch failed: README.md:92
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BAACBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BAACBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BangkokBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BangkokBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        DashenBankParser(),  // Dashen Bank (Ethiopia)
+        FaysalBankParser(),  // Faysal Bank (Pakistan)
+        MelliBankParser(),  // Melli Bank (Iran)
+        ParsianBankParser()  // Parsian Bank (Iran)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:79
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseThailandBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseThailandBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CIMBThaiParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CIMBThaiParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GSBBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GSBBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KTCCreditCardParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KTCCreditCardParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KasikornBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KasikornBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KrungThaiBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KrungThaiBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KrungsriBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KrungsriBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiamCommercialBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiamCommercialBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TTBBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TTBBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UOBThailandParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UOBThailandParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ThailandBankParsersTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ThailandBankParsersTest.kt: already exists in working directory
+Applying patch README.md with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
