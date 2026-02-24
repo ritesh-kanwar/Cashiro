@@ -3800,3 +3800,27 @@ Rejected hunk #1.
 Rejected hunk #2.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 86f3c708] feat(parser): add Thai bank support (11 banks)
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Feb 15 12:42:53 2026 +0530
+ 3 files changed, 156 insertions(+)
+ create mode 100644 README.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0064-refactor-enhance-state-management-in-Transactions-an.patch
+Applying: refactor: enhance state management in Transactions and Analytics screens
+Using index info to reconstruct a base tree...
+A	cashiro-web/Dockerfile
+Falling back to patching base and 3-way merge...
+CONFLICT (modify/delete): cashiro-web/Dockerfile deleted in HEAD and modified in refactor: enhance state management in Transactions and Analytics screens.  Version refactor: enhance state management in Transactions and Analytics screens of cashiro-web/Dockerfile left in tree.
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 refactor: enhance state management in Transactions and Analytics screens
+Conflict detected! Falling back to apply --reject
+error: cashiro-web/Dockerfile: does not exist in index
+Checking patch cashiro-web/Dockerfile...
+error: cashiro-web/Dockerfile: No such file or directory
