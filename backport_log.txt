@@ -3824,3 +3824,23 @@ Conflict detected! Falling back to apply --reject
 error: cashiro-web/Dockerfile: does not exist in index
 Checking patch cashiro-web/Dockerfile...
 error: cashiro-web/Dockerfile: No such file or directory
+[backport-fixes-upstream cb8512b8] refactor: enhance state management in Transactions
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Tue Feb 24 12:58:26 2026 +0530
+ 3 files changed, 24 insertions(+), 44 deletions(-)
+ delete mode 100644 README.md.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0065-feat-budget-track-all-expenses-when-no-categories-se.patch
+Applying: feat(budget): track all expenses when no categories selected
+error: corrupt patch at .git/rebase-apply/patch:136
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(budget): track all expenses when no categories selected
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0065-feat-budget-track-all-expenses-when-no-categories-se.patch:152
+error: corrupt patch at ../filtered_patches/0065-feat-budget-track-all-expenses-when-no-categories-se.patch:152
