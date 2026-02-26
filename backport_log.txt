@@ -3844,3 +3844,31 @@ Patch failed at 0001 feat(budget): track all expenses when no categories selecte
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0065-feat-budget-track-all-expenses-when-no-categories-se.patch:152
 error: corrupt patch at ../filtered_patches/0065-feat-budget-track-all-expenses-when-no-categories-se.patch:152
+[backport-fixes-upstream 3c86e4ff] feat(budget): track all expenses when no categories
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Tue Feb 24 16:41:45 2026 +0530
+ 1 file changed, 20 insertions(+)
+===================================
+Applying 0066-fix-parser-handle-NEFT-transfers-and-MF-redemptions-.patch
+Applying: fix(parser): handle NEFT transfers and MF redemptions correctly
+Successfully applied via git am
+===================================
+Applying 0067-Polish-BudgetGroupEditScreen-with-modern-form-design.patch
+Applying: Polish BudgetGroupEditScreen with modern form design
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt
+CONFLICT (add/add): Merge conflict in app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Polish BudgetGroupEditScreen with modern form design
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt' with conflicts.
+U app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt: already exists in working directory
