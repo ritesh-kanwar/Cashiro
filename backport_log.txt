@@ -3872,3 +3872,82 @@ Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeSty
 U app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt
 Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt...
 error: app/src/main/java/com/ritesh/cashiro/data/preferences/ThemeStyle.kt: already exists in working directory
+[backport-fixes-upstream 6fe7f9c2] Polish BudgetGroupEditScreen with modern form design
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Feb 26 14:46:38 2026 +0530
+ 2 files changed, 33 insertions(+)
+===================================
+Applying 0068-Fix-analytics-charts-text-colors-and-avatar-icon.patch
+Applying: Fix analytics charts, text colors, and avatar icon
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Fix analytics charts, text colors, and avatar icon
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:257
+error: app/build.gradle.kts: patch does not apply
+Applied patch to 'gradle/libs.versions.toml' with conflicts.
+Checking patch app/build.gradle.kts...
+error: while searching for:
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    
+    // Markdown support
+    implementation(libs.markdown)
+    
+
+error: patch failed: app/build.gradle.kts:257
+Checking patch gradle/libs.versions.toml...
+error: while searching for:
+lifecycleRuntimeCompose = "2.9.4"
+lifecycleRuntimeKtx = "2.9.2"
+activityCompose = "1.10.1"
+composeBom = "2025.07.00"
+lifecycleViewmodelCompose = "2.9.4"
+markdown = "0.7.3"
+navVersion = "2.9.3"
+
+error: patch failed: gradle/libs.versions.toml:23
+error: while searching for:
+tasksGenai = "0.10.29"
+visionInternalVkp = "18.2.3"
+workVersion = "2.10.5"
+
+[libraries]
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+
+error: patch failed: gradle/libs.versions.toml:34
+error: while searching for:
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorVersion" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
+
+error: patch failed: gradle/libs.versions.toml:73
+error: while searching for:
+tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "tasksGenai" }
+vision-internal-vkp = { group = "com.google.mlkit", name = "vision-internal-vkp", version.ref = "visionInternalVkp" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+error: patch failed: gradle/libs.versions.toml:86
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applying patch gradle/libs.versions.toml with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
