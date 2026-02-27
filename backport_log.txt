@@ -3951,3 +3951,352 @@ Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
 Rejected hunk #4.
+[backport-fixes-upstream 1d83f136] Fix analytics charts, text colors, and avatar icon
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Feb 26 17:08:06 2026 +0530
+ 3 files changed, 139 insertions(+)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 gradle/libs.versions.toml.rej
+===================================
+Applying 0070-feat-UI-overhaul-with-new-design-system-components-a.patch
+Applying: feat: UI overhaul with new design system, components, and dependency upgrades
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: UI overhaul with new design system, components, and dependency upgrades
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:6
+error: app/build.gradle.kts: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:18
+error: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt: patch does not apply
+Performing three-way merge...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/AccentColor.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/preferences/AppFont.kt' cleanly.
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:61
+error: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt' with conflicts.
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_black.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_black_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_bold.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_bold_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_extrabold.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_extrabold_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_extralight.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_extralight_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_light.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_light_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_medium.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_medium_italic.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_regular.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_semibold.ttf' cleanly.
+Performing three-way merge...
+Applied patch to 'app/src/main/res/font/sn_pro_semibold_italic.ttf' cleanly.
+Applied patch to 'build.gradle.kts' cleanly.
+Applied patch to 'gradle/libs.versions.toml' with conflicts.
+error: cashiro-web/build.gradle.kts: does not exist in index
+error: cashiro-web/server/build.gradle.kts: does not exist in index
+Checking patch app/build.gradle.kts...
+error: while searching for:
+    alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
+}
+
+android {
+
+error: patch failed: app/build.gradle.kts:6
+error: while searching for:
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    buildFeatures {
+        compose = true
+    }
+}
+
+// Configure Room schema export
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+
+error: patch failed: app/build.gradle.kts:128
+Checking patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt...
+error: while searching for:
+import androidx.navigation.compose.rememberNavController
+import com.ritesh.cashiro.navigation.AppLock
+import com.ritesh.cashiro.navigation.Home
+import com.ritesh.cashiro.navigation.Permission
+import com.ritesh.cashiro.navigation.CashiroNavHost
+import com.ritesh.cashiro.ui.theme.CashiroTheme
+import com.ritesh.cashiro.ui.viewmodel.AppLockViewModel
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:18
+error: while searching for:
+        }
+    }
+
+    // Determine initial destination based on app lock and permissions
+    val startDestination = remember {
+        val hasSmsPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_SMS
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // Note: We can't check app lock or hasSkippedPermission here because they're async from DataStore
+        // App lock will be checked after initial load via LaunchedEffect
+        if (hasSmsPermission) Home else Permission
+    }
+
+    // Observe lock state changes and navigate to lock screen if needed
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:57
+error: while searching for:
+
+    CashiroTheme(
+        darkTheme = darkTheme,
+        dynamicColor = themeUiState.isDynamicColorEnabled
+    ) {
+        CashiroNavHost(
+            navController = navController,
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:110
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/AccentColor.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/preferences/AccentColor.kt: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/AppFont.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/preferences/AppFont.kt: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/CoverStyle.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/NavBarStyle.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+Hunk #1 succeeded at 754 (offset 729 lines).
+error: while searching for:
+
+        // Budget Groups Migration
+        val HAS_MIGRATED_TO_BUDGET_GROUPS = booleanPreferencesKey("has_migrated_to_budget_groups")
+    }
+
+    val userPreferences: Flow<UserPreferences> = context.dataStore.data
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:61
+error: while searching for:
+            UserPreferences(
+                isDarkThemeEnabled = preferences[PreferencesKeys.DARK_THEME_ENABLED],
+                isDynamicColorEnabled = preferences[PreferencesKeys.DYNAMIC_COLOR_ENABLED] ?: false,
+                hasSkippedSmsPermission = preferences[PreferencesKeys.HAS_SKIPPED_SMS_PERMISSION] ?: false,
+                isDeveloperModeEnabled = preferences[PreferencesKeys.DEVELOPER_MODE_ENABLED] ?: false,
+                hasShownScanTutorial = preferences[PreferencesKeys.HAS_SHOWN_SCAN_TUTORIAL] ?: false,
+                smsScanMonths = preferences[PreferencesKeys.SMS_SCAN_MONTHS] ?: 3, // Default to 3 months
+                smsScanAllTime = preferences[PreferencesKeys.SMS_SCAN_ALL_TIME] ?: false, // Default to false
+                baseCurrency = preferences[PreferencesKeys.BASE_CURRENCY] ?: "INR", // Default to INR
+                unifiedCurrencyMode = preferences[PreferencesKeys.UNIFIED_CURRENCY_MODE] ?: false,
+                displayCurrency = preferences[PreferencesKeys.DISPLAY_CURRENCY]
+                    ?: preferences[PreferencesKeys.BASE_CURRENCY] ?: "INR"
+            )
+        }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:68
+Hunk #4 succeeded at 828 (offset 669 lines).
+error: while searching for:
+            preferences[PreferencesKeys.BASE_CURRENCY] = currency
+        }
+    }
+}
+
+data class UserPreferences(
+    val isDarkThemeEnabled: Boolean? = null, // null means follow system
+    val isDynamicColorEnabled: Boolean = false, // Default to custom brand colors
+    val hasSkippedSmsPermission: Boolean = false,
+    val isDeveloperModeEnabled: Boolean = false,
+    val hasShownScanTutorial: Boolean = false,
+    val smsScanMonths: Int = 3, // Default to 3 months
+    val smsScanAllTime: Boolean = false, // Default to false
+    val baseCurrency: String = "INR", // Default to INR
+    val unifiedCurrencyMode: Boolean = false,
+    val displayCurrency: String = "INR"
+)
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:433
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+Hunk #1 succeeded at 315 (offset -32 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt...
+error: while searching for:
+     */
+    fun getSupportedCurrencies(): List<String> = CURRENCY_SYMBOLS.keys.toList()
+
+    /**
+     * Gets the base currency for a bank using the BankParserFactory
+     * Returns INR as default for unknown banks
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:135
+Checking patch app/src/main/res/drawable-nodpi/avatar_1.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_10.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_2.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_3.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_4.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_5.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_6.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_7.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_8.png...
+Checking patch app/src/main/res/drawable-nodpi/avatar_9.png...
+Checking patch app/src/main/res/font/sn_pro_black.ttf...
+error: app/src/main/res/font/sn_pro_black.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_black_italic.ttf...
+error: app/src/main/res/font/sn_pro_black_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_bold.ttf...
+error: app/src/main/res/font/sn_pro_bold.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_bold_italic.ttf...
+error: app/src/main/res/font/sn_pro_bold_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_extrabold.ttf...
+error: app/src/main/res/font/sn_pro_extrabold.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_extrabold_italic.ttf...
+error: app/src/main/res/font/sn_pro_extrabold_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_extralight.ttf...
+error: app/src/main/res/font/sn_pro_extralight.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_extralight_italic.ttf...
+error: app/src/main/res/font/sn_pro_extralight_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_italic.ttf...
+error: app/src/main/res/font/sn_pro_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_light.ttf...
+error: app/src/main/res/font/sn_pro_light.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_light_italic.ttf...
+error: app/src/main/res/font/sn_pro_light_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_medium.ttf...
+error: app/src/main/res/font/sn_pro_medium.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_medium_italic.ttf...
+error: app/src/main/res/font/sn_pro_medium_italic.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_regular.ttf...
+error: app/src/main/res/font/sn_pro_regular.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_semibold.ttf...
+error: app/src/main/res/font/sn_pro_semibold.ttf: already exists in working directory
+Checking patch app/src/main/res/font/sn_pro_semibold_italic.ttf...
+error: app/src/main/res/font/sn_pro_semibold_italic.ttf: already exists in working directory
+Checking patch build.gradle.kts...
+error: while searching for:
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    id("com.google.dagger.hilt.android") version "2.57" apply false
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29" apply false
+}
+error: patch failed: build.gradle.kts:3
+Checking patch gradle/libs.versions.toml...
+error: while searching for:
+appUpdate = "2.1.0"
+appUpdateKtx = "2.1.0"
+biometric = "1.1.0"
+colorpickerCompose = "1.1.2"
+coreSplashscreen = "1.2.0-rc01"
+datastorePreferences = "1.1.7"
+glance = "1.1.1"
+gson = "2.13.2"
+hiltAndroid = "2.57.2"
+hiltAndroidCompiler = "2.57.2"
+hiltCompiler = "1.3.0"
+hiltNavigationCompose = "1.3.0"
+hiltWork = "1.3.0"
+kotlin = "2.1.0"
+coreKtx = "1.16.0"
+junit = "4.13.2"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+kotlinxSerializationJson = "1.9.0"
+ktorVersion = "2.3.12"
+lifecycleRuntimeCompose = "2.9.4"
+lifecycleRuntimeKtx = "2.9.2"
+activityCompose = "1.10.1"
+composeBom = "2026.01.00"
+lifecycleViewmodelCompose = "2.9.4"
+markdown = "0.7.3"
+navVersion = "2.9.3"
+opencsv = "5.12.0"
+review = "2.0.2"
+reviewKtx = "2.0.2"
+roomVersion = "2.7.2"
+tasksGenai = "0.10.29"
+visionInternalVkp = "18.2.3"
+workVersion = "2.10.5"
+coil = "2.7.0"
+material3 = "1.5.0-alpha12"
+haze = "1.7.1"
+
+error: patch failed: gradle/libs.versions.toml:3
+Checking patch cashiro-web/build.gradle.kts...
+error: cashiro-web/build.gradle.kts: No such file or directory
+Checking patch cashiro-web/server/build.gradle.kts...
+error: cashiro-web/server/build.gradle.kts: No such file or directory
+Applying patch app/build.gradle.kts with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt with 3 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/preferences/CoverStyle.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/preferences/NavBarStyle.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 3 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Hunk #4 applied cleanly.
+Rejected hunk #5.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt with 1 reject...
+Rejected hunk #1.
+Applied patch app/src/main/res/drawable-nodpi/avatar_1.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_10.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_2.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_3.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_4.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_5.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_6.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_7.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_8.png cleanly.
+Applied patch app/src/main/res/drawable-nodpi/avatar_9.png cleanly.
+Applying patch build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applying patch gradle/libs.versions.toml with 1 reject...
+Rejected hunk #1.

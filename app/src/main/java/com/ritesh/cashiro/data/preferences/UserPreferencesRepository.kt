@@ -754,6 +754,10 @@ class UserPreferencesRepository @Inject constructor(
     private object PreferencesKeys {
         val DARK_THEME_ENABLED = booleanPreferencesKey("dark_theme_enabled")
         val DYNAMIC_COLOR_ENABLED = booleanPreferencesKey("dynamic_color_enabled")
+        val THEME_STYLE = stringPreferencesKey("theme_style")
+        val ACCENT_COLOR = stringPreferencesKey("accent_color")
+        val IS_AMOLED_MODE = booleanPreferencesKey("is_amoled_mode")
+        val APP_FONT = stringPreferencesKey("app_font")
         val HAS_SKIPPED_SMS_PERMISSION = booleanPreferencesKey("has_skipped_sms_permission")
         val DEVELOPER_MODE_ENABLED = booleanPreferencesKey("developer_mode_enabled")
         val SYSTEM_PROMPT = stringPreferencesKey("system_prompt")
@@ -824,7 +828,31 @@ class UserPreferencesRepository @Inject constructor(
             preferences[PreferencesKeys.DYNAMIC_COLOR_ENABLED] = enabled
         }
     }
-    
+
+    suspend fun updateThemeStyle(themeStyle: ThemeStyle) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.THEME_STYLE] = themeStyle.name
+        }
+    }
+
+    suspend fun updateAccentColor(accentColor: AccentColor) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.ACCENT_COLOR] = accentColor.name
+        }
+    }
+
+    suspend fun updateAmoledMode(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_AMOLED_MODE] = enabled
+        }
+    }
+
+    suspend fun updateAppFont(appFont: AppFont) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.APP_FONT] = appFont.name
+        }
+    }
+
     suspend fun updateSkippedSmsPermission(skipped: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.HAS_SKIPPED_SMS_PERMISSION] = skipped
