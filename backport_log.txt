@@ -4334,3 +4334,80 @@ Patch failed at 0001 fix: polish SpendingHeatmap with rounded card, padding, big
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0088-fix-polish-SpendingHeatmap-with-rounded-card-padding.patch:53
 error: corrupt patch at ../filtered_patches/0088-fix-polish-SpendingHeatmap-with-rounded-card-padding.patch:53
+[backport-fixes-upstream 7354f53f] fix: polish SpendingHeatmap with rounded card,
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Feb 28 14:58:28 2026 +0530
+ 7 files changed, 34 insertions(+), 353 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/CashiroApp.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ delete mode 100644 build.gradle.kts.rej
+ delete mode 100644 gradle/libs.versions.toml.rej
+===================================
+Applying 0092-Update-README.md-to-reflect-UI-changes-removed-subsc.patch
+Applying: Update README.md to reflect UI changes: removed subscription screenshot, added transaction detail and appearance screenshots, and updated table labels. Added new appearance and transaction detail images. Removed outdated subscription image.
+error: sha1 information is lacking or useless (README.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Update README.md to reflect UI changes: removed subscription screenshot, added transaction detail and appearance screenshots, and updated table labels. Added new appearance and transaction detail images. Removed outdated subscription image.
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:114
+error: README.md: patch does not apply
+error: screenshots/analytics-v2.png: does not exist in index
+Falling back to direct application...
+warning: Cannot merge binary files: screenshots/chat.png (ours vs. theirs)
+Applied patch to 'screenshots/chat.png' with conflicts.
+warning: Cannot merge binary files: screenshots/home.png (ours vs. theirs)
+Applied patch to 'screenshots/home.png' with conflicts.
+error: screenshots/image.png: does not exist in index
+error: screenshots/subscription-v2.png: does not exist in index
+Falling back to direct application...
+warning: Cannot merge binary files: screenshots/transactions.png (ours vs. theirs)
+Applied patch to 'screenshots/transactions.png' with conflicts.
+Checking patch README.md...
+error: while searching for:
+<td><img src="screenshots/home.png" width="160"/></td>
+<td><img src="screenshots/analytics-v2.png" width="160"/></td>
+<td><img src="screenshots/chat.png" width="160"/></td>
+<td><img src="screenshots/subscription-v2.png" width="160"/></td>
+<td><img src="screenshots/transactions.png" width="160"/></td>
+</tr>
+<tr>
+<td align="center">Home</td>
+<td align="center">Analytics</td>
+<td align="center">AI Chat</td>
+<td align="center">Subscriptions</td>
+<td align="center">Transactions</td>
+</tr>
+</table>
+
+
+error: patch failed: README.md:114
+Checking patch screenshots/analytics-v2.png...
+error: screenshots/analytics-v2.png: No such file or directory
+Checking patch screenshots/appearance.png...
+Checking patch screenshots/chat.png...
+error: the patch applies to 'screenshots/chat.png' (5a15c1df03e149150b74db1036aa76bc264ac651), which does not match the current contents.
+error: screenshots/chat.png: patch does not apply
+Checking patch screenshots/home.png...
+error: the patch applies to 'screenshots/home.png' (3cd272c2e156be08b80b3643ee5718dcbefe1d69), which does not match the current contents.
+error: screenshots/home.png: patch does not apply
+Checking patch screenshots/image.png...
+error: screenshots/image.png: No such file or directory
+Checking patch screenshots/subscription-v2.png...
+error: screenshots/subscription-v2.png: No such file or directory
+Checking patch screenshots/transaction-detail.png...
+Checking patch screenshots/transactions.png...
+error: the patch applies to 'screenshots/transactions.png' (97c57485f88f74702735934de5bc0244da514818), which does not match the current contents.
+error: screenshots/transactions.png: patch does not apply
+Applying patch README.md with 1 reject...
+Rejected hunk #1.
+Applied patch screenshots/appearance.png cleanly.
+Applied patch screenshots/transaction-detail.png cleanly.
