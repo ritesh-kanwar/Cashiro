@@ -4300,3 +4300,37 @@ Applying patch build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applying patch gradle/libs.versions.toml with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 70179e3b] feat: UI overhaul with new design system, components,
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri Feb 27 17:56:48 2026 +0530
+ 22 files changed, 772 insertions(+), 73 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/CashiroApp.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/CoverStyle.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/NavBarStyle.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_1.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_10.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_2.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_3.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_4.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_5.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_6.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_7.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_8.png
+ create mode 100644 app/src/main/res/drawable-nodpi/avatar_9.png
+ create mode 100644 build.gradle.kts.rej
+===================================
+Applying 0088-fix-polish-SpendingHeatmap-with-rounded-card-padding.patch
+Applying: fix: polish SpendingHeatmap with rounded card, padding, bigger cells, and day labels
+error: corrupt patch at .git/rebase-apply/patch:38
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: polish SpendingHeatmap with rounded card, padding, bigger cells, and day labels
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0088-fix-polish-SpendingHeatmap-with-rounded-card-padding.patch:53
+error: corrupt patch at ../filtered_patches/0088-fix-polish-SpendingHeatmap-with-rounded-card-padding.patch:53
