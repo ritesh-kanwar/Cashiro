@@ -1,0 +1,9 @@
+What's New in v2.15.47
+
+• Major UI overhaul with glassmorphism effects, iOS-like smooth scrolling, and polished design
+• New home screen widget showing recent transactions
+• Added support for 13 new banks: Thai banks (11), Iranian banks (Melli, Parsian), and Pakistani banks (Faysal, Standard Chartered Pakistan)
+• Set your preferred default currency
+• Improved spending heatmap and analytics charts
+• Fixed navigation and back button issues across all screens
+• Bug fixes for SBI Card 

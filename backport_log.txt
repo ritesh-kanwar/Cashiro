@@ -4411,3 +4411,54 @@ Applying patch README.md with 1 reject...
 Rejected hunk #1.
 Applied patch screenshots/appearance.png cleanly.
 Applied patch screenshots/transaction-detail.png cleanly.
+[backport-fixes-upstream d646c0f0] Update README.md to reflect UI changes: removed
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Feb 28 21:17:11 2026 +0530
+ 4 files changed, 98 insertions(+)
+ create mode 100644 README.md.rej
+ create mode 100644 screenshots/appearance.png
+ create mode 100644 screenshots/transaction-detail.png
+===================================
+Applying 0093-chore-release-bump-version-to-2.15.47-skip-ci.patch
+Applying: chore(release): bump version to 2.15.47 [skip ci]
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore(release): bump version to 2.15.47 [skip ci]
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0093-chore-release-bump-version-to-2.15.47-skip-ci.patch:42: trailing whitespace.
+• Bug fixes for SBI Card
+../filtered_patches/0093-chore-release-bump-version-to-2.15.47-skip-ci.patch:63: trailing whitespace.
+• Bug fixes for SBI Card
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:21
+error: app/build.gradle.kts: patch does not apply
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: does not exist in index
+../filtered_patches/0093-chore-release-bump-version-to-2.15.47-skip-ci.patch:42: trailing whitespace.
+• Bug fixes for SBI Card
+../filtered_patches/0093-chore-release-bump-version-to-2.15.47-skip-ci.patch:63: trailing whitespace.
+• Bug fixes for SBI Card
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 81
+        versionName = "2.15.46"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+
+error: patch failed: app/build.gradle.kts:21
+Checking patch fastlane/metadata/android/en-US/changelogs/82.txt...
+Checking patch fastlane/metadata/android/en-US/changelogs/default.txt...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/changelogs/82.txt cleanly.
