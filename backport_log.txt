@@ -4462,3 +4462,24 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/82.txt cleanly.
+[backport-fixes-upstream 1ba74fad] chore(release): bump version to 2.15.47 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Feb 28 21:23:03 2026 +0530
+ 4 files changed, 72 insertions(+), 21 deletions(-)
+ delete mode 100644 README.md.rej
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/82.txt
+===================================
+Applying 0095-feat-complete-UI-differentiation-and-premium-polish-.patch
+Applying: feat: complete UI differentiation and premium polish overhaul
+error: corrupt patch at .git/rebase-apply/patch:107
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: complete UI differentiation and premium polish overhaul
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0095-feat-complete-UI-differentiation-and-premium-polish-.patch:142
+error: corrupt patch at ../filtered_patches/0095-feat-complete-UI-differentiation-and-premium-polish-.patch:142
