@@ -4502,3 +4502,25 @@ Patch failed at 0001 feat: add balance hide/reveal toggle and fix hardcoded colo
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0099-feat-add-balance-hide-reveal-toggle-and-fix-hardcode.patch:53
 error: corrupt patch at ../filtered_patches/0099-feat-add-balance-hide-reveal-toggle-and-fix-hardcode.patch:53
+[backport-fixes-upstream 9ab1fcf8] feat: add balance hide/reveal toggle and fix
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 1 18:11:49 2026 +0530
+ 1 file changed, 19 insertions(+)
+===================================
+Applying 0101-fix-prioritize-explicit-SMS-balance-over-credit-card.patch
+Applying: fix: prioritize explicit SMS balance over credit card accumulation
+Successfully applied via git am
+===================================
+Applying 0102-fix-exclude-transfers-and-investments-from-expense-c.patch
+Applying: fix: exclude transfers and investments from expense calculations
+error: corrupt patch at .git/rebase-apply/patch:21
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: exclude transfers and investments from expense calculations
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0102-fix-exclude-transfers-and-investments-from-expense-c.patch:30
+error: corrupt patch at ../filtered_patches/0102-fix-exclude-transfers-and-investments-from-expense-c.patch:30
