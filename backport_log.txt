@@ -4483,3 +4483,22 @@ Patch failed at 0001 feat: complete UI differentiation and premium polish overha
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0095-feat-complete-UI-differentiation-and-premium-polish-.patch:142
 error: corrupt patch at ../filtered_patches/0095-feat-complete-UI-differentiation-and-premium-polish-.patch:142
+[backport-fixes-upstream cd29843b] feat: complete UI differentiation and premium polish
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 1 16:00:33 2026 +0530
+ 2 files changed, 21 insertions(+), 12 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+===================================
+Applying 0099-feat-add-balance-hide-reveal-toggle-and-fix-hardcode.patch
+Applying: feat: add balance hide/reveal toggle and fix hardcoded colors
+error: corrupt patch at .git/rebase-apply/patch:43
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add balance hide/reveal toggle and fix hardcoded colors
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0099-feat-add-balance-hide-reveal-toggle-and-fix-hardcode.patch:53
+error: corrupt patch at ../filtered_patches/0099-feat-add-balance-hide-reveal-toggle-and-fix-hardcode.patch:53
