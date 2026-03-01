@@ -263,6 +263,7 @@ class SmsTransactionProcessor @Inject constructor(
             )
 
             val newBalance = when {
+                parsedTransaction.balance != null -> parsedTransaction.balance!!
                 isCreditCard -> {
                     val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
                     currentBalance + parsedTransaction.amount
@@ -271,7 +272,6 @@ class SmsTransactionProcessor @Inject constructor(
                     val currentBalance = existingAccount.balance ?: BigDecimal.ZERO
                     (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                 }
-                parsedTransaction.balance != null -> parsedTransaction.balance!!
                 else -> {
                     // SMS doesn't have explicit balance - calculate based on transaction type
                     val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
