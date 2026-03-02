@@ -84,6 +84,7 @@ class AUBankParser : BaseIndianBankParser() {
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
+<<<<<<< ours
         // Pattern 0: Credit card format - "spent at MERCHANT on"
         val spentAtPattern = Regex(
             """spent\s+at\s+(.+?)\s+on\s+(?:AU\s+Bank|$)""",
@@ -96,6 +97,8 @@ class AUBankParser : BaseIndianBankParser() {
             }
         }
 
+=======
+>>>>>>> theirs
         // Pattern 1: UPI/DR or UPI/CR format without Ref prefix: UPI/DR/ref/MERCHANT/IFSC/acct
         val upiDrCrPattern = Regex(
             """UPI/(?:DR|CR)/\d+/([^/]+)/[A-Z]{4}\d*/\d+""",
@@ -179,12 +182,18 @@ class AUBankParser : BaseIndianBankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
+<<<<<<< ours
         // Try base patterns first (handles A/c 1234, Card x1234, etc.)
         super.extractAccountLast4(message)?.let { return it }
 
         // AU Bank specific patterns if base didn't match
         val auSpecificAccPattern = Regex(
             """(?:A/c|Card)\s*[A-Za-z]*[Xx\*]*(\d+)""",
+=======
+        // Pattern for account number: "A/c XXXXX" or "A/c X7013" (with mask characters)
+        val accountPattern = Regex(
+            """A/c\s+[A-Za-z]*(\d+)""",
+>>>>>>> theirs
             RegexOption.IGNORE_CASE
         )
         auSpecificAccPattern.find(message)?.let { match ->
