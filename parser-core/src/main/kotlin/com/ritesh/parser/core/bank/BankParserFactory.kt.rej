@@ -1,0 +1,9 @@
+diff a/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt b/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt	(rejected hunks)
+@@ -6,6 +6,7 @@ package com.ritesh.parser.core.bank
+ object BankParserFactory {
+ 
+     private val parsers = listOf(
++        HDFCMutualFundParser(),  // HDFC Mutual Fund (must be before HDFCBankParser to avoid interception by HDFC's broad DLT pattern)
+         HDFCBankParser(),
+         SBIBankParser(),
+         SaraswatBankParser(),
