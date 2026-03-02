@@ -1,0 +1,10 @@
+What's New in v2.15.48
+
+• Added HDFC Mutual Fund support for SIP & redemption tracking
+• Fixed balance display showing incorrect values during currency conversion
+• New balance hide/reveal toggle for privacy
+• Improved home screen widgets with modern Material 3 design
+• Added section headers for Bank Accounts & Subscriptions
+• Fixed AU Bank UPI merchant detection
+• Transfers & investments no longer count as expenses
+• Various UI polish and stability improvements
