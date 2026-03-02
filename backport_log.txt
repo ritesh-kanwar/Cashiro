@@ -5500,3 +5500,24 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/83.txt cleanly.
+[backport-fixes-upstream d6f40045] chore(release): bump version to 2.15.48 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Mar 2 21:15:42 2026 +0530
+ 4 files changed, 93 insertions(+), 204 deletions(-)
+ delete mode 100644 README.md.rej
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/83.txt
+===================================
+Applying 0114-feat-rework-balance-card-sparkline-and-monthly-chang.patch
+Applying: feat: rework balance card sparkline and monthly change to use real account balances
+error: corrupt patch at .git/rebase-apply/patch:39
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: rework balance card sparkline and monthly change to use real account balances
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0114-feat-rework-balance-card-sparkline-and-monthly-chang.patch:51
+error: corrupt patch at ../filtered_patches/0114-feat-rework-balance-card-sparkline-and-monthly-chang.patch:51
