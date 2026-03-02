@@ -5209,3 +5209,223 @@ Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankP
 Applied patch parser-core/src/test/kotlin/TestAllNewParsers.kt cleanly.
 Applied patch parser-core/src/test/kotlin/TestDashenBankParser.kt cleanly.
 Applied patch parser-core/src/test/kotlin/TestLivBankParser.kt cleanly.
+[backport-fixes-upstream 409b4bef] fix: harden account extraction to always return last
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Mar 2 16:28:26 2026 +0530
+ 64 files changed, 1199 insertions(+), 491 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EquitasBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt.rej
+===================================
+Applying 0112-docs-update-README-with-new-screenshots-accurate-con.patch
+Applying: docs: update README with new screenshots, accurate content, and improved copy
+error: sha1 information is lacking or useless (README.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 docs: update README with new screenshots, accurate content, and improved copy
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:25
+error: README.md: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: screenshots/analytics-v2.png: does not exist in index
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: the patch applies to 'screenshots/chat.png' (5a15c1df03e149150b74db1036aa76bc264ac651), which does not match the current contents.
+error: screenshots/chat.png: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: the patch applies to 'screenshots/home.png' (3cd272c2e156be08b80b3643ee5718dcbefe1d69), which does not match the current contents.
+error: screenshots/home.png: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: the patch applies to 'screenshots/transactions.png' (97c57485f88f74702735934de5bc0244da514818), which does not match the current contents.
+error: screenshots/transactions.png: patch does not apply
+Checking patch README.md...
+error: while searching for:
+
+## Overview
+
+For Android users worldwide who want automatic expense tracking from bank SMS — clean categories, subscription detection, and clear insights. Supporting 40+ banks across 5 countries with multi-currency capabilities.
+
+<a href="https://play.google.com/store/apps/details?id=com.ritesh.cashiro">
+  <img src="https://img.shields.io/badge/GET_IT_ON-Google_Play-00875F?style=for-the-badge&logo=google-play&logoColor=white" alt="Get it on Google Play" />
+
+error: patch failed: README.md:25
+error: while searching for:
+
+### How it works
+
+1. Grant SMS permission (read‑only). No inbox changes, no messages sent.
+2. Cashiro parses transaction SMS, extracts amount, merchant, category, and date.
+3. View analytics, subscriptions, and the full transaction timeline — with on-device AI assistant for insights.
+
+## Why Cashiro
+
+- **🤖 Smart SMS Parsing** - Automatically extracts transaction details from 40+ banks across 5 countries
+- **🌍 Multi-Currency Support** - Native support for ₹, $, د.إ, ₨, ብር with proper localization
+- **📊 Clear Insights** - Analytics and charts to instantly see where money goes
+- **🔄 Subscription Tracking** - Detects and monitors recurring payments
+- **💬 On-device AI Assistant** - Ask questions like "What did I spend on food last month?" locally
+- **🏷️ Auto‑Categorization** - Clean merchant names and sensible categories
+- **📤 Data Export** - Export as CSV or PDF for taxes or records
+
+## Supported Banks & Countries
+
+Supporting **60+ banks** across **12 countries** with **multi-currency** capabilities:
+
+### 🇮🇳 India (35 banks) - INR ₹
+- **HDFC Bank**, **State Bank of India (SBI)**, **ICICI Bank**
+- **Axis Bank**, **Punjab National Bank (PNB)**, **IDBI Bank**
+- **Indian Bank**, **Federal Bank**, **Karnataka Bank**, **Kerala Gramin Bank**
+- **Canara Bank**, **Bank of Baroda**, **Bank of India**
+- **Jupiter (CSB Bank)**, **Amazon Pay (Juspay)**, **Kotak Bank**
+- **IDFC First Bank**, **Union Bank**, **HSBC Bank**
+- **Central Bank of India**, **South Indian Bank**, **JK Bank**
+- **Indian Overseas Bank**, **Airtel Payments Bank**, **AMEX**
+- **OneCard**, **UCO Bank**, **AU Bank**, and more...
+
+### 🇺🇸 USA (4 banks) - USD $
+- **Citi Bank**, **Discover Card**, **Old Hickory Credit Union**, **Charles Schwab**
+
+### 🇦🇪 UAE (3 banks) - AED د.إ
+- **First Abu Dhabi Bank (FAB)**
+- **Abu Dhabi Commercial Bank (ADCB)**
+- **Mashreq Bank**
+
+### 🇸🇦 Saudi Arabia (1 bank) - SAR ﷼
+- **Alinma Bank (بنك الإنماء)** - Arabic SMS support
+
+### 🇧🇾 Belarus (1 bank) - BYN Br
+- **Priorbank** - Russian/Belarusian SMS support
+
+### 🇳🇵 Nepal (3 banks) - NPR ₨
+- **Laxmi Sunrise Bank**, **Everest Bank**, **NMB Bank (Nabil Bank)**
+
+### 🇪🇹 Ethiopia (1 bank) - ETB ብር
+- **Commercial Bank of Ethiopia (CBE)**, **Zemen Bank**, **Dashen Bank**
+- **Telebirr** - Mobile money service
+
+### 🇨🇴 Colombia (1 bank) - COP $
+- **Bancolombia**
+
+### 🇮🇷 Iran (2 banks) - IRR ﷼
+- **Melli Bank (بانک ملی)**, **Parsian Bank (بانک پارسیان)** - Persian SMS support
+
+### 🇹🇭 Thailand (11 banks) - THB ฿
+- **Bangkok Bank (BBL)**, **Kasikorn Bank (KBank)**, **Siam Commercial Bank (SCB)**
+- **Krungthai Bank (KTB)**, **Krungsri (BAY)**, **TTB (TMBThanachart)**
+- **Government Savings Bank (GSB)**, **BAAC**, **UOB Thailand**
+- **CIMB Thai**, **KTC Credit Card** - Thai and English SMS support
+
+### 🇰🇪 Kenya (1 service) - KES Ksh
+- **M-PESA** - Mobile money service
+
+error: patch failed: README.md:36
+error: while searching for:
+
+## Privacy First
+
+All processing happens on your device using MediaPipe's LLM. Your financial data never leaves your phone. No servers, no uploads, no tracking.
+
+## Screenshots
+
+<table>
+<tr>
+<td><img src="screenshots/home.png" width="160"/></td>
+<td><img src="screenshots/analytics-v2.png" width="160"/></td>
+<td><img src="screenshots/chat.png" width="160"/></td>
+<td><img src="screenshots/transactions.png" width="160"/></td>
+<td><img src="screenshots/transaction-detail.png" width="160"/></td>
+<td><img src="screenshots/appearance.png" width="160"/></td>
+</tr>
+<tr>
+<td align="center">Home</td>
+<td align="center">Analytics</td>
+<td align="center">AI Chat</td>
+<td align="center">Transactions</td>
+<td align="center">Details</td>
+<td align="center">Appearance</td>
+</tr>
+</table>
+
+
+error: patch failed: README.md:105
+Checking patch screenshots/account-detail-dark.png...
+Checking patch screenshots/accounts-dark.png...
+Checking patch screenshots/analytics-dark.png...
+Checking patch screenshots/analytics-heatmap-light.png...
+Checking patch screenshots/analytics-light.png...
+Checking patch screenshots/analytics-scroll-dark.png...
+Checking patch screenshots/analytics-scroll-light.png...
+Checking patch screenshots/analytics-v2.png...
+error: screenshots/analytics-v2.png: No such file or directory
+Checking patch screenshots/appearance.png...
+Checking patch screenshots/chat-dark.png...
+Checking patch screenshots/chat-light.png...
+Checking patch screenshots/chat.png...
+error: the patch applies to 'screenshots/chat.png' (5a15c1df03e149150b74db1036aa76bc264ac651), which does not match the current contents.
+error: screenshots/chat.png: patch does not apply
+Checking patch screenshots/home-dark.png...
+Checking patch screenshots/home-light.png...
+Checking patch screenshots/home-scroll-dark.png...
+Checking patch screenshots/home-scroll-light.png...
+Checking patch screenshots/home.png...
+error: the patch applies to 'screenshots/home.png' (3cd272c2e156be08b80b3643ee5718dcbefe1d69), which does not match the current contents.
+error: screenshots/home.png: patch does not apply
+Checking patch screenshots/transaction-detail-dark.png...
+Checking patch screenshots/transaction-detail-light.png...
+Checking patch screenshots/transaction-detail.png...
+Checking patch screenshots/transactions.png...
+error: the patch applies to 'screenshots/transactions.png' (97c57485f88f74702735934de5bc0244da514818), which does not match the current contents.
+error: screenshots/transactions.png: patch does not apply
+Applying patch README.md with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch screenshots/account-detail-dark.png cleanly.
+Applied patch screenshots/accounts-dark.png cleanly.
+Applied patch screenshots/analytics-dark.png cleanly.
+Applied patch screenshots/analytics-heatmap-light.png cleanly.
+Applied patch screenshots/analytics-light.png cleanly.
+Applied patch screenshots/analytics-scroll-dark.png cleanly.
+Applied patch screenshots/analytics-scroll-light.png cleanly.
+Applied patch screenshots/appearance.png cleanly.
+Applied patch screenshots/chat-dark.png cleanly.
+Applied patch screenshots/chat-light.png cleanly.
+Applied patch screenshots/home-dark.png cleanly.
+Applied patch screenshots/home-light.png cleanly.
+Applied patch screenshots/home-scroll-dark.png cleanly.
+Applied patch screenshots/home-scroll-light.png cleanly.
+Applied patch screenshots/transaction-detail-dark.png cleanly.
+Applied patch screenshots/transaction-detail-light.png cleanly.
+Applied patch screenshots/transaction-detail.png cleanly.
