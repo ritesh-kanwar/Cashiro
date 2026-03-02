@@ -100,13 +100,13 @@ object CompiledPatterns {
         )
 
         val ACCOUNT_DEPOSITED = Regex(
-            """deposited\s+in\s+(?:HDFC\s+Bank\s+)?A/c\s+(?:XX+)?(\d+)""",
+            """deposited\s+in\s+(?:HDFC\s+Bank\s+)?A/c\s+(?:XX+)?(\d{3,6})""",
             RegexOption.IGNORE_CASE
         )
         val ACCOUNT_FROM =
-            Regex("""from\s+(?:HDFC\s+Bank\s+)?A/c\s+(?:XX+)?(\d+)""", RegexOption.IGNORE_CASE)
-        val ACCOUNT_SIMPLE = Regex("""HDFC\s+Bank\s+A/c\s+(\d+)""", RegexOption.IGNORE_CASE)
-        val ACCOUNT_GENERIC = Regex("""A/c\s+(?:XX+)?(\d+)""", RegexOption.IGNORE_CASE)
+            Regex("""from\s+(?:HDFC\s+Bank\s+)?A/c\s+(?:XX+)?(\d{3,6})""", RegexOption.IGNORE_CASE)
+        val ACCOUNT_SIMPLE = Regex("""HDFC\s+Bank\s+A/c\s+(\d{3,6})""", RegexOption.IGNORE_CASE)
+        val ACCOUNT_GENERIC = Regex("""A/c\s+(?:XX+)(\d{3,4})""", RegexOption.IGNORE_CASE)
 
         val AMOUNT_WILL_DEDUCT = Regex(
             """Rs\.?\s*([0-9,]+(?:\.\d{2})?)\s+will\s+be\s+deducted""",
