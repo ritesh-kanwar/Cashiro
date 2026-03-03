@@ -5967,3 +5967,231 @@ Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UtkarshBan
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/YesBankParser.kt cleanly.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 96eb5cef] =?UTF-8?q?fix:=20flip=20extractAccountLast4=20ord?=
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Tue Mar 3 16:08:32 2026 +0530
+ 62 files changed, 671 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIranianBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseThailandBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EquitasBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt.rej
+===================================
+Applying 0123-feat-add-GPay-and-PhonePe-PDF-statement-import-with-.patch
+Applying: feat: add GPay and PhonePe PDF statement import with cross-source dedup
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add GPay and PhonePe PDF statement import with cross-source dedup
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:98
+error: app/build.gradle.kts: patch does not apply
+Applied patch to 'app/proguard-rules.pro' with conflicts.
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/34.json' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:51
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:4
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:4
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionEntity.kt' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt:50
+error: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:133
+error: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Applied patch to 'gradle/libs.versions.toml' cleanly.
+Checking patch app/build.gradle.kts...
+error: while searching for:
+
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+error: patch failed: app/build.gradle.kts:98
+error: while searching for:
+    
+    // OpenCSV for CSV export
+    implementation(libs.opencsv)
+    testImplementation(kotlin("test"))
+}
+
+error: patch failed: app/build.gradle.kts:274
+Checking patch app/proguard-rules.pro...
+error: while searching for:
+-dontwarn com.google.protobuf.ProtoPresenceCheckedField
+
+# SLF4J (used by OpenCSV)
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+error: patch failed: app/proguard-rules.pro:116
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/34.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/34.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+error: while searching for:
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class, CategoryBudgetLimitEntity::class],
+    version = 33,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:51
+error: while searching for:
+        AutoMigration(from = 29, to = 30),
+        AutoMigration(from = 30, to = 31),
+        AutoMigration(from = 31, to = 32),
+        AutoMigration(from = 32, to = 33)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:82
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.TransactionEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
+
+@Dao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:4
+error: while searching for:
+    ): Flow<List<TransactionEntity>>
+    
+    @Query("""
+        SELECT * FROM transactions 
+        WHERE is_deleted = 0 
+        AND bank_name = :bankName 
+        AND account_number = :accountLast4
+        AND date_time BETWEEN :startDate AND :endDate
+        ORDER BY date_time DESC
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:169
+error: while searching for:
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): Flow<List<TransactionEntity>>
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:182
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionEntity.kt...
+error: while searching for:
+    val fromAccount: String? = null,
+
+    @ColumnInfo(name = "to_account")
+    val toAccount: String? = null
+)
+
+enum class TransactionType {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionEntity.kt:71
+Checking patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt...
+error: while searching for:
+        updatedAt = LocalDateTime.now(),
+        currency = currency,
+        fromAccount = fromAccount,
+        toAccount = toAccount
+    )
+}
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt:50
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt...
+error: while searching for:
+    // Helper method to check if transaction exists by hash
+    suspend fun getTransactionByHash(transactionHash: String): TransactionEntity? =
+        transactionDao.getTransactionByHash(transactionHash)
+    
+    suspend fun undoDeleteTransaction(transaction: TransactionEntity) {
+        transactionDao.updateTransaction(transaction.copy(isDeleted = false))
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:133
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/ImportStatementUseCase.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/PdfParserFactory.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/PdfStatementParser.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/PdfTextExtractor.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/PhonePePdfParser.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportResult.kt...
+Checking patch gradle/libs.versions.toml...
+error: while searching for:
+markdown = "0.7.3"
+navVersion = "2.9.6"
+opencsv = "5.12.0"
+review = "2.0.2"
+reviewKtx = "2.0.2"
+roomVersion = "2.8.4"
+
+error: patch failed: gradle/libs.versions.toml:28
+error: while searching for:
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
+opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
+review = { module = "com.google.android.play:review", version.ref = "review" }
+review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }
+tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "tasksGenai" }
+
+error: patch failed: gradle/libs.versions.toml:86
+Applying patch app/build.gradle.kts with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/proguard-rules.pro with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionEntity.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt with 1 reject...
+Rejected hunk #1.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/ImportStatementUseCase.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/PdfParserFactory.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/PdfStatementParser.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/PdfTextExtractor.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/PhonePePdfParser.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportResult.kt cleanly.
+Applying patch gradle/libs.versions.toml with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
