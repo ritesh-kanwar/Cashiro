@@ -19,13 +19,7 @@ publishing {
     }
 }
 
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-// Configure JUnit testing
-tasks.test {
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
     useJUnitPlatform()
 
     testLogging {
@@ -43,12 +37,11 @@ tasks.test {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 
-    // Optional: Fail fast on first test failure (remove if you want to see all failures)
-    // failFast = true
-
-    // Optional: Run tests in parallel for faster execution
     maxParallelForks = maxOf(1, Runtime.getRuntime().availableProcessors() / 2)
 }
 
-
-
+// Keep compatibility with existing CI/scripts that invoke :parser-core:test
+tasks.register("test") {
+    group = "verification"
+    dependsOn("jvmTest")
+}

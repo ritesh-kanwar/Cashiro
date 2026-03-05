@@ -1,0 +1,7 @@
+diff a/settings.gradle.kts b/settings.gradle.kts	(rejected hunks)
+@@ -22,3 +22,5 @@ dependencyResolutionManagement {
+ rootProject.name = "cashiroai-tracker"
+ include(":app")
+ include(":parser-core")
++include(":shared")
++include(":iosApp")

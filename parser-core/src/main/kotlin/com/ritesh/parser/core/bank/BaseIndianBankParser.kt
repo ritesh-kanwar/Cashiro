@@ -3,8 +3,8 @@ package com.ritesh.parser.core.bank
 import com.ritesh.parser.core.CompiledPatterns
 import com.ritesh.parser.core.MandateInfo
 import com.ritesh.parser.core.TransactionType
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
-import java.time.LocalDateTime
 
 /**
  * Base abstract class for Indian bank parsers.

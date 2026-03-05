@@ -1,0 +1,44 @@
+diff a/parser-core/build.gradle.kts b/parser-core/build.gradle.kts	(rejected hunks)
+@@ -1,17 +1,38 @@
+ plugins {
+-    kotlin("jvm")
++    kotlin("multiplatform")
+     `maven-publish`
+ }
+ 
+ group = "com.cashiroai"
+ version = "0.1.0-SNAPSHOT"
+ 
+-// Use root project's Java toolchain; avoid forcing downloads here
++kotlin {
++    jvm()
++    iosArm64()
++    iosSimulatorArm64()
++
++    sourceSets {
++        commonMain.dependencies {
++            api("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
++        }
++        val jvmMain by getting {
++            kotlin.srcDir("src/main/kotlin")
++        }
++        val jvmTest by getting {
++            kotlin.srcDir("src/test/kotlin")
++            resources.srcDir("src/test/resources")
++            dependencies {
++                implementation("org.junit.jupiter:junit-jupiter:5.10.0")
++                runtimeOnly("org.junit.platform:junit-platform-launcher")
++            }
++        }
++    }
++}
+ 
+ publishing {
+     publications {
+-        create<MavenPublication>("mavenJava") {
+-            from(components["java"])
++        create<MavenPublication>("mavenKotlin") {
++            from(components["kotlin"])
+             groupId = group.toString()
+             artifactId = "parser-core"
+             version = version.toString()

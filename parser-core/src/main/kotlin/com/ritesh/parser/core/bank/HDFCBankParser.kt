@@ -4,7 +4,6 @@ import com.ritesh.parser.core.CompiledPatterns
 import com.ritesh.parser.core.MandateInfo
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
-import java.time.LocalDateTime
 
 /**
  * HDFC Bank specific parser.
