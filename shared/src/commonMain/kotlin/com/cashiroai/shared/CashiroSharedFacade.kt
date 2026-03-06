@@ -8,6 +8,7 @@ import com.cashiroai.shared.data.model.SharedTransactionType
 import com.cashiroai.shared.data.statement.SharedStatementImportResult
 import com.cashiroai.shared.data.util.currentTimeMillis
 import com.cashiroai.shared.data.util.monthStartEpochMillis
+import com.cashiroai.shared.data.util.monthStartEpochMillisIST
 import com.cashiroai.shared.domain.usecase.CreateManualTransactionUseCase
 import com.cashiroai.shared.domain.usecase.ImportStatementUseCase
 import com.cashiroai.shared.domain.usecase.ManualTransactionInput
@@ -902,8 +903,9 @@ class CashiroSharedFacade {
         val accounts = graph.accountRepository.observeBalances().first()
         val recentTransactions = transactions.take(10).map { it.toItem() }
 
-        val monthStart = monthStartEpochMillis()
+        val monthStart = monthStartEpochMillisIST()
         val thisMonthTxns = transactions.filter { it.occurredAtEpochMillis >= monthStart }
+        println("[HomeSnapshot] monthStart=$monthStart, thisMonthTxnCount=${thisMonthTxns.size}, totalTxns=${transactions.size}")
         val monthlyIncome = thisMonthTxns
             .filter { it.transactionType == SharedTransactionType.INCOME }
             .sumOf { it.amountMinor }
