@@ -117,7 +117,11 @@ data class SharedRecentTransactionItem(
 )
 
 class CashiroSharedFacade {
-    private val graph by lazy { SharedDataGraph.create() }
+    companion object {
+        val shared: CashiroSharedFacade by lazy { CashiroSharedFacade() }
+    }
+
+    private val graph by lazy { SharedDataGraph.getInstance() }
     private val createUseCase by lazy { CreateManualTransactionUseCase(graph.transactionRepository, graph.accountRepository) }
     private val updateUseCase by lazy { UpdateManualTransactionUseCase(graph.transactionRepository, graph.accountRepository) }
     private val importStatementUseCase by lazy { ImportStatementUseCase(graph.transactionRepository, graph.accountRepository) }

@@ -2,7 +2,7 @@ import Foundation
 import Shared
 
 class RulesViewModel: ObservableObject {
-    private let facade = CashiroSharedFacade()
+    private let facade = CashiroSharedFacade.companion.shared
 
     @Published var rules: [SharedRuleItem] = []
     @Published var categories: [String] = []

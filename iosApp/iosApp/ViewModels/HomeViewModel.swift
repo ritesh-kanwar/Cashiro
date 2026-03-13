@@ -2,7 +2,7 @@ import Foundation
 import Shared
 
 class HomeViewModel: ObservableObject {
-    let facade = CashiroSharedFacade()
+    let facade = CashiroSharedFacade.companion.shared
 
     @Published var categories: [String] = []
     @Published var recentTransactions: [SharedRecentTransactionItem] = []

@@ -6803,3 +6803,420 @@ Applied patch shared/src/iosMain/kotlin/com/cashiroai/shared/Platform.ios.kt cle
 Applied patch shared/src/iosMain/kotlin/com/cashiroai/shared/data/local/SharedDatabaseFactory.ios.kt cleanly.
 Applied patch shared/src/iosMain/kotlin/com/cashiroai/shared/data/statement/SharedPdfTextExtractor.ios.kt cleanly.
 Applied patch shared/src/iosMain/kotlin/com/cashiroai/shared/data/util/TimeProvider.ios.kt cleanly.
+[backport-fixes-upstream 8eacb614] feat: add iOS platform support with KMP shared module
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri Mar 6 01:30:07 2026 +0530
+ 128 files changed, 5417 insertions(+), 38 deletions(-)
+ create mode 100644 gradle/libs.versions.toml.rej
+ create mode 100644 iosApp/iosApp.xcodeproj/project.pbxproj
+ create mode 100644 iosApp/iosApp.xcodeproj/xcuserdata/sarim.xcuserdatad/xcschemes/xcschememanagement.plist
+ create mode 100644 iosApp/iosApp/App/MainTabView.swift
+ create mode 100644 iosApp/iosApp/Components/AmountText.swift
+ create mode 100644 iosApp/iosApp/Components/CategoryChip.swift
+ create mode 100644 iosApp/iosApp/Components/SpendingSummaryCard.swift
+ create mode 100644 iosApp/iosApp/Components/StatPill.swift
+ create mode 100644 iosApp/iosApp/Components/TransactionDetailSheet.swift
+ create mode 100644 iosApp/iosApp/Components/TransactionRow.swift
+ create mode 100644 iosApp/iosApp/Extensions/AmountFormatting.swift
+ create mode 100644 iosApp/iosApp/Extensions/DateFormatting.swift
+ create mode 100644 iosApp/iosApp/Info.plist
+ create mode 100644 iosApp/iosApp/Screens/Analytics/AnalyticsPlaceholderScreen.swift
+ create mode 100644 iosApp/iosApp/Screens/Home/HomeScreen.swift
+ create mode 100644 iosApp/iosApp/Screens/Settings/SettingsPlaceholderScreen.swift
+ create mode 100644 iosApp/iosApp/Screens/Transactions/AddEditTransactionView.swift
+ create mode 100644 iosApp/iosApp/Screens/Transactions/TransactionDetailView.swift
+ create mode 100644 iosApp/iosApp/Screens/Transactions/TransactionListView.swift
+ create mode 100644 iosApp/iosApp/Theme/AppColors.swift
+ create mode 100644 iosApp/iosApp/Theme/AppSpacing.swift
+ create mode 100644 iosApp/iosApp/Theme/AppTypography.swift
+ create mode 100644 iosApp/iosApp/ViewModels/HomeViewModel.swift
+ create mode 100644 iosApp/iosApp/iosAppApp.swift
+ create mode 100644 parser-core/build.gradle.kts.rej
+ create mode 100644 parser-core/src/commonMain/kotlin/com/ritesh/parser/core/Hashing.kt
+ create mode 100644 settings.gradle.kts.rej
+ create mode 100644 shared/build.gradle.kts
+ create mode 100644 shared/src/androidMain/kotlin/com/cashiroai/shared/Platform.android.kt
+ create mode 100644 shared/src/androidMain/kotlin/com/cashiroai/shared/data/local/SharedDatabaseFactory.android.kt
+ create mode 100644 shared/src/androidMain/kotlin/com/cashiroai/shared/data/statement/SharedPdfTextExtractor.android.kt
+ create mode 100644 shared/src/androidMain/kotlin/com/cashiroai/shared/data/util/TimeProvider.android.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFacade.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/Greeting.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/SharedDataGraph.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultSharedCategories.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/SharedDataInitializer.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/SharedDatabase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/SharedDatabaseFactory.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedAccountBalanceDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedBudgetDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedCardDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedCategoryBudgetLimitDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedCategoryDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedExchangeRateDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedMerchantMappingDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedRuleApplicationDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedRuleDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedSubscriptionDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedTransactionDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedTransactionSplitDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/dao/SharedUnrecognizedSmsDao.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedAccountBalanceEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedBudgetCategoryEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedBudgetEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedCardEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedCategoryBudgetLimitEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedCategoryEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedExchangeRateEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedMerchantMappingEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedRuleApplicationEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedRuleEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedSubscriptionEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedTransactionEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedTransactionSplitEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/local/entity/SharedUnrecognizedSmsEntity.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/model/SharedCategory.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/model/SharedTransaction.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/model/SharedTransactionType.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedAccountRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedBudgetRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedCategoryRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedExchangeRateRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedMerchantMappingRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedRuleRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedSplitRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedSubscriptionRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedTransactionRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/RoomSharedUnrecognizedSmsRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedAccountRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedBudgetRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedCategoryRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedExchangeRateRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedMerchantMappingRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedRuleRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedSplitRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedSubscriptionRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedTransactionRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/SharedUnrecognizedSmsRepository.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/repository/mapper/SharedDataMappers.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/GPaySharedStatementParser.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/PhonePeSharedStatementParser.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/SharedParsedStatementTransaction.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/SharedParserUtils.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/SharedPdfTextExtractor.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/SharedStatementImportResult.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/SharedStatementParser.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/statement/SharedStatementParserFactory.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/util/TimeProvider.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/CreateManualTransactionUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ImportStatementUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageAccountUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageBudgetUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageExchangeRateUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageMerchantMappingUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageRulesUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageSplitUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageSubscriptionUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageUnrecognizedSmsUseCase.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/TransactionMutationModels.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/UpdateManualTransactionUseCase.kt
+ create mode 100644 shared/src/commonTest/kotlin/com/cashiroai/shared/data/bootstrap/SharedDataInitializerTest.kt
+ create mode 100644 shared/src/iosMain/kotlin/com/cashiroai/shared/Platform.ios.kt
+ create mode 100644 shared/src/iosMain/kotlin/com/cashiroai/shared/data/local/SharedDatabaseFactory.ios.kt
+ create mode 100644 shared/src/iosMain/kotlin/com/cashiroai/shared/data/statement/SharedPdfTextExtractor.ios.kt
+ create mode 100644 shared/src/iosMain/kotlin/com/cashiroai/shared/data/util/TimeProvider.ios.kt
+===================================
+Applying 0133-feat-ios-add-categories-budgets-and-accounts-managem.patch
+Applying: feat(ios): add categories, budgets, and accounts management screens
+Successfully applied via git am
+===================================
+Applying 0134-feat-ios-add-unified-currency-system-and-analytics-d.patch
+Applying: feat(ios): add unified currency system and analytics dashboard
+Successfully applied via git am
+===================================
+Applying 0135-feat-ios-add-settings-screens-with-appearance-app-lo.patch
+Applying: feat(ios): add settings screens with appearance, app lock, export/import
+Successfully applied via git am
+===================================
+Applying 0136-fix-ios-observe-CurrencyManager-in-all-screens-so-cu.patch
+Applying: fix(ios): observe CurrencyManager in all screens so currency changes update live
+Successfully applied via git am
+===================================
+Applying 0137-fix-ios-observe-CurrencyManager-in-all-screens-so-cu.patch
+Applying: fix(ios): observe CurrencyManager in all screens so currency changes update live
+Successfully applied via git am
+===================================
+Applying 0138-feat-ios-add-onboarding-flow-greeting-card-and-subsc.patch
+Applying: feat(ios): add onboarding flow, greeting card, and subscriptions CRUD
+Successfully applied via git am
+===================================
+Applying 0139-feat-ios-add-rules-carousels-Notion-avatars-and-fix-.patch
+Applying: feat(ios): add rules, carousels, Notion avatars, and fix UUID compilation
+Successfully applied via git am
+===================================
+Applying 0140-feat-ios-wire-subscriptions-and-rules-into-settings-.patch
+Applying: feat(ios): wire subscriptions and rules into settings and home
+Successfully applied via git am
+===================================
+Applying 0141-fix-ios-fix-GreetingCard-avatar-reference-to-use-ass.patch
+Applying: fix(ios): fix GreetingCard avatar reference to use asset images
+Successfully applied via git am
+===================================
+Applying 0142-feat-ios-add-Import-Bank-Statement-option-to-Setting.patch
+Applying: feat(ios): add Import Bank Statement option to Settings
+Successfully applied via git am
+===================================
+Applying 0143-fix-ios-fix-PDF-statement-parser-producing-absurd-am.patch
+Applying: fix(ios): fix PDF statement parser producing absurd amounts
+Successfully applied via git am
+===================================
+Applying 0144-fix-improve-PhonePe-PDF-parser-with-date-merchant-an.patch
+Applying: fix: improve PhonePe PDF parser with date, merchant, and account extraction
+Successfully applied via git am
+===================================
+Applying 0145-fix-make-amount-regex-decimal-part-optional-for-whol.patch
+Applying: fix: make amount regex decimal part optional for whole numbers in PhonePe and GPay parsers
+Successfully applied via git am
+===================================
+Applying 0146-feat-auto-create-accounts-when-importing-PDF-stateme.patch
+Applying: feat: auto-create accounts when importing PDF statements
+Successfully applied via git am
+===================================
+Applying 0147-fix-ios-rename-UPI-accounts-add-month-grouping-debug.patch
+Applying: fix(ios): rename UPI accounts, add month grouping, debug timestamps
+Successfully applied via git am
+===================================
+Applying 0148-feat-ios-allow-renaming-accounts-after-import.patch
+Applying: feat(ios): allow renaming accounts after import
+Successfully applied via git am
+===================================
+Applying 0149-fix-use-IST-timezone-for-month-start-in-spent-this-m.patch
+Applying: fix: use IST timezone for month start in spent-this-month calculation
+Successfully applied via git am
+===================================
+Applying 0150-fix-improve-PhonePe-parser-regex-flexibility-and-add.patch
+Applying: fix: improve PhonePe parser regex flexibility and add debug logging
+Successfully applied via git am
+===================================
+Applying 0151-feat-ios-add-category-icons-to-transaction-rows.patch
+Applying: feat(ios): add category icons to transaction rows
+Successfully applied via git am
+===================================
+Applying 0152-feat-shared-category-mapping-AMOLED-dark-mode-facade.patch
+Applying: feat: shared category mapping, AMOLED dark mode, facade singleton, app icon
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: shared category mapping, AMOLED dark mode, facade singleton, app icon
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:182
+error: app/build.gradle.kts: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt:4
+error: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Applied patch to 'iosApp/iosApp/Components/StatPill.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Components/TransactionRow.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Accounts/AccountDetailScreen.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Accounts/AccountListScreen.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Analytics/AnalyticsSummaryCard.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Analytics/CategoryBreakdownList.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Analytics/CategoryPieChart.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Analytics/SpendingTrendsChart.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Analytics/TopMerchantsList.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Home/HomeScreen.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Onboarding/OnboardingScreen.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Screens/Settings/AppearanceScreen.swift' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'iosApp/iosApp/Theme/AppColors.swift' cleanly.
+Applied patch to 'iosApp/iosApp/Theme/ThemeManager.swift' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch app/build.gradle.kts...
+error: while searching for:
+dependencies {
+    // Local modules
+    implementation(project(":parser-core"))
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+error: patch failed: app/build.gradle.kts:182
+Checking patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt...
+error: while searching for:
+import com.ritesh.cashiro.core.Constants
+import com.ritesh.cashiro.data.database.entity.TransactionEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.ui.icons.CategoryMapping
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt:4
+error: while searching for:
+
+/**
+ * Determines the category based on merchant name and transaction type.
+ */
+private fun determineCategory(merchant: String?, type: TransactionType): String {
+    val merchantName = merchant ?: return "Others"
+
+    // Special handling for income transactions
+    if (type == TransactionType.INCOME) {
+        val merchantLower = merchantName.lowercase()
+        return when {
+            merchantLower.contains("salary") -> "Salary"
+            merchantLower.contains("refund") -> "Refunds"
+            merchantLower.contains("cashback") -> "Cashback"
+            merchantLower.contains("interest") -> "Interest"
+            merchantLower.contains("dividend") -> "Dividends"
+            else -> "Income"
+        }
+    }
+
+    // Use unified category mapping for expenses
+    return CategoryMapping.getCategory(merchantName)
+}
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt:75
+Checking patch iosApp/iosApp.xcodeproj/project.pbxproj...
+Checking patch iosApp/iosApp/App/MainTabView.swift...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/Contents.json...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_120x120.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_152x152.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_167x167.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_180x180.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_20x20.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_29x29.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_40x40.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_58x58.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_60x60.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_76x76.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_80x80.png...
+Checking patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_87x87.png...
+Checking patch iosApp/iosApp/Components/StatPill.swift...
+Checking patch iosApp/iosApp/Components/TransactionRow.swift...
+Checking patch iosApp/iosApp/Screens/Accounts/AccountDetailScreen.swift...
+Checking patch iosApp/iosApp/Screens/Accounts/AccountListScreen.swift...
+Checking patch iosApp/iosApp/Screens/Analytics/AnalyticsSummaryCard.swift...
+Checking patch iosApp/iosApp/Screens/Analytics/CategoryBreakdownList.swift...
+Checking patch iosApp/iosApp/Screens/Analytics/CategoryPieChart.swift...
+Checking patch iosApp/iosApp/Screens/Analytics/SpendingTrendsChart.swift...
+Checking patch iosApp/iosApp/Screens/Analytics/TopMerchantsList.swift...
+Checking patch iosApp/iosApp/Screens/Home/HomeScreen.swift...
+Checking patch iosApp/iosApp/Screens/Onboarding/OnboardingScreen.swift...
+Checking patch iosApp/iosApp/Screens/Settings/AppearanceScreen.swift...
+Checking patch iosApp/iosApp/Screens/Settings/ExportImportManager.swift...
+Checking patch iosApp/iosApp/Screens/Settings/SettingsScreen.swift...
+Checking patch iosApp/iosApp/Screens/Transactions/TransactionListView.swift...
+Checking patch iosApp/iosApp/Theme/AppColors.swift...
+Checking patch iosApp/iosApp/Theme/ThemeManager.swift...
+Checking patch iosApp/iosApp/ViewModels/AccountsViewModel.swift...
+Checking patch iosApp/iosApp/ViewModels/AnalyticsViewModel.swift...
+Checking patch iosApp/iosApp/ViewModels/BudgetViewModel.swift...
+Checking patch iosApp/iosApp/ViewModels/HomeViewModel.swift...
+Checking patch iosApp/iosApp/ViewModels/OnboardingViewModel.swift...
+Checking patch iosApp/iosApp/ViewModels/RulesViewModel.swift...
+Checking patch iosApp/iosApp/ViewModels/SubscriptionsViewModel.swift...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFacade.kt...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/SharedDataGraph.kt...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/mapping/SharedCategoryMapping.kt...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ImportStatementUseCase.kt...
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch iosApp/iosApp.xcodeproj/project.pbxproj cleanly.
+Applied patch iosApp/iosApp/App/MainTabView.swift cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/Contents.json cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_120x120.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_152x152.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_167x167.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_180x180.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_20x20.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_29x29.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_40x40.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_58x58.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_60x60.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_76x76.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_80x80.png cleanly.
+Applied patch iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_87x87.png cleanly.
+Applied patch iosApp/iosApp/Components/StatPill.swift cleanly.
+Applied patch iosApp/iosApp/Components/TransactionRow.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Accounts/AccountDetailScreen.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Accounts/AccountListScreen.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Analytics/AnalyticsSummaryCard.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Analytics/CategoryBreakdownList.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Analytics/CategoryPieChart.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Analytics/SpendingTrendsChart.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Analytics/TopMerchantsList.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Home/HomeScreen.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Onboarding/OnboardingScreen.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Settings/AppearanceScreen.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Settings/ExportImportManager.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Settings/SettingsScreen.swift cleanly.
+Applied patch iosApp/iosApp/Screens/Transactions/TransactionListView.swift cleanly.
+Applied patch iosApp/iosApp/Theme/AppColors.swift cleanly.
+Applied patch iosApp/iosApp/Theme/ThemeManager.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/AccountsViewModel.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/AnalyticsViewModel.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/BudgetViewModel.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/HomeViewModel.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/OnboardingViewModel.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/RulesViewModel.swift cleanly.
+Applied patch iosApp/iosApp/ViewModels/SubscriptionsViewModel.swift cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFacade.kt cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/SharedDataGraph.kt cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/mapping/SharedCategoryMapping.kt cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ImportStatementUseCase.kt cleanly.

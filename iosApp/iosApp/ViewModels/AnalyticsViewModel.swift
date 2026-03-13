@@ -84,7 +84,7 @@ struct AnalyticsSummaryData {
 }
 
 class AnalyticsViewModel: ObservableObject {
-    private let facade = CashiroSharedFacade()
+    private let facade = CashiroSharedFacade.companion.shared
 
     @Published var selectedPeriod: AnalyticsPeriod = .thisMonth
     @Published var selectedTypeFilter: AnalyticsTypeFilter = .all

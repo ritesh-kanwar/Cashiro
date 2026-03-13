@@ -1,0 +1,38 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt b/app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt	(rejected hunks)
+@@ -4,7 +4,7 @@ import com.ritesh.parser.core.ParsedTransaction
+ import com.ritesh.cashiro.core.Constants
+ import com.ritesh.cashiro.data.database.entity.TransactionEntity
+ import com.ritesh.cashiro.data.database.entity.TransactionType
+-import com.ritesh.cashiro.ui.icons.CategoryMapping
++import com.cashiroai.shared.domain.mapping.SharedCategoryMapping
+ import java.time.Instant
+ import java.time.LocalDateTime
+ import java.time.ZoneId
+@@ -75,25 +75,11 @@ private fun normalizeMerchantName(name: String): String {
+ 
+ /**
+  * Determines the category based on merchant name and transaction type.
++ * Delegates to SharedCategoryMapping (single source of truth).
+  */
+ private fun determineCategory(merchant: String?, type: TransactionType): String {
+     val merchantName = merchant ?: return "Others"
+-
+-    // Special handling for income transactions
+-    if (type == TransactionType.INCOME) {
+-        val merchantLower = merchantName.lowercase()
+-        return when {
+-            merchantLower.contains("salary") -> "Salary"
+-            merchantLower.contains("refund") -> "Refunds"
+-            merchantLower.contains("cashback") -> "Cashback"
+-            merchantLower.contains("interest") -> "Interest"
+-            merchantLower.contains("dividend") -> "Dividends"
+-            else -> "Income"
+-        }
+-    }
+-
+-    // Use unified category mapping for expenses
+-    return CategoryMapping.getCategory(merchantName)
++    return SharedCategoryMapping.determineCategory(merchantName, type.name)
+ }
+ 
+ /**
