@@ -6195,3 +6195,54 @@ Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImpor
 Applying patch gradle/libs.versions.toml with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 4a97ec7a] feat: add GPay and PhonePe PDF statement import with
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Tue Mar 3 16:47:16 2026 +0530
+ 34 files changed, 865 insertions(+), 182 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/proguard-rules.pro.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionEntity.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/ImportStatementUseCase.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/PdfParserFactory.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/PdfStatementParser.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/PdfTextExtractor.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/PhonePePdfParser.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportResult.kt
+ create mode 100644 gradle/libs.versions.toml.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/CompiledPatterns.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AdelFiParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIranianBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseThailandBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DashenBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EmiratesNBDParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EquitasBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/FederalBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/LivBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SBIBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SelcomPesaParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SiddharthaBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ZemenBankParser.kt.rej
+===================================
+Applying 0128-feat-migrate-LLM-from-Qwen-2.5-to-Gemma-3-1B-with-R2.patch
+Applying: feat: migrate LLM from Qwen 2.5 to Gemma 3 1B with R2 hosting
+error: corrupt patch at .git/rebase-apply/patch:70
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: migrate LLM from Qwen 2.5 to Gemma 3 1B with R2 hosting
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0128-feat-migrate-LLM-from-Qwen-2.5-to-Gemma-3-1B-with-R2.patch:82
+error: corrupt patch at ../filtered_patches/0128-feat-migrate-LLM-from-Qwen-2.5-to-Gemma-3-1B-with-R2.patch:82
