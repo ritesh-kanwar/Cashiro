@@ -6246,3 +6246,51 @@ Patch failed at 0001 feat: migrate LLM from Qwen 2.5 to Gemma 3 1B with R2 hosti
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0128-feat-migrate-LLM-from-Qwen-2.5-to-Gemma-3-1B-with-R2.patch:82
 error: corrupt patch at ../filtered_patches/0128-feat-migrate-LLM-from-Qwen-2.5-to-Gemma-3-1B-with-R2.patch:82
+[backport-fixes-upstream 4c88bcd1] feat: migrate LLM from Qwen 2.5 to Gemma 3 1B with R2
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 15 22:18:54 2026 +0530
+ 9 files changed, 51 insertions(+), 161 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/proguard-rules.pro.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionEntity.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ delete mode 100644 gradle/libs.versions.toml.rej
+===================================
+Applying 0129-chore-release-bump-version-to-2.15.49-skip-ci.patch
+Applying: chore(release): bump version to 2.15.49 [skip ci]
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore(release): bump version to 2.15.49 [skip ci]
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:21
+error: app/build.gradle.kts: patch does not apply
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: does not exist in index
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 83
+        versionName = "2.15.48"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+
+error: patch failed: app/build.gradle.kts:21
+Checking patch fastlane/metadata/android/en-US/changelogs/84.txt...
+Checking patch fastlane/metadata/android/en-US/changelogs/default.txt...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/changelogs/84.txt cleanly.

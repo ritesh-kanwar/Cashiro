@@ -1,0 +1,10 @@
+
+
+What's New in v2.15.49
+
+• Upgraded AI engine to Gemma 3 1B for smarter transaction extraction
+• Import GPay and PhonePe PDF statements with automatic duplicate detection
+• Redesigned balance card with spending-first view and comparison sparkline
+• Improved chart readability — fixed label overlap, clipping, and heatmap gaps
+• Better theme contrast and AMOLED support
+• UI polish — consistent padding, touch targets, and navigation fixes
