@@ -7831,3 +7831,122 @@ Patch failed at 0001 feat: enhance rule engine and UI for transaction conditions
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0167-feat-enhance-rule-engine-and-UI-for-transaction-cond.patch:104
 error: corrupt patch at ../filtered_patches/0167-feat-enhance-rule-engine-and-UI-for-transaction-cond.patch:104
+[backport-fixes-upstream bc6674c] feat: enhance rule engine and UI for transaction
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 22 01:57:28 2026 +0530
+ 4 files changed, 23 insertions(+), 44 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+ delete mode 100644 README.md.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0168-feat-implement-dry-run-functionality-for-rule-applic.patch
+Applying: feat: implement dry run functionality for rule application
+Successfully applied via git am
+===================================
+Applying 0169-feat-ingest-bank-app-notifications.patch
+Applying: feat: ingest bank app notifications
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: ingest bank app notifications
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:25
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:6
+error: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Applied patch to 'docs/architecture.md' cleanly.
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+Hunk #1 succeeded at 11 (offset 1 line).
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
+import com.ritesh.cashiro.data.database.entity.BudgetEntity
+import com.ritesh.cashiro.data.database.entity.CategoryBudgetLimitEntity
+import com.ritesh.cashiro.data.database.entity.CardEntity
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:25
+error: while searching for:
+ * @property autoMigrations List of automatic migrations between versions.
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class, CategoryBudgetLimitEntity::class],
+    version = 34,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:50
+error: while searching for:
+        AutoMigration(from = 30, to = 31),
+        AutoMigration(from = 31, to = 32),
+        AutoMigration(from = 32, to = 33),
+        AutoMigration(from = 33, to = 34)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:83
+error: while searching for:
+    abstract fun budgetDao(): BudgetDao
+    abstract fun transactionSplitDao(): TransactionSplitDao
+    abstract fun categoryBudgetLimitDao(): CategoryBudgetLimitDao
+    
+    companion object {
+        const val DATABASE_NAME = "cashiro_database"
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:102
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BankNotificationDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BankNotificationEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BankNotificationRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt...
+error: while searching for:
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.ritesh.cashiro.data.database.CashiroDatabase
+import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.BudgetDao
+import com.ritesh.cashiro.data.database.dao.CategoryBudgetLimitDao
+import com.ritesh.cashiro.data.database.dao.CardDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:6
+error: while searching for:
+    fun provideCategoryBudgetLimitDao(database: CashiroDatabase): CategoryBudgetLimitDao {
+        return database.categoryBudgetLimitDao()
+    }
+}
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:237
+Checking patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationListenerService.kt...
+Checking patch docs/architecture.md...
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 4 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BankNotificationDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BankNotificationEntity.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/BankNotificationRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationListenerService.kt cleanly.
+Applied patch docs/architecture.md cleanly.

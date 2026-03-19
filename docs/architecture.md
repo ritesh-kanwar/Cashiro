@@ -70,7 +70,7 @@ Cashiro follows modern Android architecture guidelines with MVVM pattern, Clean 
 **Components:**
 - Repositories
 - Room DAOs
-- Data sources (SMS, AI)
+- Data sources (SMS, notification listener, AI)
 - Data models
 
 **Responsibilities:**
@@ -84,6 +84,7 @@ Cashiro follows modern Android architecture guidelines with MVVM pattern, Clean 
 - TransactionDao.kt
 - SmsDataSource.kt
 - AICategorizationService.kt
+- BankNotificationListenerService.kt (notification-to-SMS parser bridge for whitelisted bank apps)
 ```
 
 ## Module Structure
