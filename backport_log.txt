@@ -6294,3 +6294,51 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/84.txt cleanly.
+[backport-fixes-upstream be5db4b9] chore(release): bump version to 2.15.49 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 15 22:31:33 2026 +0530
+ 3 files changed, 70 insertions(+)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/84.txt
+===================================
+Applying 0131-fix-parser-fix-5-parser-bugs-from-user-feedback.patch
+Applying: fix(parser): fix 5 parser bugs from user feedback
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix(parser): fix 5 parser bugs from user feedback
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfIndiaParser.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JupiterBankParser.kt:1
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestBankOfIndiaParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestHDFCBankParser.kt: does not exist in index
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: does not exist in index
+Falling back to direct application...
+Falling back to direct application...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfIndiaParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JupiterBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestBankOfIndiaParser.kt...
+error: parser-core/src/test/kotlin/TestBankOfIndiaParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestHDFCBankParser.kt...
+error: parser-core/src/test/kotlin/TestHDFCBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CanaraBankParserTest.kt...
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/JupiterBankParserTest.kt...
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankOfIndiaParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/JupiterBankParser.kt cleanly.
+Applied patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CanaraBankParserTest.kt cleanly.
+Applied patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/JupiterBankParserTest.kt cleanly.
