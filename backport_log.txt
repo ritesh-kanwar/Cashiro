@@ -7220,3 +7220,116 @@ Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFac
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/SharedDataGraph.kt cleanly.
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/mapping/SharedCategoryMapping.kt cleanly.
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ImportStatementUseCase.kt cleanly.
+[backport-fixes-upstream fb6066f6] feat: shared category mapping, AMOLED dark mode,
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri Mar 13 16:57:41 2026 +0530
+ 50 files changed, 1542 insertions(+), 89 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt.rej
+ delete mode 100644 gradle/libs.versions.toml.rej
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/Contents.json
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_120x120.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_152x152.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_167x167.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_180x180.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_20x20.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_29x29.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_40x40.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_58x58.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_60x60.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_76x76.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_80x80.png
+ create mode 100644 iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/icon_87x87.png
+ delete mode 100644 parser-core/build.gradle.kts.rej
+ delete mode 100644 settings.gradle.kts.rej
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/domain/mapping/SharedCategoryMapping.kt
+===================================
+Applying 0153-feat-ios-show-PennyWise-owl-logo-on-welcome-screen.patch
+Applying: feat(ios): show Cashiro owl logo on welcome screen
+Successfully applied via git am
+===================================
+Applying 0154-Remove-currency-picker-from-iOS-Settings-screen-INR-.patch
+Applying: Remove currency picker from iOS Settings screen (INR-only app)
+Successfully applied via git am
+===================================
+Applying 0155-feat-ios-add-transaction-screen-upgrades-date-filter.patch
+Applying: feat(ios): add transaction screen upgrades - date filters, totals card, CSV export, skeleton loading
+Successfully applied via git am
+===================================
+Applying 0156-fix-CBE-and-Telebirr-parsing-errors-with-niche-cases.patch
+Applying: fix: CBE and Telebirr parsing errors with niche cases
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: CBE and Telebirr parsing errors with niche cases
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt:122
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt: patch does not apply
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: does not exist in index
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt...
+error: while searching for:
+    }
+
+    override fun extractAmount(message: String): BigDecimal? {
+        // CBE patterns: "ETB 3,000.00", "ETB 25.00", "ETB250"
+        val patterns = listOf(
+            Regex("""ETB\s+([0-9,]+(?:\.[0-9]{2})?)\s""", RegexOption.IGNORE_CASE),
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt:22
+error: while searching for:
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        // Pattern 1: "from Be***" (credit transaction)
+        val fromPattern = Regex("""from\s+([^,\s]+\*{0,3}[^,\s]*)""", RegexOption.IGNORE_CASE)
+        fromPattern.find(message)?.let { match ->
+            val merchant = match.groupValues[1].trim()
+            if (merchant.isNotEmpty()) {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt:67
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt...
+error: while searching for:
+            }
+        }
+
+        // Pattern 3: "paid ETB X for goods purchased from 521902 - SAMUEL..." (merchant payment)
+        val purchasedFromPattern = Regex("""for\s+goods\s+purchased\s+from\s+([^,\n]+?)(?:\s+on\s+\d{2}/\d{2}/\d{4}|\.\s+Your\s+transaction|$)""", RegexOption.IGNORE_CASE)
+        purchasedFromPattern.find(message)?.let { match ->
+            var merchant = match.groupValues[1].trim()
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt:122
+error: while searching for:
+    }
+
+    override fun extractAccountLast4(message: String): String? {
+        // Pattern: "Dear [Name]" - extract the name in brackets
+        val dearPattern = Regex("""Dear\s+\[([^\]]+)\]""", RegexOption.IGNORE_CASE)
+        dearPattern.find(message)?.let { match ->
+            return "[${match.groupValues[1]}]"
+        }
+
+        return null
+    }
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt:205
+Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
+Checking patch parser-core/src/test/kotlin/TestTelebirrParser.kt...
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch parser-core/src/test/kotlin/TestTelebirrParser.kt cleanly.
