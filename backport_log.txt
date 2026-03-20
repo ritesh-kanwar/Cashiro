@@ -7333,3 +7333,42 @@ Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrP
 Rejected hunk #1.
 Rejected hunk #2.
 Applied patch parser-core/src/test/kotlin/TestTelebirrParser.kt cleanly.
+[backport-fixes-upstream ac1c6921] fix: CBE and Telebirr parsing errors with niche cases
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Thu Mar 19 12:10:28 2026 +0300
+ 6 files changed, 220 insertions(+), 49 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt.rej
+===================================
+Applying 0157-fix-support-multi-word-merchants.patch
+Applying: fix: support multi word merchants
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestCBEBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: support multi word merchants
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt' cleanly.
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt...
+error: while searching for:
+            }
+        }
+
+        // Pattern 1: "from Be***" (credit transaction), but avoid matching "from your account".
+        val fromPattern = Regex("""from\s+(?!your\s+account\b)([^,\s]+\*{0,3}[^,\s]*)""", RegexOption.IGNORE_CASE)
+        fromPattern.find(message)?.let { match ->
+            val merchant = match.groupValues[1].trim()
+            if (merchant.isNotEmpty()) {
+                return cleanMerchantName(merchant.replace("*", ""))
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt:89
+Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt with 1 reject...
+Rejected hunk #1.
