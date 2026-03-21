@@ -121,6 +121,7 @@ Bank parsers are now in the `parser-core` module for reusability across platform
 - LazyPay
 - **Liv Bank (UAE)** - Digital bank
 - Mashreq Bank
+- **mBank CZ (Czech Republic)** - Czech SMS support
 - **M-PESA (Kenya)** - Mobile money service
 - **Navy Federal Credit Union (USA)** - NFCU
 - **NMB Bank / Nabil Bank (Nepal)**

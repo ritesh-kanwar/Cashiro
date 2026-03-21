@@ -121,6 +121,9 @@ Supporting **80+ banks** across **14 countries** with **multi-currency** capabil
 ### 🇪🇬 Egypt (1 bank) - EGP E£
 - **CIB (Commercial International Bank)**
 
+### 🇨🇿 Czech Republic (1 bank) - CZK Kč
+- **mBank CZ** - Czech SMS support
+
 ### 🇰🇪 Kenya (1 service) - KES Ksh
 - **M-PESA** - Mobile money service
 

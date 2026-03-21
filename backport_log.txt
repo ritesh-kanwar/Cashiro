@@ -7719,3 +7719,92 @@ error: parser-core/src/test/kotlin/TestEverestBankParser.kt: No such file or dir
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 1d27978] feat: enhance EverestBankParser to support EBL and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Mar 21 22:48:03 2026 +0530
+ 3 files changed, 72 insertions(+), 11 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt.rej
+===================================
+Applying 0166-feat-add-mBank-CZ-parser-for-SMS-transaction-message.patch
+Applying: feat: add mBank CZ parser for SMS transaction messages
+error: sha1 information is lacking or useless (CLAUDE.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add mBank CZ parser for SMS transaction messages
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: CLAUDE.md:87
+error: CLAUDE.md: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:72
+error: README.md: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MBankCZParser.kt' cleanly.
+Falling back to direct application...
+Checking patch CLAUDE.md...
+error: while searching for:
+- Use `com.ritesh.cashiro.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
+- The mapper handles type conversions between modules
+
+## Supported Banks (48 parsers)
+- Airtel Payments Bank
+- **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+- American Express (AMEX)
+- Axis Bank
+
+error: patch failed: CLAUDE.md:87
+Checking patch README.md...
+error: while searching for:
+
+## Supported Banks & Countries
+
+Supporting **85+ banks** across **15 countries** with **multi-currency** capabilities:
+
+### 🇮🇳 India (44 banks) - INR ₹
+- **HDFC Bank**, **HDFC Mutual Fund**, **State Bank of India (SBI)**, **ICICI Bank**
+
+error: patch failed: README.md:72
+error: while searching for:
+### 🇮🇷 Iran (2 banks) - IRR ﷼
+- **Melli Bank (بانک ملی)**, **Parsian Bank (بانک پارسیان)** - Persian SMS support
+
+### 🇸🇦 Saudi Arabia (1 bank) - SAR ﷼
+- **Alinma Bank (بنك الإنماء)** - Arabic SMS support
+
+### 🇷🇺 Russia (1 bank) - RUB ₽
+- **T-Bank (Tinkoff)** - Russian SMS support
+
+error: patch failed: README.md:120
+Hunk #3 succeeded at 121 (offset -14 lines).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        KTCCreditCardParser(),  // KTC Credit Card (Thailand)
+        TBankParser(),  // T-Bank / Tinkoff (Russia)
+        ChaseBankParser(),  // Chase Bank (USA)
+        AlRajhiBankParser()  // Al Rajhi Bank (Saudi Arabia)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:94
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MBankCZParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/MBankCZParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestMBankCZParser.kt...
+Applying patch CLAUDE.md with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Applying patch README.md with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
+Applied patch parser-core/src/test/kotlin/TestMBankCZParser.kt cleanly.
