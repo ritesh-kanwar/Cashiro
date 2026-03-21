@@ -7,6 +7,7 @@ import com.ritesh.cashiro.data.repository.BankNotificationRepository
 import com.ritesh.cashiro.data.repository.TransactionRepository
 import com.ritesh.cashiro.data.manager.SmsTransactionProcessor
 import com.ritesh.parser.core.bank.BankParserFactory
+import com.ritesh.cashiro.worker.BankNotificationRetryWorker
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -116,6 +117,7 @@ class BankNotificationListenerService : NotificationListenerService() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to process bank notification", e)
+                BankNotificationRetryWorker.enqueue(applicationContext)
             }
         }
     }
