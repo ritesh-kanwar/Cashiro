@@ -7372,3 +7372,78 @@ Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
 error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 5330dbc7] fix: support multi word merchants
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Fri Mar 20 08:12:17 2026 +0300
+ 3 files changed, 50 insertions(+), 87 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TelebirrParser.kt.rej
+===================================
+Applying 0158-chore-add-parser-core-bin-to-gitignore.patch
+Applying: chore: add parser-core/bin to gitignore
+Successfully applied via git am
+===================================
+Applying 0159-feat-enhance-AUBankParser-to-recognize-credit-card-t.patch
+Applying: feat: enhance AUBankParser to recognize credit card transactions
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enhance AUBankParser to recognize credit card transactions
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt:84
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt...
+error: while searching for:
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        // Pattern 1: UPI/DR or UPI/CR format without Ref prefix: UPI/DR/ref/MERCHANT/IFSC/acct
+        val upiDrCrPattern = Regex(
+            """UPI/(?:DR|CR)/\d+/([^/]+)/[A-Z]{4}\d*/\d+""",
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt:84
+error: while searching for:
+        val lowerMessage = message.lowercase()
+
+        return when {
+            // Income keywords
+            lowerMessage.contains("credited") -> TransactionType.INCOME
+            lowerMessage.contains("received") -> TransactionType.INCOME
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt:147
+error: while searching for:
+            lowerMessage.contains("spent") -> TransactionType.EXPENSE
+            lowerMessage.contains("paid") -> TransactionType.EXPENSE
+
+            // Credit card transactions
+            lowerMessage.contains("credit card") && lowerMessage.contains("spent") -> TransactionType.CREDIT
+
+            else -> super.extractTransactionType(message)
+        }
+    }
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt:159
+error: while searching for:
+            "debited inr",
+            "withdrawn inr",
+            "bal inr",
+            "ref upi"
+        )
+
+        // If any AU Bank specific pattern is found, it's likely a transaction
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt:216
+Checking patch parser-core/src/test/kotlin/TestAUBankParser.kt...
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Applied patch parser-core/src/test/kotlin/TestAUBankParser.kt cleanly.
