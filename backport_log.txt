@@ -7447,3 +7447,23 @@ Rejected hunk #2.
 Rejected hunk #3.
 Rejected hunk #4.
 Applied patch parser-core/src/test/kotlin/TestAUBankParser.kt cleanly.
+[backport-fixes-upstream ebfa6740] feat: enhance AUBankParser to recognize credit card
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Mar 21 20:57:55 2026 +0530
+ 4 files changed, 138 insertions(+), 15 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt.rej
+===================================
+Applying 0160-feat-update-AI-model-integration-from-Gemma-3-to-Qwe.patch
+Applying: feat: update AI model integration from Gemma 3 to Qwen 2.5
+error: corrupt patch at .git/rebase-apply/patch:73
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: update AI model integration from Gemma 3 to Qwen 2.5
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0160-feat-update-AI-model-integration-from-Gemma-3-to-Qwe.patch:84
+error: corrupt patch at ../filtered_patches/0160-feat-update-AI-model-integration-from-Gemma-3-to-Qwe.patch:84
