@@ -7670,3 +7670,52 @@ Checking patch parser-core/src/test/kotlin/TestAlRajhiBankParser.kt...
 error: parser-core/src/test/kotlin/TestAlRajhiBankParser.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 5a4ede7de] feat: add Al Rajhi Bank parser for SMS transaction
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Mar 21 22:17:13 2026 +0530
+ 6 files changed, 178 insertions(+), 62 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+ delete mode 100644 README.md.rej
+ create mode 100644 parser-core/src/test/kotlin/TestAlRajhiBankParser.kt
+===================================
+Applying 0164-feat-enhance-project-structure-and-update-account-ba.patch
+Applying: feat: enhance project structure and update account balance handling
+Successfully applied via git am
+===================================
+Applying 0165-feat-enhance-EverestBankParser-to-support-EBL-and-Fo.patch
+Applying: feat: enhance EverestBankParser to support EBL and Fonepay transactions
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestEverestBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enhance EverestBankParser to support EBL and Fonepay transactions
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt' cleanly.
+error: parser-core/src/test/kotlin/TestEverestBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt...
+error: while searching for:
+            // Text-based senders
+            upperSender == "EVEREST" ||
+                    upperSender.contains("EVERESTBANK") ||
+                    upperSender == "UJJ SH" ||
+                    upperSender == "CWRD" ||  // ATM withdrawal code
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt:21
+error: while searching for:
+                    "ATM Withdrawal"
+                }
+
+                // Transfer pattern: "9843368/{Payment type},{Receiver}" or "{Receiver}/{Payment type},UJJ SH"
+                forContent.contains("/") && forContent.contains(",") -> {
+                    val parts = forContent.split(",")
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt:88
+Checking patch parser-core/src/test/kotlin/TestEverestBankParser.kt...
+error: parser-core/src/test/kotlin/TestEverestBankParser.kt: No such file or directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
