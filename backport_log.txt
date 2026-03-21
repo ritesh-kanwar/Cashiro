@@ -7467,3 +7467,46 @@ Patch failed at 0001 feat: update AI model integration from Gemma 3 to Qwen 2.5
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0160-feat-update-AI-model-integration-from-Gemma-3-to-Qwe.patch:84
 error: corrupt patch at ../filtered_patches/0160-feat-update-AI-model-integration-from-Gemma-3-to-Qwe.patch:84
+[backport-fixes-upstream cbe7c8d8] feat: update AI model integration from Gemma 3 to
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Mar 21 22:01:20 2026 +0530
+ 2 files changed, 20 insertions(+), 50 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AUBankParser.kt.rej
+===================================
+Applying 0161-feat-add-T-Bank-parser-for-SMS-transaction-messages.patch
+Applying: feat: add T-Bank parser for SMS transaction messages
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add T-Bank parser for SMS transaction messages
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TBankParser.kt' cleanly.
+Falling back to direct application...
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        BAACBankParser(),  // BAAC (Thailand)
+        UOBThailandParser(),  // UOB Thailand
+        CIMBThaiParser(),  // CIMB Thai (Thailand)
+        KTCCreditCardParser()  // KTC Credit Card (Thailand)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:91
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/TBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestTBankParser.kt...
+error: parser-core/src/test/kotlin/TestTBankParser.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.

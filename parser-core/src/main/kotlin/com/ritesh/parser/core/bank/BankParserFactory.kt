@@ -103,6 +103,7 @@ object BankParserFactory {
         UOBThailandParser(),  // UOB Thailand
         CIMBThaiParser(),  // CIMB Thai (Thailand)
         KTCCreditCardParser(),  // KTC Credit Card (Thailand)
+<<<<<<< ours
         MBankCZParser(),  // mBank CZ (Czech Republic)
         AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
         ChaseBankParser(),  // Chase Bank (USA)
@@ -123,6 +124,9 @@ object BankParserFactory {
         TelebirrParser(),  // Telebirr (Ethiopia)
         ZemenBankParser(),  // Zemen Bank (Ethiopia)
         DashenBankParser()  // Dashen Bank (Ethiopia)
+>>>>>>> theirs
+=======
+        TBankParser()  // T-Bank / Tinkoff (Russia)
 >>>>>>> theirs
         // Add more bank parsers here as we implement them
     )
