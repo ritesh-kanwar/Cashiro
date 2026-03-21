@@ -7510,3 +7510,118 @@ Checking patch parser-core/src/test/kotlin/TestTBankParser.kt...
 error: parser-core/src/test/kotlin/TestTBankParser.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream c51d6987] feat: add T-Bank parser for SMS transaction messages
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Mar 21 22:05:44 2026 +0530
+ 4 files changed, 129 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestTBankParser.kt
+===================================
+Applying 0162-feat-add-Chase-Bank-parser-for-SMS-transaction-messa.patch
+Applying: feat: add Chase Bank parser for SMS transaction messages
+error: sha1 information is lacking or useless (CLAUDE.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Chase Bank parser for SMS transaction messages
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: CLAUDE.md:87
+error: CLAUDE.md: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: README.md:72
+error: README.md: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ChaseBankParser.kt' cleanly.
+Falling back to direct application...
+Checking patch CLAUDE.md...
+error: while searching for:
+- Use `com.ritesh.cashiro.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
+- The mapper handles type conversions between modules
+
+## Supported Banks (46 parsers)
+- Airtel Payments Bank
+- **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+- American Express (AMEX)
+
+error: patch failed: CLAUDE.md:87
+error: while searching for:
+- Bank of India
+- Canara Bank
+- Central Bank of India
+- City Union Bank
+- DBS Bank
+- Federal Bank
+
+error: patch failed: CLAUDE.md:96
+error: while searching for:
+- Slice
+- South Indian Bank
+- **Standard Chartered Bank**
+- Union Bank
+- Utkarsh Bank
+
+
+error: patch failed: CLAUDE.md:131
+Checking patch README.md...
+error: while searching for:
+
+## Supported Banks & Countries
+
+Supporting **85+ banks** across **14 countries** with **multi-currency** capabilities:
+
+### 🇮🇳 India (44 banks) - INR ₹
+- **HDFC Bank**, **HDFC Mutual Fund**, **State Bank of India (SBI)**, **ICICI Bank**
+
+error: patch failed: README.md:72
+error: while searching for:
+- **Jio Payments Bank**, **JioPay**, **India Post Payments Bank (IPPB)**
+- **Standard Chartered Bank**
+
+### 🇺🇸 USA (7 banks) - USD $
+- **Citi Bank**, **Discover Card**, **Old Hickory Credit Union**, **Charles Schwab**
+- **Navy Federal Credit Union**, **AdelFi Credit Union**, **Huntington Bank**
+
+### 🇦🇪 UAE (5 banks) - AED د.إ
+
+error: patch failed: README.md:90
+error: while searching for:
+### 🇸🇦 Saudi Arabia (1 bank) - SAR ﷼
+- **Alinma Bank (بنك الإنماء)** - Arabic SMS support
+
+### 🇧🇾 Belarus (1 bank) - BYN Br
+- **Priorbank** - Russian/Belarusian SMS support
+
+
+error: patch failed: README.md:123
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        UOBThailandParser(),  // UOB Thailand
+        CIMBThaiParser(),  // CIMB Thai (Thailand)
+        KTCCreditCardParser(),  // KTC Credit Card (Thailand)
+        TBankParser()  // T-Bank / Tinkoff (Russia)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:92
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ChaseBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ChaseBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/TestChaseBankParser.kt...
+Applying patch CLAUDE.md with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch README.md with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
+Applied patch parser-core/src/test/kotlin/TestChaseBankParser.kt cleanly.
