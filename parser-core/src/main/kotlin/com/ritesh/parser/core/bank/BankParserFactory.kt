@@ -108,6 +108,7 @@ object BankParserFactory {
         AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
         ChaseBankParser(),  // Chase Bank (USA)
         TBankParser(),  // T-Bank / Tinkoff (Russia)
+<<<<<<< ours
         BankMuscatParser(),  // Bank Muscat (Oman)
         BPCEParser(),      // BPCE (France)
         CashfreeParser(),  // Cashfree payment gateway (India)
@@ -127,6 +128,10 @@ object BankParserFactory {
 >>>>>>> theirs
 =======
         TBankParser()  // T-Bank / Tinkoff (Russia)
+>>>>>>> theirs
+=======
+        ChaseBankParser(),  // Chase Bank (USA)
+        AlRajhiBankParser()  // Al Rajhi Bank (Saudi Arabia)
 >>>>>>> theirs
         // Add more bank parsers here as we implement them
     )
