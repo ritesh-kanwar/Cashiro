@@ -7808,3 +7808,26 @@ Hunk #3 applied cleanly.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
 Applied patch parser-core/src/test/kotlin/TestMBankCZParser.kt cleanly.
+[backport-fixes-upstream ad8d2025] feat: add mBank CZ parser for SMS transaction
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Mar 21 23:30:06 2026 +0530
+ 8 files changed, 203 insertions(+), 23 deletions(-)
+ create mode 100644 CLAUDE.md.rej
+ create mode 100644 README.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EverestBankParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/TestMBankCZParser.kt
+===================================
+Applying 0167-feat-enhance-rule-engine-and-UI-for-transaction-cond.patch
+Applying: feat: enhance rule engine and UI for transaction conditions
+error: corrupt patch at .git/rebase-apply/patch:94
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enhance rule engine and UI for transaction conditions
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0167-feat-enhance-rule-engine-and-UI-for-transaction-cond.patch:104
+error: corrupt patch at ../filtered_patches/0167-feat-enhance-rule-engine-and-UI-for-transaction-cond.patch:104
