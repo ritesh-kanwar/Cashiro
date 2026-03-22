@@ -7950,3 +7950,74 @@ Rejected hunk #2.
 Applied patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt cleanly.
 Applied patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationListenerService.kt cleanly.
 Applied patch docs/architecture.md cleanly.
+[backport-fixes-upstream 259788a4] feat: ingest bank app notifications
+ Author: Azwar <azwarhabib66@gmail.com>
+ Date: Fri Mar 20 03:32:25 2026 +0500
+ 10 files changed, 437 insertions(+), 1 deletion(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/BankNotificationDao.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BankNotificationEntity.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BankNotificationRepository.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationListenerService.kt
+===================================
+Applying 0170-fix-map-senderAlias-to-parser-recognized-name.patch
+Applying: fix: map senderAlias to parser-recognized name
+Successfully applied via git am
+===================================
+Applying 0171-fix-include-timestamp-in-notification-dedup-hash.patch
+Applying: fix: include timestamp in notification dedup hash
+Successfully applied via git am
+===================================
+Applying 0172-fix-add-SMS-notification-cross-deduplication.patch
+Applying: fix: add SMS/notification cross-deduplication
+Successfully applied via git am
+===================================
+Applying 0175-feat-add-WorkManager-retry-for-failed-notification-p.patch
+Applying: feat: add WorkManager retry for failed notification processing
+Successfully applied via git am
+===================================
+Applying 0176-chore-release-bump-version-to-2.15.50-skip-ci.patch
+Applying: chore(release): bump version to 2.15.50 [skip ci]
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore(release): bump version to 2.15.50 [skip ci]
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0176-chore-release-bump-version-to-2.15.50-skip-ci.patch:45: trailing whitespace.
+• Various
+../filtered_patches/0176-chore-release-bump-version-to-2.15.50-skip-ci.patch:70: trailing whitespace.
+• Various
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:21
+error: app/build.gradle.kts: patch does not apply
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: does not exist in index
+../filtered_patches/0176-chore-release-bump-version-to-2.15.50-skip-ci.patch:45: trailing whitespace.
+• Various
+../filtered_patches/0176-chore-release-bump-version-to-2.15.50-skip-ci.patch:70: trailing whitespace.
+• Various
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 84
+        versionName = "2.15.49"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+
+error: patch failed: app/build.gradle.kts:21
+Checking patch fastlane/metadata/android/en-US/changelogs/85.txt...
+Checking patch fastlane/metadata/android/en-US/changelogs/default.txt...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/changelogs/85.txt cleanly.

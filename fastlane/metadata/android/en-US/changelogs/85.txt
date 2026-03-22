@@ -1,0 +1,12 @@
+
+
+What's New in v2.15.50
+
+• Bank app notifications now auto-track expenses — no more missed transactions
+• Smart deduplication prevents duplicate entries from SMS and notifications
+• New bank support: Al Rajhi Bank, Chase Bank, T-Bank, mBank CZ, and enhanced Everest Bank
+• Powerful rule engine with dry run preview before applying
+• Upgraded AI model for better transaction parsing
+• Auto-create accounts when importing PDF statements
+• AMOLED dark mode and new app icon
+• Various 
