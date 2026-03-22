@@ -8021,3 +8021,163 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/85.txt cleanly.
+[backport-fixes-upstream a39100a5] chore(release): bump version to 2.15.50 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 22 10:48:36 2026 +0530
+ 5 files changed, 95 insertions(+), 62 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/85.txt
+===================================
+Applying 0177-feat-update-database-schema-to-version-35-and-enhanc.patch
+Applying: feat: update database schema to version 35 and enhance app metadata
+error: patch failed: fastlane/metadata/android/en-US/full_description.txt:1
+error: fastlane/metadata/android/en-US/full_description.txt: patch does not apply
+error: patch failed: fastlane/metadata/android/en-US/title.txt:1
+error: fastlane/metadata/android/en-US/title.txt: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Using index info to reconstruct a base tree...
+A	cashiro-web/Dockerfile
+M	fastlane/metadata/android/en-US/full_description.txt
+A	fastlane/metadata/android/en-US/images/phoneScreenshots/analytics-v2.png
+A	fastlane/metadata/android/en-US/images/phoneScreenshots/chat.png
+A	fastlane/metadata/android/en-US/images/phoneScreenshots/home.png
+A	fastlane/metadata/android/en-US/images/phoneScreenshots/image.png
+A	fastlane/metadata/android/en-US/images/phoneScreenshots/subscription-v2.png
+A	fastlane/metadata/android/en-US/images/phoneScreenshots/transactions.png
+M	fastlane/metadata/android/en-US/short_description.txt
+M	fastlane/metadata/android/en-US/title.txt
+Patch failed at 0001 feat: update database schema to version 35 and enhance app metadata
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/35.json' with conflicts.
+error: patch failed: fastlane/metadata/android/en-US/full_description.txt:1
+Falling back to direct application...
+error: patch failed: fastlane/metadata/android/en-US/full_description.txt:1
+error: fastlane/metadata/android/en-US/full_description.txt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/analytics-v2.png: does not exist in index
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/chat.png: does not exist in index
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/home.png: does not exist in index
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/image.png: does not exist in index
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/subscription-v2.png: does not exist in index
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/transactions.png: does not exist in index
+Applied patch to 'fastlane/metadata/android/en-US/short_description.txt' with conflicts.
+error: patch failed: fastlane/metadata/android/en-US/title.txt:1
+Falling back to direct application...
+error: patch failed: fastlane/metadata/android/en-US/title.txt:1
+error: fastlane/metadata/android/en-US/title.txt: patch does not apply
+error: cashiro-web/Dockerfile: does not exist in index
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/35.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/35.json: already exists in working directory
+Checking patch fastlane/metadata/android/en-US/full_description.txt...
+error: while searching for:
+Cashiro AI — Free & Open-Source, private SMS-powered expense tracker
+
+Automatically extracts transaction data from bank SMS messages using pattern-based parsing. Works 100% offline - no internet connection required.
+
+Automatic expense tracking from bank SMS with clean categories, subscription detection, and clear insights.
+
+Key Features:
+• Pattern-Based SMS Parsing - Uses regex patterns to extract transactions from 20+ banks
+• 100% Offline Core Features - Transaction parsing, analytics, and exports work without internet
+• Optional AI Chat - Download Qwen 2.5 model (1.5GB, Apache 2.0) for natural language queries
+• Clear Analytics - Charts and insights to see spending patterns
+• Subscription Tracking - Detects and monitors recurring payments
+• Auto-Categorization - Clean merchant names and intelligent categories
+• Data Export - Export as CSV or PDF for records and taxes
+• Material You Design - Clean interface with dynamic theming
+
+Currently Supported Banks (20+):
+• HDFC, SBI, ICICI, Axis, PNB, IDBI
+• Indian Bank, Federal Bank, Karnataka Bank
+• Canara Bank, Bank of Baroda, Union Bank
+• Kotak, IndusInd, IDFC First, Central Bank
+• Utkarsh, HSBC, Jio Payments Bank
+• Jupiter, Slice, and payment gateways like Juspay
+• More banks being added regularly!
+
+Privacy & Security:
+• No internet required for core functionality (SMS parsing, analytics, exports)
+• Pattern-based transaction extraction - no AI needed for parsing
+• Optional AI chat uses on-device Qwen 2.5 model (Apache 2.0 licensed)
+• SMS permission is read-only - we never send messages
+• No user accounts or cloud sync required
+• Open source - audit the code yourself on GitHub
+• Zero data collection or tracking
+
+How It Works:
+1. Grant SMS permission (read-only access)
+2. App automatically parses bank SMS using regex patterns
+3. View categorized transactions, analytics, and subscriptions
+4. Optionally download AI model for chat features
+
+Perfect for:
+• Automatic daily expense tracking
+• Understanding spending patterns and budgeting
+• Managing subscription payments
+• Financial planning and analysis
+• Maintaining detailed transaction records
+
+Technical Notes:
+• Core SMS parsing uses regex patterns, not AI
+• Optional Qwen 2.5 model (Apache 2.0) for chat feature only
+• F-Droid flavor excludes all proprietary dependencies
+
+Cashiro respects your privacy while helping you take control of your finances. Join thousands of users who trust Cashiro for secure, automatic expense tracking without compromising their data.
+error: patch failed: fastlane/metadata/android/en-US/full_description.txt:1
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/1.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/2.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/3.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/4.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/5.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/6.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/7.png...
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/analytics-v2.png...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/analytics-v2.png: No such file or directory
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/chat.png...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/chat.png: No such file or directory
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/home.png...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/home.png: No such file or directory
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/image.png...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/image.png: No such file or directory
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/subscription-v2.png...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/subscription-v2.png: No such file or directory
+Checking patch fastlane/metadata/android/en-US/images/phoneScreenshots/transactions.png...
+error: fastlane/metadata/android/en-US/images/phoneScreenshots/transactions.png: No such file or directory
+Checking patch fastlane/metadata/android/en-US/short_description.txt...
+error: while searching for:
+Offline expense tracker from bank SMS with optional AI chat
+error: patch failed: fastlane/metadata/android/en-US/short_description.txt:1
+Checking patch fastlane/metadata/android/en-US/title.txt...
+error: while searching for:
+Cashiro AI
+error: patch failed: fastlane/metadata/android/en-US/title.txt:1
+Checking patch cashiro-web/Dockerfile...
+error: cashiro-web/Dockerfile: No such file or directory
+Applying patch fastlane/metadata/android/en-US/full_description.txt with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/1.png cleanly.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/2.png cleanly.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/3.png cleanly.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/4.png cleanly.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/5.png cleanly.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/6.png cleanly.
+Applied patch fastlane/metadata/android/en-US/images/phoneScreenshots/7.png cleanly.
+Applying patch fastlane/metadata/android/en-US/short_description.txt with 1 reject...
+Rejected hunk #1.
+Applying patch fastlane/metadata/android/en-US/title.txt with 1 reject...
+Rejected hunk #1.

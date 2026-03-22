@@ -1,0 +1,5 @@
+diff a/fastlane/metadata/android/en-US/short_description.txt b/fastlane/metadata/android/en-US/short_description.txt	(rejected hunks)
+@@ -1 +1 @@
+-Offline expense tracker from bank SMS with optional AI chat
+\ No newline at end of file
++Private, SMS-powered expense tracker with on-device AI
