@@ -1,7 +1,6 @@
 package com.ritesh.cashiro.data.repository
 
 import com.ritesh.cashiro.data.database.dao.BudgetDao
-import com.ritesh.cashiro.data.database.dao.CategoryBudgetLimitDao
 import com.ritesh.cashiro.data.database.dao.TransactionSplitDao
 import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
 import com.ritesh.cashiro.data.database.entity.BudgetEntity
@@ -27,7 +26,6 @@ import javax.inject.Singleton
 class BudgetGroupRepository @Inject constructor(
     private val budgetDao: BudgetDao,
     private val transactionSplitDao: TransactionSplitDao,
-    private val categoryBudgetLimitDao: CategoryBudgetLimitDao,
     private val userPreferencesRepository: UserPreferencesRepository
 ) {
     fun getActiveGroups(): Flow<List<BudgetWithCategories>> =
@@ -45,9 +43,10 @@ class BudgetGroupRepository @Inject constructor(
         color: String,
         currency: String,
         categories: List<Pair<String, BigDecimal>> = emptyList(),
-        displayOrder: Int = 0
+        displayOrder: Int = 0,
+        limitAmount: BigDecimal? = null
     ): Long {
-        val totalAmount = categories.fold(BigDecimal.ZERO) { acc, (_, amount) -> acc + amount }
+        val totalAmount = limitAmount ?: categories.fold(BigDecimal.ZERO) { acc, (_, amount) -> acc + amount }
         val now = LocalDate.now()
         val yearMonth = YearMonth.from(now)
 
@@ -59,7 +58,7 @@ class BudgetGroupRepository @Inject constructor(
             endDate = yearMonth.atEndOfMonth(),
             currency = currency,
             isActive = true,
-            includeAllCategories = false,
+            includeAllCategories = categories.isEmpty(),
             color = color,
             groupType = groupType,
             displayOrder = displayOrder,
@@ -89,10 +88,11 @@ class BudgetGroupRepository @Inject constructor(
         groupType: BudgetGroupType,
         color: String,
         categories: List<Pair<String, BigDecimal>>,
-        currency: String? = null
+        currency: String? = null,
+        limitAmount: BigDecimal? = null
     ) {
         val existing = budgetDao.getBudgetById(budgetId) ?: return
-        val totalAmount = categories.fold(BigDecimal.ZERO) { acc, (_, amount) -> acc + amount }
+        val totalAmount = limitAmount ?: categories.fold(BigDecimal.ZERO) { acc, (_, amount) -> acc + amount }
 
         budgetDao.updateBudget(
             existing.copy(
@@ -101,6 +101,7 @@ class BudgetGroupRepository @Inject constructor(
                 color = color,
                 currency = currency ?: existing.currency,
                 limitAmount = totalAmount,
+                includeAllCategories = categories.isEmpty(),
                 updatedAt = LocalDateTime.now()
             )
         )

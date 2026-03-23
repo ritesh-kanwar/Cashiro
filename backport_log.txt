@@ -8181,3 +8181,396 @@ Applying patch fastlane/metadata/android/en-US/short_description.txt with 1 reje
 Rejected hunk #1.
 Applying patch fastlane/metadata/android/en-US/title.txt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 9caa23c57] feat: update database schema to version 35 and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 22 11:05:47 2026 +0530
+ 12 files changed, 239 insertions(+), 12 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ create mode 100644 fastlane/metadata/android/en-US/full_description.txt.rej
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/1.png
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/2.png
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/3.png
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/4.png
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/5.png
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/6.png
+ create mode 100644 fastlane/metadata/android/en-US/images/phoneScreenshots/7.png
+ create mode 100644 fastlane/metadata/android/en-US/short_description.txt.rej
+ create mode 100644 fastlane/metadata/android/en-US/title.txt.rej
+===================================
+Applying 0179-feat-integrate-LiteRT-LM-for-on-device-LLM-inference.patch
+Applying: feat: integrate LiteRT-LM for on-device LLM inference and update database schema to version 36
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: integrate LiteRT-LM for on-device LLM inference and update database schema to version 36
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:244
+error: app/build.gradle.kts: patch does not apply
+Applied patch to 'app/proguard-rules.pro' cleanly.
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/36.json' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/core/Constants.kt:70
+error: app/src/main/java/com/ritesh/cashiro/core/Constants.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:3
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:407
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt:11
+error: app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt: patch does not apply
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt:17
+error: app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:8
+error: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/domain/service/LlmService.kt' cleanly.
+Applied patch to 'build.gradle.kts' cleanly.
+Performing three-way merge...
+Applied patch to 'gradle/gradle-daemon-jvm.properties' with conflicts.
+Applied patch to 'gradle/libs.versions.toml' with conflicts.
+Applied patch to 'parser-core/build.docker.gradle.kts' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch app/build.gradle.kts...
+error: while searching for:
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
+
+    // MediaPipe for LLM inference
+    implementation(libs.tasks.genai)
+    
+    // Google Play In-App Updates (only for standard flavor)
+    "standardImplementation"(libs.app.update)
+
+error: patch failed: app/build.gradle.kts:244
+Checking patch app/proguard-rules.pro...
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/36.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/36.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/core/Constants.kt...
+error: while searching for:
+     * LLM Model Configuration
+     */
+    object ModelDownload {
+        const val MODEL_URL = "https://pub-fcfb3ffddb184540a758a7fe68249908.r2.dev/qwen2.5-1.5b-it-q8.task"
+        const val MODEL_FILE_NAME = "qwen2.5-1.5b-it-q8.task"
+        const val MODEL_SIZE_MB = 1524L
+        const val MODEL_SIZE_BYTES = 1_598_556_720L
+        const val REQUIRED_SPACE_BYTES = 3_197_113_440L // ~3.0GB (2x model size for safety)
+    }
+
+    /**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/core/Constants.kt:70
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+error: while searching for:
+import androidx.room.AutoMigration
+import androidx.room.Database
+import androidx.room.DeleteColumn
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import androidx.room.migration.AutoMigrationSpec
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:3
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
+import com.ritesh.cashiro.data.database.entity.BankNotificationEntity
+import com.ritesh.cashiro.data.database.entity.BudgetEntity
+import com.ritesh.cashiro.data.database.entity.CategoryBudgetLimitEntity
+import com.ritesh.cashiro.data.database.entity.CardEntity
+import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import com.ritesh.cashiro.data.database.entity.ChatMessage
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:28
+error: while searching for:
+ * @property autoMigrations List of automatic migrations between versions.
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class, CategoryBudgetLimitEntity::class, BankNotificationEntity::class],
+    version = 35,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:52
+error: while searching for:
+        AutoMigration(from = 31, to = 32),
+        AutoMigration(from = 32, to = 33),
+        AutoMigration(from = 33, to = 34),
+        AutoMigration(from = 34, to = 35)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:86
+error: while searching for:
+    abstract fun exchangeRateDao(): ExchangeRateDao
+    abstract fun budgetDao(): BudgetDao
+    abstract fun transactionSplitDao(): TransactionSplitDao
+    abstract fun categoryBudgetLimitDao(): CategoryBudgetLimitDao
+    abstract fun bankNotificationDao(): BankNotificationDao
+
+    companion object {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:104
+error: while searching for:
+        """)
+    }
+}
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:523
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/CategoryBudgetLimitDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/CategoryBudgetLimitEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+error: while searching for:
+        )
+    }
+
+    suspend fun migrateFromOldBudget(
+        oldLimit: BigDecimal?,
+        oldCategoryLimits: List<com.ritesh.cashiro.data.database.entity.CategoryBudgetLimitEntity>,
+        currency: String
+    ) {
+        if (oldLimit == null && oldCategoryLimits.isEmpty()) return
+
+        val categories = oldCategoryLimits.map { it.categoryName to it.limitAmount }
+        createGroup(
+            name = "Spending",
+            groupType = BudgetGroupType.LIMIT,
+            color = "#1565C0",
+            currency = currency,
+            categories = categories,
+            displayOrder = 0
+        )
+    }
+
+    suspend fun moveGroupUp(budgetId: Long) {
+        val groups = budgetDao.getActiveBudgetsWithCategories().first()
+            .sortedBy { it.budget.displayOrder }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:407
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt...
+error: while searching for:
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import java.math.BigDecimal
+import java.util.UUID
+import javax.inject.Inject
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt:11
+Hunk #2 succeeded at 23 (offset -2 lines).
+Hunk #3 succeeded at 204 (offset -2 lines).
+Hunk #4 succeeded at 212 (offset -2 lines).
+Hunk #5 succeeded at 228 (offset -2 lines).
+Hunk #6 succeeded at 254 (offset -2 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt...
+error: while searching for:
+class LlmServiceImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+) : LlmService {
+    
+    private var llmInference: LlmInference? = null
+    
+    override suspend fun initialize(modelPath: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val options = LlmInference.LlmInferenceOptions.builder()
+                .setModelPath(modelPath)
+                .setMaxTokens(4096) // Match Qwen 2.5 1.5B q8 ekv4096
+                .build()
+            
+            llmInference = LlmInference.createFromOptions(context, options)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    override suspend fun generateResponse(prompt: String): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val inference = llmInference ?: return@withContext Result.failure(
+                IllegalStateException("LLM not initialized")
+            )
+            
+            val response = inference.generateResponse(prompt)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    override fun generateResponseStream(prompt: String): Flow<String> = callbackFlow {
+        val inference = llmInference ?: throw IllegalStateException("LLM not initialized")
+        
+        Log.d("LlmServiceImpl", "Starting generateResponseAsync for prompt: ${prompt.take(50)}...")
+        
+        inference.generateResponseAsync(prompt) { partialResult, done ->
+            Log.d("LlmServiceImpl", "Received partial result: ${partialResult.take(20)}..., done=$done")
+            val sent = trySend(partialResult).isSuccess
+            Log.d("LlmServiceImpl", "Sent partial result: $sent")
+            
+            if (done) {
+                Log.d("LlmServiceImpl", "Response generation complete, closing channel")
+                close()
+            }
+            done
+        }
+        
+        awaitClose { 
+            Log.d("LlmServiceImpl", "Flow closed")
+        }
+    }
+    
+    override suspend fun reset() {
+        withContext(Dispatchers.IO) {
+            llmInference?.close()
+            llmInference = null
+        }
+    }
+    
+    override fun isInitialized(): Boolean = llmInference != null
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt:17
+Checking patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.BankNotificationDao
+import com.ritesh.cashiro.data.database.dao.BudgetDao
+import com.ritesh.cashiro.data.database.dao.CategoryBudgetLimitDao
+import com.ritesh.cashiro.data.database.dao.CardDao
+import com.ritesh.cashiro.data.database.dao.CategoryDao
+import com.ritesh.cashiro.data.database.dao.ChatDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:8
+error: while searching for:
+        return database.transactionSplitDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryBudgetLimitDao(database: CashiroDatabase): CategoryBudgetLimitDao {
+        return database.categoryBudgetLimitDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBankNotificationDao(database: CashiroDatabase): BankNotificationDao {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:233
+Checking patch app/src/main/java/com/ritesh/cashiro/domain/service/LlmService.kt...
+Checking patch build.gradle.kts...
+Checking patch gradle/gradle-daemon-jvm.properties...
+error: gradle/gradle-daemon-jvm.properties: already exists in working directory
+Checking patch gradle/libs.versions.toml...
+error: while searching for:
+review = "2.0.2"
+reviewKtx = "2.0.2"
+roomVersion = "2.8.4"
+tasksGenai = "0.10.29"
+visionInternalVkp = "18.2.3"
+workVersion = "2.11.0"
+coil = "2.7.0"
+
+error: patch failed: gradle/libs.versions.toml:32
+error: while searching for:
+pdfbox-android = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfboxAndroid" }
+review = { module = "com.google.android.play:review", version.ref = "review" }
+review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }
+tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "tasksGenai" }
+vision-internal-vkp = { group = "com.google.mlkit", name = "vision-internal-vkp", version.ref = "visionInternalVkp" }
+
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
+
+error: patch failed: gradle/libs.versions.toml:91
+error: while searching for:
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+error: patch failed: gradle/libs.versions.toml:100
+Checking patch parser-core/build.docker.gradle.kts...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestHDFCMandateParsing.kt...
+Checking patch settings.gradle.kts...
+Checking patch shared/build.gradle.kts...
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch app/proguard-rules.pro cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/core/Constants.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 6 rejects...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Rejected hunk #7.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/CategoryBudgetLimitDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/CategoryBudgetLimitEntity.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 1 reject...
+Hunk #1 applied cleanly.
+Hunk #2 applied cleanly.
+Hunk #3 applied cleanly.
+Hunk #4 applied cleanly.
+Hunk #5 applied cleanly.
+Hunk #6 applied cleanly.
+Rejected hunk #7.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt with 1 reject...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Hunk #3 applied cleanly.
+Hunk #4 applied cleanly.
+Hunk #5 applied cleanly.
+Hunk #6 applied cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/domain/service/LlmService.kt cleanly.
+Applied patch build.gradle.kts cleanly.
+Applying patch gradle/libs.versions.toml with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch parser-core/build.docker.gradle.kts cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt cleanly.
+Applied patch parser-core/src/test/kotlin/TestHDFCMandateParsing.kt cleanly.
+Applied patch settings.gradle.kts cleanly.
+Applied patch shared/build.gradle.kts cleanly.

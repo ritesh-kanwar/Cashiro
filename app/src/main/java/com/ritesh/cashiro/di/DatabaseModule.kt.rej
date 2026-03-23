@@ -1,0 +1,22 @@
+diff a/app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt b/app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt	(rejected hunks)
+@@ -8,7 +8,6 @@ import com.ritesh.cashiro.data.database.CashiroDatabase
+ import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+ import com.ritesh.cashiro.data.database.dao.BankNotificationDao
+ import com.ritesh.cashiro.data.database.dao.BudgetDao
+-import com.ritesh.cashiro.data.database.dao.CategoryBudgetLimitDao
+ import com.ritesh.cashiro.data.database.dao.CardDao
+ import com.ritesh.cashiro.data.database.dao.CategoryDao
+ import com.ritesh.cashiro.data.database.dao.ChatDao
+@@ -233,12 +232,6 @@ object DatabaseModule {
+         return database.transactionSplitDao()
+     }
+ 
+-    @Provides
+-    @Singleton
+-    fun provideCategoryBudgetLimitDao(database: CashiroDatabase): CategoryBudgetLimitDao {
+-        return database.categoryBudgetLimitDao()
+-    }
+-
+     @Provides
+     @Singleton
+     fun provideBankNotificationDao(database: CashiroDatabase): BankNotificationDao {

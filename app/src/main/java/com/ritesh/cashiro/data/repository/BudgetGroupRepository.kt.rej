@@ -1,0 +1,26 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt b/app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt	(rejected hunks)
+@@ -407,24 +408,6 @@ class BudgetGroupRepository @Inject constructor(
+         )
+     }
+ 
+-    suspend fun migrateFromOldBudget(
+-        oldLimit: BigDecimal?,
+-        oldCategoryLimits: List<com.ritesh.cashiro.data.database.entity.CategoryBudgetLimitEntity>,
+-        currency: String
+-    ) {
+-        if (oldLimit == null && oldCategoryLimits.isEmpty()) return
+-
+-        val categories = oldCategoryLimits.map { it.categoryName to it.limitAmount }
+-        createGroup(
+-            name = "Spending",
+-            groupType = BudgetGroupType.LIMIT,
+-            color = "#1565C0",
+-            currency = currency,
+-            categories = categories,
+-            displayOrder = 0
+-        )
+-    }
+-
+     suspend fun moveGroupUp(budgetId: Long) {
+         val groups = budgetDao.getActiveBudgetsWithCategories().first()
+             .sortedBy { it.budget.displayOrder }
