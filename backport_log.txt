@@ -8574,3 +8574,43 @@ Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankPa
 Applied patch parser-core/src/test/kotlin/TestHDFCMandateParsing.kt cleanly.
 Applied patch settings.gradle.kts cleanly.
 Applied patch shared/build.gradle.kts cleanly.
+[backport-fixes-upstream 9ffe15148] feat: integrate LiteRT-LM for on-device LLM inference
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Mar 23 23:08:49 2026 +0530
+ 28 files changed, 1007 insertions(+), 581 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/core/Constants.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/CategoryBudgetLimitDao.kt
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/CategoryBudgetLimitEntity.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/MonthlyBudgetRepository.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+ delete mode 100644 fastlane/metadata/android/en-US/full_description.txt.rej
+ delete mode 100644 fastlane/metadata/android/en-US/short_description.txt.rej
+ delete mode 100644 fastlane/metadata/android/en-US/title.txt.rej
+ create mode 100644 gradle/libs.versions.toml.rej
+ create mode 100644 parser-core/src/test/kotlin/TestHDFCMandateParsing.kt
+===================================
+Applying 0181-fix-detect-credit-card-type-in-Standard-Chartered-pa.patch
+Applying: fix: detect credit card type in Standard Chartered parser
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: detect credit card type in Standard Chartered parser
+Conflict detected! Falling back to apply --reject
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/CardRepository.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt' cleanly.
+error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: does not exist in index
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/CardRepository.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt...
+error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: No such file or directory
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/CardRepository.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt cleanly.
