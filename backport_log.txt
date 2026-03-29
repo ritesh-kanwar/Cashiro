@@ -8614,3 +8614,51 @@ Checking patch parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt...
 error: parser-core/src/test/kotlin/TestStandardCharteredBankParser.kt: No such file or directory
 Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/CardRepository.kt cleanly.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/StandardCharteredBankParser.kt cleanly.
+[backport-fixes-upstream a22b3e680] fix: detect credit card type in Standard Chartered
+ Author: Azwar <azwarhabib66@gmail.com>
+ Date: Tue Mar 24 02:38:32 2026 +0500
+ 11 files changed, 55 insertions(+), 321 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/core/Constants.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/service/LlmServiceImpl.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+ delete mode 100644 gradle/libs.versions.toml.rej
+===================================
+Applying 0182-fix-navigation-bugs-launchSingleTop-on-all-routes-re.patch
+Applying: fix: navigation bugs — launchSingleTop on all routes, refactor AccountDetailScreen, remove orphaned route
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/CashiroApp.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: navigation bugs — launchSingleTop on all routes, refactor AccountDetailScreen, remove orphaned route
+Conflict detected! Falling back to apply --reject
+Applied patch to 'TODO.md' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:100
+error: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch TODO.md...
+Checking patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt...
+error: while searching for:
+    // Navigate to transaction detail when editTransactionId changes
+    LaunchedEffect(editTransactionId) {
+        editTransactionId?.let { transactionId ->
+            navController.navigate(com.ritesh.cashiro.navigation.TransactionDetail(transactionId))
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:100
+Checking patch shared/src/commonTest/kotlin/com/cashiroai/shared/data/bootstrap/SharedDataInitializerTest.kt...
+Applied patch TODO.md cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt with 1 reject...
+Rejected hunk #1.
+Applied patch shared/src/commonTest/kotlin/com/cashiroai/shared/data/bootstrap/SharedDataInitializerTest.kt cleanly.
