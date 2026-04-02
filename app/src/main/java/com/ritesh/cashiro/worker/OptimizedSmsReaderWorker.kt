@@ -75,24 +75,29 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     companion object {
-        const val TAG = "OptimizedSmsReaderWorker"
-        const val WORK_NAME = "optimized_sms_reader_work"
-
-        // Input keys
-        const val INPUT_FORCE_RESYNC = "input_force_resync"
-
-        // Progress keys
-        const val PROGRESS_TOTAL = "progress_total"
-        const val PROGRESS_PROCESSED = "progress_processed"
-        const val PROGRESS_PARSED = "progress_parsed"
-        const val PROGRESS_SAVED = "progress_saved"
-        const val PROGRESS_BLOCKED = "progress_blocked"
-        const val PROGRESS_TIME_ELAPSED = "progress_time_elapsed"
+        const val TAG                               = "OptimizedSmsReaderWorker"
+        const val WORK_NAME                         = "optimized_sms_reader_work"
+        const val INPUT_FORCE_RESYNC                = "input_force_resync"
+        const val PROGRESS_TOTAL                    = "progress_total"
+        const val PROGRESS_PROCESSED                = "progress_processed"
+        const val PROGRESS_PARSED                   = "progress_parsed"
+        const val PROGRESS_SAVED                    = "progress_saved"
+        const val PROGRESS_BLOCKED                  = "progress_blocked"
+        const val PROGRESS_TIME_ELAPSED             = "progress_time_elapsed"
         const val PROGRESS_ESTIMATED_TIME_REMAINING = "progress_estimated_time_remaining"
-        const val PROGRESS_CURRENT_BATCH = "progress_current_batch"
-        const val PROGRESS_TOTAL_BATCHES = "progress_total_batches"
+        const val PROGRESS_CURRENT_BATCH            = "progress_current_batch"
+        const val PROGRESS_TOTAL_BATCHES            = "progress_total_batches"
+        const val PROGRESS_MSG_PER_SEC              = "progress_msg_per_sec"
+        const val PROGRESS_ETA_SECONDS              = "progress_eta_seconds"
 
-        // SMS Content Provider columns
+        private const val NOTIFICATION_ID           = 9001
+        private const val PARSE_CHANNEL_CAPACITY    = 512
+        private const val RESULT_CHANNEL_CAPACITY   = 512
+        private const val PROGRESS_REPORT_INTERVAL  = 10
+        private const val PROGRESS_MONITOR_INTERVAL = 50L
+        private const val UNRECOGNIZED_BATCH_SIZE   = 50
+        private const val ETA_WINDOW_MS             = 2000L
+
         private val SMS_PROJECTION = arrayOf(
             Telephony.Sms._ID,
             Telephony.Sms.ADDRESS,

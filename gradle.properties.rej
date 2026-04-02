@@ -1,0 +1,20 @@
+diff a/gradle.properties b/gradle.properties	(rejected hunks)
+@@ -22,4 +22,15 @@ kotlin.code.style=official
+ # Enables namespacing of each library's R class so that its R class includes only the
+ # resources declared in the library itself and none from the library's dependencies,
+ # thereby reducing the size of the R class for that library
+-android.nonTransitiveRClass=true
+\ No newline at end of file
++android.nonTransitiveRClass=true
++android.defaults.buildfeatures.resvalues=true
++android.sdk.defaultTargetSdkToCompileSdkIfUnset=false
++android.enableAppCompileTimeRClass=false
++android.usesSdkInManifest.disallowed=false
++android.uniquePackageNames=false
++android.dependency.useConstraints=true
++android.r8.strictFullModeForKeepRules=false
++android.r8.optimizedResourceShrinking=false
++android.builtInKotlin=false
++android.newDsl=false
++android.sourceset.disallowProvider=false
+\ No newline at end of file

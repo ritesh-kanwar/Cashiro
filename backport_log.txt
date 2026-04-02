@@ -8662,3 +8662,701 @@ Applied patch TODO.md cleanly.
 Applying patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt with 1 reject...
 Rejected hunk #1.
 Applied patch shared/src/commonTest/kotlin/com/cashiroai/shared/data/bootstrap/SharedDataInitializerTest.kt cleanly.
+[backport-fixes-upstream cb667686a] =?UTF-8?q?fix:=20navigation=20bugs=20=E2=80=94=20?=
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Mar 29 22:21:20 2026 +0530
+ 4 files changed, 111 insertions(+), 41 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/CashiroApp.kt.rej
+===================================
+Applying 0183-feat-add-ALECU-Credit-Union-USA-bank-parser.patch
+Applying: feat: add ALECU Credit Union (USA) bank parser
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Successfully applied via git am
+===================================
+Applying 0184-Combined-changes-fixing-various-bugs-220.patch
+Applying: Combined changes fixing various bugs (#220)
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Combined changes fixing various bugs (#220)
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:341: trailing whitespace.
+                
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:346: trailing whitespace.
+                    
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:352: trailing whitespace.
+                
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:4706: trailing whitespace.
+            
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:4740: trailing whitespace.
+            
+Falling back to direct application...
+Applied patch to '.github/workflows/release.yml' cleanly.
+Applied patch to '.github/workflows/test.yml' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:132
+error: app/build.gradle.kts: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/dao/MerchantMappingDao.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:108
+error: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/MerchantMappingRepository.kt' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:1
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt:1
+error: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt: patch does not apply
+Applied patch to 'build.gradle.kts' cleanly.
+Applied patch to 'docs/BANK_SUPPORT.md' cleanly.
+Applied patch to 'gradle.properties' with conflicts.
+Applied patch to 'gradle/gradle-daemon-jvm.properties' with conflicts.
+Applied patch to 'gradle/libs.versions.toml' with conflicts.
+Applied patch to 'gradle/wrapper/gradle-wrapper.properties' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/build.gradle.kts:7
+error: parser-core/build.gradle.kts: patch does not apply
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:1
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:1
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestSouthIndianBankParser.kt: does not exist in index
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:341: trailing whitespace.
+                
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:346: trailing whitespace.
+                    
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:352: trailing whitespace.
+                
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:4706: trailing whitespace.
+            
+../filtered_patches/0184-Combined-changes-fixing-various-bugs-220.patch:4740: trailing whitespace.
+            
+Checking patch .coderabbit.yaml...
+Checking patch .github/workflows/release.yml...
+Hunk #1 succeeded at 53 (offset -7 lines).
+Checking patch .github/workflows/test.yml...
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        compose = true
+    }
+
+error: patch failed: app/build.gradle.kts:132
+error: while searching for:
+    androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+
+error: patch failed: app/build.gradle.kts:260
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/MerchantMappingDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt...
+Hunk #1 succeeded at 745 (offset 729 lines).
+error: while searching for:
+                isDeveloperModeEnabled = preferences[PreferencesKeys.DEVELOPER_MODE_ENABLED] ?: false,
+                hasShownScanTutorial = preferences[PreferencesKeys.HAS_SHOWN_SCAN_TUTORIAL] ?: false,
+                smsScanMonths = preferences[PreferencesKeys.SMS_SCAN_MONTHS] ?: 3,
+                smsScanAllTime = preferences[PreferencesKeys.SMS_SCAN_ALL_TIME] ?: false,
+                baseCurrency = preferences[PreferencesKeys.BASE_CURRENCY] ?: "INR",
+                unifiedCurrencyMode = preferences[PreferencesKeys.UNIFIED_CURRENCY_MODE] ?: false,
+                displayCurrency = preferences[PreferencesKeys.DISPLAY_CURRENCY]
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:108
+Hunk #3 succeeded at 945 (offset 663 lines).
+Hunk #4 succeeded at 956 (offset 663 lines).
+error: while searching for:
+    val isDeveloperModeEnabled: Boolean = false,
+    val hasShownScanTutorial: Boolean = false,
+    val smsScanMonths: Int = 3,
+    val smsScanAllTime: Boolean = false,
+    val baseCurrency: String = "INR",
+    val unifiedCurrencyMode: Boolean = false,
+    val displayCurrency: String = "INR",
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt:606
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/MerchantMappingRepository.kt...
+error: while searching for:
+    suspend fun getMappingCount(): Int {
+        return merchantMappingDao.getMappingCount()
+    }
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/MerchantMappingRepository.kt:37
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+package com.ritesh.cashiro.worker
+
+import android.content.Context
+import android.net.Uri
+import android.provider.Telephony
+import android.util.Log
+import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import androidx.work.workDataOf
+import com.ritesh.parser.core.ParsedTransaction
+import com.ritesh.parser.core.bank.BankParserFactory
+import com.ritesh.parser.core.bank.FederalBankParser
+import com.ritesh.parser.core.bank.HDFCBankParser
+import com.ritesh.parser.core.bank.IndianBankParser
+import com.ritesh.parser.core.bank.SBIBankParser
+import com.ritesh.parser.core.bank.IndusIndBankParser
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+import com.ritesh.cashiro.data.mapper.toEntity
+import com.ritesh.cashiro.data.mapper.toEntityType
+import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+import com.ritesh.cashiro.data.repository.AccountBalanceRepository
+import com.ritesh.cashiro.data.repository.CardRepository
+import com.ritesh.cashiro.data.repository.LlmRepository
+import com.ritesh.cashiro.data.repository.MerchantMappingRepository
+import com.ritesh.cashiro.data.repository.SubscriptionRepository
+import com.ritesh.cashiro.data.repository.TransactionRepository
+import com.ritesh.cashiro.data.repository.UnrecognizedSmsRepository
+import com.ritesh.cashiro.domain.repository.RuleRepository
+import com.ritesh.cashiro.domain.service.RuleEngine
+import com.ritesh.cashiro.utils.CurrencyFormatter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.datetime.toJavaLocalDateTime
+import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import kotlin.system.measureTimeMillis
+
+/**
+ * Optimized SMS Worker with parallel processing and progress tracking.
+ * This worker provides significant performance improvements through:
+ * 1. Parallel processing of SMS messages
+ * 2. Progress reporting with estimated time completion
+ * 3. Optimized database operations
+ * 4. Efficient memory usage
+ */
+@HiltWorker
+class OptimizedSmsReaderWorker @AssistedInject constructor(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:1
+Hunk #2 succeeded at 75 (offset 7 lines).
+error: while searching for:
+            Telephony.Sms.TYPE
+        )
+
+        // Parallel processing configuration
+        private const val PROGRESS_REPORT_INTERVAL = 10 // Report progress every 10 messages
+    }
+
+    /**
+     * Calculates optimal batch size based on available cores and total messages
+     */
+    private fun calculateOptimalBatchSize(totalMessages: Int, availableCores: Int): Int {
+        return when {
+            totalMessages < 100 -> 10 // Small datasets: small batches for better progress tracking
+            totalMessages < 500 -> 25 // Medium datasets: moderate batches
+            totalMessages < 2000 -> 50 // Large datasets: standard batches
+            else -> {
+                // Very large datasets: scale batch size with cores but cap at reasonable limit
+                val coreBasedBatch = availableCores * 15
+                minOf(coreBasedBatch, 200)
+            }
+        }
+    }
+
+    /**
+     * Calculates optimal parallelism based on available cores and message count
+     *
+     * IMPORTANT: Sequential processing (parallelism=1) to prevent race conditions
+     * in balance calculations. When multiple threads process transactions for the
+     * same account simultaneously, they read the same "previous balance" value,
+     * causing incorrect balance calculations.
+     */
+    private fun calculateOptimalParallelism(totalMessages: Int, availableCores: Int): Int {
+        // Always use sequential processing to ensure correct balance calculations
+        return 1
+    }
+
+    data class ProcessingStats(
+        var totalMessages: Int = 0,
+        var processedMessages: Int = 0,
+        var parsedTransactions: Int = 0,
+        var savedTransactions: Int = 0,
+        var blockedTransactions: Int = 0,
+        var subscriptionCount: Int = 0,
+        var startTime: Long = System.currentTimeMillis(),
+        var messagesPerSecond: Double = 0.0
+    ) {
+        fun updateTimeElapsed(): Long = System.currentTimeMillis() - startTime
+
+        fun updateMessagesPerSecond() {
+            val elapsedSeconds = updateTimeElapsed() / 1000.0
+            messagesPerSecond = if (elapsedSeconds > 0) processedMessages / elapsedSeconds else 0.0
+        }
+
+        fun getEstimatedTimeRemaining(): Long {
+            return if (messagesPerSecond > 0 && processedMessages > 0) {
+                val remainingMessages = totalMessages - processedMessages
+                (remainingMessages / messagesPerSecond * 1000).toLong()
+            } else 0L
+        }
+    }
+
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        try {
+            // Check if this is a force resync request
+            val forceResync = inputData.getBoolean(INPUT_FORCE_RESYNC, false)
+            Log.d(TAG, "Starting optimized SMS reading and parsing work... (forceResync: $forceResync)")
+
+            // If force resync, clear existing data first
+            if (forceResync) {
+                Log.d(TAG, "Force resync: Clearing existing transactions and account balances...")
+                transactionRepository.deleteAllTransactions()
+                accountBalanceRepository.deleteAllBalances()
+                Log.d(TAG, "Force resync: Database cleared, starting fresh scan")
+            }
+
+            val stats = ProcessingStats()
+
+            // Read SMS messages (force resync ignores last scan timestamp)
+            val messages = readSmsMessages(forceResync)
+            stats.totalMessages = messages.size
+            Log.d(TAG, "Found ${messages.size} SMS messages to process")
+
+            // Calculate optimal batch size and parallelism based on available cores and message count
+            val availableCores = Runtime.getRuntime().availableProcessors()
+            val batchSize = calculateOptimalBatchSize(messages.size, availableCores)
+            val parallelism = calculateOptimalParallelism(messages.size, availableCores)
+
+            Log.d(TAG, "Auto-calculated optimization parameters:")
+            Log.d(TAG, "- Available CPU cores: $availableCores")
+            Log.d(TAG, "- Batch size: $batchSize")
+            Log.d(TAG, "- 
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:100
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt...
+error: while searching for:
+package com.ritesh.cashiro.worker
+
+import android.content.Context
+import android.net.Uri
+import android.provider.Telephony
+import android.util.Log
+import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import com.ritesh.cashiro.core.Constants
+import com.ritesh.parser.core.bank.BankParserFactory
+import com.ritesh.parser.core.bank.HDFCBankParser
+import com.ritesh.parser.core.bank.IndianBankParser
+import com.ritesh.parser.core.bank.IndusIndBankParser
+import com.ritesh.parser.core.bank.SBIBankParser
+import com.ritesh.parser.core.ParsedTransaction
+import com.ritesh.cashiro.data.mapper.toEntity
+import com.ritesh.cashiro.data.mapper.toEntityType
+import com.ritesh.cashiro.data.repository.AccountBalanceRepository
+import com.ritesh.cashiro.data.repository.CardRepository
+import com.ritesh.cashiro.data.repository.LlmRepository
+import com.ritesh.cashiro.data.repository.MerchantMappingRepository
+import com.ritesh.cashiro.data.repository.SubscriptionRepository
+import com.ritesh.cashiro.data.repository.TransactionRepository
+import com.ritesh.cashiro.data.repository.UnrecognizedSmsRepository
+import com.ritesh.cashiro.domain.repository.RuleRepository
+import com.ritesh.cashiro.domain.service.RuleEngine
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+import com.ritesh.cashiro.utils.CurrencyFormatter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.first
+import kotlinx.datetime.toJavaLocalDateTime
+import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+
+/**
+ * Worker responsible for reading SMS messages and logging them.
+ * This is the first step in our SMS scanning pipeline.
+ */
+@HiltWorker
+class SmsReaderWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val transactionRepository: TransactionRepository,
+    private val subscriptionRepository: SubscriptionRepository,
+    private val accountBalanceRepository: AccountBalanceRepository,
+    private val cardRepository: CardRepository,
+    private val llmRepository: LlmRepository,
+    private val merchantMappingRepository: MerchantMappingRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val unrecognizedSmsRepository: UnrecognizedSmsRepository,
+    private val ruleRepository: RuleRepository,
+    private val ruleEngine: RuleEngine
+) : CoroutineWorker(appContext, workerParams) {
+    
+    companion object {
+        const val TAG = "SmsReaderWorker"
+        const val WORK_NAME = "sms_reader_work"
+        
+        // SMS Content Provider columns
+        private val SMS_PROJECTION = arrayOf(
+            Telephony.Sms._ID,
+            Telephony.Sms.ADDRESS,
+            Telephony.Sms.DATE,
+            Telephony.Sms.BODY,
+            Telephony.Sms.TYPE
+        )
+    }
+    
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        try {
+            Log.d(TAG, "Starting SMS reading and parsing work...")
+            
+            // Read SMS messages
+            val messages = readSmsMessages()
+            Log.d(TAG, "Found ${messages.size} SMS messages")
+            
+            var parsedCount = 0
+            var savedCount = 0
+            var subscriptionCount = 0
+            
+            // Process all messages from the scan period
+            for (sms in messages) {
+                // Skip promotional (-P) and government (-G) messages
+                val senderUpper = sms.sender.uppercase()
+                if (senderUpper.endsWith("-P") || senderUpper.endsWith("-G")) {
+                    Log.d(TAG, "Skipping promotional/government SMS from: ${sms.sender}")
+                    contin
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt:1
+error: removal patch leaves file contents
+error: app/src/main/java/com/ritesh/cashiro/worker/SmsReaderWorker.kt: patch does not apply
+Checking patch build.gradle.kts...
+Checking patch docs/BANK_SUPPORT.md...
+error: while searching for:
+|------|-----------------|---------|
+| **Credit** | `Rs.XXX credited to A/c` | Rs.5000 credited to A/c XX1234 |
+| **Credit** | `A/c XXXX-credited by Rs.XXX` | A/c X9338-credited by Rs.500 |
+| **Debit** | `Rs.XXX debited from A/c` | Rs.2000 debited from A/c XX1234 |
+| **Debit** | `A/C XXXX debited by XXX` | A/C X9474 debited by 370.0 |
+| **UPI Send** | `trf to MERCHANT` | debited by 100 trf to SHOPKEEPER |
+
+error: patch failed: docs/BANK_SUPPORT.md:40
+error: while searching for:
+| Type | Template Pattern | Example |
+|------|-----------------|---------|
+| **Credit** | `credited by Rs XXX` | PNB A/c XX5678 credited by Rs 3000 |
+| **Debit** | `debited by Rs XXX` | PNB A/c XX5678 debited by Rs 1000 |
+| **ATM** | `ATM withdrawal Rs XXX` | ATM withdrawal Rs 2000 from A/c XX5678 |
+
+### IDFC First Bank
+
+error: patch failed: docs/BANK_SUPPORT.md:83
+error: while searching for:
+| **Axis** | `AXIS`, `AXISBK`, `XX-AXIS-S`, `XX-AXISBK-S` |
+| **Indian Bank** | `INDBNK`, `INDIAN`, `XX-INDBNK-S` (e.g., `AD-INDBNK-S`) |
+| **Federal** | `FEDERA`, `FEDERALBNK`, `XX-FEDERA-S` |
+| **PNB** | `PNB`, `PNBSMS`, `XX-PNB-S` |
+| **IDBI** | `IDBI`, `IDBIBNK`, `XX-IDBI-S` |
+| **Karnataka** | `KARNBK`, `KARNATAKA`, `XX-KARNBK-S` |
+| **Canara** | `CANBNK`, `CANARA`, `XX-CANBNK-S` |
+
+error: patch failed: docs/BANK_SUPPORT.md:105
+error: while searching for:
+| **SBI** | `Bal: Rs XXX` | Bal: Rs 5000 |
+| **Indian Bank** | `Bal Rs. XXX` | Bal Rs. 50000.00 |
+| **Indian Bank** | `Available Balance: Rs. XXX` | Available Balance: Rs. 25000 |
+| **PNB** | `Bal INR XXX` or `Bal Rs.XXX` | Bal INR 5000.00 |
+| **IDBI** | `Bal Rs XXX` | Bal Rs 3694.38 |
+| **IDFC First** | `New Bal :INR XXX` | New Bal :INR 15000.00 |
+| **Karnataka Bank** | `Balance is Rs.XXX` | Balance is Rs.705.92 |
+
+error: patch failed: docs/BANK_SUPPORT.md:128
+error: while searching for:
+| **Account** | Last 4 digits of account | All banks ✅ |
+| **Merchant** | Merchant/Sender name | All banks ✅ |
+| **Balance** | Available balance after transaction | Most banks (except ICICI) |
+| **Reference** | Transaction reference/ID | Most banks (except Federal, PNB) |
+| **UPI ID** | VPA for UPI transactions | HDFC, SBI, ICICI, Axis, Indian |
+| **Card Number** | Last 4 digits of card | HDFC, ICICI |
+| **ATM Location** | ATM withdrawal location | HDFC, SBI, Axis, Indian, PNB |
+| **Date/Time** | Transaction timestamp | Parsed from SMS timestamp |
+
+
+error: patch failed: docs/BANK_SUPPORT.md:160
+Checking patch gradle.properties...
+error: while searching for:
+# Enables namespacing of each library's R class so that its R class includes only the
+# resources declared in the library itself and none from the library's dependencies,
+# thereby reducing the size of the R class for that library
+android.nonTransitiveRClass=true
+error: patch failed: gradle.properties:22
+Checking patch gradle/gradle-daemon-jvm.properties...
+error: while searching for:
+#This file is generated by updateDaemonJvm
+toolchainUrl.FREE_BSD.AARCH64=https\://api.foojay.io/disco/v3.0/ids/56a19bc915b9ba2eb62ba7554c61b919/redirect
+toolchainUrl.FREE_BSD.X86_64=https\://api.foojay.io/disco/v3.0/ids/ecd23fd7707c683afbcd6052998cb6a9/redirect
+toolchainUrl.LINUX.AARCH64=https\://api.foojay.io/disco/v3.0/ids/56a19bc915b9ba2eb62ba7554c61b919/redirect
+toolchainUrl.LINUX.X86_64=https\://api.foojay.io/disco/v3.0/ids/ecd23fd7707c683afbcd6052998cb6a9/redirect
+toolchainUrl.MAC_OS.AARCH64=https\://api.foojay.io/disco/v3.0/ids/e99bae143b75f9a10ead10248f02055e/redirect
+toolchainUrl.MAC_OS.X86_64=https\://api.foojay.io/disco/v3.0/ids/658299a896470fbb3103ba3a430ee227/redirect
+toolchainUrl.UNIX.AARCH64=https\://api.foojay.io/disco/v3.0/ids/56a19bc915b9ba2eb62ba7554c61b919/redirect
+toolchainUrl.UNIX.X86_64=https\://api.foojay.io/disco/v3.0/ids/ecd23fd7707c683afbcd6052998cb6a9/redirect
+toolchainUrl.WINDOWS.AARCH64=https\://api.foojay.io/disco/v3.0/ids/248ffb1098f61659502d0c09aa348294/redirect
+toolchainUrl.WINDOWS.X86_64=https\://api.foojay.io/disco/v3.0/ids/e7337738591f6120002875ec9a5cf45c/redirect
+toolchainVendor=JETBRAINS
+toolchainVersion=21
+
+error: patch failed: gradle/gradle-daemon-jvm.properties:1
+Checking patch gradle/libs.versions.toml...
+error: while searching for:
+[versions]
+agp = "8.13.0"
+appUpdate = "2.1.0"
+appUpdateKtx = "2.1.0"
+biometric = "1.1.0"
+
+error: patch failed: gradle/libs.versions.toml:1
+error: while searching for:
+composeBom = "2026.01.00"
+lifecycleViewmodelCompose = "2.10.0"
+markdown = "0.7.3"
+navVersion = "2.9.6"
+opencsv = "5.12.0"
+pdfboxAndroid = "2.0.27.0"
+
+error: patch failed: gradle/libs.versions.toml:26
+error: while searching for:
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
+opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
+pdfbox-android = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfboxAndroid" }
+review = { module = "com.google.android.play:review", version.ref = "review" }
+
+error: patch failed: gradle/libs.versions.toml:87
+error: while searching for:
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+
+error: patch failed: gradle/libs.versions.toml:104
+Checking patch gradle/wrapper/gradle-wrapper.properties...
+Checking patch parser-core/build.gradle.kts...
+error: while searching for:
+version = "0.1.0-SNAPSHOT"
+
+kotlin {
+    jvm()
+    iosArm64()
+    iosSimulatorArm64()
+
+error: patch failed: parser-core/build.gradle.kts:7
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt...
+error: while searching for:
+package com.ritesh.parser.core.bank
+
+import com.ritesh.parser.core.ParsedTransaction
+import java.math.BigDecimal
+import java.text.Normalizer
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:1
+error: while searching for:
+        return normalizedSender.contains("PUNJAB NATIONAL BANK") || // RCS sender (any case)
+                normalizedSender.contains("PNBBNK") ||
+                normalizedSender.contains("PUNBN") ||
+                normalizedSender.matches(Regex("^[A-Z]{2}-PNBBNK-S$")) ||
+                normalizedSender.matches(Regex("^[A-Z]{2}-PNB-S$")) ||
+                normalizedSender.matches(Regex("^[A-Z]{2}-PNBBNK$")) ||
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:16
+error: while searching for:
+    }
+
+    override fun extractAmount(message: String): BigDecimal? {
+        // Handle debit patterns - both "Rs." and "INR" formats
+        val debitPattern = Regex(
+            """debited\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            RegexOption.IGNORE_CASE
+        )
+        debitPattern.find(message)?.let { match ->
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:40
+error: while searching for:
+
+        // Handle credit patterns - both "Rs." and "INR" formats
+        val creditPattern = Regex(
+            """(?:(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)\s+(?:has\s+been\s+)?credited|credited\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?))""",
+            RegexOption.IGNORE_CASE
+        )
+        creditPattern.find(message)?.let { match ->
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:56
+error: while searching for:
+        return super.extractAmount(message)
+    }
+
+    override fun extractMerchant(message: String, sender: String): String? {
+        val fromPattern = Regex(
+            """From\s+([^/]+)/""",
+            RegexOption.IGNORE_CASE
+        )
+        fromPattern.find(message)?.let { match ->
+            val merchant = cleanMerchantName(match.groupValues[1].trim())
+            if (isValidMerchantName(merchant)) {
+                return merchant
+            }
+        }
+
+        if (message.contains("NEFT", ignoreCase = true)) {
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:77
+error: while searching for:
+    }
+
+    override fun extractAccountLast4(message: String): String? {
+        super.extractAccountLast4(message)?.let { return it }
+        val acPattern = Regex(
+            """A/c\s+([X*\d]+)""",
+            RegexOption.IGNORE_CASE
+        )
+        acPattern.find(message)?.let { match ->
+            return extractLast4Digits(match.groupValues[1])
+        }
+
+        return null
+    }
+
+    override fun extractReference(message: String): String? {
+        val neftRefPattern = Regex(
+            """ref\s+no\.\s+([A-Z0-9]+)""",
+            RegexOption.IGNORE_CASE
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:101
+Hunk #7 succeeded at 192 (offset -72 lines).
+error: while searching for:
+            return match.groupValues[1]
+        }
+
+        return super.extractReference(message)
+    }
+
+    override fun extractBalance(message: String): BigDecimal? {
+        val balPattern = Regex(
+            """Bal\s+(?:INR\s+|Rs\.?)([0-9,]+(?:\.\d{2})?)""",
+            RegexOption.IGNORE_CASE
+        )
+        balPattern.find(message)?.let { match ->
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:130
+error: while searching for:
+            }
+        }
+
+        return super.extractBalance(message)
+    }
+
+    override fun isTransactionMessage(message: String): Boolean {
+        val lowerMessage = message.lowercase()
+
+        if (lowerMessage.contains("register for e-statement")) {
+            return true
+        }
+
+        return super.isTransactionMessage(message)
+    }
+}
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt:147
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt...
+Checking patch parser-core/src/test/kotlin/PNBBankParserTest.kt...
+Checking patch parser-core/src/test/kotlin/TestSouthIndianBankParser.kt...
+error: parser-core/src/test/kotlin/TestSouthIndianBankParser.kt: No such file or directory
+Checking patch settings.gradle.kts...
+Applied patch .coderabbit.yaml cleanly.
+Applied patch .github/workflows/release.yml cleanly.
+Applied patch .github/workflows/test.yml cleanly.
+Applying patch app/build.gradle.kts with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/MerchantMappingDao.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt with 2 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Hunk #4 applied cleanly.
+Rejected hunk #5.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/MerchantMappingRepository.kt with 1 reject...
+Rejected hunk #1.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Rejected hunk #3.
+Applied patch build.gradle.kts cleanly.
+Applying patch docs/BANK_SUPPORT.md with 5 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Applying patch gradle.properties with 1 reject...
+Rejected hunk #1.
+Applying patch gradle/gradle-daemon-jvm.properties with 1 reject...
+Rejected hunk #1.
+Applying patch gradle/libs.versions.toml with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Applied patch gradle/wrapper/gradle-wrapper.properties cleanly.
+Applying patch parser-core/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt with 8 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Hunk #7 applied cleanly.
+Rejected hunk #8.
+Rejected hunk #9.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt cleanly.
+Applied patch parser-core/src/test/kotlin/PNBBankParserTest.kt cleanly.
+Applied patch settings.gradle.kts cleanly.

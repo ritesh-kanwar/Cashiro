@@ -192,6 +192,16 @@ class PNBBankParser : BaseIndianBankParser() {
             return match.groupValues[1]
         }
 
+        // Handle UPI Ref ID: "(UPI Ref ID:606379499474)"
+        val upiRefIdPattern = Regex(
+            """UPI\s+Ref\s+ID:?\s*(\d+)""",
+            RegexOption.IGNORE_CASE
+        )
+        upiRefIdPattern.find(message)?.let { match ->
+            return match.groupValues[1]
+        }
+
+        // Handle "UPI: <number>" format
         val upiRefPattern = Regex(
             """UPI:\s*([0-9]+)""",
             RegexOption.IGNORE_CASE
