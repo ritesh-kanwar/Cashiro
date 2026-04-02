@@ -9360,3 +9360,42 @@ Rejected hunk #9.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt cleanly.
 Applied patch parser-core/src/test/kotlin/PNBBankParserTest.kt cleanly.
 Applied patch settings.gradle.kts cleanly.
+[backport-fixes-upstream 41d6de9a8] Combined changes fixing various bugs (#220)
+ Date: Thu Apr 2 19:31:13 2026 +0530
+ 25 files changed, 4120 insertions(+), 127 deletions(-)
+ create mode 100644 .coderabbit.yaml
+ create mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/CashiroApp.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/preferences/UserPreferencesRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/MerchantMappingRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ create mode 100644 docs/BANK_SUPPORT.md.rej
+ create mode 100644 gradle.properties.rej
+ create mode 100644 gradle/gradle-daemon-jvm.properties.rej
+ create mode 100644 gradle/libs.versions.toml.rej
+ create mode 100644 parser-core/build.gradle.kts.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PNBBankParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/PNBBankParserTest.kt
+===================================
+Applying 0185-fix-HDFC-NEFT-deposit-SMS-misclassified-as-balance-u.patch
+Applying: fix: HDFC NEFT deposit SMS misclassified as balance update, not parsed as income
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: HDFC NEFT deposit SMS misclassified as balance update, not parsed as income
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestHDFCBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestHDFCBankParser.kt...
+error: parser-core/src/test/kotlin/TestHDFCBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HDFCBankParser.kt cleanly.

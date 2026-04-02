@@ -1,9 +1,0 @@
-diff a/parser-core/build.gradle.kts b/parser-core/build.gradle.kts	(rejected hunks)
-@@ -7,6 +7,7 @@ group = "com.cashiroai"
- version = "0.1.0-SNAPSHOT"
- 
- kotlin {
-+    jvmToolchain(21)
-     jvm()
-     iosArm64()
-     iosSimulatorArm64()
