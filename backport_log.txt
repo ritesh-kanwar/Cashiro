@@ -9799,3 +9799,58 @@ Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRat
 Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/RuleApplicationDao.kt cleanly.
 Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt cleanly.
 Applied patch app/src/test/java/com/ritesh/cashiro/data/backup/BackupModelsTest.kt cleanly.
+[backport-fixes-upstream b7c336d7] feat(backup): extend export/import to include rules,
+ Date: Fri Apr 3 04:44:54 2026 +0530
+ 13 files changed, 844 insertions(+), 77 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt.rej
+ create mode 100644 app/src/test/java/com/ritesh/cashiro/data/backup/BackupModelsTest.kt
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt.rej
+===================================
+Applying 0201-fix-use-getAllBudgets-for-move-up-down-to-include-in.patch
+Applying: fix: use getAllBudgets for move up/down to include inactive budgets
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: use getAllBudgets for move up/down to include inactive budgets
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:409
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+error: while searching for:
+    }
+
+    suspend fun moveGroupUp(budgetId: Long) {
+        val groups = budgetDao.getActiveBudgetsWithCategories().first()
+            .sortedBy { it.budget.displayOrder }
+        val index = groups.indexOfFirst { it.budget.id == budgetId }
+        if (index > 0) {
+            val current = groups[index].budget
+            val above = groups[index - 1].budget
+            budgetDao.updateBudget(current.copy(displayOrder = above.displayOrder, updatedAt = LocalDateTime.now()))
+            budgetDao.updateBudget(above.copy(displayOrder = current.displayOrder, updatedAt = LocalDateTime.now()))
+        }
+    }
+
+    suspend fun moveGroupDown(budgetId: Long) {
+        val groups = budgetDao.getActiveBudgetsWithCategories().first()
+            .sortedBy { it.budget.displayOrder }
+        val index = groups.indexOfFirst { it.budget.id == budgetId }
+        if (index >= 0 && index < groups.size - 1) {
+            val current = groups[index].budget
+            val below = groups[index + 1].budget
+            budgetDao.updateBudget(current.copy(displayOrder = below.displayOrder, updatedAt = LocalDateTime.now()))
+            budgetDao.updateBudget(below.copy(displayOrder = current.displayOrder, updatedAt = LocalDateTime.now()))
+        }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:409
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 1 reject...
+Rejected hunk #1.
