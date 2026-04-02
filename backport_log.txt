@@ -9514,3 +9514,71 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParse
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 53dc52c1] feat: add CRED parser for credit card bill payments
+ Date: Fri Apr 3 03:33:57 2026 +0530
+ 4 files changed, 107 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0198-fix-parser-core-address-Greptile-feedback-for-CRED-p.patch
+Applying: fix(parser-core): address Greptile feedback for CRED parser
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix(parser-core): address Greptile feedback for CRED parser
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt:19
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt:41
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt: patch does not apply
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt...
+error: while searching for:
+
+    override fun canHandle(sender: String): Boolean {
+        val normalizedSender = sender.uppercase()
+        // Match senders containing CRED, CREDIN, etc.
+        return normalizedSender.contains("CRED") ||
+                // DLT patterns: JK-CREDIN-S, AX-CREDIN-S, etc.
+                normalizedSender.matches(Regex("^[A-Z]{2}-CREDIN-S$")) ||
+                normalizedSender.matches(Regex("^[A-Z]{2}-CRED-[TPG]$")) ||
+                normalizedSender.matches(Regex("^[A-Z]{2}-CRED-S$")) ||
+                normalizedSender == "CRED" ||
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt:19
+error: while searching for:
+               lowerMessage.contains("credited towards your")
+    }
+
+    override fun parse(smsBody: String, sender: String, timestamp: Long): ParsedTransaction? {
+        // Use base parsing logic
+        val parsed = super.parse(smsBody, sender, timestamp) ?: return null
+        
+        // Ensure transaction type is TRANSFER
+        return parsed.copy(
+            type = TransactionType.TRANSFER
+        )
+    }
+}
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt:75
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt...
+error: while searching for:
+                    reference = null
+                )
+            ),
+            ParserTestCase(
+                name = "Non-CRED message (should not parse)",
+                message = "Your OTP for transaction is 123456. Do not share.",
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt:41
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt with 1 reject...
+Rejected hunk #1.
