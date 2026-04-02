@@ -1,0 +1,9 @@
+diff a/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt b/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt	(rejected hunks)
+@@ -15,6 +15,7 @@ object BankParserFactory {
+         FederalBankParser(),
+         JuspayParser(),
+         SliceParser(),
++        CredParser(),
+         LazyPayParser(),
+         UtkarshBankParser(),
+         ICICIBankParser(),

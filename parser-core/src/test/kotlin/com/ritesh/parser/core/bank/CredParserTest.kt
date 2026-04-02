@@ -42,6 +42,7 @@ class CredParserTest {
                 )
             ),
             ParserTestCase(
+<<<<<<< ours
                 name = "CRED payment with comma-formatted amount",
                 message = "Payment of Rs.50,000 has been successfully credited towards your ICICI Bank Credit Card. Your payment was settled in 3 seconds - CRED",
                 sender = "JK-CREDIN-S",
@@ -81,6 +82,8 @@ class CredParserTest {
                 )
             ),
             ParserTestCase(
+=======
+>>>>>>> theirs
                 name = "Non-CRED message (should not parse)",
                 message = "Your OTP for transaction is 123456. Do not share.",
                 sender = "JK-CREDIN-S",

@@ -9438,3 +9438,79 @@ Patch failed at 0001 feat: add loan/borrowed money tracking (#236)
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0187-feat-add-loan-borrowed-money-tracking-236.patch:2019
 error: corrupt patch at ../filtered_patches/0187-feat-add-loan-borrowed-money-tracking-236.patch:2019
+[backport-fixes-upstream 886aca5] feat: add loan/borrowed money tracking (#236)
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri Apr 3 21:41:34 2026 +0530
+ 1 file changed, 39 insertions(+)
+===================================
+Applying 0193-feat-enhance-Slice-credit-card-SMS-parsing.patch
+Applying: feat: enhance Slice credit card SMS parsing
+Successfully applied via git am
+===================================
+Applying 0194-test-add-Slice-parser-test-cases-for-credit-card-tra.patch
+Applying: test: add Slice parser test cases for credit card transactions
+Successfully applied via git am
+===================================
+Applying 0195-fix-address-Greptile-review-feedback-for-Slice-parse.patch
+Applying: fix: address Greptile review feedback for Slice parser
+Successfully applied via git am
+===================================
+Applying 0196-fix-avoid-matching-unsuccessful-as-success-indicator.patch
+Applying: fix: avoid matching 'unsuccessful' as success indicator
+Successfully applied via git am
+===================================
+Applying 0197-feat-add-CRED-parser-for-credit-card-bill-payments.patch
+Applying: feat: add CRED parser for credit card bill payments
+.git/rebase-apply/patch:100: trailing whitespace.
+        return lowerMessage.contains("payment of") && 
+.git/rebase-apply/patch:107: trailing whitespace.
+        
+warning: 2 lines add whitespace errors.
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add CRED parser for credit card bill payments
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0197-feat-add-CRED-parser-for-credit-card-bill-payments.patch:111: trailing whitespace.
+        return lowerMessage.contains("payment of") && 
+../filtered_patches/0197-feat-add-CRED-parser-for-credit-card-bill-payments.patch:118: trailing whitespace.
+        
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt' with conflicts.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt
+warning: 2 lines add whitespace errors.
+../filtered_patches/0197-feat-add-CRED-parser-for-credit-card-bill-payments.patch:111: trailing whitespace.
+        return lowerMessage.contains("payment of") && 
+../filtered_patches/0197-feat-add-CRED-parser-for-credit-card-bill-payments.patch:118: trailing whitespace.
+        
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        FederalBankParser(),
+        JuspayParser(),
+        SliceParser(),
+        LazyPayParser(),
+        UtkarshBankParser(),
+        ICICIBankParser(),
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:15
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
