@@ -9582,3 +9582,220 @@ Rejected hunk #1.
 Rejected hunk #2.
 Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 07617963] fix(parser-core): address Greptile feedback for CRED
+ Date: Fri Apr 3 03:56:39 2026 +0530
+ 4 files changed, 145 insertions(+), 9 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CredParser.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CredParserTest.kt.rej
+===================================
+Applying 0199-feat-backup-extend-export-import-to-include-rules-bu.patch
+Applying: feat(backup): extend export/import to include rules, budgets, exchange rates, and more
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/dao/BankNotificationDao.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(backup): extend export/import to include rules, budgets, exchange rates, and more
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:74: trailing whitespace.
+        
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:156: trailing whitespace.
+                
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:180: trailing whitespace.
+                
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:209: trailing whitespace.
+                
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:227: trailing whitespace.
+                    val existingPair = existingRates.find { 
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:5
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:5
+error: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt' with conflicts.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRateDao.kt' cleanly.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/dao/RuleApplicationDao.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:74: trailing whitespace.
+        
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:156: trailing whitespace.
+                
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:180: trailing whitespace.
+                
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:209: trailing whitespace.
+                
+../filtered_patches/0199-feat-backup-extend-export-import-to-include-rules-bu.patch:227: trailing whitespace.
+                    val existingPair = existingRates.find { 
+Checking patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt...
+error: while searching for:
+import com.google.gson.GsonBuilder
+import com.ritesh.cashiro.BuildConfig
+import com.ritesh.cashiro.data.database.CashiroDatabase
+import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:5
+error: while searching for:
+        val merchantMappings = database.merchantMappingDao().getAllMappings().first()
+        val unrecognizedSms = database.unrecognizedSmsDao().getAllUnrecognizedSms().first()
+        val chatMessages = database.chatDao().getAllMessages().first()
+        
+        // Get preferences from repository
+        val prefs = userPreferencesRepository.userPreferences.first()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:66
+Hunk #3 succeeded at 173 (offset 65 lines).
+error: while searching for:
+                device = "${Build.MANUFACTURER} ${Build.MODEL}",
+                androidVersion = Build.VERSION.SDK_INT,
+                statistics = BackupStatistics(
+                    totalTransactions = transactions.size,
+                    totalCategories = categories.size,
+                    totalCards = cards.size,
+                    totalSubscriptions = subscriptions.size,
+                    dateRange = dateRange
+                )
+            ),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:108
+error: while searching for:
+                subscriptions = subscriptions,
+                merchantMappings = merchantMappings,
+                unrecognizedSms = if (privacy == ExportPrivacy.FULL) unrecognizedSms else emptyList(),
+                chatMessages = if (privacy == ExportPrivacy.FULL) chatMessages else emptyList()
+            ),
+            preferences = PreferencesSnapshot(
+                theme = ThemePreferences(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:123
+Checking patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt...
+error: while searching for:
+                database.merchantMappingDao().deleteAllMappings()
+                database.unrecognizedSmsDao().deleteAll()
+                database.chatDao().deleteAllMessages()
+                
+                // Import all data
+                backup.database.categories.forEach { category ->
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:100
+error: while searching for:
+                    database.chatDao().insertMessage(message)
+                }
+                
+                // Import preferences
+                importPreferences(backup.preferences)
+                
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:136
+error: while searching for:
+        return database.withTransaction {
+            try {
+                // Get existing data for duplicate checking
+                val existingTransactionHashes = database.transactionDao()
+                    .getAllTransactions().first()
+                    .map { it.transactionHash }
+                    .toSet()
+                
+                val existingCategories = database.categoryDao()
+                    .getAllCategories().first()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:161
+error: while searching for:
+                }
+                
+                // Import transactions (skip duplicates by hash)
+                backup.database.transactions.forEach { transaction ->
+                    if (!existingTransactionHashes.contains(transaction.transactionHash)) {
+                        // Generate new ID for imported transaction
+                        val newTransaction = transaction.copy(id = 0)
+                        database.transactionDao().insertTransaction(newTransaction)
+                        importedTransactions++
+                    } else {
+                        skippedDuplicates++
+                    }
+                }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:182
+error: while searching for:
+                importSubscriptionsWithMerge(backup.database.subscriptions)
+                importMerchantMappingsWithMerge(backup.database.merchantMappings)
+                
+                // Import preferences (merge with existing)
+                importPreferences(backup.preferences)
+                
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:199
+error: while searching for:
+     */
+    private suspend fun importMerchantMappingsWithMerge(mappings: List<MerchantMappingEntity>) {
+        mappings.forEach { mapping ->
+            // Merchant mappings use merchant name as primary key, so just insert/replace
+            database.merchantMappingDao().insertMapping(mapping)
+        }
+    }
+    
+    /**
+     * Import user preferences
+     */
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:261
+Checking patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt...
+error: while searching for:
+    @SerializedName("total_subscriptions")
+    val totalSubscriptions: Int,
+    
+    @SerializedName("date_range")
+    val dateRange: DateRange?
+)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt:66
+error: while searching for:
+    val unrecognizedSms: List<UnrecognizedSmsEntity>,
+    
+    @SerializedName("chat_messages")
+    val chatMessages: List<ChatMessage>
+)
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt:107
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BankNotificationDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt...
+Hunk #1 succeeded at 28 (offset 13 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRateDao.kt...
+Hunk #1 succeeded at 71 (offset 2 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/RuleApplicationDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt...
+Checking patch app/src/test/java/com/ritesh/cashiro/data/backup/BackupModelsTest.kt...
+Applying patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Rejected hunk #4.
+Rejected hunk #5.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt with 6 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BankNotificationDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/ExchangeRateDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/RuleApplicationDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionSplitDao.kt cleanly.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/backup/BackupModelsTest.kt cleanly.

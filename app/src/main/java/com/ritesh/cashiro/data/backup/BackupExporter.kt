@@ -173,6 +173,16 @@ class BackupExporter @Inject constructor(
             )}
         }
         
+        // Determine what's actually exported based on privacy mode
+        // Rules are included in all modes as they contain no PII
+        val exportedRules = rules
+        val exportedExchangeRates = if (privacy == ExportPrivacy.FULL) exchangeRates else emptyList()
+        val exportedBudgets = if (privacy == ExportPrivacy.FULL) budgets else emptyList()
+        val exportedBudgetCategories = if (privacy == ExportPrivacy.FULL) budgetCategories else emptyList()
+        val exportedTransactionSplits = if (privacy == ExportPrivacy.FULL) transactionSplits else emptyList()
+        val exportedBankNotifications = if (privacy == ExportPrivacy.FULL) bankNotifications else emptyList()
+        val exportedRuleApplications = if (privacy == ExportPrivacy.FULL) ruleApplications else emptyList()
+        
         return CashiroBackup(
             metadata = BackupMetadata(
                 exportId = UUID.randomUUID().toString(),
