@@ -9875,3 +9875,21 @@ Patch failed at 0001 fix: address Greptile feedback - use getActiveBudgets and a
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0202-fix-address-Greptile-feedback-use-getActiveBudgets-a.patch:38
 error: corrupt patch at ../filtered_patches/0202-fix-address-Greptile-feedback-use-getActiveBudgets-a.patch:38
+[backport-fixes-upstream 4553fd16a] fix: address Greptile feedback - use getActiveBudgets
+ Date: Fri Apr 3 04:22:19 2026 +0530
+ 2 files changed, 21 insertions(+), 36 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+===================================
+Applying 0204-feat-auto-merge-loans-for-same-person-instead-of-cre.patch
+Applying: feat: auto-merge loans for same person instead of creating duplicates
+error: corrupt patch at .git/rebase-apply/patch:46
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: auto-merge loans for same person instead of creating duplicates
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0204-feat-auto-merge-loans-for-same-person-instead-of-cre.patch:60
+error: corrupt patch at ../filtered_patches/0204-feat-auto-merge-loans-for-same-person-instead-of-cre.patch:60
