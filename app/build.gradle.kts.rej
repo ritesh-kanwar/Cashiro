@@ -1,0 +1,12 @@
+diff a/app/build.gradle.kts b/app/build.gradle.kts	(rejected hunks)
+@@ -21,8 +21,8 @@ android {
+         applicationId = "com.ritesh.cashiro"
+         minSdk = 26
+         targetSdk = 36
+-        versionCode = 85
+-        versionName = "2.15.50"
++        versionCode = 86
++        versionName = "2.15.51"
+ 
+         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+         

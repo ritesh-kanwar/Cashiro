@@ -9994,3 +9994,57 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BankMusca
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BankMuscatParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream f61bcf739] =?UTF-8?q?feat:=20add=20Bank=20Muscat=20(Oman)=20?=
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 5 15:34:47 2026 +0530
+ 4 files changed, 61 insertions(+), 23 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt.rej
+===================================
+Applying 0212-fix-address-4-user-reported-parser-bugs.patch
+Applying: fix: address 4 user-reported parser bugs
+Successfully applied via git am
+===================================
+Applying 0213-chore-release-bump-version-to-2.15.51-skip-ci.patch
+Applying: chore(release): bump version to 2.15.51 [skip ci]
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore(release): bump version to 2.15.51 [skip ci]
+Conflict detected! Falling back to apply --reject
+../filtered_patches/0213-chore-release-bump-version-to-2.15.51-skip-ci.patch:44: trailing whitespace.
+• On-device
+../filtered_patches/0213-chore-release-bump-version-to-2.15.51-skip-ci.patch:71: trailing whitespace.
+• On-device
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:21
+error: app/build.gradle.kts: patch does not apply
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: does not exist in index
+../filtered_patches/0213-chore-release-bump-version-to-2.15.51-skip-ci.patch:44: trailing whitespace.
+• On-device
+../filtered_patches/0213-chore-release-bump-version-to-2.15.51-skip-ci.patch:71: trailing whitespace.
+• On-device
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 85
+        versionName = "2.15.50"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+
+error: patch failed: app/build.gradle.kts:21
+Checking patch fastlane/metadata/android/en-US/changelogs/86.txt...
+Checking patch fastlane/metadata/android/en-US/changelogs/default.txt...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/changelogs/86.txt cleanly.
