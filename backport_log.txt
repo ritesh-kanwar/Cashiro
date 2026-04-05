@@ -9950,3 +9950,47 @@ error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSB
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/HSBCBankParser.kt cleanly.
 Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 81c7d7dd6] feat: add HSBC Egypt (EGP) credit card support (#231)
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 5 13:02:05 2026 +0530
+ 3 files changed, 128 insertions(+), 57 deletions(-)
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/HSBCBankParserTest.kt.rej
+===================================
+Applying 0209-feat-add-Bank-Muscat-Oman-parser-Arabic-SMS-with-OMR.patch
+Applying: feat: add Bank Muscat (Oman) parser — Arabic SMS with OMR currency
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Bank Muscat (Oman) parser — Arabic SMS with OMR currency
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankMuscatParser.kt' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BankMuscatParserTest.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankMuscatParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankMuscatParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        TBankParser(),  // T-Bank / Tinkoff (Russia)
+        ChaseBankParser(),  // Chase Bank (USA)
+        AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
+        MBankCZParser()  // mBank CZ (Czech Republic)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:97
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BankMuscatParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BankMuscatParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
