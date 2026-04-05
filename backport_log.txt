@@ -10048,3 +10048,46 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/86.txt cleanly.
+[backport-fixes-upstream 03b7e208d] chore(release): bump version to 2.15.51 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 5 19:06:51 2026 +0530
+ 4 files changed, 77 insertions(+), 11 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/86.txt
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0214-chore-release-bump-version-to-2.15.52-skip-ci.patch
+Applying: chore(release): bump version to 2.15.52 [skip ci]
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 chore(release): bump version to 2.15.52 [skip ci]
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:21
+error: app/build.gradle.kts: patch does not apply
+Falling back to direct application...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: does not exist in index
+Checking patch app/build.gradle.kts...
+error: while searching for:
+        applicationId = "com.ritesh.cashiro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 86
+        versionName = "2.15.51"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+
+error: patch failed: app/build.gradle.kts:21
+Checking patch fastlane/metadata/android/en-US/changelogs/87.txt...
+Checking patch fastlane/metadata/android/en-US/changelogs/default.txt...
+error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or directory
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch fastlane/metadata/android/en-US/changelogs/87.txt cleanly.

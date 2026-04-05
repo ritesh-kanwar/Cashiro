@@ -1,0 +1,14 @@
+So v2.15.52 is a patch release with the parser bug fixes from `ac12de3d`. Here are the release notes:
+
+---
+
+What's New in v2.15.52
+
+• Fixed IDFC FIRST bill reminders incorrectly showing as transactions
+• JioPay bill payments now correctly categorized as expenses
+• Improved merchant name detection for HDFC UPI and ICICI credit card transactions
+• General stability improvements
+
+---
+
+That's 282 characters — well within the 500 limit.
