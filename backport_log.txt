@@ -9893,3 +9893,25 @@ Patch failed at 0001 feat: auto-merge loans for same person instead of creating 
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0204-feat-auto-merge-loans-for-same-person-instead-of-cre.patch:60
 error: corrupt patch at ../filtered_patches/0204-feat-auto-merge-loans-for-same-person-instead-of-cre.patch:60
+[backport-fixes-upstream e5ffc8f80] feat: auto-merge loans for same person instead of
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 5 02:23:15 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0205-fix-budget-card-shows-overall-amount-even-when-categ.patch
+Applying: fix: budget card shows overall amount even when categories are ₹0
+Successfully applied via git am
+===================================
+Applying 0207-feat-add-edit-loan-amount-for-interest-corrections.patch
+Applying: feat: add edit loan amount for interest/corrections
+error: corrupt patch at .git/rebase-apply/patch:28
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add edit loan amount for interest/corrections
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0207-feat-add-edit-loan-amount-for-interest-corrections.patch:36
+error: corrupt patch at ../filtered_patches/0207-feat-add-edit-loan-amount-for-interest-corrections.patch:36
