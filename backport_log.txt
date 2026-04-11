@@ -10303,3 +10303,43 @@ Patch failed at 0001 fix: exclude loan repayments from budget and analytics tota
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0220-fix-exclude-loan-repayments-from-budget-and-analytic.patch:31
 error: corrupt patch at ../filtered_patches/0220-fix-exclude-loan-repayments-from-budget-and-analytic.patch:31
+[backport-fixes-upstream 2181994a] fix: exclude loan repayments from budget and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 12 13:39:47 2026 +0530
+ 2 files changed, 19 insertions(+), 16 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0221-fix-GPay-PDF-parser-assigns-correct-date-to-every-ro.patch
+Applying: fix: GPay PDF parser assigns correct date to every row (#250)
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: GPay PDF parser assigns correct date to every row (#250)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:144
+error: app/build.gradle.kts: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+Checking patch app/build.gradle.kts...
+error: while searching for:
+    buildFeatures {
+        compose = true
+    }
+}
+
+kotlin {
+
+error: patch failed: app/build.gradle.kts:144
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt...
+Checking patch app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt...
+Applying patch app/build.gradle.kts with 1 reject...
+Rejected hunk #1.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt cleanly.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt cleanly.
