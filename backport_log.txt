@@ -10214,3 +10214,73 @@ Rejected hunk #1.
 Rejected hunk #2.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 2dbc46c2] feat: add SNB-AlAhli and STC Bank (Saudi Arabia)
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Apr 11 12:35:51 2026 +0530
+ 3 files changed, 111 insertions(+)
+ create mode 100644 CLAUDE.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0219-feat-add-DOP-Bank-and-Prime-Commercial-Bank-parsers.patch
+Applying: feat: add DOP Bank and Prime Commercial Bank parsers
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DOPBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DOPBankParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParser.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/DOPBankParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/DOPBankParserTest.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add DOP Bank and Prime Commercial Bank parsers
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DOPBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/DOPBankParserTest.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt' with conflicts.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DOPBankParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParser.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/DOPBankParserTest.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
+        NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
+        SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
+        MPesaTanzaniaParser(),  // M-Pesa Tanzania (must be before Kenya M-PESA)
+        MPESAParser(),  // M-PESA (Kenya)
+        SelcomPesaParser(),  // Selcom Pesa (Tanzania)
+        TigoPesaParser(),  // Tigo Pesa / Mixx by Yas (Tanzania)
+        CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
+        DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+        HuntingtonBankParser(),  // Huntington Bank (USA)
+        StandardCharteredBankParser(),  // Standard Chartered Bank (India and Pakistan)
+        EquitasBankParser(),  // Equitas Small Finance Bank (India)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:68
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DOPBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/DOPBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/DOPBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/DOPBankParserTest.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.

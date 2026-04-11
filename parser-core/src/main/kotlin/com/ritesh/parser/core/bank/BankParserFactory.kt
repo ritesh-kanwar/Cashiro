@@ -73,8 +73,12 @@ object BankParserFactory {
         ManjushreeFinanceParser(), // Manjushree Finance (Nepal)
         SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
 <<<<<<< ours
+<<<<<<< ours
         PrimeCommercialBankParser(),  // Prime Commercial Bank (Nepal)
 =======
+>>>>>>> theirs
+=======
+        PrimeCommercialBankParser(),  // Prime Commercial Bank (Nepal)
 >>>>>>> theirs
         MPesaTanzaniaParser(),  // M-Pesa Tanzania (must be before Kenya M-PESA)
         MPESAParser(),  // M-PESA (Kenya)
@@ -82,6 +86,7 @@ object BankParserFactory {
         TigoPesaParser(),  // Tigo Pesa / Mixx by Yas (Tanzania)
         CIBEgyptParser(),  // CIB - Commercial International Bank (Egypt)
         DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
+        DOPBankParser(),  // Department of Post (India)
         HuntingtonBankParser(),  // Huntington Bank (USA)
 <<<<<<< ours
         StandardCharteredBankParser(),  // Standard Chartered Bank (India and Pakistan)

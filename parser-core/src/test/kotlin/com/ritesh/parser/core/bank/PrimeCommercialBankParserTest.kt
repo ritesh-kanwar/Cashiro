@@ -15,7 +15,11 @@ class PrimeCommercialBankParserTest {
         testCases = listOf(
             ParserTestCase(
                 name = "Debit transaction - withdrawn with phone remark",
+<<<<<<< ours
                 message = "Dear FOO, NPR 1,234.50 is withdrawn from A/C XXX#1234 on 01/01/2026 05:55. Rmk: 9812345678. Good Baln: NPR 321.45",
+=======
+                message = "Dear Customer, NPR 1,234.50 is withdrawn from A/C XXX#1234 on 01/01/2026 05:55. Rmk: 9812345678. Good Baln: NPR 321.45",
+>>>>>>> theirs
                 sender = "PCBLNPKA",
                 expected = ExpectedTransaction(
                     amount = BigDecimal("1234.50"),
@@ -28,7 +32,11 @@ class PrimeCommercialBankParserTest {
             ),
             ParserTestCase(
                 name = "Credit transaction - deposited with text remark",
+<<<<<<< ours
                 message = "Dear FOO, NPR 9,876.00 is deposited in A/C XXX#5678 on 01/01/2026 05:55. Rmk: CASHDEP. Good Baln: NPR 54321.123.",
+=======
+                message = "Dear Customer, NPR 9,876.00 is deposited in A/C XXX#5678 on 01/01/2026 05:55. Rmk: CASHDEP. Good Baln: NPR 54321.123.",
+>>>>>>> theirs
                 sender = "PRIME_ALERT",
                 expected = ExpectedTransaction(
                     amount = BigDecimal("9876.00"),
