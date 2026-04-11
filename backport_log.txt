@@ -10137,3 +10137,80 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankPa
 Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
 error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt cleanly.
+[backport-fixes-upstream 990152b] fix: wrong input mapping
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Tue Apr 7 11:08:06 2026 +0300
+ 2 files changed, 25 insertions(+), 16 deletions(-)
+===================================
+Applying 0217-feat-add-SNB-AlAhli-and-STC-Bank-Saudi-Arabia-parser.patch
+Applying: feat: add SNB-AlAhli and STC Bank (Saudi Arabia) parsers
+error: sha1 information is lacking or useless (CLAUDE.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add SNB-AlAhli and STC Bank (Saudi Arabia) parsers
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: CLAUDE.md:87
+error: CLAUDE.md: patch does not apply
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SNBAlAhliBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/STCBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SNBAlAhliBankParserTest.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/STCBankParserTest.kt' cleanly.
+Checking patch CLAUDE.md...
+error: while searching for:
+- Use `com.ritesh.cashiro.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
+- The mapper handles type conversions between modules
+
+## Supported Banks (51 parsers)
+- Airtel Payments Bank
+- **Al Rajhi Bank (Saudi Arabia)** - Arabic SMS support
+- **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+
+error: patch failed: CLAUDE.md:87
+error: while searching for:
+- **Priorbank (Belarus)** - Russian/Belarusian SMS support
+- Punjab National Bank (PNB)
+- Saraswat Co-operative Bank
+- **Siddhartha Bank Limited (Nepal)**
+- State Bank of India (SBI)
+- Slice
+- South Indian Bank
+- **Standard Chartered Bank**
+- **T-Bank / Tinkoff (Russia)** - Russian SMS support
+- Union Bank
+- Utkarsh Bank
+
+error: patch failed: CLAUDE.md:129
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        TBankParser(),  // T-Bank / Tinkoff (Russia)
+        ChaseBankParser(),  // Chase Bank (USA)
+        AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
+        MBankCZParser(),  // mBank CZ (Czech Republic)
+        BankMuscatParser()  // Bank Muscat (Oman)
+        // Add more bank parsers here as we implement them
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:97
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SNBAlAhliBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SNBAlAhliBankParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/STCBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/STCBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SNBAlAhliBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SNBAlAhliBankParserTest.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/STCBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/STCBankParserTest.kt: already exists in working directory
+Applying patch CLAUDE.md with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
