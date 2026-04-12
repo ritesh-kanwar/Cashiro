@@ -10378,3 +10378,23 @@ interface BudgetDao {
 error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt:10
 Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 138c0faa] fix: sort active budgets by display_order so move
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 12 17:44:34 2026 +0530
+ 3 files changed, 45 insertions(+), 16 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt.rej
+===================================
+Applying 0223-feat-add-credit-card-statement-date-with-billed-unbi.patch
+Applying: feat: add credit card statement date with billed/unbilled split (#152)
+error: corrupt patch at .git/rebase-apply/patch:1546
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add credit card statement date with billed/unbilled split (#152)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0223-feat-add-credit-card-statement-date-with-billed-unbi.patch:1565
+error: corrupt patch at ../filtered_patches/0223-feat-add-credit-card-statement-date-with-billed-unbi.patch:1565
