@@ -10284,3 +10284,22 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeComm
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/PrimeCommercialBankParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream d787ce86] feat: add DOP Bank and Prime Commercial Bank parsers
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 12 00:36:48 2026 +0530
+ 8 files changed, 219 insertions(+), 33 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+===================================
+Applying 0220-fix-exclude-loan-repayments-from-budget-and-analytic.patch
+Applying: fix: exclude loan repayments from budget and analytics totals
+error: corrupt patch at .git/rebase-apply/patch:20
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: exclude loan repayments from budget and analytics totals
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0220-fix-exclude-loan-repayments-from-budget-and-analytic.patch:31
+error: corrupt patch at ../filtered_patches/0220-fix-exclude-loan-repayments-from-budget-and-analytic.patch:31
