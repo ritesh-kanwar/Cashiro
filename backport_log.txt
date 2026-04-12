@@ -10343,3 +10343,38 @@ Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt cleanly.
 Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt cleanly.
+[backport-fixes-upstream 62435fe3] fix: GPay PDF parser assigns correct date to every
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat Apr 11 19:08:20 2026 +0530
+ 4 files changed, 227 insertions(+), 17 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt
+===================================
+Applying 0222-fix-sort-active-budgets-by-display_order-so-move-up-.patch
+Applying: fix: sort active budgets by display_order so move up/down works
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: sort active budgets by display_order so move up/down works
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt:10
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt...
+error: while searching for:
+@Dao
+interface BudgetDao {
+
+    @Query("SELECT * FROM budgets WHERE is_active = 1 ORDER BY created_at DESC")
+    fun getActiveBudgets(): Flow<List<BudgetEntity>>
+
+    @Query("SELECT * FROM budgets ORDER BY created_at DESC")
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt:10
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt with 1 reject...
+Rejected hunk #1.
