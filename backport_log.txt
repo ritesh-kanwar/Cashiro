@@ -10398,3 +10398,22 @@ Patch failed at 0001 feat: add credit card statement date with billed/unbilled s
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0223-feat-add-credit-card-statement-date-with-billed-unbi.patch:1565
 error: corrupt patch at ../filtered_patches/0223-feat-add-credit-card-statement-date-with-billed-unbi.patch:1565
+[backport-fixes-upstream 2ddf6232] feat: add credit card statement date with
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 12 17:23:10 2026 +0530
+ 2 files changed, 20 insertions(+), 10 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetDao.kt.rej
+===================================
+Applying 0224-feat-improve-budget-screen-colors-and-add-per-budget.patch
+Applying: feat: improve budget screen colors and add per-budget spending pace chart
+error: corrupt patch at .git/rebase-apply/patch:139
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: improve budget screen colors and add per-budget spending pace chart
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0224-feat-improve-budget-screen-colors-and-add-per-budget.patch:160
+error: corrupt patch at ../filtered_patches/0224-feat-improve-budget-screen-colors-and-add-per-budget.patch:160
