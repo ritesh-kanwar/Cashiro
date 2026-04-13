@@ -10417,3 +10417,21 @@ Patch failed at 0001 feat: improve budget screen colors and add per-budget spend
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0224-feat-improve-budget-screen-colors-and-add-per-budget.patch:160
 error: corrupt patch at ../filtered_patches/0224-feat-improve-budget-screen-colors-and-add-per-budget.patch:160
+[backport-fixes-upstream 657b4a82] feat: improve budget screen colors and add per-budget
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun Apr 12 18:16:00 2026 +0530
+ 1 file changed, 19 insertions(+)
+===================================
+Applying 0226-fix-recalculate-balance-on-edit-and-free-hash-on-sof.patch
+Applying: fix: recalculate balance on edit and free hash on soft delete (#267)
+error: corrupt patch at .git/rebase-apply/patch:1739
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: recalculate balance on edit and free hash on soft delete (#267)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0226-fix-recalculate-balance-on-edit-and-free-hash-on-sof.patch:1819
+error: corrupt patch at ../filtered_patches/0226-fix-recalculate-balance-on-edit-and-free-hash-on-sof.patch:1819
