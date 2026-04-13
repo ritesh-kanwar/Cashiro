@@ -10435,3 +10435,18 @@ Patch failed at 0001 fix: recalculate balance on edit and free hash on soft dele
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0226-fix-recalculate-balance-on-edit-and-free-hash-on-sof.patch:1819
 error: corrupt patch at ../filtered_patches/0226-fix-recalculate-balance-on-edit-and-free-hash-on-sof.patch:1819
+[backport-fixes-upstream 42c0f187] fix: recalculate balance on edit and free hash on
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Mon Apr 13 21:23:38 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0227-feat-receipt-attachment-form-redesign-with-filled-te.patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To record the empty patch as an empty commit, run "git am --allow-empty".
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch is empty.
+Conflict detected! Falling back to apply --reject
+error: No valid patches in input (allow with "--allow-empty")
+error: No valid patches in input (allow with "--allow-empty")
