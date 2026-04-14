@@ -10450,3 +10450,18 @@ Patch is empty.
 Conflict detected! Falling back to apply --reject
 error: No valid patches in input (allow with "--allow-empty")
 error: No valid patches in input (allow with "--allow-empty")
+[backport-fixes-upstream 18803e9] feat: receipt attachment + form redesign with filled
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Mon Apr 13 21:23:51 2026 +0530
+ 1 file changed, 15 insertions(+)
+===================================
+Applying 0228-fix-improve-balance-history-contrast-and-clear-smsSo.patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To record the empty patch as an empty commit, run "git am --allow-empty".
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch is empty.
+Conflict detected! Falling back to apply --reject
+error: No valid patches in input (allow with "--allow-empty")
+error: No valid patches in input (allow with "--allow-empty")
