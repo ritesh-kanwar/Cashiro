@@ -10519,3 +10519,27 @@ Applying patch CLAUDE.md with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt cleanly.
+[backport-fixes-upstream 4d5c4d00] feat: add Punjab & Sind Bank SMS parser (#266)
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Apr 16 14:02:35 2026 +0530
+ 3 files changed, 73 insertions(+)
+ create mode 100644 CLAUDE.md.rej
+===================================
+Applying 0231-fix-show-masked-mobile-as-merchant-for-Kotak-IMPS-cr.patch
+Applying: fix: show masked mobile as merchant for Kotak IMPS credits
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: show masked mobile as merchant for Kotak IMPS credits
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestKotakBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestKotakBankParser.kt...
+error: parser-core/src/test/kotlin/TestKotakBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBankParser.kt cleanly.
