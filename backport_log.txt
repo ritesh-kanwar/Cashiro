@@ -10543,3 +10543,189 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBank
 Checking patch parser-core/src/test/kotlin/TestKotakBankParser.kt...
 error: parser-core/src/test/kotlin/TestKotakBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBankParser.kt cleanly.
+[backport-fixes-upstream 92b53e33] fix: show masked mobile as merchant for Kotak IMPS
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Apr 16 15:10:25 2026 +0530
+ 3 files changed, 33 insertions(+), 18 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+===================================
+Applying 0232-feat-android-branded-adaptive-launcher-themed-monoch.patch
+Applying: feat(android): branded adaptive launcher + themed monochrome
+Using index info to reconstruct a base tree...
+M	app/src/main/res/mipmap-hdpi/ic_launcher.webp
+M	app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp
+M	app/src/main/res/mipmap-hdpi/ic_launcher_round.webp
+M	app/src/main/res/mipmap-mdpi/ic_launcher.webp
+M	app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp
+M	app/src/main/res/mipmap-mdpi/ic_launcher_round.webp
+M	app/src/main/res/mipmap-xhdpi/ic_launcher.webp
+M	app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp
+M	app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp
+M	app/src/main/res/mipmap-xxhdpi/ic_launcher.webp
+M	app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp
+M	app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp
+M	app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp
+M	app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp
+M	app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp
+Falling back to patching base and 3-way merge...
+warning: Cannot merge binary files: app/src/main/res/mipmap-hdpi/ic_launcher.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-hdpi/ic_launcher.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-hdpi/ic_launcher.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-hdpi/ic_launcher_round.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-hdpi/ic_launcher_round.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-hdpi/ic_launcher_round.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-mdpi/ic_launcher.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-mdpi/ic_launcher.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-mdpi/ic_launcher.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-mdpi/ic_launcher_round.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-mdpi/ic_launcher_round.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-mdpi/ic_launcher_round.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xhdpi/ic_launcher.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xhdpi/ic_launcher.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xhdpi/ic_launcher.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxhdpi/ic_launcher.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xxhdpi/ic_launcher.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xxhdpi/ic_launcher.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp (HEAD vs. feat(android): branded adaptive launcher + themed monochrome)
+Auto-merging app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp
+CONFLICT (content): Merge conflict in app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat(android): branded adaptive launcher + themed monochrome
+Conflict detected! Falling back to apply --reject
+warning: Cannot merge binary files: app/src/main/res/mipmap-hdpi/ic_launcher.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-hdpi/ic_launcher.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp' with conflicts.
+Falling back to direct application...
+warning: Cannot merge binary files: app/src/main/res/mipmap-hdpi/ic_launcher_round.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-hdpi/ic_launcher_round.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-mdpi/ic_launcher.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-mdpi/ic_launcher.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp' with conflicts.
+Falling back to direct application...
+warning: Cannot merge binary files: app/src/main/res/mipmap-mdpi/ic_launcher_round.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-mdpi/ic_launcher_round.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-xhdpi/ic_launcher.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xhdpi/ic_launcher.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp' with conflicts.
+Falling back to direct application...
+warning: Cannot merge binary files: app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxhdpi/ic_launcher.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xxhdpi/ic_launcher.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp' with conflicts.
+Falling back to direct application...
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp' with conflicts.
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp' with conflicts.
+Falling back to direct application...
+warning: Cannot merge binary files: app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp (ours vs. theirs)
+Applied patch to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp' with conflicts.
+Falling back to direct application...
+U app/src/main/res/mipmap-hdpi/ic_launcher.webp
+U app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp
+U app/src/main/res/mipmap-hdpi/ic_launcher_round.webp
+U app/src/main/res/mipmap-mdpi/ic_launcher.webp
+U app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp
+U app/src/main/res/mipmap-mdpi/ic_launcher_round.webp
+U app/src/main/res/mipmap-xhdpi/ic_launcher.webp
+U app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp
+U app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp
+U app/src/main/res/mipmap-xxhdpi/ic_launcher.webp
+U app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp
+U app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp
+U app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp
+U app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp
+U app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp
+Checking patch app/src/main/res/mipmap-hdpi/ic_launcher.webp...
+error: the patch applies to 'app/src/main/res/mipmap-hdpi/ic_launcher.webp' (32713b9599baba464f70ac1083f04b4a1c7e5ef1), which does not match the current contents.
+error: app/src/main/res/mipmap-hdpi/ic_launcher.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp...
+error: the patch applies to 'app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp' (f32838fd065db4e56ada8a2015fc74f0fa4fae14), which does not match the current contents.
+error: app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-hdpi/ic_launcher_monochrome.webp...
+error: app/src/main/res/mipmap-hdpi/ic_launcher_monochrome.webp: already exists in working directory
+Checking patch app/src/main/res/mipmap-hdpi/ic_launcher_round.webp...
+error: the patch applies to 'app/src/main/res/mipmap-hdpi/ic_launcher_round.webp' (f32838fd065db4e56ada8a2015fc74f0fa4fae14), which does not match the current contents.
+error: app/src/main/res/mipmap-hdpi/ic_launcher_round.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-mdpi/ic_launcher.webp...
+error: the patch applies to 'app/src/main/res/mipmap-mdpi/ic_launcher.webp' (42befd12d9745315afaa0cbe78290a36c1836375), which does not match the current contents.
+error: app/src/main/res/mipmap-mdpi/ic_launcher.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp...
+error: the patch applies to 'app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp' (8752541b94490ed3bcea78ba2a2c4f6e67baa54f), which does not match the current contents.
+error: app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-mdpi/ic_launcher_monochrome.webp...
+error: app/src/main/res/mipmap-mdpi/ic_launcher_monochrome.webp: already exists in working directory
+Checking patch app/src/main/res/mipmap-mdpi/ic_launcher_round.webp...
+error: the patch applies to 'app/src/main/res/mipmap-mdpi/ic_launcher_round.webp' (8752541b94490ed3bcea78ba2a2c4f6e67baa54f), which does not match the current contents.
+error: app/src/main/res/mipmap-mdpi/ic_launcher_round.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xhdpi/ic_launcher.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xhdpi/ic_launcher.webp' (13bdb994bdc34a389af9f259f37c2037d8ecc9be), which does not match the current contents.
+error: app/src/main/res/mipmap-xhdpi/ic_launcher.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp' (8c78a07a94983dfab4fb35abf5cba0c146db12f1), which does not match the current contents.
+error: app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xhdpi/ic_launcher_monochrome.webp...
+error: app/src/main/res/mipmap-xhdpi/ic_launcher_monochrome.webp: already exists in working directory
+Checking patch app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp' (8c78a07a94983dfab4fb35abf5cba0c146db12f1), which does not match the current contents.
+error: app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xxhdpi/ic_launcher.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xxhdpi/ic_launcher.webp' (c45d97e4e7203297803911d82c2ab7583be53607), which does not match the current contents.
+error: app/src/main/res/mipmap-xxhdpi/ic_launcher.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp' (c95017b5bce5457dfb0fd25a786be37023f710f3), which does not match the current contents.
+error: app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xxhdpi/ic_launcher_monochrome.webp...
+error: app/src/main/res/mipmap-xxhdpi/ic_launcher_monochrome.webp: already exists in working directory
+Checking patch app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp' (c95017b5bce5457dfb0fd25a786be37023f710f3), which does not match the current contents.
+error: app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp' (86142795a603291f5d3051d90e3a5198b2ab6e96), which does not match the current contents.
+error: app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp' (014efe02927d5a12fe1258ef4587094a73cd6513), which does not match the current contents.
+error: app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp: patch does not apply
+Checking patch app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.webp...
+error: app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.webp: already exists in working directory
+Checking patch app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp...
+error: the patch applies to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp' (014efe02927d5a12fe1258ef4587094a73cd6513), which does not match the current contents.
+error: app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp: patch does not apply
+Checking patch scripts/generate_android_launcher_icons.sh...
+error: scripts/generate_android_launcher_icons.sh: already exists in working directory
