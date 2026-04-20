@@ -1,8 +1,22 @@
 package com.ritesh.parser.core.bank
 
+<<<<<<< ours
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
 
+=======
+import com.ritesh.parser.core.ParsedTransaction
+import com.ritesh.parser.core.TransactionType
+import java.math.BigDecimal
+
+/**
+ * Parser for Greater Bank SMS messages.
+ *
+ * Supported formats:
+ * - Debit alert: "Your Account XXXX<last4> had a DEBIT transaction of RS. <amount> on <date> at <time>.Available balance is Rs. <balance>: GREATER BANK"
+ * - UPI/IMPS transfer: "Your a/c no. XXXXXXXX<last4> is debited for Rs.<amount> on <date> and credited to a/c no. XXXXXXXX<last4> (UPI Ref no <ref>) If Not You? Call ... Greater Bank"
+ */
+>>>>>>> theirs
 class GreaterBankParser : BaseIndianBankParser() {
 
     override fun getBankName() = "Greater Bank"
@@ -17,6 +31,10 @@ class GreaterBankParser : BaseIndianBankParser() {
     }
 
     override fun extractAmount(message: String): BigDecimal? {
+<<<<<<< ours
+=======
+        // Format 1: "RS. 100.00" or "RS.100.00"
+>>>>>>> theirs
         val rsUpperPattern = Regex("""RS\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         rsUpperPattern.find(message)?.let { match ->
             val amountStr = match.groupValues[1].replace(",", "")
@@ -26,9 +44,17 @@ class GreaterBankParser : BaseIndianBankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
+<<<<<<< ours
         val accountPattern = Regex("""Account\s+[X*]+(\d{4})""", RegexOption.IGNORE_CASE)
         accountPattern.find(message)?.let { return it.groupValues[1] }
 
+=======
+        // "Account XXXX5207"
+        val accountPattern = Regex("""Account\s+[X*]+(\d{4})""", RegexOption.IGNORE_CASE)
+        accountPattern.find(message)?.let { return it.groupValues[1] }
+
+        // "a/c no. XXXXXXXX5207"
+>>>>>>> theirs
         val acNoPattern = Regex("""a/c\s+no\.?\s+[X*]+(\d{4})""", RegexOption.IGNORE_CASE)
         acNoPattern.find(message)?.let { return it.groupValues[1] }
 
@@ -36,6 +62,10 @@ class GreaterBankParser : BaseIndianBankParser() {
     }
 
     override fun extractBalance(message: String): BigDecimal? {
+<<<<<<< ours
+=======
+        // "Available balance is Rs. 1127.55"
+>>>>>>> theirs
         val balPattern = Regex(
             """[Aa]vailable\s+balance\s+is\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
@@ -48,6 +78,10 @@ class GreaterBankParser : BaseIndianBankParser() {
     }
 
     override fun extractReference(message: String): String? {
+<<<<<<< ours
+=======
+        // "UPI Ref no 232135417634"
+>>>>>>> theirs
         val upiRefPattern = Regex("""UPI\s+Ref\s+no\s+(\d+)""", RegexOption.IGNORE_CASE)
         upiRefPattern.find(message)?.let { return it.groupValues[1] }
 
@@ -57,10 +91,18 @@ class GreaterBankParser : BaseIndianBankParser() {
     override fun extractMerchant(message: String, sender: String): String? {
         val lower = message.lowercase()
 
+<<<<<<< ours
+=======
+        // UPI transfer to another account
+>>>>>>> theirs
         if (lower.contains("upi ref")) {
             return "Bank Transfer"
         }
 
+<<<<<<< ours
+=======
+        // Generic debit alert with no destination info
+>>>>>>> theirs
         if (lower.contains("debit transaction")) {
             return "Debit Transaction"
         }

@@ -143,7 +143,12 @@ object BankParserFactory {
 =======
         AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
         MBankCZParser(),  // mBank CZ (Czech Republic)
+<<<<<<< ours
         BankMuscatParser()  // Bank Muscat (Oman)
+>>>>>>> theirs
+=======
+        BankMuscatParser(),  // Bank Muscat (Oman)
+        GreaterBankParser()  // Greater Bank (India)
 >>>>>>> theirs
         // Add more bank parsers here as we implement them
     )

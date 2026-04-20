@@ -10757,3 +10757,49 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankPa
 Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
 error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt cleanly.
+[backport-fixes-upstream 49a83282] fix: update CBE parser for card payments
+ Author: Bruk Berhane Asfaw <brukbrhane@gmail.com>
+ Date: Mon Apr 20 12:35:40 2026 +0300
+ 2 files changed, 48 insertions(+), 3 deletions(-)
+===================================
+Applying 0234-feat-add-Greater-Bank-SMS-parser.patch
+Applying: feat: add Greater Bank SMS parser
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GreaterBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GreaterBankParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Greater Bank SMS parser
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GreaterBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/GreaterBankParserTest.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GreaterBankParser.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        SNBAlAhliBankParser(),  // Saudi National Bank / Al Ahli Bank (Saudi Arabia)
+        STCBankParser(),  // STC Bank (Saudi Arabia)
+        MBankCZParser(),  // mBank CZ (Czech Republic)
+        BankMuscatParser()  // Bank Muscat (Oman)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:103
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GreaterBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/GreaterBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/GreaterBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/GreaterBankParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
