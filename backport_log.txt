@@ -10729,3 +10729,31 @@ error: the patch applies to 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.w
 error: app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp: patch does not apply
 Checking patch scripts/generate_android_launcher_icons.sh...
 error: scripts/generate_android_launcher_icons.sh: already exists in working directory
+[backport-fixes-upstream 96288884] feat(android): branded adaptive launcher + themed
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Apr 20 00:10:25 2026 +0530
+ 7 files changed, 274 insertions(+)
+ create mode 100644 app/src/main/res/mipmap-hdpi/ic_launcher_monochrome.webp
+ create mode 100644 app/src/main/res/mipmap-mdpi/ic_launcher_monochrome.webp
+ create mode 100644 app/src/main/res/mipmap-xhdpi/ic_launcher_monochrome.webp
+ create mode 100644 app/src/main/res/mipmap-xxhdpi/ic_launcher_monochrome.webp
+ create mode 100644 app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.webp
+ create mode 100755 scripts/generate_android_launcher_icons.sh
+===================================
+Applying 0233-fix-update-CBE-parser-for-card-payments.patch
+Applying: fix: update CBE parser for card payments
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestCBEBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: update CBE parser for card payments
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt' cleanly.
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestCBEBankParser.kt...
+error: parser-core/src/test/kotlin/TestCBEBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CBEBankParser.kt cleanly.
