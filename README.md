@@ -302,7 +302,7 @@ Special thanks to the following projects and resources:
 
 ## License
 
-GNU General Public License v3.0 - see [LICENSE](LICENSE)
+GNU General Public License v3.0 only- see [LICENSE](LICENSE)
 
 ---
 
