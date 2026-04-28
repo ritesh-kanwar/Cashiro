@@ -10803,3 +10803,26 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/GreaterBa
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/GreaterBankParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 2ca482d] feat: add Greater Bank SMS parser
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon Apr 20 23:56:57 2026 +0530
+ 4 files changed, 104 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0235-fix-improve-card-visibility-in-AMOLED-black-theme-27.patch
+Applying: fix: improve card visibility in AMOLED black theme (#273)
+Successfully applied via git am
+===================================
+Applying 0236-feat-income-budget-impact-refund-extra-budget-275.patch
+Applying: feat: income budget impact — refund & extra budget (#275)
+error: corrupt patch at .git/rebase-apply/patch:1700
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: income budget impact — refund & extra budget (#275)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0236-feat-income-budget-impact-refund-extra-budget-275.patch:1730
+error: corrupt patch at ../filtered_patches/0236-feat-income-budget-impact-refund-extra-budget-275.patch:1730
