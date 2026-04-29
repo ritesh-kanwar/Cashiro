@@ -11050,3 +11050,24 @@ Patch failed at 0001 fix: address P1 coroutine and atomicity issues from PR revi
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0240-fix-address-P1-coroutine-and-atomicity-issues-from-P.patch:126
 error: corrupt patch at ../filtered_patches/0240-fix-address-P1-coroutine-and-atomicity-issues-from-P.patch:126
+[backport-fixes-upstream a1cfd592] fix: address P1 coroutine and atomicity issues from
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 17:14:34 2026 +0530
+ 4 files changed, 24 insertions(+), 212 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+===================================
+Applying 0241-fix-resolvedDisplayOrder-used-in-BudgetEntity-clear-.patch
+Applying: fix: resolvedDisplayOrder used in BudgetEntity, clear budget impact on type change
+error: corrupt patch at .git/rebase-apply/patch:18
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: resolvedDisplayOrder used in BudgetEntity, clear budget impact on type change
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0241-fix-resolvedDisplayOrder-used-in-BudgetEntity-clear-.patch:29
+error: corrupt patch at ../filtered_patches/0241-fix-resolvedDisplayOrder-used-in-BudgetEntity-clear-.patch:29
