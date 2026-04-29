@@ -11089,3 +11089,76 @@ Patch failed at 0001 fix: atomic group deletion and budget impact category valid
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0242-fix-atomic-group-deletion-and-budget-impact-category.patch:45
 error: corrupt patch at ../filtered_patches/0242-fix-atomic-group-deletion-and-budget-impact-category.patch:45
+[backport-fixes-upstream 49df804a] fix: atomic group deletion and budget impact category
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 18:07:15 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0243-fix-historical-budget-fallback-and-transaction-group.patch
+Applying: fix: historical budget fallback and transaction group index
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: historical budget fallback and transaction group index
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/43.json' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:59
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionGroupEntity.kt: does not exist in index
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:197
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt: patch does not apply
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/43.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/43.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+error: while searching for:
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, BudgetMonthSnapshotEntity::class, BudgetCategoryMonthSnapshotEntity::class, TransactionSplitEntity::class, BankNotificationEntity::class, LoanEntity::class, TransactionGroupEntity::class],
+    version = 42,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:59
+error: while searching for:
+        AutoMigration(from = 37, to = 38),
+        AutoMigration(from = 39, to = 40),
+        AutoMigration(from = 40, to = 41),
+        AutoMigration(from = 41, to = 42)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:98
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionGroupEntity.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionGroupEntity.kt: No such file or directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+error: while searching for:
+
+    private suspend fun getGroupsForMonth(year: Int, month: Int): List<BudgetWithCategories> {
+        val groupSnapshots = snapshotDao.getGroupSnapshots(year, month)
+        return if (groupSnapshots.isNotEmpty()) {
+            val catSnapshots = snapshotDao.getCategorySnapshots(year, month)
+            reconstructFromSnapshots(groupSnapshots, catSnapshots)
+        } else {
+            budgetDao.getActiveBudgetsWithCategories().first()
+        }
+    }
+
+    private fun reconstructFromSnapshots(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:197
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 1 reject...
+Rejected hunk #1.
