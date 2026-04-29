@@ -10845,3 +10845,184 @@ Patch failed at 0001 feat: transaction groups for organising related transaction
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0237-feat-transaction-groups-for-organising-related-trans.patch:1890
 error: corrupt patch at ../filtered_patches/0237-feat-transaction-groups-for-organising-related-trans.patch:1890
+[backport-fixes-upstream 41f315d] feat: transaction groups for organising related
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 10:34:57 2026 +0530
+ 1 file changed, 19 insertions(+)
+===================================
+Applying 0239-fix-budget-limits-no-longer-bleed-into-past-months-2.patch
+Applying: fix: budget limits no longer bleed into past months (#276)
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: budget limits no longer bleed into past months (#276)
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/42.json' with conflicts.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:19
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:1
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:8
+error: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt: patch does not apply
+Checking patch app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/42.json...
+error: app/schemas/com.ritesh.cashiro.data.database.CashiroDatabase/42.json: already exists in working directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.ExchangeRateDao
+import com.ritesh.cashiro.data.database.dao.LoanDao
+import com.ritesh.cashiro.data.database.dao.MerchantMappingDao
+import com.ritesh.cashiro.data.database.dao.TransactionGroupDao
+import com.ritesh.cashiro.data.database.dao.RuleApplicationDao
+import com.ritesh.cashiro.data.database.dao.RuleDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:19
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.BankNotificationEntity
+import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
+import com.ritesh.cashiro.data.database.entity.BudgetEntity
+import com.ritesh.cashiro.data.database.entity.CardEntity
+import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import com.ritesh.cashiro.data.database.entity.ChatMessage
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:29
+error: while searching for:
+ * @property autoMigrations List of automatic migrations between versions.
+ */
+@Database(
+    entities = [TransactionEntity::class, SubscriptionEntity::class, ChatMessage::class, MerchantMappingEntity::class, CategoryEntity::class, AccountBalanceEntity::class, UnrecognizedSmsEntity::class, CardEntity::class, RuleEntity::class, RuleApplicationEntity::class, ExchangeRateEntity::class, BudgetEntity::class, BudgetCategoryEntity::class, TransactionSplitEntity::class, BankNotificationEntity::class, LoanEntity::class, TransactionGroupEntity::class],
+    version = 41,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:55
+error: while searching for:
+        AutoMigration(from = 36, to = 37),
+        AutoMigration(from = 37, to = 38),
+        AutoMigration(from = 39, to = 40),
+        AutoMigration(from = 40, to = 41)
+    ]
+)
+@TypeConverters(Converters::class)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:94
+error: while searching for:
+    abstract fun bankNotificationDao(): BankNotificationDao
+    abstract fun loanDao(): LoanDao
+    abstract fun transactionGroupDao(): TransactionGroupDao
+
+    companion object {
+        const val DATABASE_NAME = "cashiro_database"
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:115
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetSnapshotDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryMonthSnapshotEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetMonthSnapshotEntity.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+error: while searching for:
+package com.ritesh.cashiro.data.repository
+
+import com.ritesh.cashiro.data.database.dao.BudgetDao
+import com.ritesh.cashiro.data.database.dao.TransactionSplitDao
+import com.ritesh.cashiro.data.database.entity.BudgetCategoryEntity
+import com.ritesh.cashiro.data.database.entity.BudgetEntity
+import com.ritesh.cashiro.data.database.entity.BudgetGroupType
+import com.ritesh.cashiro.data.database.entity.BudgetPeriodType
+import com.ritesh.cashiro.data.database.entity.BudgetWithCategories
+import com.ritesh.cashiro.data.database.entity.BudgetImpactType
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:1
+Hunk #2 succeeded at 12 (offset -4 lines).
+Hunk #3 succeeded at 26 (offset -4 lines).
+Hunk #4 succeeded at 81 (offset -5 lines).
+Hunk #5 succeeded at 120 (offset -5 lines).
+Hunk #6 succeeded at 137 (offset -5 lines).
+error: while searching for:
+        budgetDao.updateBudgetLimitAmount(budgetId, total)
+    }
+
+    fun getGroupSpending(year: Int, month: Int, currency: String): Flow<BudgetOverallSummary> {
+        val yearMonth = YearMonth.of(year, month)
+        val startDate = yearMonth.atDay(1).atStartOfDay()
+        val endDate = yearMonth.atEndOfMonth().atTime(23, 59, 59)
+
+        val today = LocalDate.now()
+        val daysElapsed = if (yearMonth == YearMonth.from(today)) {
+            today.dayOfMonth
+        } else {
+            yearMonth.lengthOfMonth()
+        }
+        val daysRemaining = if (yearMonth == YearMonth.from(today)) {
+            (ChronoUnit.DAYS.between(today, yearMonth.atEndOfMonth()).toInt() + 1).coerceAtLeast(0)
+        } else {
+            0
+        }
+
+        val daysInMonth = yearMonth.lengthOfMonth()
+
+        return combine(
+            budgetDao.getActiveBudgetsWithCategories(),
+            transactionSplitDao.getTransactionsWithSplitsFiltered(startDate, endDate, currency)
+        ) { groups, allTransactions ->
+            buildSummary(groups, allTransactions, daysElapsed, daysRemaining, currency, daysInMonth)
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:152
+Hunk #8 succeeded at 187 (offset -90 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.BankNotificationDao
+import com.ritesh.cashiro.data.database.dao.BudgetDao
+import com.ritesh.cashiro.data.database.dao.CardDao
+import com.ritesh.cashiro.data.database.dao.CategoryDao
+import com.ritesh.cashiro.data.database.dao.ChatDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:8
+error: while searching for:
+    fun provideTransactionGroupDao(database: CashiroDatabase): TransactionGroupDao {
+        return database.transactionGroupDao()
+    }
+}
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:252
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 5 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetSnapshotDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryMonthSnapshotEntity.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetMonthSnapshotEntity.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 2 rejects...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Hunk #3 applied cleanly.
+Hunk #4 applied cleanly.
+Hunk #5 applied cleanly.
+Hunk #6 applied cleanly.
+Rejected hunk #7.
+Hunk #8 applied cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
