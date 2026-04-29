@@ -11071,3 +11071,21 @@ Patch failed at 0001 fix: resolvedDisplayOrder used in BudgetEntity, clear budge
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0241-fix-resolvedDisplayOrder-used-in-BudgetEntity-clear-.patch:29
 error: corrupt patch at ../filtered_patches/0241-fix-resolvedDisplayOrder-used-in-BudgetEntity-clear-.patch:29
+[backport-fixes-upstream d08755fd] fix: resolvedDisplayOrder used in BudgetEntity, clear
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 17:51:28 2026 +0530
+ 1 file changed, 21 insertions(+)
+===================================
+Applying 0242-fix-atomic-group-deletion-and-budget-impact-category.patch
+Applying: fix: atomic group deletion and budget impact category validation
+error: corrupt patch at .git/rebase-apply/patch:37
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: atomic group deletion and budget impact category validation
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0242-fix-atomic-group-deletion-and-budget-impact-category.patch:45
+error: corrupt patch at ../filtered_patches/0242-fix-atomic-group-deletion-and-budget-impact-category.patch:45
