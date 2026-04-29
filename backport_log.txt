@@ -10826,3 +10826,22 @@ Patch failed at 0001 feat: income budget impact — refund & extra budget (#275)
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0236-feat-income-budget-impact-refund-extra-budget-275.patch:1730
 error: corrupt patch at ../filtered_patches/0236-feat-income-budget-impact-refund-extra-budget-275.patch:1730
+[backport-fixes-upstream cd0e209c] =?UTF-8?q?feat:=20income=20budget=20impact=20?=
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Tue Apr 28 21:23:26 2026 +0530
+ 2 files changed, 23 insertions(+), 11 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0237-feat-transaction-groups-for-organising-related-trans.patch
+Applying: feat: transaction groups for organising related transactions (#274)
+error: corrupt patch at .git/rebase-apply/patch:1880
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: transaction groups for organising related transactions (#274)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0237-feat-transaction-groups-for-organising-related-trans.patch:1890
+error: corrupt patch at ../filtered_patches/0237-feat-transaction-groups-for-organising-related-trans.patch:1890
