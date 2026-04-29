@@ -11026,3 +11026,27 @@ Hunk #8 applied cleanly.
 Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream fd58cbe4] fix: budget limits no longer bleed into past months
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 16:05:31 2026 +0530
+ 8 files changed, 531 insertions(+), 20 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetSnapshotDao.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetCategoryMonthSnapshotEntity.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetMonthSnapshotEntity.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+===================================
+Applying 0240-fix-address-P1-coroutine-and-atomicity-issues-from-P.patch
+Applying: fix: address P1 coroutine and atomicity issues from PR review
+error: corrupt patch at .git/rebase-apply/patch:110
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: address P1 coroutine and atomicity issues from PR review
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0240-fix-address-P1-coroutine-and-atomicity-issues-from-P.patch:126
+error: corrupt patch at ../filtered_patches/0240-fix-address-P1-coroutine-and-atomicity-issues-from-P.patch:126
