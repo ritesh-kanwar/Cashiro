@@ -11162,3 +11162,23 @@ Rejected hunk #1.
 Rejected hunk #2.
 Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 26cf449db] fix: historical budget fallback and transaction group
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 20:31:32 2026 +0530
+ 3 files changed, 110 insertions(+)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+===================================
+Applying 0244-fix-clear-stale-budget-fields-in-_editableTransactio.patch
+Applying: fix: clear stale budget fields in _editableTransaction on type change
+error: corrupt patch at .git/rebase-apply/patch:17
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: clear stale budget fields in _editableTransaction on type change
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0244-fix-clear-stale-budget-fields-in-_editableTransactio.patch:28
+error: corrupt patch at ../filtered_patches/0244-fix-clear-stale-budget-fields-in-_editableTransactio.patch:28
