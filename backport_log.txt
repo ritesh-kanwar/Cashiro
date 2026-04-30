@@ -11429,3 +11429,26 @@ Rejected hunk #1.
 Rejected hunk #2.
 Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 87f2316bb] feat: add Mexican Peso (MXN) currency support
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri May 1 00:50:40 2026 +0530
+ 9 files changed, 172 insertions(+), 24 deletions(-)
+ delete mode 100644 CLAUDE.md.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0254-feat-surface-Lent-this-month-stat-on-home-expanded-b.patch
+Applying: feat: surface "Lent this month" stat on home expanded balance card
+error: corrupt patch at .git/rebase-apply/patch:62
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: surface "Lent this month" stat on home expanded balance card
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0254-feat-surface-Lent-this-month-stat-on-home-expanded-b.patch:84
+error: corrupt patch at ../filtered_patches/0254-feat-surface-Lent-this-month-stat-on-home-expanded-b.patch:84
