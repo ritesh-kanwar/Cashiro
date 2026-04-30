@@ -11286,3 +11286,61 @@ Patch failed at 0001 fix: address Greptile findings on group recent items PR
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0250-fix-address-Greptile-findings-on-group-recent-items-.patch:59
 error: corrupt patch at ../filtered_patches/0250-fix-address-Greptile-findings-on-group-recent-items-.patch:59
+[backport-fixes-upstream 5ba52ae9] fix: address Greptile findings on group recent items
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Apr 30 16:17:46 2026 +0530
+ 2 files changed, 20 insertions(+), 12 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+===================================
+Applying 0251-feat-add-Altana-Federal-Credit-Union-USA-SMS-parser.patch
+Applying: feat: add Altana Federal Credit Union (USA) SMS parser
+error: sha1 information is lacking or useless (CLAUDE.md).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Altana Federal Credit Union (USA) SMS parser
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: CLAUDE.md:87
+error: CLAUDE.md: patch does not apply
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AltanaFCUParser.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AltanaFCUParserTest.kt' cleanly.
+Checking patch CLAUDE.md...
+error: while searching for:
+- Use `com.ritesh.cashiro.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
+- The mapper handles type conversions between modules
+
+## Supported Banks (54 parsers)
+- Airtel Payments Bank
+- **Al Rajhi Bank (Saudi Arabia)** - Arabic SMS support
+- **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+- American Express (AMEX)
+- Axis Bank
+- Bank of Baroda
+
+error: patch failed: CLAUDE.md:87
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AltanaFCUParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/AltanaFCUParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        OldHickoryParser(),  // Old Hickory Credit Union (USA)
+        LaxmiBankParser(),  // Laxmi Sunrise Bank (Nepal)
+        CBEBankParser(),  // Commercial Bank of Ethiopia
+        EverestBankParser(),  // Everest Bank (Nepal)
+        BancolombiaParser(),  // Bancolombia (Colombia)
+        MashreqBankParser(),  // Mashreq Bank (UAE)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:58
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AltanaFCUParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/AltanaFCUParserTest.kt: already exists in working directory
+Applying patch CLAUDE.md with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
