@@ -11344,3 +11344,88 @@ Applying patch CLAUDE.md with 1 reject...
 Rejected hunk #1.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 430aa68e] feat: add Altana Federal Credit Union (USA) SMS
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Apr 30 23:55:37 2026 +0530
+ 3 files changed, 81 insertions(+)
+ create mode 100644 CLAUDE.md.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0252-feat-add-Mexican-Peso-MXN-currency-support.patch
+Applying: feat: add Mexican Peso (MXN) currency support
+Using index info to reconstruct a base tree...
+M	app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt
+M	app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt
+M	app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt
+Falling back to patching base and 3-way merge...
+Auto-merging app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt
+CONFLICT (content): Merge conflict in app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt
+Auto-merging app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt
+CONFLICT (content): Merge conflict in app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt
+Auto-merging app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Mexican Peso (MXN) currency support
+Conflict detected! Falling back to apply --reject
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt' with conflicts.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt' with conflicts.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt' cleanly.
+U app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt
+U app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt
+Checking patch app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt...
+error: while searching for:
+            val rates = fetchAllExchangeRates("USD")
+            rates?.keys?.toList() ?: listOf(
+                "AED", "USD", "EUR", "GBP", "INR", "THB", "MYR", "SGD", "KWD", "KRW",
+                "CAD", "AUD", "JPY", "CNY", "NPR", "ETB"
+            )
+        } catch (e: Exception) {
+            listOf(
+                "AED", "USD", "EUR", "GBP", "INR", "THB", "MYR", "SGD", "KWD", "KRW",
+                "CAD", "AUD", "JPY", "CNY", "NPR", "ETB"
+            )
+        }
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt:104
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt...
+error: while searching for:
+        "AED" to "AED",
+        "SGD" to "S$",
+        "CAD" to "C$",
+        "AUD" to "A$",
+        "JPY" to "¥",
+        "CNY" to "¥",
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:25
+error: while searching for:
+        "AED" to Locale.Builder().setLanguage("en").setRegion("AE").build(),
+        "SGD" to Locale.Builder().setLanguage("en").setRegion("SG").build(),
+        "CAD" to Locale.CANADA,
+        "AUD" to Locale.Builder().setLanguage("en").setRegion("AU").build(),
+        "JPY" to Locale.JAPAN,
+        "CNY" to Locale.CHINA,
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt:48
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt...
+error: while searching for:
+            // Asia Pacific
+            "SGD", "AUD", "THB", "MYR", "KRW", "NPR",
+            // Americas
+            "CAD",
+            // Africa
+            "ETB", "KES",
+            // Europe
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt:99
+Applying patch app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt with 1 reject...
+Rejected hunk #1.
