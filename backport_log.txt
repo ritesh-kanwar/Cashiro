@@ -11452,3 +11452,24 @@ Patch failed at 0001 feat: surface "Lent this month" stat on home expanded balan
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0254-feat-surface-Lent-this-month-stat-on-home-expanded-b.patch:84
 error: corrupt patch at ../filtered_patches/0254-feat-surface-Lent-this-month-stat-on-home-expanded-b.patch:84
+[backport-fixes-upstream 196e33cd7] feat: surface "Lent this month" stat on home expanded
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri May 1 01:24:26 2026 +0530
+ 4 files changed, 23 insertions(+), 43 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyFormatter.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/utils/CurrencyUtils.kt.rej
+===================================
+Applying 0255-feat-separate-loan-flows-from-Spent-this-month-and-s.patch
+Applying: feat: separate loan flows from "Spent this month" and surface settlement losses
+error: corrupt patch at .git/rebase-apply/patch:88
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: separate loan flows from "Spent this month" and surface settlement losses
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0255-feat-separate-loan-flows-from-Spent-this-month-and-s.patch:121
+error: corrupt patch at ../filtered_patches/0255-feat-separate-loan-flows-from-Spent-this-month-and-s.patch:121
