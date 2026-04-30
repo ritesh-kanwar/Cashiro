@@ -1,0 +1,10 @@
+What's New in v2.15.53
+• Transaction Groups to organise related transactions
+• Personal/Business profile filtering for accounts & transactions
+• Quick Add Transaction home-screen widget
+• Receipt attachments + redesigned transaction form
+• Credit card statement date with billed/unbilled split
+• Per-budget spending pace chart
+• Income budget impact (refunds & extra budget)
+• New bank support: Greater Bank, Punjab & Sind, DOP, Prime Commercial, SNB-AlAhli, STC Bank
+• Branded adap
