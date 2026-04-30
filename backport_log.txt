@@ -11208,3 +11208,21 @@ Patch failed at 0001 feat: add Personal/Business profile filtering for accounts 
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0246-feat-add-Personal-Business-profile-filtering-for-acc.patch:3991
 error: corrupt patch at ../filtered_patches/0246-feat-add-Personal-Business-profile-filtering-for-acc.patch:3991
+[backport-fixes-upstream efce05f8] feat: add Personal/Business profile filtering for
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu Apr 30 12:05:13 2026 +0530
+ 1 file changed, 26 insertions(+)
+===================================
+Applying 0247-fix-address-Greptile-P2-findings-on-profile-feature.patch
+Applying: fix: address Greptile P2 findings on profile feature
+error: corrupt patch at .git/rebase-apply/patch:1774
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: address Greptile P2 findings on profile feature
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0247-fix-address-Greptile-P2-findings-on-profile-feature.patch:1786
+error: corrupt patch at ../filtered_patches/0247-fix-address-Greptile-P2-findings-on-profile-feature.patch:1786
