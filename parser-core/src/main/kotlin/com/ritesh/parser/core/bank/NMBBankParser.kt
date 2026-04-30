@@ -25,7 +25,8 @@ class NMBBankParser : BankParser() {
         return normalizedSender.contains("NMB") ||
                 normalizedSender == "NMB_ALERT" ||
                 normalizedSender == "NMBBANK" ||
-                normalizedSender.contains("NABIL")
+                // NABIL is handled by a separate parser (NabilBankParser)
+                false
     }
 
     override fun extractAmount(message: String): BigDecimal? {
