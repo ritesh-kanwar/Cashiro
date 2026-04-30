@@ -11182,3 +11182,29 @@ Patch failed at 0001 fix: clear stale budget fields in _editableTransaction on t
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0244-fix-clear-stale-budget-fields-in-_editableTransactio.patch:28
 error: corrupt patch at ../filtered_patches/0244-fix-clear-stale-budget-fields-in-_editableTransactio.patch:28
+find: ‘./.git/objects/2c’: No such file or directory
+find: ‘./.git/objects/30’: No such file or directory
+find: ‘./.git/objects/32’: No such file or directory
+find: ‘./.git/objects/2d’: No such file or directory
+find: ‘./.git/objects/2f’: No such file or directory
+find: ‘./.git/objects/3c’: No such file or directory
+[backport-fixes-upstream 7609e72] fix: clear stale budget fields in
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed Apr 29 21:24:46 2026 +0530
+ 3 files changed, 20 insertions(+), 37 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+===================================
+Applying 0246-feat-add-Personal-Business-profile-filtering-for-acc.patch
+Applying: feat: add Personal/Business profile filtering for accounts and transactions
+error: corrupt patch at .git/rebase-apply/patch:3960
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Personal/Business profile filtering for accounts and transactions
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0246-feat-add-Personal-Business-profile-filtering-for-acc.patch:3991
+error: corrupt patch at ../filtered_patches/0246-feat-add-Personal-Business-profile-filtering-for-acc.patch:3991
