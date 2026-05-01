@@ -11491,3 +11491,21 @@ Patch failed at 0001 fix: address Greptile findings on Lent/Spent loan tracking
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0256-fix-address-Greptile-findings-on-Lent-Spent-loan-tra.patch:44
 error: corrupt patch at ../filtered_patches/0256-fix-address-Greptile-findings-on-Lent-Spent-loan-tra.patch:44
+[backport-fixes-upstream 240b3172] fix: address Greptile findings on Lent/Spent loan
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri May 1 11:32:28 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0259-feat-support-AND-OR-between-rule-conditions.patch
+Applying: feat: support AND / OR between rule conditions
+error: corrupt patch at .git/rebase-apply/patch:59
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: support AND / OR between rule conditions
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0259-feat-support-AND-OR-between-rule-conditions.patch:90
+error: corrupt patch at ../filtered_patches/0259-feat-support-AND-OR-between-rule-conditions.patch:90
