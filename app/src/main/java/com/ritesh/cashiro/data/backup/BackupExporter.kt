@@ -7,6 +7,7 @@ import com.ritesh.cashiro.BuildConfig
 import android.net.Uri
 import com.ritesh.cashiro.data.database.CashiroDatabase
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+import com.ritesh.cashiro.data.repository.WebhookRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import java.io.File
@@ -27,7 +28,8 @@ import androidx.core.net.toUri
 class BackupExporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: CashiroDatabase,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val webhookRepository: WebhookRepository
 ) {
     
     private val gson = GsonBuilder()
@@ -120,6 +122,22 @@ class BackupExporter @Inject constructor(
         val subcategories = if (config.includeProfileData) database.subcategoryDao().getAllSubcategories().first() else emptyList()
         val rules = if (config.includeAppPreferences) database.ruleDao().getAllRules().first() else emptyList()
         val ruleApplications = if (config.includeTransactionalData) database.ruleApplicationDao().getRecentApplications(1000).first() else emptyList() // Limit to recent apps for backup size
+        val webhookProfiles = if (config.includeAppPreferences) {
+            database.webhookProfileDao().getAllProfiles().first().map { profile ->
+                WebhookProfileBackup(
+                    id = profile.id,
+                    name = profile.name,
+                    url = profile.url,
+                    enabled = profile.enabled,
+                    dataTypes = profile.dataTypes,
+                    rangePreset = profile.rangePreset,
+                    customStart = profile.customStart,
+                    customEnd = profile.customEnd,
+                    currency = profile.currency,
+                    headers = webhookRepository.decodeHeaders(profile.headersJson).map { it.copy(value = "") }
+                )
+            }
+        } else emptyList()
         
         // Get preferences from repository
         val prefs = userPreferencesRepository.userPreferences.first()
@@ -158,7 +176,7 @@ class BackupExporter @Inject constructor(
             metadata = BackupMetadata(
                 exportId = UUID.randomUUID().toString(),
                 appVersion = BuildConfig.VERSION_NAME,
-                databaseVersion = 20, // Current database version
+                databaseVersion = 48,
                 device = "${Build.MANUFACTURER} ${Build.MODEL}",
                 androidVersion = Build.VERSION.SDK_INT,
                 statistics = BackupStatistics(
@@ -184,7 +202,8 @@ class BackupExporter @Inject constructor(
                 budgetCategoryLimits = budgetCategoryLimits,
                 subcategories = subcategories,
                 rules = rules,
-                ruleApplications = ruleApplications
+                ruleApplications = ruleApplications,
+                webhookProfiles = webhookProfiles
             ),
             preferences = PreferencesSnapshot(
                 theme = ThemePreferences(

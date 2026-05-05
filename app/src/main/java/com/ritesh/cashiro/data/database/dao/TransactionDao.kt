@@ -245,4 +245,36 @@ interface TransactionDao {
         startDate: LocalDateTime,
         endDate: LocalDateTime
     ): List<TransactionEntity>
+
+    @Query(
+        """
+        SELECT * FROM transactions
+        WHERE updated_at > :updatedAfter
+        AND updated_at <= :updatedBefore
+        AND currency = :currency
+        AND is_sample = 0
+        ORDER BY updated_at ASC, id ASC
+        """
+    )
+    suspend fun getTransactionsUpdatedBetween(
+        updatedAfter: LocalDateTime,
+        updatedBefore: LocalDateTime,
+        currency: String
+    ): List<TransactionEntity>
+
+    @Query(
+        """
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+        AND is_sample = 0
+        AND currency = :currency
+        AND date_time BETWEEN :startDate AND :endDate
+        ORDER BY date_time DESC
+        """
+    )
+    suspend fun getTransactionsBetweenDatesByCurrency(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        currency: String
+    ): List<TransactionEntity>
 }

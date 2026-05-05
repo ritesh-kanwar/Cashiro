@@ -23,6 +23,9 @@ import com.ritesh.cashiro.data.database.dao.SubscriptionDao
 import com.ritesh.cashiro.data.database.dao.BudgetDao
 import com.ritesh.cashiro.data.database.dao.TransactionDao
 import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+import com.ritesh.cashiro.data.database.dao.WebhookCursorDao
+import com.ritesh.cashiro.data.database.dao.WebhookLogDao
+import com.ritesh.cashiro.data.database.dao.WebhookProfileDao
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.BudgetCategoryLimitEntity
 import com.ritesh.cashiro.data.database.entity.BudgetEntity
@@ -37,6 +40,9 @@ import com.ritesh.cashiro.data.database.entity.SubcategoryEntity
 import com.ritesh.cashiro.data.database.entity.SubscriptionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+import com.ritesh.cashiro.data.database.entity.WebhookCursorEntity
+import com.ritesh.cashiro.data.database.entity.WebhookLogEntity
+import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
 
 /**
  * The Cashiro Room database.
@@ -64,9 +70,12 @@ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
             ExchangeRateEntity::class,
             SubcategoryEntity::class,
             BudgetEntity::class,
-            BudgetCategoryLimitEntity::class
+            BudgetCategoryLimitEntity::class,
+            WebhookProfileEntity::class,
+            WebhookLogEntity::class,
+            WebhookCursorEntity::class
         ],
-    version = 47,
+    version = 48,
     exportSchema = true,
     autoMigrations =
         [
@@ -89,7 +98,8 @@ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
             AutoMigration(from = 43, to = 44, spec = Migration43To44::class),
             AutoMigration(from = 44, to = 45, spec = Migration44To45::class),
             AutoMigration(from = 45, to = 46, spec = Migration45To46::class),
-            AutoMigration(from = 46, to = 47, spec = Migration46To47::class)
+            AutoMigration(from = 46, to = 47, spec = Migration46To47::class),
+            AutoMigration(from = 47, to = 48)
         ]
 )
 @TypeConverters(Converters::class)
@@ -107,6 +117,9 @@ abstract class CashiroDatabase : RoomDatabase() {
     abstract fun exchangeRateDao(): ExchangeRateDao
     abstract fun subcategoryDao(): SubcategoryDao
     abstract fun budgetDao(): BudgetDao
+    abstract fun webhookProfileDao(): WebhookProfileDao
+    abstract fun webhookLogDao(): WebhookLogDao
+    abstract fun webhookCursorDao(): WebhookCursorDao
 
     companion object {
         const val DATABASE_NAME = "pennywise_database"

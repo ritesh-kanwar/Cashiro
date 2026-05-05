@@ -16,6 +16,10 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import com.ritesh.cashiro.data.webhook.WebhookScheduledTime
+import com.ritesh.cashiro.data.webhook.WebhookSettings
+import com.ritesh.cashiro.data.webhook.WebhookSyncMode
+import kotlinx.serialization.json.Json
 
 private val Context.dataStore: DataStore<Preferences> by
         preferencesDataStore(name = "user_preferences")
@@ -77,6 +81,11 @@ constructor(@ApplicationContext private val context: Context) {
         val BLUR_EFFECTS = booleanPreferencesKey("blur_effects")
         val IS_SAMPLE_DATA_SEEDED = booleanPreferencesKey("is_sample_data_seeded")
         val APP_ICON = stringPreferencesKey("app_icon")
+        val WEBHOOK_SYNC_MODE = stringPreferencesKey("webhook_sync_mode")
+        val WEBHOOK_INTERVAL_HOURS = intPreferencesKey("webhook_interval_hours")
+        val WEBHOOK_SCHEDULE_HOUR = intPreferencesKey("webhook_schedule_hour")
+        val WEBHOOK_SCHEDULE_MINUTE = intPreferencesKey("webhook_schedule_minute")
+        val WEBHOOK_SCHEDULED_TIMES_JSON = stringPreferencesKey("webhook_scheduled_times_json")
     }
 
     val userPreferences: Flow<UserPreferences> =
@@ -152,9 +161,52 @@ constructor(@ApplicationContext private val context: Context) {
             preferences[PreferencesKeys.BASE_CURRENCY] ?: "INR"
         }
 
+    val webhookSettings: Flow<WebhookSettings> =
+        context.dataStore.data.map { preferences ->
+            val storedMode = preferences[PreferencesKeys.WEBHOOK_SYNC_MODE]
+            val syncMode = WebhookSyncMode.entries.firstOrNull { it.name == storedMode }
+                ?: WebhookSyncMode.INTERVAL
+
+            val timesJson = preferences[PreferencesKeys.WEBHOOK_SCHEDULED_TIMES_JSON]
+            val scheduledTimes: List<WebhookScheduledTime> = if (timesJson != null) {
+                runCatching {
+                    Json.decodeFromString<List<WebhookScheduledTime>>(timesJson)
+                }.getOrElse { defaultScheduledTimes() }
+            } else {
+                // Migrate from legacy single hour/minute keys
+                val legacyHour = preferences[PreferencesKeys.WEBHOOK_SCHEDULE_HOUR]
+                val legacyMinute = preferences[PreferencesKeys.WEBHOOK_SCHEDULE_MINUTE]
+                if (legacyHour != null) {
+                    listOf(WebhookScheduledTime(hour = legacyHour, minute = legacyMinute ?: 0))
+                } else {
+                    defaultScheduledTimes()
+                }
+            }
+
+            WebhookSettings(
+                syncMode = syncMode,
+                intervalHours = preferences[PreferencesKeys.WEBHOOK_INTERVAL_HOURS] ?: 6,
+                scheduledTimes = scheduledTimes
+            )
+        }
+
+    private fun defaultScheduledTimes(): List<WebhookScheduledTime> = listOf(
+        WebhookScheduledTime(hour = 8, minute = 0),
+        WebhookScheduledTime(hour = 21, minute = 0)
+    )
+
     suspend fun updateBaseCurrency(currency: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.BASE_CURRENCY] = currency
+        }
+    }
+
+    suspend fun updateWebhookSettings(settings: WebhookSettings) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WEBHOOK_SYNC_MODE] = settings.syncMode.name
+            preferences[PreferencesKeys.WEBHOOK_INTERVAL_HOURS] = settings.intervalHours
+            preferences[PreferencesKeys.WEBHOOK_SCHEDULED_TIMES_JSON] =
+                Json.encodeToString(settings.scheduledTimes)
         }
     }
 

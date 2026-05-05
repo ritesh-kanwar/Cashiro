@@ -154,6 +154,10 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".receiver.WebhookSyncAlarmReceiver"
+            android:exported="false" />
+
         <!-- Quick Settings Tiles -->
         <service
             android:name=".service.AddTransactionTileService"

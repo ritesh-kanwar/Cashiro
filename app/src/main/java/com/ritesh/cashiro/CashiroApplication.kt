@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.ritesh.cashiro.data.repository.AppLockRepository
+import com.ritesh.cashiro.data.webhook.WebhookSyncScheduler
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,9 @@ class CashiroApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var appLockRepository: AppLockRepository
+
+    @Inject
+    lateinit var webhookSyncScheduler: WebhookSyncScheduler
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var activityReferences = 0
@@ -42,6 +46,9 @@ class CashiroApplication : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         registerActivityLifecycleCallbacks(AppLockLifecycleObserver())
+        applicationScope.launch {
+            webhookSyncScheduler.applyScheduling()
+        }
     }
 
     /**

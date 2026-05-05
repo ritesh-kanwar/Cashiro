@@ -8,6 +8,7 @@ import androidx.room.withTransaction
 import com.ritesh.cashiro.data.database.CashiroDatabase
 import com.ritesh.cashiro.data.database.entity.*
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+import com.ritesh.cashiro.data.repository.WebhookRepository
 import com.ritesh.cashiro.data.preferences.NavigationBarStyle
 import com.ritesh.cashiro.data.preferences.AppFont
 import com.ritesh.cashiro.data.preferences.ThemeStyle
@@ -32,7 +33,8 @@ import javax.inject.Singleton
 class BackupImporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: CashiroDatabase,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val webhookRepository: WebhookRepository
 ) {
     
     private val gson = GsonBuilder()
@@ -225,6 +227,23 @@ class BackupImporter @Inject constructor(
                 backup.database.ruleApplications.forEach { app ->
                     database.ruleApplicationDao().insertApplication(app)
                 }
+
+                backup.database.webhookProfiles.forEach { profile ->
+                    database.webhookProfileDao().upsertProfile(
+                        WebhookProfileEntity(
+                            id = profile.id,
+                            name = profile.name,
+                            url = profile.url,
+                            enabled = profile.enabled,
+                            dataTypes = profile.dataTypes,
+                            rangePreset = profile.rangePreset,
+                            customStart = profile.customStart,
+                            customEnd = profile.customEnd,
+                            currency = profile.currency,
+                            headersJson = webhookRepository.encodeHeaders(profile.headers)
+                        )
+                    )
+                }
                 
                 // Import preferences
                 importPreferences(backup.preferences)
@@ -356,6 +375,7 @@ class BackupImporter @Inject constructor(
                 importSubscriptionsWithMerge(backup.database.subscriptions)
                 importMerchantMappingsWithMerge(backup.database.merchantMappings)
                 importBudgetsWithMerge(backup.database.budgets, backup.database.budgetCategoryLimits)
+                importWebhookProfilesWithMerge(backup.database.webhookProfiles)
                 
                 // Import preferences (merge with existing)
                 importPreferences(backup.preferences)
@@ -462,6 +482,28 @@ class BackupImporter @Inject constructor(
                 // Since this is a NEW budget (checked above), limits naturally won't exist.
                 val newLimit = limit.copy(id = 0, budgetId = newBudgetId)
                 database.budgetDao().insertCategoryLimit(newLimit)
+            }
+        }
+    }
+
+    private suspend fun importWebhookProfilesWithMerge(profiles: List<WebhookProfileBackup>) {
+        profiles.forEach { profile ->
+            val existing = database.webhookProfileDao().getProfileById(profile.id)
+            if (existing == null) {
+                database.webhookProfileDao().upsertProfile(
+                    WebhookProfileEntity(
+                        id = profile.id,
+                        name = profile.name,
+                        url = profile.url,
+                        enabled = profile.enabled,
+                        dataTypes = profile.dataTypes,
+                        rangePreset = profile.rangePreset,
+                        customStart = profile.customStart,
+                        customEnd = profile.customEnd,
+                        currency = profile.currency,
+                        headersJson = webhookRepository.encodeHeaders(profile.headers)
+                    )
+                )
             }
         }
     }

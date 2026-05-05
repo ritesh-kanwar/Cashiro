@@ -18,6 +18,9 @@ import com.ritesh.cashiro.data.database.dao.SubcategoryDao
 import com.ritesh.cashiro.data.database.dao.SubscriptionDao
 import com.ritesh.cashiro.data.database.dao.TransactionDao
 import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
+import com.ritesh.cashiro.data.database.dao.WebhookCursorDao
+import com.ritesh.cashiro.data.database.dao.WebhookLogDao
+import com.ritesh.cashiro.data.database.dao.WebhookProfileDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -215,6 +218,24 @@ object DatabaseModule {
     @Singleton
     fun provideBudgetDao(database: CashiroDatabase): BudgetDao {
         return database.budgetDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebhookProfileDao(database: CashiroDatabase): WebhookProfileDao {
+        return database.webhookProfileDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebhookLogDao(database: CashiroDatabase): WebhookLogDao {
+        return database.webhookLogDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebhookCursorDao(database: CashiroDatabase): WebhookCursorDao {
+        return database.webhookCursorDao()
     }
 }
 /** Database callback to seed initial data when database is first created */

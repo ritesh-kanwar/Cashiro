@@ -2,6 +2,7 @@ package com.ritesh.cashiro.data.backup
 
 import com.google.gson.annotations.SerializedName
 import com.ritesh.cashiro.data.database.entity.*
+import com.ritesh.cashiro.data.webhook.WebhookHeader
 import java.time.LocalDateTime
 
 /**
@@ -127,8 +128,34 @@ data class DatabaseSnapshot(
     @SerializedName("rule_applications")
     val ruleApplications: List<RuleApplicationEntity> = emptyList(),
 
+    @SerializedName("webhook_profiles")
+    val webhookProfiles: List<WebhookProfileBackup> = emptyList(),
+
     @SerializedName("chat_messages")
     val chatMessages: List<ChatMessage>
+)
+
+data class WebhookProfileBackup(
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("url")
+    val url: String,
+    @SerializedName("enabled")
+    val enabled: Boolean,
+    @SerializedName("data_types")
+    val dataTypes: List<String>,
+    @SerializedName("range_preset")
+    val rangePreset: String,
+    @SerializedName("custom_start")
+    val customStart: LocalDateTime? = null,
+    @SerializedName("custom_end")
+    val customEnd: LocalDateTime? = null,
+    @SerializedName("currency")
+    val currency: String,
+    @SerializedName("headers")
+    val headers: List<WebhookHeader> = emptyList()
 )
 
 /**

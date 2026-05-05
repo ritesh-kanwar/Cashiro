@@ -87,6 +87,8 @@ import com.ritesh.cashiro.presentation.ui.features.settings.rules.RulesScreen
 import com.ritesh.cashiro.presentation.ui.features.settings.rules.RulesViewModel
 import com.ritesh.cashiro.presentation.ui.features.settings.sms.SMSScreen
 import com.ritesh.cashiro.presentation.ui.features.settings.unrecognized.UnrecognizedSmsScreen
+import com.ritesh.cashiro.presentation.ui.features.settings.webhooks.WebhookEditorScreen
+import com.ritesh.cashiro.presentation.ui.features.settings.webhooks.WebhooksScreen
 import com.ritesh.cashiro.presentation.ui.features.subscriptions.SubscriptionsScreen
 import com.ritesh.cashiro.presentation.ui.features.transactions.ExportTransactionsDialog
 import com.ritesh.cashiro.presentation.ui.features.transactions.TransactionDetailScreen
@@ -279,10 +281,38 @@ fun CashiroNavHost(
                         onNavigateToProfile = { navController.safeNavigate(Profile) },
                         onNavigateToSms = { navController.safeNavigate(SmsSettings) },
                         onNavigateToNotifications = { navController.safeNavigate(NotificationSettings) },
+                        onNavigateToWebhooks = { navController.safeNavigate(Webhooks) },
                         onNavigateToBudgets = { navController.safeNavigate(Budgets()) },
                         onNavigateToDataPrivacy = { navController.safeNavigate(DataPrivacy) },
                         onNavigateToAbout = { navController.safeNavigate(About) },
                         blurEffects = themeUiState.blurEffects
+                    )
+                }
+
+                composable<Webhooks>(
+                    enterTransition = CashiroTransitions.horizontalSlideEnter,
+                    exitTransition = CashiroTransitions.horizontalSlideExit,
+                    popEnterTransition = CashiroTransitions.horizontalSlidePopEnter,
+                    popExitTransition = CashiroTransitions.horizontalSlidePopExit
+                ) {
+                    WebhooksScreen(
+                        onNavigateBack = { navController.safePopBackStack() },
+                        onNavigateToEditor = { profileId ->
+                            navController.safeNavigate(WebhookEditor(profileId))
+                        }
+                    )
+                }
+
+                composable<WebhookEditor>(
+                    enterTransition = CashiroTransitions.horizontalSlideEnter,
+                    exitTransition = CashiroTransitions.horizontalSlideExit,
+                    popEnterTransition = CashiroTransitions.horizontalSlidePopEnter,
+                    popExitTransition = CashiroTransitions.horizontalSlidePopExit
+                ) { backStackEntry ->
+                    val route = backStackEntry.toRoute<WebhookEditor>()
+                    WebhookEditorScreen(
+                        profileId = route.profileId,
+                        onNavigateBack = { navController.safePopBackStack() }
                     )
                 }
 

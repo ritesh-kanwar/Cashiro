@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.ritesh.cashiro.data.manager.NotificationScheduler
+import com.ritesh.cashiro.data.webhook.WebhookSyncScheduler
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -23,6 +24,7 @@ class BootReceiver : BroadcastReceiver() {
     @InstallIn(SingletonComponent::class)
     interface BootReceiverEntryPoint {
         fun notificationScheduler(): NotificationScheduler
+        fun webhookSyncScheduler(): WebhookSyncScheduler
     }
 
     private val receiverScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -36,10 +38,12 @@ class BootReceiver : BroadcastReceiver() {
                 BootReceiverEntryPoint::class.java
             )
             val scheduler = entryPoint.notificationScheduler()
+            val webhookSyncScheduler = entryPoint.webhookSyncScheduler()
 
             receiverScope.launch {
                 try {
                     scheduler.scheduleDailyReminder()
+                    webhookSyncScheduler.applyScheduling()
                 } catch (e: Exception) {
                     Log.e(TAG, "Error rescheduling alarms after boot", e)
                 }

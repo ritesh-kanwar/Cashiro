@@ -218,6 +218,8 @@ data class Transactions(
 
 
 @Serializable object NotificationSettings
+@Serializable object Webhooks
+@Serializable data class WebhookEditor(val profileId: String? = null)
 
 @Serializable data class Budgets(val sharedElementPrefix: Long? = null)
 
