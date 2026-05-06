@@ -1,10 +1,12 @@
 package com.ritesh.cashiro.data.webhook
 
 import com.ritesh.cashiro.data.database.entity.WebhookLogEntity
+import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import com.ritesh.cashiro.data.repository.WebhookRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.first
 
 data class WebhookSyncRunResult(
     val anySuccess: Boolean,
@@ -15,7 +17,8 @@ data class WebhookSyncRunResult(
 class WebhookSyncManager @Inject constructor(
     private val webhookRepository: WebhookRepository,
     private val payloadBuilder: WebhookPayloadBuilder,
-    private val deliveryService: WebhookDeliveryService
+    private val deliveryService: WebhookDeliveryService,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) {
     suspend fun syncAll(reason: WebhookSyncReason, sendTestPayload: Boolean = false): WebhookSyncRunResult {
         val profiles = webhookRepository.getEnabledProfiles()
@@ -34,8 +37,10 @@ class WebhookSyncManager @Inject constructor(
         val profile = webhookRepository.getProfile(profileId)
             ?: return WebhookSyncRunResult(anySuccess = false, anyRetryableFailure = false)
         val headers = webhookRepository.decodeHeaders(profile.headersJson)
+        val dataTypes = webhookRepository.decodeDataTypes(profile.dataTypes)
+        val currency = userPreferencesRepository.baseCurrency.first()
         val cursorState = webhookRepository.getCursors(profile.id)
-        val batches = payloadBuilder.build(profile, cursorState, sendTestPayload)
+        val batches = payloadBuilder.build(profile, dataTypes, currency, cursorState, sendTestPayload)
         var anySuccess = false
         var anyRetryableFailure = false
 
@@ -45,8 +50,9 @@ class WebhookSyncManager @Inject constructor(
                 WebhookLogEntity(
                     profileId = profile.id,
                     profileName = profile.name,
-                    syncReason = reason.name,
-                    status = if (attempt.success) "SUCCESS" else "FAILED",
+                    syncReason = reason,
+                    status = if (attempt.success) com.ritesh.cashiro.data.database.entity.WebhookLogStatus.SUCCESS
+                        else com.ritesh.cashiro.data.database.entity.WebhookLogStatus.FAILURE,
                     message = attempt.message,
                     httpStatus = attempt.httpStatus,
                     batchCount = batch.envelope.batch.count

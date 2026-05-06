@@ -6,6 +6,7 @@ import com.ritesh.cashiro.data.database.dao.WebhookCursorDao
 import com.ritesh.cashiro.data.database.dao.WebhookLogDao
 import com.ritesh.cashiro.data.database.dao.WebhookProfileDao
 import com.ritesh.cashiro.data.database.entity.WebhookCursorEntity
+import com.ritesh.cashiro.data.database.entity.WebhookDataType
 import com.ritesh.cashiro.data.database.entity.WebhookLogEntity
 import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
 import com.ritesh.cashiro.data.webhook.WebhookCursorUpdate
@@ -15,9 +16,6 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 @Singleton
 class WebhookRepository @Inject constructor(
@@ -26,8 +24,6 @@ class WebhookRepository @Inject constructor(
     private val logDao: WebhookLogDao,
     private val cursorDao: WebhookCursorDao
 ) {
-    private val json = Json { ignoreUnknownKeys = true }
-
     fun getAllProfiles(): Flow<List<WebhookProfileEntity>> = profileDao.getAllProfiles()
 
     suspend fun getEnabledProfiles(): List<WebhookProfileEntity> = profileDao.getEnabledProfiles()
@@ -43,30 +39,27 @@ class WebhookRepository @Inject constructor(
 
     suspend fun saveProfile(draft: WebhookProfileDraft): String {
         val now = LocalDateTime.now()
+        val id = draft.id ?: java.util.UUID.randomUUID().toString()
+        val existing = draft.id?.let { profileDao.getProfileById(it) }
         val entity = WebhookProfileEntity(
-            id = draft.id ?: java.util.UUID.randomUUID().toString(),
+            id = id,
             name = draft.name.trim(),
             url = draft.url.trim(),
             enabled = draft.enabled,
-            dataTypes = draft.dataTypes.map { it.name },
-            rangePreset = draft.rangePreset.name,
+            rangePreset = draft.rangePreset,
             customStart = draft.customStart,
             customEnd = draft.customEnd,
-            currency = draft.currency.trim().uppercase(),
+            dataTypes = draft.dataTypes.map { it.name },
             headersJson = encodeHeaders(draft.headers),
-            updatedAt = now,
-            createdAt = now
+            // Operational fields are owned by the sync runner — preserve whatever was already there.
+            lastError = existing?.lastError,
+            consecutiveFailures = existing?.consecutiveFailures ?: 0,
+            lastSyncedAt = existing?.lastSyncedAt,
+            createdAt = existing?.createdAt ?: now,
+            updatedAt = now
         )
-        val existing = draft.id?.let { profileDao.getProfileById(it) }
-        profileDao.upsertProfile(
-            if (existing == null) entity else entity.copy(
-                createdAt = existing.createdAt,
-                consecutiveFailures = existing.consecutiveFailures,
-                lastError = existing.lastError,
-                lastSyncedAt = existing.lastSyncedAt
-            )
-        )
-        return entity.id
+        profileDao.upsertProfile(entity)
+        return id
     }
 
     suspend fun deleteProfile(profileId: String) {
@@ -88,7 +81,7 @@ class WebhookRepository @Inject constructor(
                 cursorDao.upsertCursor(
                     WebhookCursorEntity(
                         profileId = profileId,
-                        dataType = update.dataType.name,
+                        dataType = update.dataType,
                         lastSuccessAt = update.successAt,
                         lastRangeEnd = update.rangeEnd,
                         updatedAt = syncedAt
@@ -102,15 +95,10 @@ class WebhookRepository @Inject constructor(
         profileDao.markFailure(profileId, message, LocalDateTime.now())
     }
 
-    fun decodeHeaders(headersJson: String): List<WebhookHeader> {
-        return try {
-            json.decodeFromString<List<WebhookHeader>>(headersJson)
-        } catch (_: Exception) {
-            emptyList()
-        }
-    }
+    fun decodeHeaders(headersJson: String): List<WebhookHeader> = WebhookHeaderEncoder.decode(headersJson)
 
-    fun encodeHeaders(headers: List<WebhookHeader>): String {
-        return json.encodeToString(headers.filter { it.key.isNotBlank() })
-    }
+    fun encodeHeaders(headers: List<WebhookHeader>): String = WebhookHeaderEncoder.encode(headers)
+
+    fun decodeDataTypes(dataTypes: List<String>): Set<WebhookDataType> =
+        dataTypes.mapNotNull { value -> runCatching { WebhookDataType.valueOf(value) }.getOrNull() }.toSet()
 }

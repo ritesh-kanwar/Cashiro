@@ -83,7 +83,7 @@ interface WebhookCursorDao {
     suspend fun getCursorsForProfile(profileId: String): List<WebhookCursorEntity>
 
     @Query("SELECT * FROM webhook_cursors WHERE profile_id = :profileId AND data_type = :dataType LIMIT 1")
-    suspend fun getCursor(profileId: String, dataType: String): WebhookCursorEntity?
+    suspend fun getCursor(profileId: String, dataType: com.ritesh.cashiro.data.database.entity.WebhookDataType): WebhookCursorEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertCursor(cursor: WebhookCursorEntity)

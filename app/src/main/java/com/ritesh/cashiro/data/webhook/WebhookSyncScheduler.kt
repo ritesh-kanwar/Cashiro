@@ -109,7 +109,7 @@ class WebhookSyncScheduler @Inject constructor(
     }
 
     private fun scheduleSingleAlarm(time: WebhookScheduledTime) {
-        val nextRun = nextRunFor(time)
+        val nextRun = WebhookScheduleArithmetic.nextRunFor(time, LocalDateTime.now())
         val triggerAtMillis = nextRun.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val intent = Intent(context, WebhookSyncAlarmReceiver::class.java).apply {
             putExtra(ALARM_INTENT_EXTRA_ID, time.id)
@@ -126,15 +126,6 @@ class WebhookSyncScheduler @Inject constructor(
         } else {
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
         }
-    }
-
-    private fun nextRunFor(time: WebhookScheduledTime): LocalDateTime {
-        val now = LocalDateTime.now()
-        var next = now.withHour(time.hour).withMinute(time.minute).withSecond(0).withNano(0)
-        if (!next.isAfter(now)) {
-            next = next.plusDays(1)
-        }
-        return next
     }
 
     private fun syncConstraints(): Constraints =

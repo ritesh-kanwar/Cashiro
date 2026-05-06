@@ -705,7 +705,7 @@ fun SettingsScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .background(
-                                        color = cyan_light,
+                                        color = purple_light,
                                         shape = CircleShape
                                     ),
                                 contentAlignment = Alignment.Center
@@ -713,7 +713,7 @@ fun SettingsScreen(
                                 Icon(
                                     Icons.Rounded.Webhook,
                                     contentDescription = null,
-                                    tint = cyan_dark
+                                    tint = purple_dark
                                 )
                             }
                         },

@@ -75,7 +75,7 @@ import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
             WebhookLogEntity::class,
             WebhookCursorEntity::class
         ],
-    version = 48,
+    version = 51,
     exportSchema = true,
     autoMigrations =
         [
@@ -146,7 +146,10 @@ abstract class CashiroDatabase : RoomDatabase() {
                                 MIGRATION_20_21,
                                 MIGRATION_21_22,
                                 MIGRATION_22_23,
-                                MIGRATION_29_30
+                                MIGRATION_29_30,
+                                MIGRATION_48_49,
+                                MIGRATION_49_50,
+                                MIGRATION_50_51
                             )
                             .build()
                     INSTANCE = instance
@@ -564,6 +567,322 @@ class Migration10To11 : AutoMigrationSpec {
  * Manual migration from version 29 to 30. Adds new fields to categories and subcategories tables
  * for enhanced functionality.
  */
+/**
+ * Manual migration 48 -> 49.
+ *
+ * Normalises the webhook_profiles table by extracting the previously-blob columns
+ * `data_types` (CSV) and `headers_json` (JSON array) into proper child tables, and
+ * drops the now-redundant per-profile `currency` column (use the app baseCurrency).
+ * Also collapses any legacy webhook_logs.status values ("DELIVERED" -> "SUCCESS",
+ * "ERROR"/"FAILED" -> "FAILURE") so the typed enum reads cleanly.
+ */
+val MIGRATION_48_49 =
+    object : Migration(48, 49) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // 1) Create new child tables.
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS webhook_profile_headers (
+                    profile_id TEXT NOT NULL,
+                    ordinal INTEGER NOT NULL,
+                    key TEXT NOT NULL,
+                    value TEXT NOT NULL,
+                    PRIMARY KEY(profile_id, ordinal),
+                    FOREIGN KEY(profile_id) REFERENCES webhook_profiles(id) ON DELETE CASCADE
+                )
+                """.trimIndent()
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_webhook_profile_headers_profile_id ON webhook_profile_headers(profile_id)")
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS webhook_profile_data_types (
+                    profile_id TEXT NOT NULL,
+                    data_type TEXT NOT NULL,
+                    PRIMARY KEY(profile_id, data_type),
+                    FOREIGN KEY(profile_id) REFERENCES webhook_profiles(id) ON DELETE CASCADE
+                )
+                """.trimIndent()
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_webhook_profile_data_types_profile_id ON webhook_profile_data_types(profile_id)")
+
+            // 2) Copy data from the soon-to-be-dropped columns into the child tables.
+            val profileCursor = db.query("SELECT id, data_types, headers_json FROM webhook_profiles")
+            while (profileCursor.moveToNext()) {
+                val profileId = profileCursor.getString(0)
+                val dataTypesCsv = profileCursor.getString(1) ?: ""
+                val headersJson = profileCursor.getString(2) ?: "[]"
+
+                dataTypesCsv.split(",")
+                    .map { it.trim() }
+                    .filter { it.isNotEmpty() }
+                    .distinct()
+                    .forEach { dataType ->
+                        db.execSQL(
+                            "INSERT OR IGNORE INTO webhook_profile_data_types (profile_id, data_type) VALUES (?, ?)",
+                            arrayOf<Any>(profileId, dataType)
+                        )
+                    }
+
+                runCatching {
+                    val parsed = kotlinx.serialization.json.Json.parseToJsonElement(headersJson)
+                    val array = (parsed as? kotlinx.serialization.json.JsonArray) ?: emptyList()
+                    array.forEachIndexed { index, element ->
+                        val obj = element as? kotlinx.serialization.json.JsonObject ?: return@forEachIndexed
+                        val key = (obj["key"] as? kotlinx.serialization.json.JsonPrimitive)?.content.orEmpty()
+                        val value = (obj["value"] as? kotlinx.serialization.json.JsonPrimitive)?.content.orEmpty()
+                        if (key.isNotEmpty()) {
+                            db.execSQL(
+                                "INSERT OR REPLACE INTO webhook_profile_headers (profile_id, ordinal, key, value) VALUES (?, ?, ?, ?)",
+                                arrayOf<Any>(profileId, index, key, value)
+                            )
+                        }
+                    }
+                }
+            }
+            profileCursor.close()
+
+            // 3) Recreate webhook_profiles without data_types / headers_json / currency.
+            db.execSQL(
+                """
+                CREATE TABLE webhook_profiles_new (
+                    id TEXT NOT NULL PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    url TEXT NOT NULL,
+                    enabled INTEGER NOT NULL DEFAULT 1,
+                    range_preset TEXT NOT NULL,
+                    custom_start TEXT,
+                    custom_end TEXT,
+                    last_error TEXT,
+                    consecutive_failures INTEGER NOT NULL DEFAULT 0,
+                    last_synced_at TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                )
+                """.trimIndent()
+            )
+            db.execSQL(
+                """
+                INSERT INTO webhook_profiles_new (
+                    id, name, url, enabled, range_preset, custom_start, custom_end,
+                    last_error, consecutive_failures, last_synced_at, created_at, updated_at
+                ) SELECT
+                    id, name, url, enabled, range_preset, custom_start, custom_end,
+                    last_error, consecutive_failures, last_synced_at, created_at, updated_at
+                FROM webhook_profiles
+                """.trimIndent()
+            )
+            db.execSQL("DROP TABLE webhook_profiles")
+            db.execSQL("ALTER TABLE webhook_profiles_new RENAME TO webhook_profiles")
+
+            // 4) Normalise legacy log status values to the new SUCCESS/FAILURE pair.
+            db.execSQL("UPDATE webhook_logs SET status = 'SUCCESS' WHERE status IN ('SUCCESS', 'DELIVERED', 'success', 'delivered')")
+            db.execSQL("UPDATE webhook_logs SET status = 'FAILURE' WHERE status NOT IN ('SUCCESS', 'FAILURE')")
+        }
+    }
+
+/**
+ * Manual migration 49 -> 50.
+ *
+ * Splits the operational/status fields out of webhook_profiles into a sibling
+ * webhook_profile_status table so editor saves no longer touch sync state and vice-versa.
+ */
+val MIGRATION_49_50 =
+    object : Migration(49, 50) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // 1) Create the new status table.
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS webhook_profile_status (
+                    profile_id TEXT NOT NULL PRIMARY KEY,
+                    last_error TEXT,
+                    consecutive_failures INTEGER NOT NULL DEFAULT 0,
+                    last_synced_at TEXT,
+                    updated_at TEXT NOT NULL,
+                    FOREIGN KEY(profile_id) REFERENCES webhook_profiles(id) ON DELETE CASCADE
+                )
+                """.trimIndent()
+            )
+
+            // 2) Copy operational state from webhook_profiles into the new table.
+            db.execSQL(
+                """
+                INSERT INTO webhook_profile_status (
+                    profile_id, last_error, consecutive_failures, last_synced_at, updated_at
+                ) SELECT
+                    id, last_error, consecutive_failures, last_synced_at, updated_at
+                FROM webhook_profiles
+                """.trimIndent()
+            )
+
+            // 3) Recreate webhook_profiles without the operational columns.
+            db.execSQL(
+                """
+                CREATE TABLE webhook_profiles_new (
+                    id TEXT NOT NULL PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    url TEXT NOT NULL,
+                    enabled INTEGER NOT NULL DEFAULT 1,
+                    range_preset TEXT NOT NULL,
+                    custom_start TEXT,
+                    custom_end TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                )
+                """.trimIndent()
+            )
+            db.execSQL(
+                """
+                INSERT INTO webhook_profiles_new (
+                    id, name, url, enabled, range_preset, custom_start, custom_end, created_at, updated_at
+                ) SELECT
+                    id, name, url, enabled, range_preset, custom_start, custom_end, created_at, updated_at
+                FROM webhook_profiles
+                """.trimIndent()
+            )
+            db.execSQL("DROP TABLE webhook_profiles")
+            db.execSQL("ALTER TABLE webhook_profiles_new RENAME TO webhook_profiles")
+        }
+    }
+
+/**
+ * Manual migration 50 -> 51.
+ *
+ * Collapses the over-normalised webhook schema back to a single profile row that owns its
+ * operational state and inlines the small data_types CSV / headers JSON blobs. Child tables
+ * (webhook_profile_headers, webhook_profile_data_types, webhook_profile_status) are dropped.
+ *
+ * The pragmatic call: at this app's actual scale (single-digit profiles, single-digit child
+ * rows per profile) the join-table cost outweighed the 1NF benefit.
+ */
+val MIGRATION_50_51 =
+    object : Migration(50, 51) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            data class Aggregated(
+                val dataTypesCsv: String,
+                val headersJson: String,
+                val lastError: String?,
+                val consecutiveFailures: Int,
+                val lastSyncedAt: String?
+            )
+            val perProfile = mutableMapOf<String, Aggregated>()
+            val ids = mutableListOf<String>()
+            db.query("SELECT id FROM webhook_profiles").use { c ->
+                while (c.moveToNext()) ids += c.getString(0)
+            }
+            ids.forEach { id ->
+                val dataTypes = mutableListOf<String>()
+                db.query(
+                    "SELECT data_type FROM webhook_profile_data_types WHERE profile_id = ?",
+                    arrayOf<Any>(id)
+                ).use { c -> while (c.moveToNext()) dataTypes += c.getString(0) }
+
+                val headerPairs = mutableListOf<Pair<String, String>>()
+                db.query(
+                    "SELECT key, value FROM webhook_profile_headers WHERE profile_id = ? ORDER BY ordinal ASC",
+                    arrayOf<Any>(id)
+                ).use { c ->
+                    while (c.moveToNext()) headerPairs += c.getString(0) to c.getString(1)
+                }
+                val headersJson = if (headerPairs.isEmpty()) "[]" else {
+                    headerPairs.joinToString(prefix = "[", postfix = "]") { (k, v) ->
+                        """{"key":${jsonString(k)},"value":${jsonString(v)}}"""
+                    }
+                }
+
+                var lastError: String? = null
+                var consecutiveFailures = 0
+                var lastSyncedAt: String? = null
+                db.query(
+                    "SELECT last_error, consecutive_failures, last_synced_at FROM webhook_profile_status WHERE profile_id = ? LIMIT 1",
+                    arrayOf<Any>(id)
+                ).use { c ->
+                    if (c.moveToNext()) {
+                        lastError = if (c.isNull(0)) null else c.getString(0)
+                        consecutiveFailures = c.getInt(1)
+                        lastSyncedAt = if (c.isNull(2)) null else c.getString(2)
+                    }
+                }
+
+                perProfile[id] = Aggregated(
+                    dataTypesCsv = dataTypes.joinToString(","),
+                    headersJson = headersJson,
+                    lastError = lastError,
+                    consecutiveFailures = consecutiveFailures,
+                    lastSyncedAt = lastSyncedAt
+                )
+            }
+
+            db.execSQL(
+                """
+                CREATE TABLE webhook_profiles_new (
+                    id TEXT NOT NULL PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    url TEXT NOT NULL,
+                    enabled INTEGER NOT NULL DEFAULT 1,
+                    range_preset TEXT NOT NULL,
+                    custom_start TEXT,
+                    custom_end TEXT,
+                    data_types TEXT NOT NULL DEFAULT '',
+                    headers_json TEXT NOT NULL DEFAULT '[]',
+                    last_error TEXT,
+                    consecutive_failures INTEGER NOT NULL DEFAULT 0,
+                    last_synced_at TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                )
+                """.trimIndent()
+            )
+            db.query(
+                "SELECT id, name, url, enabled, range_preset, custom_start, custom_end, created_at, updated_at FROM webhook_profiles"
+            ).use { c ->
+                while (c.moveToNext()) {
+                    val id = c.getString(0)
+                    val agg = perProfile[id] ?: Aggregated("", "[]", null, 0, null)
+                    db.execSQL(
+                        """
+                        INSERT INTO webhook_profiles_new (
+                            id, name, url, enabled, range_preset, custom_start, custom_end,
+                            data_types, headers_json, last_error, consecutive_failures, last_synced_at,
+                            created_at, updated_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """.trimIndent(),
+                        arrayOf<Any?>(
+                            id, c.getString(1), c.getString(2), c.getInt(3), c.getString(4),
+                            if (c.isNull(5)) null else c.getString(5),
+                            if (c.isNull(6)) null else c.getString(6),
+                            agg.dataTypesCsv, agg.headersJson,
+                            agg.lastError, agg.consecutiveFailures, agg.lastSyncedAt,
+                            c.getString(7), c.getString(8)
+                        )
+                    )
+                }
+            }
+
+            db.execSQL("DROP TABLE IF EXISTS webhook_profile_headers")
+            db.execSQL("DROP TABLE IF EXISTS webhook_profile_data_types")
+            db.execSQL("DROP TABLE IF EXISTS webhook_profile_status")
+            db.execSQL("DROP TABLE webhook_profiles")
+            db.execSQL("ALTER TABLE webhook_profiles_new RENAME TO webhook_profiles")
+        }
+
+        private fun jsonString(value: String): String {
+            val sb = StringBuilder("\"")
+            value.forEach { ch ->
+                when {
+                    ch == '\\' -> sb.append("\\\\")
+                    ch == '"' -> sb.append("\\\"")
+                    ch == '\n' -> sb.append("\\n")
+                    ch == '\r' -> sb.append("\\r")
+                    ch == '\t' -> sb.append("\\t")
+                    ch.code < 0x20 -> sb.append("\\u%04x".format(ch.code))
+                    else -> sb.append(ch)
+                }
+            }
+            sb.append("\"")
+            return sb.toString()
+        }
+    }
+
 val MIGRATION_29_30 =
     object : Migration(29, 30) {
         override fun migrate(db: SupportSQLiteDatabase) {

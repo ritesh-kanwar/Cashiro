@@ -123,6 +123,7 @@ class BackupExporter @Inject constructor(
         val rules = if (config.includeAppPreferences) database.ruleDao().getAllRules().first() else emptyList()
         val ruleApplications = if (config.includeTransactionalData) database.ruleApplicationDao().getRecentApplications(1000).first() else emptyList() // Limit to recent apps for backup size
         val webhookProfiles = if (config.includeAppPreferences) {
+            val baseCurrency = userPreferencesRepository.baseCurrency.first()
             database.webhookProfileDao().getAllProfiles().first().map { profile ->
                 WebhookProfileBackup(
                     id = profile.id,
@@ -130,10 +131,10 @@ class BackupExporter @Inject constructor(
                     url = profile.url,
                     enabled = profile.enabled,
                     dataTypes = profile.dataTypes,
-                    rangePreset = profile.rangePreset,
+                    rangePreset = profile.rangePreset.name,
                     customStart = profile.customStart,
                     customEnd = profile.customEnd,
-                    currency = profile.currency,
+                    currency = baseCurrency,
                     headers = webhookRepository.decodeHeaders(profile.headersJson).map { it.copy(value = "") }
                 )
             }

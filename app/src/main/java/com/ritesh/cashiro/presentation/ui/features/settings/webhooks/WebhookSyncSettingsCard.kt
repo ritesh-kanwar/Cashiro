@@ -22,8 +22,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bolt
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,9 +30,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -56,6 +51,10 @@ import androidx.compose.ui.unit.dp
 import com.ritesh.cashiro.data.webhook.WebhookScheduledTime
 import com.ritesh.cashiro.data.webhook.WebhookSettings
 import com.ritesh.cashiro.data.webhook.WebhookSyncMode
+import com.ritesh.cashiro.data.webhook.WebhookValidation
+import com.ritesh.cashiro.presentation.ui.components.GenericTypeSwitcher
+import com.ritesh.cashiro.presentation.ui.icons.Bag
+import com.ritesh.cashiro.presentation.ui.icons.Iconax
 import com.ritesh.cashiro.presentation.ui.theme.Spacing
 
 private enum class ScheduleSegment(val mode: WebhookSyncMode, val label: String) {
@@ -63,8 +62,8 @@ private enum class ScheduleSegment(val mode: WebhookSyncMode, val label: String)
     Scheduled(WebhookSyncMode.SCHEDULED, "Scheduled")
 }
 
-private const val MIN_INTERVAL_HOURS = 1
-private const val MAX_INTERVAL_HOURS = 24
+private val MIN_INTERVAL_HOURS = WebhookValidation.MIN_INTERVAL_HOURS
+private val MAX_INTERVAL_HOURS = WebhookValidation.MAX_INTERVAL_HOURS
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -78,43 +77,20 @@ fun WebhookSyncSettingsCard(
     var selectedMode by remember(settings.syncMode) { mutableStateOf(settings.syncMode) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            ScheduleSegment.entries.forEachIndexed { index, segment ->
-                val selected = segment.mode == selectedMode
-                SegmentedButton(
-                    selected = selected,
-                    onClick = {
-                        if (selectedMode != segment.mode) {
-                            focusManager.clearFocus() // Dismiss keyboard before animation starts
-                            selectedMode = segment.mode
-                            onSettingsChange(settings.copy(syncMode = segment.mode))
-                        }
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(
-                        index = index,
-                        count = ScheduleSegment.entries.size
-                    ),
-                    icon = {
-                        SegmentedButtonDefaults.Icon(active = selected) {
-                            Icon(
-                                imageVector = when (segment) {
-                                    ScheduleSegment.Interval -> Icons.Rounded.Bolt
-                                    ScheduleSegment.Scheduled -> Icons.Rounded.Schedule
-                                },
-                                contentDescription = null,
-                                modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
-                            )
-                        }
-                    },
-                    label = {
-                        Text(
-                            text = segment.label,
-                            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
-                        )
-                    }
-                )
-            }
-        }
+        val segments = ScheduleSegment.entries
+        GenericTypeSwitcher(
+            selectedIndex = segments.indexOfFirst { it.mode == selectedMode }.coerceAtLeast(0),
+            onIndexChange = { index ->
+                val target = segments[index].mode
+                if (selectedMode != target) {
+                    focusManager.clearFocus()
+                    selectedMode = target
+                    onSettingsChange(settings.copy(syncMode = target))
+                }
+            },
+            options = segments.map { it.label },
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(Spacing.md))
 
@@ -174,23 +150,23 @@ private fun IntervalDetail(
     onCommit: (Int) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    
-    // Stable text state that only resets when the mode actually changes (via key initialHours)
-    var text by remember(initialHours) { 
-        mutableStateOf(initialHours.coerceIn(MIN_INTERVAL_HOURS, MAX_INTERVAL_HOURS).toString()) 
+
+    var text by remember(initialHours) {
+        mutableStateOf(initialHours.coerceIn(MIN_INTERVAL_HOURS, MAX_INTERVAL_HOURS).toString())
     }
 
+    val errorMessage = WebhookValidation.validateIntervalHours(text)
+
     fun commit() {
-        val parsed = text.toIntOrNull()?.coerceIn(MIN_INTERVAL_HOURS, MAX_INTERVAL_HOURS)
-            ?: initialHours.coerceIn(MIN_INTERVAL_HOURS, MAX_INTERVAL_HOURS)
-        val normalized = parsed.toString()
-        if (text != normalized) text = normalized
-        onCommit(parsed)
+        val parsed = text.toIntOrNull()
+        if (parsed != null && parsed in MIN_INTERVAL_HOURS..MAX_INTERVAL_HOURS) {
+            onCommit(parsed)
+        }
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
         Text(
-            text = "Run automatically on a repeating interval. Range: 1–24 hours.",
+            text = "Run automatically on a repeating interval. Range: $MIN_INTERVAL_HOURS–$MAX_INTERVAL_HOURS hours.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -214,6 +190,7 @@ private fun IntervalDetail(
                 }
             ),
             shape = singleFieldShape(),
+            errorMessage = errorMessage,
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { state ->
@@ -326,7 +303,7 @@ private fun ScheduledTimeRow(
         )
         IconButton(onClick = onDelete) {
             Icon(
-                Icons.Rounded.Delete,
+                Iconax.Bag,
                 contentDescription = "Remove time",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )

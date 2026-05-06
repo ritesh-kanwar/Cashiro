@@ -6,6 +6,10 @@ import com.ritesh.cashiro.data.database.entity.TransactionType
 import com.ritesh.cashiro.data.database.entity.BudgetPeriod
 import com.ritesh.cashiro.data.database.entity.BudgetTrackType
 import com.ritesh.cashiro.data.database.entity.BudgetType
+import com.ritesh.cashiro.data.database.entity.WebhookDataType
+import com.ritesh.cashiro.data.database.entity.WebhookLogStatus
+import com.ritesh.cashiro.data.database.entity.WebhookRangePreset
+import com.ritesh.cashiro.data.webhook.WebhookSyncReason
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -141,4 +145,32 @@ class Converters {
             value.split(",")
         }
     }
+
+    @TypeConverter
+    fun fromWebhookLogStatus(value: WebhookLogStatus): String = value.name
+
+    @TypeConverter
+    fun toWebhookLogStatus(value: String): WebhookLogStatus = WebhookLogStatus.fromLegacy(value)
+
+    @TypeConverter
+    fun fromWebhookDataType(value: WebhookDataType): String = value.name
+
+    @TypeConverter
+    fun toWebhookDataType(value: String): WebhookDataType =
+        runCatching { WebhookDataType.valueOf(value) }.getOrElse { WebhookDataType.SUMMARY }
+
+    @TypeConverter
+    fun fromWebhookRangePreset(value: WebhookRangePreset): String = value.name
+
+    @TypeConverter
+    fun toWebhookRangePreset(value: String): WebhookRangePreset =
+        runCatching { WebhookRangePreset.valueOf(value) }
+            .getOrElse { WebhookRangePreset.SINCE_LAST_SUCCESS }
+
+    @TypeConverter
+    fun fromWebhookSyncReason(value: WebhookSyncReason): String = value.name
+
+    @TypeConverter
+    fun toWebhookSyncReason(value: String): WebhookSyncReason =
+        runCatching { WebhookSyncReason.valueOf(value) }.getOrElse { WebhookSyncReason.MANUAL }
 }

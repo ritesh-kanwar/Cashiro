@@ -35,46 +35,44 @@ class WebhookPayloadBuilder @Inject constructor(
 
     suspend fun build(
         profile: WebhookProfileEntity,
+        selectedTypes: Set<WebhookDataType>,
+        currency: String,
         cursors: List<WebhookCursorEntity>,
         sendTestPayload: Boolean
     ): List<WebhookBatchPayload> {
-        val selectedTypes = profile.dataTypes.mapNotNull { value ->
-            WebhookDataType.entries.find { it.name == value }
-        }.toSet()
-
         if (sendTestPayload) {
-            return listOf(buildTestPayload(profile, selectedTypes))
+            return listOf(buildTestPayload(profile, selectedTypes, currency))
         }
 
         val range = resolveRange(profile, cursors)
         val cursorUpdates = mutableListOf<WebhookCursorUpdate>()
         val summary = if (WebhookDataType.SUMMARY in selectedTypes) {
             cursorUpdates += WebhookCursorUpdate(WebhookDataType.SUMMARY, LocalDateTime.now(), range.end)
-            buildSummary(range, profile.currency)
+            buildSummary(range, currency)
         } else {
             null
         }
         val budgets = if (WebhookDataType.BUDGETS in selectedTypes) {
             cursorUpdates += WebhookCursorUpdate(WebhookDataType.BUDGETS, LocalDateTime.now(), range.end)
-            buildBudgets(range, profile.currency)
+            buildBudgets(range, currency)
         } else {
             emptyList()
         }
         val accounts = if (WebhookDataType.ACCOUNTS in selectedTypes) {
             cursorUpdates += WebhookCursorUpdate(WebhookDataType.ACCOUNTS, LocalDateTime.now(), range.end)
-            buildAccounts(profile.currency)
+            buildAccounts(currency)
         } else {
             emptyList()
         }
         val subscriptions = if (WebhookDataType.SUBSCRIPTIONS in selectedTypes) {
             cursorUpdates += WebhookCursorUpdate(WebhookDataType.SUBSCRIPTIONS, LocalDateTime.now(), range.end)
-            buildSubscriptions(profile.currency)
+            buildSubscriptions(currency)
         } else {
             emptyList()
         }
 
         val transactionBatches = if (WebhookDataType.TRANSACTIONS in selectedTypes) {
-            buildTransactionBatches(profile, range, cursors)
+            buildTransactionBatches(profile, currency, range, cursors)
         } else {
             listOf(emptyList())
         }
@@ -93,7 +91,7 @@ class WebhookPayloadBuilder @Inject constructor(
                         range = range.preset.name.lowercase(),
                         start = range.start.format(formatter),
                         end = range.end.format(formatter),
-                        currency = profile.currency,
+                        currency = currency,
                         dataTypes = selectedTypes.map { it.name.lowercase() }
                     ),
                     batch = WebhookBatchInfo(
@@ -212,16 +210,16 @@ class WebhookPayloadBuilder @Inject constructor(
 
     private suspend fun buildTransactionBatches(
         profile: WebhookProfileEntity,
+        currency: String,
         range: WebhookDateRange,
         cursors: List<WebhookCursorEntity>
     ): List<List<WebhookTransactionPayload>> {
-        val preset = WebhookRangePreset.valueOf(profile.rangePreset)
-        val transactions = if (preset == WebhookRangePreset.SINCE_LAST_SUCCESS) {
-            val cursor = cursors.firstOrNull { it.dataType == WebhookDataType.TRANSACTIONS.name }?.lastSuccessAt
+        val transactions = if (profile.rangePreset == WebhookRangePreset.SINCE_LAST_SUCCESS) {
+            val cursor = cursors.firstOrNull { it.dataType == WebhookDataType.TRANSACTIONS }?.lastSuccessAt
                 ?: LocalDateTime.of(1970, 1, 1, 0, 0)
-            transactionRepository.getTransactionsUpdatedBetween(cursor, range.end, profile.currency)
+            transactionRepository.getTransactionsUpdatedBetween(cursor, range.end, currency)
         } else {
-            transactionRepository.getTransactionsBetweenDatesByCurrency(range.start, range.end, profile.currency)
+            transactionRepository.getTransactionsBetweenDatesByCurrency(range.start, range.end, currency)
         }
         return transactions
             .filter { !it.isSample }
@@ -256,7 +254,8 @@ class WebhookPayloadBuilder @Inject constructor(
 
     private fun buildTestPayload(
         profile: WebhookProfileEntity,
-        selectedTypes: Set<WebhookDataType>
+        selectedTypes: Set<WebhookDataType>,
+        currency: String
     ): WebhookBatchPayload {
         return WebhookBatchPayload(
             envelope = WebhookEnvelope(
@@ -267,7 +266,7 @@ class WebhookPayloadBuilder @Inject constructor(
                     range = "test",
                     start = LocalDateTime.now().minusMinutes(1).format(formatter),
                     end = LocalDateTime.now().format(formatter),
-                    currency = profile.currency,
+                    currency = currency,
                     dataTypes = selectedTypes.map { it.name.lowercase() }
                 ),
                 batch = WebhookBatchInfo(
@@ -279,7 +278,7 @@ class WebhookPayloadBuilder @Inject constructor(
                     totalIncome = "1200",
                     totalExpense = "450",
                     netAmount = "750",
-                    currency = profile.currency,
+                    currency = currency,
                     categories = listOf(
                         WebhookCategorySummaryPayload("Food", "Dining", 2, "250"),
                         WebhookCategorySummaryPayload("Travel", "Cab", 1, "200")
@@ -290,7 +289,7 @@ class WebhookPayloadBuilder @Inject constructor(
                         id = "test_txn_1",
                         action = "upsert",
                         amount = "250",
-                        currency = profile.currency,
+                        currency = currency,
                         merchant = "Webhook Test Merchant",
                         description = "Synthetic test payload",
                         category = "Food",
@@ -314,30 +313,31 @@ class WebhookPayloadBuilder @Inject constructor(
     ): WebhookDateRange {
         val now = LocalDateTime.now()
         val today = LocalDate.now()
-        val preset = WebhookRangePreset.valueOf(profile.rangePreset)
-        return when (preset) {
-            WebhookRangePreset.SINCE_LAST_SUCCESS -> {
-                val cursor = cursors.firstOrNull { it.dataType == WebhookDataType.TRANSACTIONS.name }?.lastSuccessAt
+        val range = WebhookRange.fromFlat(profile.rangePreset, profile.customStart, profile.customEnd)
+        return when (range) {
+            WebhookRange.SinceLastSuccess -> {
+                val cursor = cursors.firstOrNull { it.dataType == WebhookDataType.TRANSACTIONS }?.lastSuccessAt
                     ?: LocalDateTime.of(1970, 1, 1, 0, 0)
-                WebhookDateRange(preset, cursor, now)
+                WebhookDateRange(WebhookRangePreset.SINCE_LAST_SUCCESS, cursor, now)
             }
-            WebhookRangePreset.TODAY -> WebhookDateRange(preset, today.atStartOfDay(), now)
-            WebhookRangePreset.CURRENT_WEEK -> WebhookDateRange(preset, today.startOfWeek().atStartOfDay(), now)
-            WebhookRangePreset.CURRENT_MONTH -> WebhookDateRange(preset, today.withDayOfMonth(1).atStartOfDay(), now)
-            WebhookRangePreset.PREVIOUS_MONTH -> {
+            WebhookRange.Today -> WebhookDateRange(WebhookRangePreset.TODAY, today.atStartOfDay(), now)
+            WebhookRange.CurrentWeek ->
+                WebhookDateRange(WebhookRangePreset.CURRENT_WEEK, today.startOfWeek().atStartOfDay(), now)
+            WebhookRange.CurrentMonth ->
+                WebhookDateRange(WebhookRangePreset.CURRENT_MONTH, today.withDayOfMonth(1).atStartOfDay(), now)
+            WebhookRange.PreviousMonth -> {
                 val previous = today.minusMonths(1)
                 WebhookDateRange(
-                    preset,
+                    WebhookRangePreset.PREVIOUS_MONTH,
                     previous.withDayOfMonth(1).atStartOfDay(),
                     previous.withDayOfMonth(previous.lengthOfMonth()).atTime(LocalTime.MAX)
                 )
             }
-            WebhookRangePreset.LAST_30_DAYS -> WebhookDateRange(preset, today.minusDays(29).atStartOfDay(), now)
-            WebhookRangePreset.CUSTOM -> WebhookDateRange(
-                preset,
-                profile.customStart ?: today.withDayOfMonth(1).atStartOfDay(),
-                profile.customEnd ?: now
-            )
+            WebhookRange.Last30Days ->
+                WebhookDateRange(WebhookRangePreset.LAST_30_DAYS, today.minusDays(29).atStartOfDay(), now)
+            is WebhookRange.Custom ->
+                // The sealed type guarantees both bounds are present here; no `?:` fallback needed.
+                WebhookDateRange(WebhookRangePreset.CUSTOM, range.start, range.end)
         }
     }
 }

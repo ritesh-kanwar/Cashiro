@@ -229,18 +229,24 @@ class BackupImporter @Inject constructor(
                 }
 
                 backup.database.webhookProfiles.forEach { profile ->
-                    database.webhookProfileDao().upsertProfile(
-                        WebhookProfileEntity(
+                    webhookRepository.saveProfile(
+                        com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
                             id = profile.id,
                             name = profile.name,
                             url = profile.url,
                             enabled = profile.enabled,
-                            dataTypes = profile.dataTypes,
-                            rangePreset = profile.rangePreset,
+                            dataTypes = profile.dataTypes
+                                .mapNotNull {
+                                    runCatching {
+                                        com.ritesh.cashiro.data.database.entity.WebhookDataType.valueOf(it)
+                                    }.getOrNull()
+                                }
+                                .toSet(),
+                            rangePreset = parseRangePreset(profile.rangePreset),
                             customStart = profile.customStart,
                             customEnd = profile.customEnd,
                             currency = profile.currency,
-                            headersJson = webhookRepository.encodeHeaders(profile.headers)
+                            headers = profile.headers
                         )
                     )
                 }
@@ -490,23 +496,33 @@ class BackupImporter @Inject constructor(
         profiles.forEach { profile ->
             val existing = database.webhookProfileDao().getProfileById(profile.id)
             if (existing == null) {
-                database.webhookProfileDao().upsertProfile(
-                    WebhookProfileEntity(
+                webhookRepository.saveProfile(
+                    com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
                         id = profile.id,
                         name = profile.name,
                         url = profile.url,
                         enabled = profile.enabled,
-                        dataTypes = profile.dataTypes,
-                        rangePreset = profile.rangePreset,
+                        dataTypes = profile.dataTypes
+                            .mapNotNull {
+                                runCatching {
+                                    com.ritesh.cashiro.data.database.entity.WebhookDataType.valueOf(it)
+                                }.getOrNull()
+                            }
+                            .toSet(),
+                        rangePreset = parseRangePreset(profile.rangePreset),
                         customStart = profile.customStart,
                         customEnd = profile.customEnd,
                         currency = profile.currency,
-                        headersJson = webhookRepository.encodeHeaders(profile.headers)
+                        headers = profile.headers
                     )
                 )
             }
         }
     }
+
+    private fun parseRangePreset(value: String): WebhookRangePreset =
+        runCatching { WebhookRangePreset.valueOf(value) }
+            .getOrElse { WebhookRangePreset.SINCE_LAST_SUCCESS }
     
     /**
      * Import user preferences

@@ -1,6 +1,8 @@
 package com.ritesh.cashiro.presentation.ui.features.settings.webhooks
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,11 +23,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Code
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.VpnKey
@@ -34,8 +34,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +45,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,23 +60,29 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ritesh.cashiro.data.database.entity.WebhookDataType
 import com.ritesh.cashiro.data.database.entity.WebhookRangePreset
 import com.ritesh.cashiro.data.webhook.WebhookHeader
 import com.ritesh.cashiro.data.webhook.WebhookProfileDraft
+import com.ritesh.cashiro.data.webhook.WebhookValidation
 import com.ritesh.cashiro.presentation.ui.components.CustomTitleTopAppBar
-import com.ritesh.cashiro.presentation.ui.components.ListItem
-import com.ritesh.cashiro.presentation.ui.components.ListItemPosition
+import com.ritesh.cashiro.presentation.ui.components.DatePicker
 import com.ritesh.cashiro.presentation.ui.components.SectionHeader
-import com.ritesh.cashiro.presentation.ui.components.toShape
+import com.ritesh.cashiro.presentation.ui.icons.Bag
+import com.ritesh.cashiro.presentation.ui.icons.Iconax
 import com.ritesh.cashiro.presentation.ui.features.categories.NavigationContent
 import com.ritesh.cashiro.presentation.ui.theme.Dimensions
 import com.ritesh.cashiro.presentation.ui.theme.Spacing
 import dev.chrisbanes.haze.HazeState
-import java.time.LocalDate
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -94,11 +100,15 @@ fun WebhookEditorScreen(
     var currency by remember { mutableStateOf("INR") }
     var enabled by remember { mutableStateOf(true) }
     var rangePreset by remember { mutableStateOf(WebhookRangePreset.SINCE_LAST_SUCCESS) }
-    var customStart by remember { mutableStateOf("") }
-    var customEnd by remember { mutableStateOf("") }
+    var customStart by remember { mutableStateOf<LocalDateTime?>(null) }
+    var customEnd by remember { mutableStateOf<LocalDateTime?>(null) }
+    var showStartPicker by remember { mutableStateOf(false) }
+    var showEndPicker by remember { mutableStateOf(false) }
     val selectedTypes = remember { mutableStateListOf(WebhookDataType.SUMMARY, WebhookDataType.TRANSACTIONS) }
     val headers = remember { mutableStateListOf<WebhookHeader>() }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var nameError by remember { mutableStateOf<String?>(null) }
+    var urlError by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(profileId) {
         val draft = viewModel.loadDraft(profileId)
@@ -107,8 +117,8 @@ fun WebhookEditorScreen(
         currency = draft.currency
         enabled = draft.enabled
         rangePreset = draft.rangePreset
-        customStart = draft.customStart?.toString().orEmpty()
-        customEnd = draft.customEnd?.toString().orEmpty()
+        customStart = draft.customStart
+        customEnd = draft.customEnd
         selectedTypes.clear()
         selectedTypes.addAll(draft.dataTypes)
         headers.clear()
@@ -160,48 +170,27 @@ fun WebhookEditorScreen(
             ) {
                 CashiroTextField(
                     value = name,
-                    onValueChange = { name = it },
-                    label = "Profile name",
+                    onValueChange = {
+                        name = it
+                        nameError = WebhookValidation.validateName(it)
+                    },
+                    label = "Webhook name",
                     leading = Icons.Rounded.Badge,
-                    shape = topFieldShape()
+                    shape = topFieldShape(),
+                    errorMessage = nameError
                 )
                 CashiroTextField(
                     value = url,
-                    onValueChange = { url = it },
+                    onValueChange = {
+                        url = it
+                        urlError = WebhookValidation.validateUrl(it)
+                    },
                     label = "Webhook URL",
                     leading = Icons.Rounded.Link,
-                    shape = middleFieldShape()
-                )
-                CashiroTextField(
-                    value = currency,
-                    onValueChange = { currency = it.uppercase() },
-                    label = "Currency",
-                    leading = Icons.Rounded.AttachMoney,
-                    shape = bottomFieldShape()
+                    shape = bottomFieldShape(),
+                    errorMessage = urlError
                 )
             }
-
-            ListItem(
-                headline = {
-                    Text(
-                        text = "Enabled",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium
-                    )
-                },
-                supporting = {
-                    Text(
-                        text = "Include this profile in scheduled syncs",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                trailing = {
-                    Switch(checked = enabled, onCheckedChange = { enabled = it })
-                },
-                shape = ListItemPosition.Single.toShape(),
-                padding = PaddingValues(0.dp)
-            )
 
             Spacer(modifier = Modifier.height(Spacing.xs))
             SectionHeader(title = "Data types")
@@ -216,12 +205,12 @@ fun WebhookEditorScreen(
             ) {
                 WebhookDataType.entries.forEach { type ->
                     val selected = selectedTypes.contains(type)
-                    FilterChip(
+                    PillChip(
+                        label = type.name.lowercase(),
                         selected = selected,
                         onClick = {
                             if (selected) selectedTypes.remove(type) else selectedTypes.add(type)
-                        },
-                        label = { Text(type.name.lowercase()) }
+                        }
                     )
                 }
             }
@@ -233,34 +222,32 @@ fun WebhookEditorScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
                 WebhookRangePreset.entries.forEach { preset ->
-                    FilterChip(
+                    PillChip(
+                        label = preset.name.lowercase().replace('_', ' '),
                         selected = rangePreset == preset,
-                        onClick = { rangePreset = preset },
-                        label = { Text(preset.name.lowercase().replace('_', ' ')) }
+                        onClick = { rangePreset = preset }
                     )
                 }
             }
 
             if (rangePreset == WebhookRangePreset.CUSTOM) {
-                Column(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(1.5.dp)
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
                 ) {
-                    CashiroTextField(
+                    DateField(
+                        label = "Starts",
                         value = customStart,
-                        onValueChange = { customStart = it },
-                        label = "Custom start",
-                        placeholder = "yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss",
-                        leading = Icons.Rounded.CalendarMonth,
-                        shape = topFieldShape()
+                        icon = Icons.Rounded.CalendarMonth,
+                        onClick = { showStartPicker = true },
+                        modifier = Modifier.weight(1f)
                     )
-                    CashiroTextField(
+                    DateField(
+                        label = "Ends",
                         value = customEnd,
-                        onValueChange = { customEnd = it },
-                        label = "Custom end",
-                        placeholder = "yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss",
-                        leading = Icons.Rounded.Event,
-                        shape = bottomFieldShape()
+                        icon = Icons.Rounded.Event,
+                        onClick = { showEndPicker = true },
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
@@ -329,7 +316,7 @@ fun WebhookEditorScreen(
                                 modifier = Modifier.size(24.dp)
                             ) {
                                 Icon(
-                                    Icons.Rounded.Delete,
+                                    Iconax.Bag,
                                     contentDescription = "Remove header",
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier.size(18.dp)
@@ -377,8 +364,8 @@ fun WebhookEditorScreen(
                         enabled = enabled,
                         dataTypes = selectedTypes.toSet(),
                         rangePreset = rangePreset,
-                        customStart = parseDateTimeInput(customStart),
-                        customEnd = parseDateTimeInput(customEnd),
+                        customStart = customStart,
+                        customEnd = customEnd,
                         currency = currency,
                         headers = headers.filter { it.key.isNotBlank() }
                     )
@@ -388,6 +375,8 @@ fun WebhookEditorScreen(
                         onError = { errorMessage = it }
                     )
                 },
+                enabled = name.isNotBlank() && url.isNotBlank() &&
+                    nameError == null && urlError == null,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Save webhook")
@@ -405,13 +394,49 @@ fun WebhookEditorScreen(
                     ),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
                 ) {
-                    Icon(Icons.Rounded.Delete, contentDescription = null)
+                    Icon(Iconax.Bag, contentDescription = null)
                     Spacer(modifier = Modifier.width(Spacing.sm))
                     Text("Delete webhook")
                 }
             }
 
             Spacer(modifier = Modifier.height(Spacing.xl))
+        }
+
+        if (showStartPicker) {
+            val zone = ZoneId.systemDefault()
+            val initialMillis = (customStart ?: LocalDateTime.now())
+                .atZone(zone).toInstant().toEpochMilli()
+            val pickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
+            DatePicker(
+                onDismiss = { showStartPicker = false },
+                onConfirm = {
+                    pickerState.selectedDateMillis?.let { millis ->
+                        customStart = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zone)
+                    }
+                    showStartPicker = false
+                },
+                datePickerState = pickerState
+            )
+        }
+
+        if (showEndPicker) {
+            val zone = ZoneId.systemDefault()
+            val initialMillis = (customEnd ?: LocalDateTime.now())
+                .atZone(zone).toInstant().toEpochMilli()
+            val pickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
+            DatePicker(
+                onDismiss = { showEndPicker = false },
+                onConfirm = {
+                    pickerState.selectedDateMillis?.let { millis ->
+                        // End-of-day so the inclusive bound covers the picked day in full.
+                        customEnd = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zone)
+                            .toLocalDate().atTime(LocalTime.MAX)
+                    }
+                    showEndPicker = false
+                },
+                datePickerState = pickerState
+            )
         }
     }
 }
@@ -430,7 +455,8 @@ internal fun CashiroTextField(
     singleLine: Boolean = true,
     keyboardOptions: androidx.compose.foundation.text.KeyboardOptions = androidx.compose.foundation.text.KeyboardOptions.Default,
     keyboardActions: androidx.compose.foundation.text.KeyboardActions = androidx.compose.foundation.text.KeyboardActions.Default,
-    suffix: (@Composable () -> Unit)? = null
+    suffix: (@Composable () -> Unit)? = null,
+    errorMessage: String? = null
 ) {
     TextField(
         value = value,
@@ -445,6 +471,8 @@ internal fun CashiroTextField(
         singleLine = singleLine,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        isError = errorMessage != null,
+        supportingText = errorMessage?.let { { Text(it) } },
         modifier = modifier.fillMaxWidth(),
         shape = shape,
         colors = TextFieldDefaults.colors(
@@ -456,6 +484,40 @@ internal fun CashiroTextField(
             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
     )
+}
+
+@Composable
+internal fun PillChip(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val background = if (selected) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    }
+    val labelColor = if (selected) {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(60.dp))
+            .background(background)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = labelColor
+        )
+    }
 }
 
 @Composable
@@ -480,10 +542,42 @@ internal fun bottomFieldShape(): Shape = RoundedCornerShape(
 @Composable
 internal fun singleFieldShape(): Shape = RoundedCornerShape(Dimensions.Radius.md)
 
-private fun parseDateTimeInput(value: String): LocalDateTime? {
-    if (value.isBlank()) return null
-    return runCatching { LocalDateTime.parse(value) }
-        .getOrElse {
-            runCatching { LocalDate.parse(value).atStartOfDay() }.getOrNull()
+@Composable
+private fun DateField(
+    label: String,
+    value: LocalDateTime?,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(Dimensions.Radius.md),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = Spacing.md, vertical = Spacing.sm),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
+        ) {
+            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = value?.format(DATE_FIELD_FORMATTER) ?: "Pick a date",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (value != null) MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
+    }
 }
+
+private val DATE_FIELD_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")

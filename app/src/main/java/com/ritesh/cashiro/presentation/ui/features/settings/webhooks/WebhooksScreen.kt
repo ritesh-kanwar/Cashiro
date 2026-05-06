@@ -28,14 +28,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Webhook
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -61,6 +59,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ritesh.cashiro.presentation.effects.overScrollVertical
@@ -71,7 +70,10 @@ import com.ritesh.cashiro.presentation.ui.components.ListItemPosition
 import com.ritesh.cashiro.presentation.ui.components.SectionHeader
 import com.ritesh.cashiro.presentation.ui.components.toShape
 import com.ritesh.cashiro.data.database.entity.WebhookLogEntity
+import com.ritesh.cashiro.data.database.entity.WebhookLogStatus
 import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
+import com.ritesh.cashiro.presentation.ui.icons.Bag
+import com.ritesh.cashiro.presentation.ui.icons.Iconax
 import com.ritesh.cashiro.presentation.ui.features.categories.NavigationContent
 import com.ritesh.cashiro.presentation.ui.theme.Dimensions
 import com.ritesh.cashiro.presentation.ui.theme.Spacing
@@ -123,7 +125,7 @@ fun WebhooksScreen(
         ) {
             SectionHeader(title = "BYOAPI Finance Sync")
             Text(
-                text = "Send selected finance data to your own endpoint. Successful deliveries must return JSON with ok=true.",
+                text = "Send selected finance data to your own endpoint. Any HTTP 2xx response is treated as a successful delivery.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -189,10 +191,12 @@ fun WebhooksScreen(
             )
 
             SectionHeader(title = "Sync Schedule")
-            WebhookSyncSettingsCard(
-                settings = uiState.settings,
-                onSettingsChange = viewModel::saveSettings
-            )
+            if (uiState.settingsLoaded) {
+                WebhookSyncSettingsCard(
+                    settings = uiState.settings,
+                    onSettingsChange = viewModel::saveSettings
+                )
+            }
 
             SectionHeader(title = "Profiles")
             if (uiState.profiles.isEmpty()) {
@@ -353,6 +357,25 @@ private fun IconBadge(
     }
 }
 
+@Composable
+private fun DataTypeChip(label: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .clip(RoundedCornerShape(60.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun WebhookProfileCard(
@@ -440,7 +463,7 @@ private fun WebhookProfileCard(
                     DropdownMenuItem(
                         text = { Text("Delete") },
                         leadingIcon = {
-                            Icon(Icons.Rounded.Delete, contentDescription = null)
+                            Icon(Iconax.Bag, contentDescription = null)
                         },
                         onClick = {
                             showMenu = false
@@ -468,25 +491,7 @@ private fun WebhookProfileCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 profile.dataTypes.forEach { dataType ->
-                    AssistChip(
-                        onClick = onClick,
-                        label = {
-                            Text(
-                                text = dataType.lowercase(),
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        ),
-                        border = AssistChipDefaults.assistChipBorder(
-                            enabled = true,
-                            borderColor = MaterialTheme.colorScheme.outlineVariant,
-                            borderWidth = 1.dp
-                        ),
-                        shape = MaterialTheme.shapes.medium
-                    )
+                    DataTypeChip(label = dataType.lowercase(), onClick = onClick)
                 }
             }
         }
@@ -537,13 +542,10 @@ private fun DeliveryLogsList(logs: List<WebhookLogEntity>) {
 
 @Composable
 private fun DeliveryLogRow(log: WebhookLogEntity) {
-    val statusUpper = log.status.uppercase()
-    val isSuccess = statusUpper == "SUCCESS" || statusUpper == "DELIVERED"
-    val isFailed = statusUpper == "FAILED" || statusUpper == "ERROR"
-    val (bg, fg) = when {
-        isSuccess -> green_light to green_dark
-        isFailed -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.error
-        else -> blue_light to blue_dark
+    val (bg, fg) = when (log.status) {
+        WebhookLogStatus.SUCCESS -> green_light to green_dark
+        WebhookLogStatus.FAILURE ->
+            MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.error
     }
 
     Row(
@@ -585,7 +587,7 @@ private fun DeliveryLogRow(log: WebhookLogEntity) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = statusUpper,
+                    text = log.status.name,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = fg,
@@ -594,12 +596,20 @@ private fun DeliveryLogRow(log: WebhookLogEntity) {
                 )
             }
             Text(
-                text = "${log.syncReason.lowercase()} • ${log.message}",
+                text = "${log.syncReason.name.lowercase()} • ${log.message}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            Text(
+                text = log.createdAt.format(LogTimeFormatter),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
+
+private val LogTimeFormatter: java.time.format.DateTimeFormatter =
+    java.time.format.DateTimeFormatter.ofPattern("MMM d, HH:mm")

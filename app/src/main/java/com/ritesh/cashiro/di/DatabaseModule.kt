@@ -5,6 +5,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.ritesh.cashiro.data.database.CashiroDatabase
+import com.ritesh.cashiro.data.database.MIGRATION_48_49
+import com.ritesh.cashiro.data.database.MIGRATION_49_50
+import com.ritesh.cashiro.data.database.MIGRATION_50_51
 import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
 import com.ritesh.cashiro.data.database.dao.BudgetDao
 import com.ritesh.cashiro.data.database.dao.CardDao
@@ -60,7 +63,10 @@ object DatabaseModule {
                     CashiroDatabase.MIGRATION_14_15,
                     CashiroDatabase.MIGRATION_20_21,
                     CashiroDatabase.MIGRATION_21_22,
-                    CashiroDatabase.MIGRATION_22_23
+                    CashiroDatabase.MIGRATION_22_23,
+                    MIGRATION_48_49,
+                    MIGRATION_49_50,
+                    MIGRATION_50_51
                 )
 
                 // Enable auto-migrations

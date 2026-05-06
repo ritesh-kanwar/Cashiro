@@ -19,16 +19,14 @@ data class WebhookProfileEntity(
     val url: String,
     @ColumnInfo(name = "enabled", defaultValue = "1")
     val enabled: Boolean = true,
-    @ColumnInfo(name = "data_types")
-    val dataTypes: List<String> = listOf(WebhookDataType.SUMMARY.name, WebhookDataType.TRANSACTIONS.name),
     @ColumnInfo(name = "range_preset")
-    val rangePreset: String = WebhookRangePreset.SINCE_LAST_SUCCESS.name,
+    val rangePreset: WebhookRangePreset = WebhookRangePreset.SINCE_LAST_SUCCESS,
     @ColumnInfo(name = "custom_start")
     val customStart: LocalDateTime? = null,
     @ColumnInfo(name = "custom_end")
     val customEnd: LocalDateTime? = null,
-    @ColumnInfo(name = "currency", defaultValue = "INR")
-    val currency: String = "INR",
+    @ColumnInfo(name = "data_types", defaultValue = "")
+    val dataTypes: List<String> = listOf(WebhookDataType.SUMMARY.name, WebhookDataType.TRANSACTIONS.name),
     @ColumnInfo(name = "headers_json", defaultValue = "[]")
     val headersJson: String = "[]",
     @ColumnInfo(name = "last_error")
@@ -61,12 +59,13 @@ data class WebhookLogEntity(
     val id: Long = 0,
     @ColumnInfo(name = "profile_id")
     val profileId: String,
+    // Snapshotted from webhook_profiles.name at the time of delivery so renames don't rewrite history.
     @ColumnInfo(name = "profile_name")
     val profileName: String,
     @ColumnInfo(name = "sync_reason")
-    val syncReason: String,
+    val syncReason: com.ritesh.cashiro.data.webhook.WebhookSyncReason,
     @ColumnInfo(name = "status")
-    val status: String,
+    val status: WebhookLogStatus,
     @ColumnInfo(name = "message")
     val message: String,
     @ColumnInfo(name = "http_status")
@@ -94,7 +93,7 @@ data class WebhookCursorEntity(
     @ColumnInfo(name = "profile_id")
     val profileId: String,
     @ColumnInfo(name = "data_type")
-    val dataType: String,
+    val dataType: WebhookDataType,
     @ColumnInfo(name = "last_success_at")
     val lastSuccessAt: LocalDateTime? = null,
     @ColumnInfo(name = "last_range_end")
@@ -109,6 +108,18 @@ enum class WebhookDataType {
     BUDGETS,
     ACCOUNTS,
     SUBSCRIPTIONS
+}
+
+enum class WebhookLogStatus {
+    SUCCESS,
+    FAILURE;
+
+    companion object {
+        fun fromLegacy(value: String): WebhookLogStatus = when (value.uppercase()) {
+            "SUCCESS", "DELIVERED" -> SUCCESS
+            else -> FAILURE
+        }
+    }
 }
 
 enum class WebhookRangePreset {

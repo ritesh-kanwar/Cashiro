@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -43,6 +44,7 @@ class WebhooksViewModel @Inject constructor(
             profiles = profiles,
             logs = logs,
             settings = settings,
+            settingsLoaded = true,
             isSyncing = isSyncing,
             message = message
         )
@@ -74,11 +76,12 @@ class WebhooksViewModel @Inject constructor(
 
     fun toggleProfile(profile: WebhookProfileEntity, enabled: Boolean) {
         viewModelScope.launch {
-            webhookRepository.saveProfile(
-                profile.toDraft(
-                    headers = webhookRepository.decodeHeaders(profile.headersJson)
-                ).copy(enabled = enabled)
-            )
+            val draft = profile.toDraft(
+                dataTypes = webhookRepository.decodeDataTypes(profile.dataTypes),
+                headers = webhookRepository.decodeHeaders(profile.headersJson),
+                currency = userPreferencesRepository.baseCurrency.first()
+            ).copy(enabled = enabled)
+            webhookRepository.saveProfile(draft)
             flashMessage.value = if (enabled) "Webhook enabled" else "Webhook disabled"
         }
     }
@@ -91,28 +94,28 @@ class WebhooksViewModel @Inject constructor(
     }
 
     suspend fun loadDraft(profileId: String?): WebhookProfileDraft {
+        val baseCurrency = userPreferencesRepository.baseCurrency.first()
         if (profileId == null) {
-            return WebhookProfileDraft(
-                name = "",
-                url = "",
-                enabled = true,
-                dataTypes = setOf(WebhookDataType.SUMMARY, WebhookDataType.TRANSACTIONS),
-                rangePreset = WebhookRangePreset.SINCE_LAST_SUCCESS,
-                currency = "INR",
-                headers = emptyList()
-            )
+            return blankDraft(baseCurrency)
         }
         val profile = webhookRepository.getProfile(profileId)
-        return profile?.toDraft(webhookRepository.decodeHeaders(profile.headersJson)) ?: WebhookProfileDraft(
-            name = "",
-            url = "",
-            enabled = true,
-            dataTypes = setOf(WebhookDataType.SUMMARY, WebhookDataType.TRANSACTIONS),
-            rangePreset = WebhookRangePreset.SINCE_LAST_SUCCESS,
-            currency = "INR",
-            headers = emptyList()
+            ?: return blankDraft(baseCurrency)
+        return profile.toDraft(
+            dataTypes = webhookRepository.decodeDataTypes(profile.dataTypes),
+            headers = webhookRepository.decodeHeaders(profile.headersJson),
+            currency = baseCurrency
         )
     }
+
+    private fun blankDraft(currency: String): WebhookProfileDraft = WebhookProfileDraft(
+        name = "",
+        url = "",
+        enabled = true,
+        dataTypes = setOf(WebhookDataType.SUMMARY, WebhookDataType.TRANSACTIONS),
+        rangePreset = WebhookRangePreset.SINCE_LAST_SUCCESS,
+        currency = currency,
+        headers = emptyList()
+    )
 
     fun saveProfile(draft: WebhookProfileDraft, onSaved: (String) -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
@@ -153,13 +156,17 @@ class WebhooksViewModel @Inject constructor(
     }
 }
 
-private fun WebhookProfileEntity.toDraft(headers: List<WebhookHeader>): WebhookProfileDraft = WebhookProfileDraft(
+private fun WebhookProfileEntity.toDraft(
+    dataTypes: Set<WebhookDataType>,
+    headers: List<WebhookHeader>,
+    currency: String
+): WebhookProfileDraft = WebhookProfileDraft(
     id = id,
     name = name,
     url = url,
     enabled = enabled,
-    dataTypes = dataTypes.mapNotNull { value -> WebhookDataType.entries.find { it.name == value } }.toSet(),
-    rangePreset = WebhookRangePreset.valueOf(rangePreset),
+    dataTypes = dataTypes,
+    rangePreset = rangePreset,
     customStart = customStart,
     customEnd = customEnd,
     currency = currency,
