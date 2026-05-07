@@ -33,6 +33,7 @@ import com.ritesh.cashiro.data.backup.ExportResult
 import com.ritesh.cashiro.data.backup.ImportResult
 import com.ritesh.cashiro.data.backup.ImportStrategy
 import com.ritesh.cashiro.data.repository.MerchantMappingRepository
+import com.ritesh.cashiro.data.webhook.WebhookSyncScheduler
 import com.ritesh.cashiro.domain.repository.RuleRepository
 import android.content.Intent
 import androidx.core.content.FileProvider
@@ -83,7 +84,7 @@ class SettingsViewModel @Inject constructor(
     private val backupExporter: BackupExporter,
     private val backupImporter: BackupImporter,
     private val database: CashiroDatabase,
-    private val webhookSyncScheduler: com.ritesh.cashiro.data.webhook.WebhookSyncScheduler
+    private val webhookSyncScheduler: WebhookSyncScheduler
 ) : ViewModel() {
 
     val databaseVersion: Int

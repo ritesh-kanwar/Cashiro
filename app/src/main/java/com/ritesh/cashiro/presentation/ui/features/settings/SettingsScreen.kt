@@ -123,7 +123,7 @@ fun SettingsScreen(
     val downloadProgress = uiState.downloadProgress
     val totalTransactionsCount by settingsViewModel.totalTransactions.collectAsStateWithLifecycle()
     val userPreferences by settingsViewModel.userPreferences.collectAsStateWithLifecycle(initialValue = null)
-    val isDeveloperModeEnabled by settingsViewModel.isDeveloperModeEnabled.collectAsStateWithLifecycle(initialValue = false)
+    val isDeveloperModeEnabled = userPreferences?.isDeveloperModeEnabled == true
     var showDeleteModelDialog by remember { mutableStateOf(false) }
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -683,8 +683,6 @@ fun SettingsScreen(
                             )
                         },
                         onClick = { onNavigateToSms() },
-                        // Webhooks (gated below) is the bottom of this group when dev mode is on;
-                        // when it's hidden, SMS becomes the last item and needs the bottom shape.
                         shape = if (isDeveloperModeEnabled) ListItemPosition.Middle.toShape()
                             else ListItemPosition.Bottom.toShape(),
                         padding = PaddingValues(0.dp)

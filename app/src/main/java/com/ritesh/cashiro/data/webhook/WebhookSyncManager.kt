@@ -39,9 +39,9 @@ class WebhookSyncManager @Inject constructor(
     }
 
     suspend fun syncProfile(profileId: String, reason: WebhookSyncReason, sendTestPayload: Boolean = false): WebhookSyncRunResult {
-        if (!userPreferencesRepository.isDeveloperModeEnabled.first()) {
-            return WebhookSyncRunResult(anySuccess = false, anyRetryableFailure = false)
-        }
+        // The dev-mode gate is read once in syncAll() (the only public entry point) and inherited
+        // here. syncProfile is package-private-ish; keeping a second .first() read on the same
+        // immutable-within-the-call Flow would be a wasted DataStore round-trip per profile.
         val profile = webhookRepository.getProfile(profileId)
             ?: return WebhookSyncRunResult(anySuccess = false, anyRetryableFailure = false)
         val headers = webhookRepository.decodeHeaders(profile.headersJson)
