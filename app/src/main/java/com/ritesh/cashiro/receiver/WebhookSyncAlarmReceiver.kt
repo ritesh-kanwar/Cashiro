@@ -36,10 +36,22 @@ class WebhookSyncAlarmReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
-                runCatching { scheduler.enqueueImmediate(WebhookSyncReason.SCHEDULED) }
-                    .onFailure { Log.e("WebhookSyncAlarm", "enqueueImmediate failed", it) }
-                runCatching { scheduler.applyScheduling() }
-                    .onFailure { Log.e("WebhookSyncAlarm", "applyScheduling failed after alarm", it) }
+                // Explicit try/catch (not runCatching) so CancellationException stays
+                // unswallowed and structured concurrency holds if this scope is ever parented.
+                try {
+                    scheduler.enqueueImmediate(WebhookSyncReason.SCHEDULED)
+                } catch (e: kotlinx.coroutines.CancellationException) {
+                    throw e
+                } catch (t: Throwable) {
+                    Log.e("WebhookSyncAlarm", "enqueueImmediate failed", t)
+                }
+                try {
+                    scheduler.applyScheduling()
+                } catch (e: kotlinx.coroutines.CancellationException) {
+                    throw e
+                } catch (t: Throwable) {
+                    Log.e("WebhookSyncAlarm", "applyScheduling failed after alarm", t)
+                }
             } finally {
                 pendingResult.finish()
             }

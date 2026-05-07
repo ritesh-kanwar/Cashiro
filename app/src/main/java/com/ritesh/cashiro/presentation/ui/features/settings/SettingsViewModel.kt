@@ -427,9 +427,16 @@ class SettingsViewModel @Inject constructor(
             // The Webhooks feature is gated behind dev mode. Reconcile any in-flight WorkManager
             // work / AlarmManager alarms so toggling the gate immediately stops or resumes sync.
             // applyScheduling() can throw on DataStore / AlarmManager failures; isolate that
-            // failure mode so the toggle itself doesn't crash this coroutine.
-            runCatching { webhookSyncScheduler.applyScheduling() }
-                .onFailure { Log.e("SettingsViewModel", "Failed to apply webhook scheduling", it) }
+            // failure mode so the toggle itself doesn't crash this coroutine. Explicit try/catch
+            // (not runCatching) so structured concurrency's CancellationException still propagates
+            // when viewModelScope is cleared.
+            try {
+                webhookSyncScheduler.applyScheduling()
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (t: Throwable) {
+                Log.e("SettingsViewModel", "Failed to apply webhook scheduling", t)
+            }
         }
     }
 
