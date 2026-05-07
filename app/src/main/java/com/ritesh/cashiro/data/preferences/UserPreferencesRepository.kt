@@ -86,6 +86,10 @@ constructor(@ApplicationContext private val context: Context) {
         val WEBHOOK_SCHEDULE_HOUR = intPreferencesKey("webhook_schedule_hour")
         val WEBHOOK_SCHEDULE_MINUTE = intPreferencesKey("webhook_schedule_minute")
         val WEBHOOK_SCHEDULED_TIMES_JSON = stringPreferencesKey("webhook_scheduled_times_json")
+        // Snapshot of WebhookScheduledTime.id values that were last successfully armed with
+        // AlarmManager. Read on the next applyScheduling() so deleted times can have their
+        // PendingIntents cancelled even though they're no longer present in the active settings.
+        val WEBHOOK_LAST_SCHEDULED_IDS = androidx.datastore.preferences.core.stringSetPreferencesKey("webhook_last_scheduled_ids")
     }
 
     val userPreferences: Flow<UserPreferences> =
@@ -207,6 +211,15 @@ constructor(@ApplicationContext private val context: Context) {
             preferences[PreferencesKeys.WEBHOOK_INTERVAL_HOURS] = settings.intervalHours
             preferences[PreferencesKeys.WEBHOOK_SCHEDULED_TIMES_JSON] =
                 Json.encodeToString(settings.scheduledTimes)
+        }
+    }
+
+    suspend fun getWebhookLastScheduledIds(): Set<String> =
+        context.dataStore.data.map { it[PreferencesKeys.WEBHOOK_LAST_SCHEDULED_IDS].orEmpty() }.first()
+
+    suspend fun setWebhookLastScheduledIds(ids: Set<String>) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.WEBHOOK_LAST_SCHEDULED_IDS] = ids
         }
     }
 

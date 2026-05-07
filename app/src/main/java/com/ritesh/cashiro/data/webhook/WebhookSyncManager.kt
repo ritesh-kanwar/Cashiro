@@ -74,9 +74,11 @@ class WebhookSyncManager @Inject constructor(
             } else {
                 anyRetryableFailure = anyRetryableFailure || attempt.retryable
                 webhookRepository.markFailure(profile.id, attempt.message)
-                if (attempt.retryable) {
-                    break
-                }
+                // Stop after any failure — both retryable (5xx/429 will be re-attempted by
+                // WorkManager backoff anyway) and non-retryable (4xx is overwhelmingly going
+                // to fail the same way for every remaining batch, just spamming logs and
+                // bumping consecutive_failures).
+                break
             }
         }
 

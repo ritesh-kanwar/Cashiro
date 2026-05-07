@@ -229,26 +229,7 @@ class BackupImporter @Inject constructor(
                 }
 
                 backup.database.webhookProfiles.forEach { profile ->
-                    webhookRepository.saveProfile(
-                        com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
-                            id = profile.id,
-                            name = profile.name,
-                            url = profile.url,
-                            enabled = profile.enabled,
-                            dataTypes = profile.dataTypes
-                                .mapNotNull {
-                                    runCatching {
-                                        com.ritesh.cashiro.data.database.entity.WebhookDataType.valueOf(it)
-                                    }.getOrNull()
-                                }
-                                .toSet(),
-                            rangePreset = parseRangePreset(profile.rangePreset),
-                            customStart = parseLocalDateTime(profile.customStart),
-                            customEnd = parseLocalDateTime(profile.customEnd),
-                            currency = profile.currency,
-                            headers = profile.headers
-                        )
-                    )
+                    webhookRepository.saveProfile(profile.toDraft())
                 }
                 
                 // Import preferences
@@ -496,26 +477,7 @@ class BackupImporter @Inject constructor(
         profiles.forEach { profile ->
             val existing = database.webhookProfileDao().getProfileById(profile.id)
             if (existing == null) {
-                webhookRepository.saveProfile(
-                    com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
-                        id = profile.id,
-                        name = profile.name,
-                        url = profile.url,
-                        enabled = profile.enabled,
-                        dataTypes = profile.dataTypes
-                            .mapNotNull {
-                                runCatching {
-                                    com.ritesh.cashiro.data.database.entity.WebhookDataType.valueOf(it)
-                                }.getOrNull()
-                            }
-                            .toSet(),
-                        rangePreset = parseRangePreset(profile.rangePreset),
-                        customStart = parseLocalDateTime(profile.customStart),
-                        customEnd = parseLocalDateTime(profile.customEnd),
-                        currency = profile.currency,
-                        headers = profile.headers
-                    )
-                )
+                webhookRepository.saveProfile(profile.toDraft())
             }
         }
     }
@@ -526,6 +488,26 @@ class BackupImporter @Inject constructor(
 
     private fun parseLocalDateTime(value: String?): java.time.LocalDateTime? =
         value?.let { runCatching { java.time.LocalDateTime.parse(it) }.getOrNull() }
+
+    private fun WebhookProfileBackup.toDraft(): com.ritesh.cashiro.data.webhook.WebhookProfileDraft =
+        com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
+            id = id,
+            name = name,
+            url = url,
+            enabled = enabled,
+            dataTypes = dataTypes
+                .mapNotNull {
+                    runCatching {
+                        com.ritesh.cashiro.data.database.entity.WebhookDataType.valueOf(it)
+                    }.getOrNull()
+                }
+                .toSet(),
+            rangePreset = parseRangePreset(rangePreset),
+            customStart = parseLocalDateTime(customStart),
+            customEnd = parseLocalDateTime(customEnd),
+            currency = currency,
+            headers = headers
+        )
     
     /**
      * Import user preferences

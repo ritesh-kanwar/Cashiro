@@ -41,24 +41,32 @@ class WebhookSyncScheduler @Inject constructor(
 
     suspend fun applyScheduling() {
         val settings = userPreferencesRepository.webhookSettings.first()
+        // Cancel against the *previously-armed* IDs so deleted scheduled times have their
+        // PendingIntents removed too — ID-keyed alarms wouldn't otherwise be reachable from
+        // settings.scheduledTimes once the user removed them.
+        val previouslyArmed = userPreferencesRepository.getWebhookLastScheduledIds()
+        val idsToCancel = previouslyArmed + settings.scheduledTimes.map { it.id }
+
         if (!userPreferencesRepository.isDeveloperModeEnabled.first()) {
             // Feature is gated behind developer mode. Tear down any work / alarms that may have
             // been scheduled while it was on so toggling it off immediately stops background sync.
             cancelPeriodic()
-            cancelAllScheduledAlarms(settings.scheduledTimes.map { it.id })
+            cancelAllScheduledAlarms(idsToCancel)
+            userPreferencesRepository.setWebhookLastScheduledIds(emptySet())
             return
         }
         when (settings.syncMode) {
             WebhookSyncMode.INTERVAL -> {
-                cancelAllScheduledAlarms(settings.scheduledTimes.map { it.id })
+                cancelAllScheduledAlarms(idsToCancel)
+                userPreferencesRepository.setWebhookLastScheduledIds(emptySet())
                 schedulePeriodic(settings.intervalHours)
             }
             WebhookSyncMode.SCHEDULED -> {
                 cancelPeriodic()
-                cancelAllScheduledAlarms(settings.scheduledTimes.map { it.id })
-                settings.scheduledTimes
-                    .filter { it.enabled }
-                    .forEach { scheduleSingleAlarm(it) }
+                cancelAllScheduledAlarms(idsToCancel)
+                val armed = settings.scheduledTimes.filter { it.enabled }
+                armed.forEach { scheduleSingleAlarm(it) }
+                userPreferencesRepository.setWebhookLastScheduledIds(armed.map { it.id }.toSet())
             }
         }
     }
@@ -77,7 +85,7 @@ class WebhookSyncScheduler @Inject constructor(
     }
 
     /** Cancels the legacy single alarm plus alarms for the given list of IDs. */
-    fun cancelAllScheduledAlarms(ids: List<String>) {
+    fun cancelAllScheduledAlarms(ids: Collection<String>) {
         // Legacy single-alarm cancel (pre-multi-time)
         val legacyIntent = Intent(context, WebhookSyncAlarmReceiver::class.java)
         PendingIntent.getBroadcast(
@@ -128,7 +136,12 @@ class WebhookSyncScheduler @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms()) {
+        // SCHEDULE_EXACT_ALARM permission is only required from Android 12 (S) onward; below
+        // that, exact alarms are granted by default. Without this guard, every pre-S install
+        // silently fell through to inexact alarms even though it didn't need to.
+        val canScheduleExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+            alarmManager.canScheduleExactAlarms()
+        if (canScheduleExact) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
         } else {
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
