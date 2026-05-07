@@ -21,6 +21,11 @@ class WebhookSyncManager @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) {
     suspend fun syncAll(reason: WebhookSyncReason, sendTestPayload: Boolean = false): WebhookSyncRunResult {
+        if (!userPreferencesRepository.isDeveloperModeEnabled.first()) {
+            // Defence in depth: if a user toggles dev mode off while WorkManager has work
+            // enqueued or AlarmManager has alarms armed, those callbacks must not fire deliveries.
+            return WebhookSyncRunResult(anySuccess = false, anyRetryableFailure = false)
+        }
         val profiles = webhookRepository.getEnabledProfiles()
         var anySuccess = false
         var anyRetryableFailure = false
@@ -34,6 +39,9 @@ class WebhookSyncManager @Inject constructor(
     }
 
     suspend fun syncProfile(profileId: String, reason: WebhookSyncReason, sendTestPayload: Boolean = false): WebhookSyncRunResult {
+        if (!userPreferencesRepository.isDeveloperModeEnabled.first()) {
+            return WebhookSyncRunResult(anySuccess = false, anyRetryableFailure = false)
+        }
         val profile = webhookRepository.getProfile(profileId)
             ?: return WebhookSyncRunResult(anySuccess = false, anyRetryableFailure = false)
         val headers = webhookRepository.decodeHeaders(profile.headersJson)

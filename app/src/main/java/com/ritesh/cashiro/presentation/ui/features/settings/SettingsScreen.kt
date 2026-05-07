@@ -123,6 +123,7 @@ fun SettingsScreen(
     val downloadProgress = uiState.downloadProgress
     val totalTransactionsCount by settingsViewModel.totalTransactions.collectAsStateWithLifecycle()
     val userPreferences by settingsViewModel.userPreferences.collectAsStateWithLifecycle(initialValue = null)
+    val isDeveloperModeEnabled by settingsViewModel.isDeveloperModeEnabled.collectAsStateWithLifecycle(initialValue = false)
     var showDeleteModelDialog by remember { mutableStateOf(false) }
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -682,52 +683,57 @@ fun SettingsScreen(
                             )
                         },
                         onClick = { onNavigateToSms() },
-                        shape = ListItemPosition.Middle.toShape(),
+                        // Webhooks (gated below) is the bottom of this group when dev mode is on;
+                        // when it's hidden, SMS becomes the last item and needs the bottom shape.
+                        shape = if (isDeveloperModeEnabled) ListItemPosition.Middle.toShape()
+                            else ListItemPosition.Bottom.toShape(),
                         padding = PaddingValues(0.dp)
                     )
-                    ListItem(
-                        headline = {
-                            Text(
-                                text = "Webhooks",
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Medium
-                            )
-                        },
-                        supporting = {
-                            Text(
-                                text = "BYOAPI finance sync",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        leading = {
-                            Box(
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .background(
-                                        color = purple_light,
-                                        shape = CircleShape
-                                    ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    Icons.Rounded.Webhook,
-                                    contentDescription = null,
-                                    tint = purple_dark
+                    if (isDeveloperModeEnabled) {
+                        ListItem(
+                            headline = {
+                                Text(
+                                    text = "Webhooks",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium
                                 )
-                            }
-                        },
-                        trailing = {
-                            Icon(
-                                Icons.Rounded.ChevronRight,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        onClick = { onNavigateToWebhooks() },
-                        shape = ListItemPosition.Bottom.toShape(),
-                        padding = PaddingValues(0.dp)
-                    )
+                            },
+                            supporting = {
+                                Text(
+                                    text = "BYOAPI finance sync",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            },
+                            leading = {
+                                Box(
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .background(
+                                            color = purple_light,
+                                            shape = CircleShape
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.Rounded.Webhook,
+                                        contentDescription = null,
+                                        tint = purple_dark
+                                    )
+                                }
+                            },
+                            trailing = {
+                                Icon(
+                                    Icons.Rounded.ChevronRight,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            },
+                            onClick = { onNavigateToWebhooks() },
+                            shape = ListItemPosition.Bottom.toShape(),
+                            padding = PaddingValues(0.dp)
+                        )
+                    }
                 }
 
                 Spacer( modifier = Modifier.height(Spacing.md))

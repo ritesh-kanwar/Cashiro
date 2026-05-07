@@ -82,7 +82,8 @@ class SettingsViewModel @Inject constructor(
     private val merchantMappingRepository: MerchantMappingRepository,
     private val backupExporter: BackupExporter,
     private val backupImporter: BackupImporter,
-    private val database: CashiroDatabase
+    private val database: CashiroDatabase,
+    private val webhookSyncScheduler: com.ritesh.cashiro.data.webhook.WebhookSyncScheduler
 ) : ViewModel() {
 
     val databaseVersion: Int
@@ -422,6 +423,9 @@ class SettingsViewModel @Inject constructor(
     fun toggleDeveloperMode(enabled: Boolean) {
         viewModelScope.launch {
             userPreferencesRepository.setDeveloperModeEnabled(enabled)
+            // The Webhooks feature is gated behind dev mode. Reconcile any in-flight WorkManager
+            // work / AlarmManager alarms so toggling the gate immediately stops or resumes sync.
+            webhookSyncScheduler.applyScheduling()
         }
     }
 

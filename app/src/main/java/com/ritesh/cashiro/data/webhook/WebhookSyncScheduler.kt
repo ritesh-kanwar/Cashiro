@@ -41,6 +41,13 @@ class WebhookSyncScheduler @Inject constructor(
 
     suspend fun applyScheduling() {
         val settings = userPreferencesRepository.webhookSettings.first()
+        if (!userPreferencesRepository.isDeveloperModeEnabled.first()) {
+            // Feature is gated behind developer mode. Tear down any work / alarms that may have
+            // been scheduled while it was on so toggling it off immediately stops background sync.
+            cancelPeriodic()
+            cancelAllScheduledAlarms(settings.scheduledTimes.map { it.id })
+            return
+        }
         when (settings.syncMode) {
             WebhookSyncMode.INTERVAL -> {
                 cancelAllScheduledAlarms(settings.scheduledTimes.map { it.id })
