@@ -119,7 +119,9 @@ class WebhooksViewModel @Inject constructor(
 
     fun saveProfile(draft: WebhookProfileDraft, onSaved: (String) -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
-            if (!draft.url.startsWith("http://") && !draft.url.startsWith("https://")) {
+            val trimmedUrl = draft.url.trim()
+            if (!trimmedUrl.startsWith("http://", ignoreCase = true) &&
+                !trimmedUrl.startsWith("https://", ignoreCase = true)) {
                 onError("Webhook URL must start with http:// or https://")
                 return@launch
             }
@@ -135,7 +137,7 @@ class WebhooksViewModel @Inject constructor(
                 onError("Custom range needs both start and end")
                 return@launch
             }
-            val profileId = webhookRepository.saveProfile(draft)
+            val profileId = webhookRepository.saveProfile(draft.copy(url = trimmedUrl))
             flashMessage.value = "Webhook saved"
             onSaved(profileId)
         }

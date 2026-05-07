@@ -489,7 +489,7 @@ class BackupImporter @Inject constructor(
     private fun parseLocalDateTime(value: String?): java.time.LocalDateTime? =
         value?.let { runCatching { java.time.LocalDateTime.parse(it) }.getOrNull() }
 
-    private fun WebhookProfileBackup.toDraft(): com.ritesh.cashiro.data.webhook.WebhookProfileDraft =
+    private suspend fun WebhookProfileBackup.toDraft(): com.ritesh.cashiro.data.webhook.WebhookProfileDraft =
         com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
             id = id,
             name = name,
@@ -505,7 +505,9 @@ class BackupImporter @Inject constructor(
             rangePreset = parseRangePreset(rangePreset),
             customStart = parseLocalDateTime(customStart),
             customEnd = parseLocalDateTime(customEnd),
-            currency = currency,
+            // Currency is no longer part of the backup model — derive from the importing user's
+            // own baseCurrency preference, same as the runtime sync path does.
+            currency = userPreferencesRepository.baseCurrency.first(),
             headers = headers
         )
     

@@ -65,7 +65,7 @@ class WebhookScheduleArithmeticTest {
     }
 
     @Test
-    fun `slot at midnight stays today when called just before midnight on previous day`() {
+    fun `slot at midnight rolls to tomorrow when re-armed at 23-59`() {
         // Edge: if we somehow re-armed at 23:59 of day N for a 00:00 slot of day N+1
         // (e.g. user toggled the time while screen was open at 23:59), today's 00:00 is in the
         // past, so we expect tomorrow. This pins it.

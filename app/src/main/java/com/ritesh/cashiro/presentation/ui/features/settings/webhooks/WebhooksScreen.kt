@@ -639,4 +639,4 @@ private fun DeliveryLogRow(log: WebhookLogEntity) {
 }
 
 private val LogTimeFormatter: java.time.format.DateTimeFormatter =
-    java.time.format.DateTimeFormatter.ofPattern("MMM d, HH:mm")
+    java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy, HH:mm", java.util.Locale.getDefault())

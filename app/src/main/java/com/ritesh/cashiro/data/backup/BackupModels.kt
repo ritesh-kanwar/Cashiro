@@ -154,8 +154,6 @@ data class WebhookProfileBackup(
     val customStart: String? = null,
     @SerializedName("custom_end")
     val customEnd: String? = null,
-    @SerializedName("currency")
-    val currency: String,
     @SerializedName("headers")
     val headers: List<WebhookHeader> = emptyList()
 )

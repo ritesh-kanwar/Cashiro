@@ -106,7 +106,13 @@ class WebhookPayloadBuilder @Inject constructor(
                     subscriptions = if (index == 0) subscriptions else emptyList()
                 ),
                 cursorUpdates = updates,
-                itemCount = transactions.size + budgets.size + accounts.size + subscriptions.size + if (summary != null) 1 else 0
+                // Only the first batch carries summary/budgets/accounts/subscriptions; later
+                // batches are transactions-only. Counting them on every batch overstated metrics
+                // for multi-batch syncs.
+                itemCount = transactions.size +
+                    if (index == 0) {
+                        budgets.size + accounts.size + subscriptions.size + (if (summary != null) 1 else 0)
+                    } else 0
             )
         }
     }

@@ -29,8 +29,10 @@ import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.VpnKey
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -110,6 +112,7 @@ fun WebhookEditorScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var nameError by remember { mutableStateOf<String?>(null) }
     var urlError by remember { mutableStateOf<String?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(profileId) {
         val draft = viewModel.loadDraft(profileId)
@@ -377,7 +380,8 @@ fun WebhookEditorScreen(
                     )
                 },
                 enabled = name.isNotBlank() && url.isNotBlank() &&
-                    nameError == null && urlError == null,
+                    nameError == null && urlError == null &&
+                    isCustomRangeValid(rangePreset, customStart, customEnd),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Save webhook")
@@ -385,10 +389,7 @@ fun WebhookEditorScreen(
 
             if (profileId != null) {
                 OutlinedButton(
-                    onClick = {
-                        viewModel.deleteProfile(profileId)
-                        onNavigateBack()
-                    },
+                    onClick = { showDeleteDialog = true },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
@@ -399,6 +400,38 @@ fun WebhookEditorScreen(
                     Spacer(modifier = Modifier.width(Spacing.sm))
                     Text("Delete webhook")
                 }
+            }
+
+            if (showDeleteDialog && profileId != null) {
+                AlertDialog(
+                    onDismissRequest = { showDeleteDialog = false },
+                    title = { Text("Delete webhook?") },
+                    text = {
+                        Text(
+                            "This profile, its scheduled syncs, and all delivery logs " +
+                                "will be removed. This can't be undone."
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                showDeleteDialog = false
+                                viewModel.deleteProfile(profileId)
+                                onNavigateBack()
+                            }
+                        ) {
+                            Text(
+                                "Delete",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDeleteDialog = false }) {
+                            Text("Cancel")
+                        }
+                    }
+                )
             }
 
             Spacer(modifier = Modifier.height(Spacing.xl))
@@ -586,3 +619,13 @@ private fun DateField(
 }
 
 private val DATE_FIELD_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
+
+private fun isCustomRangeValid(
+    preset: WebhookRangePreset,
+    customStart: LocalDateTime?,
+    customEnd: LocalDateTime?
+): Boolean {
+    if (preset != WebhookRangePreset.CUSTOM) return true
+    if (customStart == null || customEnd == null) return false
+    return !customStart.isAfter(customEnd)
+}
