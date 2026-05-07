@@ -135,7 +135,9 @@ class BackupExporter @Inject constructor(
                     customStart = profile.customStart,
                     customEnd = profile.customEnd,
                     currency = baseCurrency,
-                    headers = webhookRepository.decodeHeaders(profile.headersJson).map { it.copy(value = "") }
+                    headers = com.ritesh.cashiro.data.repository.WebhookHeaderEncoder.sanitizeForExport(
+                        webhookRepository.decodeHeaders(profile.headersJson)
+                    )
                 )
             }
         } else emptyList()

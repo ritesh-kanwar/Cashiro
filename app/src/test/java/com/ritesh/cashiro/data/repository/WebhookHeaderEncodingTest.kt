@@ -62,4 +62,21 @@ class WebhookHeaderEncodingTest {
         assertTrue("expected key field", encoded.contains("\"key\":\"K\""))
         assertTrue("expected value field", encoded.contains("\"value\":\"V\""))
     }
+
+    @Test
+    fun `sanitizeForExport wipes values but keeps keys`() {
+        // Pins the BackupExporter contract: a shared backup file must never carry bearer tokens
+        // or API keys, but the user must be able to see which header keys to re-enter on restore.
+        val saved = listOf(
+            WebhookHeader(key = "Authorization", value = "Bearer secret-123"),
+            WebhookHeader(key = "X-Api-Key", value = "extremely-private")
+        )
+
+        val sanitized = WebhookHeaderEncoder.sanitizeForExport(saved)
+
+        assertEquals(2, sanitized.size)
+        assertEquals("Authorization", sanitized[0].key)
+        assertEquals("X-Api-Key", sanitized[1].key)
+        sanitized.forEach { assertEquals("", it.value) }
+    }
 }

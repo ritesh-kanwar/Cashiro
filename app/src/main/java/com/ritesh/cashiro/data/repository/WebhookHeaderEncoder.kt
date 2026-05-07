@@ -19,4 +19,12 @@ object WebhookHeaderEncoder {
     fun decode(headersJson: String): List<WebhookHeader> = runCatching {
         json.decodeFromString<List<WebhookHeader>>(headersJson)
     }.getOrDefault(emptyList())
+
+    /**
+     * Returns a copy of [headers] with every value wiped to "". Used when exporting backups so a
+     * shared file never leaks bearer tokens / API keys; keys are preserved so a restore can prompt
+     * the user to re-enter the values.
+     */
+    fun sanitizeForExport(headers: List<WebhookHeader>): List<WebhookHeader> =
+        headers.map { it.copy(value = "") }
 }

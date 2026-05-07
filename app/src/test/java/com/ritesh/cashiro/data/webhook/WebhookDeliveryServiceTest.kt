@@ -202,4 +202,35 @@ class WebhookDeliveryServiceTest {
         assertTrue("envelope contains app name", body.contains("\"name\":\"Cashiro\""))
         assertTrue("snake_case SerialName aliases are honored", body.contains("\"data_types\""))
     }
+
+    @Test
+    fun `result message never echoes header values across any branch`() = runTest {
+        // Privacy guarantee: WebhookLogEntity.message is built from result.message and is the
+        // single string we persist about an attempt. It must never carry header values, even
+        // accidentally, across any of the four code paths (2xx success / non-retryable 4xx /
+        // retryable 5xx / network exception). Using a sentinel value lets a single check pin
+        // every branch.
+        val sensitiveHeader = WebhookHeader(
+            key = "Authorization",
+            value = "Bearer EXTREMELY_PRIVATE_TOKEN_${System.nanoTime()}"
+        )
+        val sentinel = "EXTREMELY_PRIVATE_TOKEN"
+        val targetUrl = "https://example.com/hook"
+
+        val branches: List<suspend MockRequestHandleScope.(HttpRequestData) -> io.ktor.client.request.HttpResponseData> = listOf(
+            { jsonOk() },                                       // 2xx
+            { respondError(HttpStatusCode.BadRequest) },        // 4xx non-retryable
+            { respondError(HttpStatusCode.InternalServerError) }, // 5xx retryable
+            { throw java.net.ConnectException("connection refused: $targetUrl") } // network
+        )
+
+        for (responder in branches) {
+            val service = service(responder = responder)
+            val result = service.deliver(targetUrl, listOf(sensitiveHeader), sampleEnvelope)
+            assertFalse(
+                "result.message must not echo header values (got: \"${result.message}\")",
+                result.message.contains(sentinel)
+            )
+        }
+    }
 }
