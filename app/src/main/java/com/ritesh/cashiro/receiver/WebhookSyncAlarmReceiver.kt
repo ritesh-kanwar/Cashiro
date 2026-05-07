@@ -28,16 +28,18 @@ class WebhookSyncAlarmReceiver : BroadcastReceiver() {
             ReceiverEntryPoint::class.java
         )
         val scheduler = entryPoint.webhookSyncScheduler()
-        scheduler.enqueueImmediate(WebhookSyncReason.SCHEDULED)
-        // applyScheduling() re-arms the next alarm. BroadcastReceiver only has ~10s of guaranteed
-        // process time; without goAsync() the OS could kill us before that completes and the
-        // schedule would silently stop firing.
+        // BroadcastReceiver only has ~10s of guaranteed process time, and any work done before
+        // goAsync() blocks the receiver thread. Acquire the PendingResult first so the receiver
+        // returns immediately, then run the scheduler work inside a coroutine. enqueueImmediate
+        // throwing must not skip applyScheduling — they're isolated with their own runCatching
+        // so one failure can't silently disarm the next alarm.
         val pendingResult = goAsync()
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
-                scheduler.applyScheduling()
-            } catch (t: Throwable) {
-                Log.e("WebhookSyncAlarm", "applyScheduling failed after alarm", t)
+                runCatching { scheduler.enqueueImmediate(WebhookSyncReason.SCHEDULED) }
+                    .onFailure { Log.e("WebhookSyncAlarm", "enqueueImmediate failed", it) }
+                runCatching { scheduler.applyScheduling() }
+                    .onFailure { Log.e("WebhookSyncAlarm", "applyScheduling failed after alarm", it) }
             } finally {
                 pendingResult.finish()
             }

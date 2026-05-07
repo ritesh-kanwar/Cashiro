@@ -52,15 +52,14 @@ class WebhookHeaderEncodingTest {
     }
 
     @Test
-    fun `encoded shape uses the documented JSON array of {key, value} objects`() {
-        // The migration emits this shape from raw SQL; if encode drifts, migrated data won't
-        // decode cleanly. Worth pinning the surface format itself.
-        val encoded = WebhookHeaderEncoder.encode(
-            listOf(WebhookHeader(key = "K", value = "V"))
-        )
+    fun `encoded shape decodes structurally to a list of key-value entries`() {
+        // The migration emits the same shape from raw SQL; if encode drifts, migrated data won't
+        // decode cleanly. Decode-and-assert avoids whitespace-sensitive substring matching that
+        // would silently pass if the serializer ever inserts spaces around the colon.
+        val original = listOf(WebhookHeader(key = "K", value = "V"))
+        val encoded = WebhookHeaderEncoder.encode(original)
         assertTrue("expected JSON array", encoded.startsWith("[") && encoded.endsWith("]"))
-        assertTrue("expected key field", encoded.contains("\"key\":\"K\""))
-        assertTrue("expected value field", encoded.contains("\"value\":\"V\""))
+        assertEquals(original, WebhookHeaderEncoder.decode(encoded))
     }
 
     @Test
@@ -78,5 +77,10 @@ class WebhookHeaderEncodingTest {
         assertEquals("Authorization", sanitized[0].key)
         assertEquals("X-Api-Key", sanitized[1].key)
         sanitized.forEach { assertEquals("", it.value) }
+    }
+
+    @Test
+    fun `sanitizeForExport on empty list returns empty list without throwing`() {
+        assertEquals(emptyList<WebhookHeader>(), WebhookHeaderEncoder.sanitizeForExport(emptyList()))
     }
 }

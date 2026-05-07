@@ -44,10 +44,12 @@ class BootReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
-                scheduler.scheduleDailyReminder()
-                webhookSyncScheduler.applyScheduling()
-            } catch (e: Exception) {
-                Log.e(TAG, "Error rescheduling alarms after boot", e)
+                // Wrap each scheduler in its own runCatching so a failure in one (e.g. notification
+                // channels missing on a fresh boot) doesn't prevent the other from re-arming.
+                runCatching { scheduler.scheduleDailyReminder() }
+                    .onFailure { Log.e(TAG, "Failed to reschedule daily reminder", it) }
+                runCatching { webhookSyncScheduler.applyScheduling() }
+                    .onFailure { Log.e(TAG, "Failed to re-apply webhook scheduling", it) }
             } finally {
                 pendingResult.finish()
             }

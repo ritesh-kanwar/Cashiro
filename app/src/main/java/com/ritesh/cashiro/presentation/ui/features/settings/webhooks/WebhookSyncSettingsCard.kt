@@ -307,10 +307,15 @@ private fun ScheduledTimeRow(
                     if (time.enabled) "enabled" else "disabled"
             }
         )
-        IconButton(onClick = onDelete) {
+        IconButton(
+            onClick = onDelete,
+            modifier = Modifier.semantics {
+                contentDescription = "Remove ${time.displayTime()} schedule"
+            }
+        ) {
             Icon(
                 Iconax.Bag,
-                contentDescription = "Remove time",
+                contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

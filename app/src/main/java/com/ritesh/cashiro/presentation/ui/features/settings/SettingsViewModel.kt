@@ -426,7 +426,10 @@ class SettingsViewModel @Inject constructor(
             userPreferencesRepository.setDeveloperModeEnabled(enabled)
             // The Webhooks feature is gated behind dev mode. Reconcile any in-flight WorkManager
             // work / AlarmManager alarms so toggling the gate immediately stops or resumes sync.
-            webhookSyncScheduler.applyScheduling()
+            // applyScheduling() can throw on DataStore / AlarmManager failures; isolate that
+            // failure mode so the toggle itself doesn't crash this coroutine.
+            runCatching { webhookSyncScheduler.applyScheduling() }
+                .onFailure { Log.e("SettingsViewModel", "Failed to apply webhook scheduling", it) }
         }
     }
 
