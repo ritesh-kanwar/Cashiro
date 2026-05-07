@@ -148,10 +148,12 @@ data class WebhookProfileBackup(
     val dataTypes: List<String>,
     @SerializedName("range_preset")
     val rangePreset: String,
+    // Stored as ISO-8601 strings rather than LocalDateTime because Gson has no built-in
+    // TypeAdapter for java.time and would reflect on the class's internal fields.
     @SerializedName("custom_start")
-    val customStart: LocalDateTime? = null,
+    val customStart: String? = null,
     @SerializedName("custom_end")
-    val customEnd: LocalDateTime? = null,
+    val customEnd: String? = null,
     @SerializedName("currency")
     val currency: String,
     @SerializedName("headers")

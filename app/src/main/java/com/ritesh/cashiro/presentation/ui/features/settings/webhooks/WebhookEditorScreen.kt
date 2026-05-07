@@ -79,9 +79,10 @@ import com.ritesh.cashiro.presentation.ui.theme.Dimensions
 import com.ritesh.cashiro.presentation.ui.theme.Spacing
 import dev.chrisbanes.haze.HazeState
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -404,15 +405,19 @@ fun WebhookEditorScreen(
         }
 
         if (showStartPicker) {
-            val zone = ZoneId.systemDefault()
-            val initialMillis = (customStart ?: LocalDateTime.now())
-                .atZone(zone).toInstant().toEpochMilli()
+            // M3 DatePicker treats selectedDateMillis as midnight-UTC for the picked calendar
+            // date. Round-trip through UTC so users in negative offsets don't see the date
+            // shift back one day on save.
+            val initialMillis = (customStart?.toLocalDate() ?: LocalDate.now())
+                .atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
             val pickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
             DatePicker(
                 onDismiss = { showStartPicker = false },
                 onConfirm = {
                     pickerState.selectedDateMillis?.let { millis ->
-                        customStart = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zone)
+                        val pickedDate = Instant.ofEpochMilli(millis)
+                            .atZone(ZoneOffset.UTC).toLocalDate()
+                        customStart = pickedDate.atStartOfDay()
                     }
                     showStartPicker = false
                 },
@@ -421,17 +426,17 @@ fun WebhookEditorScreen(
         }
 
         if (showEndPicker) {
-            val zone = ZoneId.systemDefault()
-            val initialMillis = (customEnd ?: LocalDateTime.now())
-                .atZone(zone).toInstant().toEpochMilli()
+            val initialMillis = (customEnd?.toLocalDate() ?: LocalDate.now())
+                .atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
             val pickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
             DatePicker(
                 onDismiss = { showEndPicker = false },
                 onConfirm = {
                     pickerState.selectedDateMillis?.let { millis ->
+                        val pickedDate = Instant.ofEpochMilli(millis)
+                            .atZone(ZoneOffset.UTC).toLocalDate()
                         // End-of-day so the inclusive bound covers the picked day in full.
-                        customEnd = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zone)
-                            .toLocalDate().atTime(LocalTime.MAX)
+                        customEnd = pickedDate.atTime(LocalTime.MAX)
                     }
                     showEndPicker = false
                 },

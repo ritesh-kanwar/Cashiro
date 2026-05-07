@@ -132,8 +132,8 @@ class BackupExporter @Inject constructor(
                     enabled = profile.enabled,
                     dataTypes = profile.dataTypes,
                     rangePreset = profile.rangePreset.name,
-                    customStart = profile.customStart,
-                    customEnd = profile.customEnd,
+                    customStart = profile.customStart?.toString(),
+                    customEnd = profile.customEnd?.toString(),
                     currency = baseCurrency,
                     headers = com.ritesh.cashiro.data.repository.WebhookHeaderEncoder.sanitizeForExport(
                         webhookRepository.decodeHeaders(profile.headersJson)
@@ -179,7 +179,7 @@ class BackupExporter @Inject constructor(
             metadata = BackupMetadata(
                 exportId = UUID.randomUUID().toString(),
                 appVersion = BuildConfig.VERSION_NAME,
-                databaseVersion = 48,
+                databaseVersion = 51,
                 device = "${Build.MANUFACTURER} ${Build.MODEL}",
                 androidVersion = Build.VERSION.SDK_INT,
                 statistics = BackupStatistics(

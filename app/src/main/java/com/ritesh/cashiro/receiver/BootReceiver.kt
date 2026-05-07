@@ -27,26 +27,29 @@ class BootReceiver : BroadcastReceiver() {
         fun webhookSyncScheduler(): WebhookSyncScheduler
     }
 
-    private val receiverScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            Log.d(TAG, "Device rebooted, rescheduling alarms")
+        if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
+        Log.d(TAG, "Device rebooted, rescheduling alarms")
 
-            val entryPoint = EntryPointAccessors.fromApplication(
-                context.applicationContext,
-                BootReceiverEntryPoint::class.java
-            )
-            val scheduler = entryPoint.notificationScheduler()
-            val webhookSyncScheduler = entryPoint.webhookSyncScheduler()
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            BootReceiverEntryPoint::class.java
+        )
+        val scheduler = entryPoint.notificationScheduler()
+        val webhookSyncScheduler = entryPoint.webhookSyncScheduler()
 
-            receiverScope.launch {
-                try {
-                    scheduler.scheduleDailyReminder()
-                    webhookSyncScheduler.applyScheduling()
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error rescheduling alarms after boot", e)
-                }
+        // BroadcastReceiver onReceive has only ~10s of guaranteed lifetime. Without goAsync()
+        // the OS can kill the process before applyScheduling()/scheduleDailyReminder() finish
+        // and alarms would never be restored after a reboot.
+        val pendingResult = goAsync()
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            try {
+                scheduler.scheduleDailyReminder()
+                webhookSyncScheduler.applyScheduling()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error rescheduling alarms after boot", e)
+            } finally {
+                pendingResult.finish()
             }
         }
     }

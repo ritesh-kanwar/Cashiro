@@ -243,8 +243,8 @@ class BackupImporter @Inject constructor(
                                 }
                                 .toSet(),
                             rangePreset = parseRangePreset(profile.rangePreset),
-                            customStart = profile.customStart,
-                            customEnd = profile.customEnd,
+                            customStart = parseLocalDateTime(profile.customStart),
+                            customEnd = parseLocalDateTime(profile.customEnd),
                             currency = profile.currency,
                             headers = profile.headers
                         )
@@ -510,8 +510,8 @@ class BackupImporter @Inject constructor(
                             }
                             .toSet(),
                         rangePreset = parseRangePreset(profile.rangePreset),
-                        customStart = profile.customStart,
-                        customEnd = profile.customEnd,
+                        customStart = parseLocalDateTime(profile.customStart),
+                        customEnd = parseLocalDateTime(profile.customEnd),
                         currency = profile.currency,
                         headers = profile.headers
                     )
@@ -523,6 +523,9 @@ class BackupImporter @Inject constructor(
     private fun parseRangePreset(value: String): WebhookRangePreset =
         runCatching { WebhookRangePreset.valueOf(value) }
             .getOrElse { WebhookRangePreset.SINCE_LAST_SUCCESS }
+
+    private fun parseLocalDateTime(value: String?): java.time.LocalDateTime? =
+        value?.let { runCatching { java.time.LocalDateTime.parse(it) }.getOrNull() }
     
     /**
      * Import user preferences
