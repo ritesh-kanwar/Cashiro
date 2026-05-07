@@ -214,8 +214,8 @@ constructor(@ApplicationContext private val context: Context) {
         }
     }
 
-    suspend fun getWebhookLastScheduledIds(): Set<String> =
-        context.dataStore.data.map { it[PreferencesKeys.WEBHOOK_LAST_SCHEDULED_IDS].orEmpty() }.first()
+    val webhookLastScheduledIds: Flow<Set<String>> =
+        context.dataStore.data.map { it[PreferencesKeys.WEBHOOK_LAST_SCHEDULED_IDS].orEmpty() }
 
     suspend fun setWebhookLastScheduledIds(ids: Set<String>) {
         context.dataStore.edit { preferences ->

@@ -228,8 +228,11 @@ class BackupImporter @Inject constructor(
                     database.ruleApplicationDao().insertApplication(app)
                 }
 
-                backup.database.webhookProfiles.forEach { profile ->
-                    webhookRepository.saveProfile(profile.toDraft())
+                if (backup.database.webhookProfiles.isNotEmpty()) {
+                    val baseCurrency = userPreferencesRepository.baseCurrency.first()
+                    backup.database.webhookProfiles.forEach { profile ->
+                        webhookRepository.saveProfile(profile.toDraft(baseCurrency))
+                    }
                 }
                 
                 // Import preferences
@@ -474,10 +477,12 @@ class BackupImporter @Inject constructor(
     }
 
     private suspend fun importWebhookProfilesWithMerge(profiles: List<WebhookProfileBackup>) {
+        if (profiles.isEmpty()) return
+        val baseCurrency = userPreferencesRepository.baseCurrency.first()
         profiles.forEach { profile ->
             val existing = database.webhookProfileDao().getProfileById(profile.id)
             if (existing == null) {
-                webhookRepository.saveProfile(profile.toDraft())
+                webhookRepository.saveProfile(profile.toDraft(baseCurrency))
             }
         }
     }
@@ -489,7 +494,10 @@ class BackupImporter @Inject constructor(
     private fun parseLocalDateTime(value: String?): java.time.LocalDateTime? =
         value?.let { runCatching { java.time.LocalDateTime.parse(it) }.getOrNull() }
 
-    private suspend fun WebhookProfileBackup.toDraft(): com.ritesh.cashiro.data.webhook.WebhookProfileDraft =
+    // Currency is no longer part of the backup model — derive from the importing user's own
+    // baseCurrency preference, same as the runtime sync path does. Caller passes it in so we
+    // don't re-read DataStore once per profile when restoring multiple webhooks.
+    private fun WebhookProfileBackup.toDraft(currency: String): com.ritesh.cashiro.data.webhook.WebhookProfileDraft =
         com.ritesh.cashiro.data.webhook.WebhookProfileDraft(
             id = id,
             name = name,
@@ -505,9 +513,7 @@ class BackupImporter @Inject constructor(
             rangePreset = parseRangePreset(rangePreset),
             customStart = parseLocalDateTime(customStart),
             customEnd = parseLocalDateTime(customEnd),
-            // Currency is no longer part of the backup model — derive from the importing user's
-            // own baseCurrency preference, same as the runtime sync path does.
-            currency = userPreferencesRepository.baseCurrency.first(),
+            currency = currency,
             headers = headers
         )
     
