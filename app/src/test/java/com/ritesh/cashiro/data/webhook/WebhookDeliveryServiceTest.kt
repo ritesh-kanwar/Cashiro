@@ -188,9 +188,9 @@ class WebhookDeliveryServiceTest {
     fun `request body is JSON-serialized envelope`() = runTest {
         var capturedBody: String? = null
         val service = service {
-            capturedBody = (it.body as io.ktor.http.content.OutgoingContent.ByteArrayContent)
-                .bytes()
-                .toString(Charsets.UTF_8)
+            val body = it.body as? io.ktor.http.content.OutgoingContent.ByteArrayContent
+            assertNotNull("expected ByteArrayContent body, got ${it.body::class}", body)
+            capturedBody = body!!.bytes().toString(Charsets.UTF_8)
             jsonOk()
         }
 
@@ -233,8 +233,19 @@ class WebhookDeliveryServiceTest {
 
         assertTrue("302 with Location should follow and surface the final 200", result.success)
         assertEquals(200, result.httpStatus)
-        // Two requests: original POST + followed GET (or POST, depending on engine semantics)
-        assertTrue("expected the redirect to be followed", attempts.size >= 2)
+        // Two requests: original POST + followed GET (or POST, depending on engine semantics).
+        // Verifying the URLs (not just the count) pins the actual redirect chain so a future
+        // engine change that silently drops the follow-up would still trip this test.
+        assertEquals("expected original request + redirect follow", 2, attempts.size)
+        assertTrue(
+            "first request should target the Apps Script /exec endpoint",
+            attempts[0].url.toString().endsWith("/exec")
+        )
+        assertEquals(
+            "second request should target the redirect Location",
+            redirectTarget,
+            attempts[1].url.toString()
+        )
     }
 
     @Test
