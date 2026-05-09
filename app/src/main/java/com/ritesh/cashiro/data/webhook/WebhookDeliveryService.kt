@@ -3,6 +3,7 @@ package com.ritesh.cashiro.data.webhook
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -33,6 +34,15 @@ class WebhookDeliveryService internal constructor(
     private val client = HttpClient(engine) {
         install(ContentNegotiation) {
             json(json)
+        }
+        // Match OkHttp's default behaviour (which the reference health-connect-webhook impl
+        // relies on): follow 30x even on non-safe methods. Google Apps Script's documented
+        // POST protocol is "doPost runs, returns 302 to googleusercontent.com echo URL with
+        // the response body" — without this, every successful Apps Script delivery surfaces
+        // as the bare 302 and gets logged as failure, which prevents the cursor from
+        // advancing and causes the receiver-side data to duplicate on every subsequent sync.
+        install(HttpRedirect) {
+            checkHttpMethod = false
         }
     }
 

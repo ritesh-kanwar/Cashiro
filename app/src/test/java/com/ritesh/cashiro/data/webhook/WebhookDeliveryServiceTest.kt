@@ -204,6 +204,40 @@ class WebhookDeliveryServiceTest {
     }
 
     @Test
+    fun `Apps Script style 302 with Location header is followed and counted as success`() = runTest {
+        // Real-world reproduction of the maintainer's bug report on PR #75:
+        // Google Apps Script Web Apps return 302 to a googleusercontent.com echo URL after a
+        // successful doPost(). Before the fix, the engine surfaced the bare 302 to our
+        // 200..299 success check and we logged FAILURE — even though the receiver had already
+        // processed the body. Cursor never advanced, every subsequent sync re-POSTed the same
+        // batch, sheet duplicated rows.
+        val attempts = mutableListOf<HttpRequestData>()
+        val redirectTarget = "https://script.googleusercontent.com/macros/echo?key=abc"
+        val service = service(attempts) { request ->
+            if (request.url.toString().endsWith("/exec")) {
+                respond(
+                    content = ByteReadChannel.Empty,
+                    status = HttpStatusCode.Found,
+                    headers = headersOf(HttpHeaders.Location, redirectTarget)
+                )
+            } else {
+                jsonOk()
+            }
+        }
+
+        val result = service.deliver(
+            url = "https://script.google.com/macros/s/X/exec",
+            headers = emptyList(),
+            payload = sampleEnvelope
+        )
+
+        assertTrue("302 with Location should follow and surface the final 200", result.success)
+        assertEquals(200, result.httpStatus)
+        // Two requests: original POST + followed GET (or POST, depending on engine semantics)
+        assertTrue("expected the redirect to be followed", attempts.size >= 2)
+    }
+
+    @Test
     fun `result message never echoes header values across any branch`() = runTest {
         // Privacy guarantee: WebhookLogEntity.message is built from result.message and is the
         // single string we persist about an attempt. It must never carry header values, even

@@ -24,6 +24,20 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 
+/**
+ * Pure helper for the cursor-update construction inside [WebhookPayloadBuilder]. Extracted so
+ * the invariant — `successAt == rangeEnd` so the next sync's `> successAt` lower bound exactly
+ * continues from this sync's `<= rangeEnd` upper bound, no gap — can be unit-tested.
+ *
+ * Mirrors the reference health-connect-webhook impl which sets the per-data-type cursor to
+ * `data.maxOf { record.endTime }` (i.e. the timestamp of the last record in the sent batch),
+ * guaranteeing the cursor is always inside what was actually delivered.
+ */
+internal object WebhookPayloadBuilderCursors {
+    fun cursorUpdateFor(dataType: WebhookDataType, rangeEnd: LocalDateTime): WebhookCursorUpdate =
+        WebhookCursorUpdate(dataType = dataType, successAt = rangeEnd, rangeEnd = rangeEnd)
+}
+
 @Singleton
 class WebhookPayloadBuilder @Inject constructor(
     private val transactionRepository: TransactionRepository,
@@ -47,25 +61,25 @@ class WebhookPayloadBuilder @Inject constructor(
         val range = resolveRange(profile, cursors)
         val cursorUpdates = mutableListOf<WebhookCursorUpdate>()
         val summary = if (WebhookDataType.SUMMARY in selectedTypes) {
-            cursorUpdates += WebhookCursorUpdate(WebhookDataType.SUMMARY, LocalDateTime.now(), range.end)
+            cursorUpdates += WebhookPayloadBuilderCursors.cursorUpdateFor(WebhookDataType.SUMMARY, range.end)
             buildSummary(range, currency)
         } else {
             null
         }
         val budgets = if (WebhookDataType.BUDGETS in selectedTypes) {
-            cursorUpdates += WebhookCursorUpdate(WebhookDataType.BUDGETS, LocalDateTime.now(), range.end)
+            cursorUpdates += WebhookPayloadBuilderCursors.cursorUpdateFor(WebhookDataType.BUDGETS, range.end)
             buildBudgets(range, currency)
         } else {
             emptyList()
         }
         val accounts = if (WebhookDataType.ACCOUNTS in selectedTypes) {
-            cursorUpdates += WebhookCursorUpdate(WebhookDataType.ACCOUNTS, LocalDateTime.now(), range.end)
+            cursorUpdates += WebhookPayloadBuilderCursors.cursorUpdateFor(WebhookDataType.ACCOUNTS, range.end)
             buildAccounts(currency)
         } else {
             emptyList()
         }
         val subscriptions = if (WebhookDataType.SUBSCRIPTIONS in selectedTypes) {
-            cursorUpdates += WebhookCursorUpdate(WebhookDataType.SUBSCRIPTIONS, LocalDateTime.now(), range.end)
+            cursorUpdates += WebhookPayloadBuilderCursors.cursorUpdateFor(WebhookDataType.SUBSCRIPTIONS, range.end)
             buildSubscriptions(currency)
         } else {
             emptyList()
@@ -80,7 +94,7 @@ class WebhookPayloadBuilder @Inject constructor(
         return transactionBatches.mapIndexed { index, transactions ->
             val updates = cursorUpdates.toMutableList()
             if (WebhookDataType.TRANSACTIONS in selectedTypes) {
-                updates += WebhookCursorUpdate(WebhookDataType.TRANSACTIONS, LocalDateTime.now(), range.end)
+                updates += WebhookPayloadBuilderCursors.cursorUpdateFor(WebhookDataType.TRANSACTIONS, range.end)
             }
             WebhookBatchPayload(
                 envelope = WebhookEnvelope(

@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.data.webhook
 
+import com.ritesh.cashiro.data.database.entity.WebhookDataType
 import com.ritesh.cashiro.data.database.entity.WebhookRangePreset
 import java.time.LocalDateTime
 import org.junit.Assert.assertEquals
@@ -63,5 +64,21 @@ class WebhookRangeTest {
             // throw or land in some default branch unexpectedly when a new preset is introduced.
             assertEquals(preset, range.toFlat().preset)
         }
+    }
+
+    @Test
+    fun `cursor update successAt matches the range upper bound, not wall-clock now`() {
+        // Reproduces the cursor-skip bug: WebhookPayloadBuilder.build was constructing
+        // WebhookCursorUpdate(dataType, LocalDateTime.now(), range.end), where now() is computed
+        // AFTER range.end. Records updated in (range.end, now()] would be missed on the next
+        // sync because the next fetch uses lastSuccessAt as its lower bound. Cursor must equal
+        // the same upper bound that was used to fetch the data this run, otherwise gaps form.
+        val rangeEnd = LocalDateTime.of(2026, 5, 9, 14, 0, 0)
+
+        val update = WebhookPayloadBuilderCursors.cursorUpdateFor(WebhookDataType.TRANSACTIONS, rangeEnd)
+
+        assertEquals(WebhookDataType.TRANSACTIONS, update.dataType)
+        assertEquals(rangeEnd, update.successAt)
+        assertEquals(rangeEnd, update.rangeEnd)
     }
 }
