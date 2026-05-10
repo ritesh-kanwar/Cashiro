@@ -6,6 +6,7 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondError
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteReadChannel
@@ -246,6 +247,65 @@ class WebhookDeliveryServiceTest {
             redirectTarget,
             attempts[1].url.toString()
         )
+    }
+
+    @Test
+    fun `Apps Script 302 redirect target only accepts GET so POST must be downgraded`() = runTest {
+        // Apps Script returns 302 to a googleusercontent.com/echo URL that only accepts GET.
+        val attempts = mutableListOf<HttpRequestData>()
+        val service = service(attempts) { request ->
+            when {
+                request.url.toString().endsWith("/exec") -> respond(
+                    content = ByteReadChannel.Empty,
+                    status = HttpStatusCode.Found,
+                    headers = headersOf(
+                        HttpHeaders.Location,
+                        "https://script.googleusercontent.com/macros/echo?key=abc"
+                    )
+                )
+                request.method == HttpMethod.Get -> jsonOk(body = """{"ok":true}""")
+                else -> respondError(HttpStatusCode.MethodNotAllowed)
+            }
+        }
+
+        val result = service.deliver(
+            url = "https://script.google.com/macros/s/X/exec",
+            headers = emptyList(),
+            payload = sampleEnvelope
+        )
+
+        assertTrue(result.success)
+        assertEquals(200, result.httpStatus)
+        assertEquals(2, attempts.size)
+        assertEquals(HttpMethod.Post, attempts[0].method)
+        assertEquals(HttpMethod.Get, attempts[1].method)
+    }
+
+    @Test
+    fun `307 Temporary Redirect preserves POST method`() = runTest {
+        val attempts = mutableListOf<HttpRequestData>()
+        val service = service(attempts) { request ->
+            if (request.url.toString().endsWith("/first")) {
+                respond(
+                    content = ByteReadChannel.Empty,
+                    status = HttpStatusCode.TemporaryRedirect,
+                    headers = headersOf(HttpHeaders.Location, "https://example.com/second")
+                )
+            } else {
+                jsonOk()
+            }
+        }
+
+        val result = service.deliver(
+            url = "https://example.com/first",
+            headers = emptyList(),
+            payload = sampleEnvelope
+        )
+
+        assertTrue(result.success)
+        assertEquals(2, attempts.size)
+        assertEquals(HttpMethod.Post, attempts[0].method)
+        assertEquals(HttpMethod.Post, attempts[1].method)
     }
 
     @Test

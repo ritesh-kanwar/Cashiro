@@ -13,6 +13,25 @@ data class WebhookSyncRunResult(
     val anyRetryableFailure: Boolean
 )
 
+internal data class BatchOutcome(
+    val cursorUpdates: List<WebhookCursorUpdate>,
+    val attempt: WebhookAttemptResult
+)
+
+/**
+ * All-or-nothing: returns null if any batch failed, so the cursor stays put and the
+ * worker's retry re-ships the entire range. Receivers dedup by stable transaction id.
+ */
+internal fun resolveCursorAdvance(
+    outcomes: List<BatchOutcome>,
+    sendTestPayload: Boolean
+): List<WebhookCursorUpdate>? {
+    if (sendTestPayload) return null
+    if (outcomes.isEmpty()) return null
+    if (outcomes.any { !it.attempt.success }) return null
+    return outcomes.last().cursorUpdates
+}
+
 @Singleton
 class WebhookSyncManager @Inject constructor(
     private val webhookRepository: WebhookRepository,
@@ -49,8 +68,7 @@ class WebhookSyncManager @Inject constructor(
         val currency = userPreferencesRepository.baseCurrency.first()
         val cursorState = webhookRepository.getCursors(profile.id)
         val batches = payloadBuilder.build(profile, dataTypes, currency, cursorState, sendTestPayload)
-        var anySuccess = false
-        var anyRetryableFailure = false
+        val outcomes = mutableListOf<BatchOutcome>()
 
         for (batch in batches) {
             val attempt = deliveryService.deliver(profile.url, headers, batch.envelope)
@@ -66,22 +84,20 @@ class WebhookSyncManager @Inject constructor(
                     batchCount = batch.envelope.batch.count
                 )
             )
-            if (attempt.success) {
-                anySuccess = true
-                if (!sendTestPayload) {
-                    webhookRepository.markSuccess(profile.id, LocalDateTime.now(), batch.cursorUpdates)
-                }
-            } else {
-                anyRetryableFailure = anyRetryableFailure || attempt.retryable
+            outcomes += BatchOutcome(batch.cursorUpdates, attempt)
+            if (!attempt.success) {
                 webhookRepository.markFailure(profile.id, attempt.message)
-                // Stop after any failure — both retryable (5xx/429 will be re-attempted by
-                // WorkManager backoff anyway) and non-retryable (4xx is overwhelmingly going
-                // to fail the same way for every remaining batch, just spamming logs and
-                // bumping consecutive_failures).
                 break
             }
         }
 
+        val cursorUpdates = resolveCursorAdvance(outcomes, sendTestPayload)
+        if (cursorUpdates != null) {
+            webhookRepository.markSuccess(profile.id, LocalDateTime.now(), cursorUpdates)
+        }
+
+        val anySuccess = outcomes.any { it.attempt.success }
+        val anyRetryableFailure = outcomes.any { !it.attempt.success && it.attempt.retryable }
         return WebhookSyncRunResult(anySuccess = anySuccess, anyRetryableFailure = anyRetryableFailure)
     }
 }
