@@ -1,9 +1,44 @@
 package com.ritesh.cashiro.utils
 
 import android.util.Log
+import java.math.BigDecimal
+import java.math.MathContext
 import java.time.LocalDate
 
 object SubscriptionUtils {
+
+    private val WEEKS_PER_YEAR = BigDecimal(52)
+    private val MONTHS_PER_YEAR = BigDecimal(12)
+    private val MONTHS_PER_QUARTER = BigDecimal(3)
+    private val MONTHS_PER_HALF = BigDecimal(6)
+    private val AVG_DAYS_PER_MONTH = BigDecimal("30.4375")
+    private val MC = MathContext.DECIMAL64
+
+    fun monthlyEquivalent(amount: BigDecimal, billingCycle: String?): BigDecimal {
+        val cycle = billingCycle?.lowercase() ?: "monthly"
+
+        if (cycle.startsWith("custom_")) {
+            val parts = cycle.split("_")
+            val count = parts.getOrNull(1)?.toLongOrNull()?.takeIf { it > 0 } ?: 1L
+            val unit = parts.getOrNull(2) ?: "month"
+            val divisor = BigDecimal(count)
+            return when (unit) {
+                "day"  -> amount.multiply(AVG_DAYS_PER_MONTH).divide(divisor, MC)
+                "week" -> amount.multiply(WEEKS_PER_YEAR).divide(MONTHS_PER_YEAR.multiply(divisor), MC)
+                "year" -> amount.divide(MONTHS_PER_YEAR.multiply(divisor), MC)
+                else   -> amount.divide(divisor, MC)
+            }
+        }
+
+        return when (cycle) {
+            "weekly"      -> amount.multiply(WEEKS_PER_YEAR).divide(MONTHS_PER_YEAR, MC)
+            "quarterly"   -> amount.divide(MONTHS_PER_QUARTER, MC)
+            "semi-annual" -> amount.divide(MONTHS_PER_HALF, MC)
+            "annual"      -> amount.divide(MONTHS_PER_YEAR, MC)
+            else          -> amount
+        }
+    }
+
     /**
      * Calculates the next payment date based on the current date and billing cycle.
      * Supports standard cycles (Weekly, Monthly, Quarterly, Semi-Annual, Annual)
