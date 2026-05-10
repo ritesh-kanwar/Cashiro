@@ -66,25 +66,30 @@ class SubscriptionsViewModel @Inject constructor(
                     currencyConversionService.refreshExchangeRatesForAccount(subscriptionCurrencies + targetCurrency)
                 }
 
-                val convertedAmounts = subscriptions.associate { subscription ->
-                    subscription.id to if (subscription.currency == targetCurrency) {
-                        subscription.amount
-                    } else {
-                        currencyConversionService.convertAmount(
-                            amount = subscription.amount,
-                            fromCurrency = subscription.currency,
-                            toCurrency = targetCurrency
-                        ) ?: subscription.amount
+                var totalMonthlyAmount = BigDecimal.ZERO
+                val convertedAmounts = buildMap(subscriptions.size) {
+                    subscriptions.forEach { sub ->
+                        val converted = if (sub.currency == targetCurrency) {
+                            sub.amount
+                        } else {
+                            currencyConversionService.convertAmount(
+                                amount = sub.amount,
+                                fromCurrency = sub.currency,
+                                toCurrency = targetCurrency
+                            ) ?: sub.amount
+                        }
+                        put(sub.id, converted)
+                        totalMonthlyAmount = totalMonthlyAmount.add(
+                            SubscriptionUtils.monthlyEquivalent(converted, sub.billingCycle)
+                        )
                     }
                 }
 
-                val totalMonthlyAmount = convertedAmounts.values.sumOf { it }
-                
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         activeSubscriptions = subscriptions,
                         totalMonthlyAmount = totalMonthlyAmount,
-                        totalYearlyAmount = totalMonthlyAmount * BigDecimal(12),
+                        totalYearlyAmount = totalMonthlyAmount.multiply(BigDecimal(12)),
                         targetCurrency = targetCurrency,
                         convertedAmounts = convertedAmounts,
                         isLoading = false
