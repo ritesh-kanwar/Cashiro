@@ -81,9 +81,16 @@ class SubscriptionUtilsMonthlyEquivalentTest {
     }
 
     @Test
-    fun `malformed custom cycle defaults count to 1 and unit to month`() {
+    fun `malformed custom cycle falls back to monthly`() {
         assertEqualsMoney(bd("250"), SubscriptionUtils.monthlyEquivalent(bd("250"), "custom_"))
         assertEqualsMoney(bd("250"), SubscriptionUtils.monthlyEquivalent(bd("250"), "custom_abc_xyz"))
+    }
+
+    @Test
+    fun `custom cycle with invalid count but valid unit falls back to monthly`() {
+        // Coderabbit catch: "custom_abc_day" must not become amount * 30.4375 (every day).
+        assertEqualsMoney(bd("250"), SubscriptionUtils.monthlyEquivalent(bd("250"), "custom_abc_day"))
+        assertEqualsMoney(bd("250"), SubscriptionUtils.monthlyEquivalent(bd("250"), "custom_0_month"))
     }
 
     @Test

@@ -67,6 +67,7 @@ class SubscriptionsViewModel @Inject constructor(
                 }
 
                 var totalMonthlyAmount = BigDecimal.ZERO
+                var conversionFailures = 0
                 val convertedAmounts = buildMap(subscriptions.size) {
                     subscriptions.forEach { sub ->
                         val converted = if (sub.currency == targetCurrency) {
@@ -76,7 +77,11 @@ class SubscriptionsViewModel @Inject constructor(
                                 amount = sub.amount,
                                 fromCurrency = sub.currency,
                                 toCurrency = targetCurrency
-                            ) ?: sub.amount
+                            )
+                        }
+                        if (converted == null) {
+                            conversionFailures++
+                            return@forEach
                         }
                         put(sub.id, converted)
                         totalMonthlyAmount = totalMonthlyAmount.add(
@@ -92,6 +97,7 @@ class SubscriptionsViewModel @Inject constructor(
                         totalYearlyAmount = totalMonthlyAmount.multiply(BigDecimal(12)),
                         targetCurrency = targetCurrency,
                         convertedAmounts = convertedAmounts,
+                        conversionFailureCount = conversionFailures,
                         isLoading = false
                     )
                 }

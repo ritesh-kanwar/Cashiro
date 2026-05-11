@@ -17,10 +17,10 @@ object SubscriptionUtils {
 
     private data class CustomCycle(val count: Long, val unit: String, val endDate: String?)
 
-    private fun parseCustomCycle(cycle: String): CustomCycle {
+    private fun parseCustomCycle(cycle: String): CustomCycle? {
         val parts = cycle.split("_")
-        val count = parts.getOrNull(1)?.toLongOrNull()?.takeIf { it > 0 } ?: 1L
-        val unit = parts.getOrNull(2)?.takeIf { it in CUSTOM_CYCLE_UNITS } ?: "month"
+        val count = parts.getOrNull(1)?.toLongOrNull()?.takeIf { it > 0 } ?: return null
+        val unit = parts.getOrNull(2)?.takeIf { it in CUSTOM_CYCLE_UNITS } ?: return null
         return CustomCycle(count, unit, parts.getOrNull(3))
     }
 
@@ -28,7 +28,7 @@ object SubscriptionUtils {
         val cycle = billingCycle?.lowercase() ?: "monthly"
 
         if (cycle.startsWith("custom_")) {
-            val (count, unit, _) = parseCustomCycle(cycle)
+            val (count, unit, _) = parseCustomCycle(cycle) ?: return "Monthly"
             return if (count == 1L) "Every $unit" else "Every $count ${unit}s"
         }
 
@@ -45,7 +45,7 @@ object SubscriptionUtils {
         val cycle = billingCycle?.lowercase() ?: "monthly"
 
         if (cycle.startsWith("custom_")) {
-            val (count, unit, _) = parseCustomCycle(cycle)
+            val (count, unit, _) = parseCustomCycle(cycle) ?: return amount
             val divisor = BigDecimal(count)
             return when (unit) {
                 "day"  -> amount.multiply(AVG_DAYS_PER_MONTH).divide(divisor, MC)
@@ -76,8 +76,9 @@ object SubscriptionUtils {
         val today = LocalDate.now()
         val cycle = billingCycle?.lowercase() ?: "monthly"
         
-        if (cycle.startsWith("custom_")) {
-            val (count, unit, endDateStr) = parseCustomCycle(cycle)
+        val custom = if (cycle.startsWith("custom_")) parseCustomCycle(cycle) else null
+        if (custom != null) {
+            val (count, unit, endDateStr) = custom
 
             fun LocalDate.advance(): LocalDate = when (unit) {
                 "day"  -> plusDays(count)

@@ -211,6 +211,8 @@ fun SubscriptionsScreen(
                 subscription = selectedSubscription,
                 categoryEntity = categoriesMap[selectedSubscription.category],
                 subcategoryEntity = subcategoriesMap[selectedSubscription.subcategory],
+                convertedAmount = uiState.convertedAmounts[selectedSubscription.id],
+                targetCurrency = uiState.targetCurrency,
                 onDismiss = { subscriptionsViewModel.selectSubscription(null) },
                 onMarkAsPaid = { subscriptionsViewModel.markAsPaid(selectedSubscription) },
                 onEdit = {
@@ -240,7 +242,8 @@ fun SubscriptionsScreen(
                     monthlyAmount = uiState.totalMonthlyAmount,
                     yearlyAmount = uiState.totalYearlyAmount,
                     activeCount = uiState.activeSubscriptions.size,
-                    currency = uiState.targetCurrency
+                    currency = uiState.targetCurrency,
+                    conversionFailureCount = uiState.conversionFailureCount
                 )
             }
             
@@ -300,7 +303,8 @@ private fun TotalSubscriptionsSummary(
     monthlyAmount: BigDecimal,
     yearlyAmount: BigDecimal,
     activeCount: Int,
-    currency: String
+    currency: String,
+    conversionFailureCount: Int = 0
 ) {
     CashiroCard(
         modifier = Modifier.fillMaxWidth(),
@@ -416,6 +420,16 @@ private fun TotalSubscriptionsSummary(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+            }
+            if (conversionFailureCount > 0) {
+                Spacer(modifier = Modifier.height(Spacing.sm))
+                Text(
+                    text = "$conversionFailureCount subscription(s) couldn't be converted to $currency, totals may be incomplete.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
@@ -710,6 +724,8 @@ private fun PaymentStatusBottomSheet(
     subscription: SubscriptionEntity,
     categoryEntity: CategoryEntity? = null,
     subcategoryEntity: SubcategoryEntity? = null,
+    convertedAmount: BigDecimal? = null,
+    targetCurrency: String? = null,
     onDismiss: () -> Unit,
     onMarkAsPaid: () -> Unit,
     onEdit: () -> Unit
@@ -800,11 +816,13 @@ private fun PaymentStatusBottomSheet(
                             color = if (isOverdue) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSecondaryContainer
                         )
                         val cycleLabel = SubscriptionUtils.formatBillingCycle(subscription.billingCycle)
-                        val monthlyEq = SubscriptionUtils.monthlyEquivalent(subscription.amount, subscription.billingCycle)
-                        val cycleSubtitle = if (monthlyEq.compareTo(subscription.amount) == 0) {
+                        val displayAmount = convertedAmount ?: subscription.amount
+                        val displayCurrency = targetCurrency ?: subscription.currency
+                        val monthlyEq = SubscriptionUtils.monthlyEquivalent(displayAmount, subscription.billingCycle)
+                        val cycleSubtitle = if (monthlyEq.compareTo(displayAmount) == 0) {
                             cycleLabel
                         } else {
-                            "$cycleLabel · ≈ ${CurrencyFormatter.formatCurrency(monthlyEq, subscription.currency)}/mo"
+                            "$cycleLabel · ≈ ${CurrencyFormatter.formatCurrency(monthlyEq, displayCurrency)}/mo"
                         }
                         Text(
                             text = cycleSubtitle,

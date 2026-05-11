@@ -54,7 +54,20 @@ class SubscriptionUtilsFormatBillingCycleTest {
 
     @Test
     fun `custom cycle with malformed parts falls back to monthly`() {
-        assertEquals("Every month", SubscriptionUtils.formatBillingCycle("custom_"))
-        assertEquals("Every month", SubscriptionUtils.formatBillingCycle("custom_abc_xyz"))
+        assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_"))
+        assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_abc_xyz"))
+    }
+
+    @Test
+    fun `custom cycle with valid unit but invalid count falls back to monthly`() {
+        // Coderabbit catch: "custom_abc_day" should not silently become "Every day".
+        assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_abc_day"))
+        assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_-3_week"))
+        assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_0_month"))
+    }
+
+    @Test
+    fun `custom cycle with valid count but invalid unit falls back to monthly`() {
+        assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_2_decade"))
     }
 }

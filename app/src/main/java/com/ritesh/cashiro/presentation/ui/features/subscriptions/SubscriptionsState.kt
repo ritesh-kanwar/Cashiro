@@ -11,5 +11,6 @@ data class SubscriptionsUiState(
     val isLoading: Boolean = true,
     val lastHiddenSubscription: SubscriptionEntity? = null,
     val selectedSubscription: SubscriptionEntity? = null,
-    val convertedAmounts: Map<Long, BigDecimal> = emptyMap()
+    val convertedAmounts: Map<Long, BigDecimal> = emptyMap(),
+    val conversionFailureCount: Int = 0
 )
