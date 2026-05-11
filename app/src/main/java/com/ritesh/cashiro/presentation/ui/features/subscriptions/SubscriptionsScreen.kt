@@ -817,7 +817,11 @@ private fun PaymentStatusBottomSheet(
                         )
                         val cycleLabel = SubscriptionUtils.formatBillingCycle(subscription.billingCycle)
                         val displayAmount = convertedAmount ?: subscription.amount
-                        val displayCurrency = targetCurrency ?: subscription.currency
+                        val displayCurrency = if (convertedAmount != null) {
+                            targetCurrency ?: subscription.currency
+                        } else {
+                            subscription.currency
+                        }
                         val monthlyEq = SubscriptionUtils.monthlyEquivalent(displayAmount, subscription.billingCycle)
                         val cycleSubtitle = if (monthlyEq.compareTo(displayAmount) == 0) {
                             cycleLabel
