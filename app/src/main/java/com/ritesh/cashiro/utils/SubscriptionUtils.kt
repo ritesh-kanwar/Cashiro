@@ -13,14 +13,39 @@ object SubscriptionUtils {
     private val MONTHS_PER_HALF = BigDecimal(6)
     private val AVG_DAYS_PER_MONTH = BigDecimal("30.4375")
     private val MC = MathContext.DECIMAL64
+    private val CUSTOM_CYCLE_UNITS = setOf("day", "week", "month", "year")
+
+    private data class CustomCycle(val count: Long, val unit: String, val endDate: String?)
+
+    private fun parseCustomCycle(cycle: String): CustomCycle {
+        val parts = cycle.split("_")
+        val count = parts.getOrNull(1)?.toLongOrNull()?.takeIf { it > 0 } ?: 1L
+        val unit = parts.getOrNull(2)?.takeIf { it in CUSTOM_CYCLE_UNITS } ?: "month"
+        return CustomCycle(count, unit, parts.getOrNull(3))
+    }
+
+    fun formatBillingCycle(billingCycle: String?): String {
+        val cycle = billingCycle?.lowercase() ?: "monthly"
+
+        if (cycle.startsWith("custom_")) {
+            val (count, unit, _) = parseCustomCycle(cycle)
+            return if (count == 1L) "Every $unit" else "Every $count ${unit}s"
+        }
+
+        return when (cycle) {
+            "weekly"      -> "Weekly"
+            "quarterly"   -> "Quarterly"
+            "semi-annual" -> "Semi-annual"
+            "annual"      -> "Annual"
+            else          -> "Monthly"
+        }
+    }
 
     fun monthlyEquivalent(amount: BigDecimal, billingCycle: String?): BigDecimal {
         val cycle = billingCycle?.lowercase() ?: "monthly"
 
         if (cycle.startsWith("custom_")) {
-            val parts = cycle.split("_")
-            val count = parts.getOrNull(1)?.toLongOrNull()?.takeIf { it > 0 } ?: 1L
-            val unit = parts.getOrNull(2) ?: "month"
+            val (count, unit, _) = parseCustomCycle(cycle)
             val divisor = BigDecimal(count)
             return when (unit) {
                 "day"  -> amount.multiply(AVG_DAYS_PER_MONTH).divide(divisor, MC)
@@ -52,42 +77,29 @@ object SubscriptionUtils {
         val cycle = billingCycle?.lowercase() ?: "monthly"
         
         if (cycle.startsWith("custom_")) {
-            val parts = cycle.split("_")
-            val count = parts.getOrNull(1)?.toLongOrNull() ?: 1L
-            val unit = parts.getOrNull(2) ?: "month"
-            val endDateStr = parts.getOrNull(3)
-            
-            var nextDate = when (unit) {
-                "day" -> fromDate.plusDays(count)
-                "week" -> fromDate.plusWeeks(count)
-                "year" -> fromDate.plusYears(count)
-                else -> fromDate.plusMonths(count) // month
+            val (count, unit, endDateStr) = parseCustomCycle(cycle)
+
+            fun LocalDate.advance(): LocalDate = when (unit) {
+                "day"  -> plusDays(count)
+                "week" -> plusWeeks(count)
+                "year" -> plusYears(count)
+                else   -> plusMonths(count)
             }
-            
-            // Catch up to today if needed
-            while (nextDate.isBefore(today)) {
-                nextDate = when (unit) {
-                    "day" -> nextDate.plusDays(count)
-                    "week" -> nextDate.plusWeeks(count)
-                    "year" -> nextDate.plusYears(count)
-                    else -> nextDate.plusMonths(count)
-                }
-            }
-            
-            // Check if we passed the end date
+
+            var nextDate = fromDate.advance()
+            while (nextDate.isBefore(today)) nextDate = nextDate.advance()
+
             if (endDateStr != null && endDateStr != "forever") {
                 try {
                     val endDate = LocalDate.parse(endDateStr)
                     if (nextDate.isAfter(endDate)) {
-                        // For now we still return it, letting the system handle expiry later
-                        // or we could return null/special value if it shouldn't repeat anymore.
                         Log.d("SubscriptionUtils", "Next date $nextDate is after end date $endDate")
                     }
                 } catch (e: Exception) {
                     Log.e("SubscriptionUtils", "Error parsing end date: $endDateStr", e)
                 }
             }
-            
+
             return nextDate
         }
 

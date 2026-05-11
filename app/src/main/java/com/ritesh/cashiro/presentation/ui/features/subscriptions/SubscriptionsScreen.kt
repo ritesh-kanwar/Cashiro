@@ -99,6 +99,7 @@ import com.ritesh.cashiro.presentation.ui.theme.Spacing
 import com.ritesh.cashiro.presentation.ui.theme.expense_dark
 import com.ritesh.cashiro.presentation.ui.theme.expense_light
 import com.ritesh.cashiro.utils.CurrencyFormatter
+import com.ritesh.cashiro.utils.SubscriptionUtils
 import com.ritesh.cashiro.utils.formatAmount
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
@@ -596,6 +597,12 @@ private fun SwipeableSubscriptionItem(
                                     )
                                 }
 
+                                // Billing Cycle Tag
+                                SubtitleTag(
+                                    text = SubscriptionUtils.formatBillingCycle(subscription.billingCycle),
+                                    color = MaterialTheme.colorScheme.tertiary
+                                )
+
                                 // Category Tag
                                 categoryEntity?.let { category ->
                                     SubtitleTag(
@@ -791,6 +798,19 @@ private fun PaymentStatusBottomSheet(
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = if (isOverdue) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        val cycleLabel = SubscriptionUtils.formatBillingCycle(subscription.billingCycle)
+                        val monthlyEq = SubscriptionUtils.monthlyEquivalent(subscription.amount, subscription.billingCycle)
+                        val cycleSubtitle = if (monthlyEq.compareTo(subscription.amount) == 0) {
+                            cycleLabel
+                        } else {
+                            "$cycleLabel · ≈ ${CurrencyFormatter.formatCurrency(monthlyEq, subscription.currency)}/mo"
+                        }
+                        Text(
+                            text = cycleSubtitle,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (isOverdue) MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f)
+                                    else MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                         )
                         if (subscription.nextPaymentDate != null) {
                             Text(
