@@ -70,4 +70,45 @@ class SubscriptionUtilsFormatBillingCycleTest {
     fun `custom cycle with valid count but invalid unit falls back to monthly`() {
         assertEquals("Monthly", SubscriptionUtils.formatBillingCycle("custom_2_decade"))
     }
+
+    @Test
+    fun `cycle subtitle for monthly returns just the cycle label`() {
+        val subtitle = SubscriptionUtils.cycleSubtitle(
+            amount = java.math.BigDecimal("500"),
+            currency = "INR",
+            billingCycle = "monthly"
+        )
+        assertEquals("Monthly", subtitle)
+    }
+
+    @Test
+    fun `cycle subtitle for non-monthly appends the per-month equivalent`() {
+        val subtitle = SubscriptionUtils.cycleSubtitle(
+            amount = java.math.BigDecimal("1390"),
+            currency = "INR",
+            billingCycle = "annual"
+        )
+        // 1390 / 12 = 115.83
+        assertEquals("Annual · ≈ ₹115.83/mo", subtitle)
+    }
+
+    @Test
+    fun `cycle subtitle for custom cycle with valid count appends per-month equivalent`() {
+        val subtitle = SubscriptionUtils.cycleSubtitle(
+            amount = java.math.BigDecimal("100"),
+            currency = "INR",
+            billingCycle = "custom_2_week"
+        )
+        assertEquals("Every 2 weeks · ≈ ₹216.67/mo", subtitle)
+    }
+
+    @Test
+    fun `cycle subtitle for malformed custom cycle returns just Monthly`() {
+        val subtitle = SubscriptionUtils.cycleSubtitle(
+            amount = java.math.BigDecimal("250"),
+            currency = "INR",
+            billingCycle = "custom_abc_day"
+        )
+        assertEquals("Monthly", subtitle)
+    }
 }

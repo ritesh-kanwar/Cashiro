@@ -41,6 +41,16 @@ object SubscriptionUtils {
         }
     }
 
+    fun cycleSubtitle(amount: BigDecimal, currency: String, billingCycle: String?): String {
+        val cycleLabel = formatBillingCycle(billingCycle)
+        val monthlyEq = monthlyEquivalent(amount, billingCycle)
+        return if (monthlyEq.compareTo(amount) == 0) {
+            cycleLabel
+        } else {
+            "$cycleLabel · ≈ ${CurrencyFormatter.formatCurrency(monthlyEq, currency)}/mo"
+        }
+    }
+
     fun monthlyEquivalent(amount: BigDecimal, billingCycle: String?): BigDecimal {
         val cycle = billingCycle?.lowercase() ?: "monthly"
 

@@ -744,8 +744,8 @@ private fun PaymentStatusBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 40.dp),
+                .padding(horizontal = Spacing.lg)
+                .padding(bottom = Spacing.xl + Spacing.sm),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -764,7 +764,7 @@ private fun PaymentStatusBottomSheet(
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.surfaceVariant.copy(0.5f))
                         .clickable { onEdit() }
-                        .padding(8.dp)
+                        .padding(Spacing.sm)
                 ) {
                     Icon(
                         imageVector =Iconax.Edit2,
@@ -775,8 +775,8 @@ private fun PaymentStatusBottomSheet(
                 }
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
-            
+            Spacer(modifier = Modifier.height(Spacing.md))
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -785,8 +785,8 @@ private fun PaymentStatusBottomSheet(
                 shape = MaterialTheme.shapes.large
             ) {
                 Row(
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(Spacing.md).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.md),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     BrandIcon(
@@ -815,19 +815,17 @@ private fun PaymentStatusBottomSheet(
                             fontWeight = FontWeight.Bold,
                             color = if (isOverdue) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSecondaryContainer
                         )
-                        val cycleLabel = SubscriptionUtils.formatBillingCycle(subscription.billingCycle)
                         val displayAmount = convertedAmount ?: subscription.amount
                         val displayCurrency = if (convertedAmount != null) {
                             targetCurrency ?: subscription.currency
                         } else {
                             subscription.currency
                         }
-                        val monthlyEq = SubscriptionUtils.monthlyEquivalent(displayAmount, subscription.billingCycle)
-                        val cycleSubtitle = if (monthlyEq.compareTo(displayAmount) == 0) {
-                            cycleLabel
-                        } else {
-                            "$cycleLabel · ≈ ${CurrencyFormatter.formatCurrency(monthlyEq, displayCurrency)}/mo"
-                        }
+                        val cycleSubtitle = SubscriptionUtils.cycleSubtitle(
+                            amount = displayAmount,
+                            currency = displayCurrency,
+                            billingCycle = subscription.billingCycle
+                        )
                         Text(
                             text = cycleSubtitle,
                             style = MaterialTheme.typography.bodySmall,
@@ -847,19 +845,19 @@ private fun PaymentStatusBottomSheet(
                 }
             }
             
-            Spacer(modifier = Modifier.height(24.dp))
-            
+            Spacer(modifier = Modifier.height(Spacing.lg))
+
             Text(
                 text = "Is this subscription paid?",
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center
             )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
+
+            Spacer(modifier = Modifier.height(Spacing.lg))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
                 OutlinedButton(
                     onClick = onDismiss,
@@ -877,8 +875,8 @@ private fun PaymentStatusBottomSheet(
             }
             
             if (!subscription.smsBody.isNullOrBlank()) {
-                Spacer(modifier = Modifier.height(24.dp))
-                
+                Spacer(modifier = Modifier.height(Spacing.lg))
+
                 TextButton(
                     onClick = { showSmsBody = !showSmsBody }
                 ) {
@@ -887,13 +885,13 @@ private fun PaymentStatusBottomSheet(
                             imageVector = if (showSmsBody) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
                             contentDescription = null
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(Spacing.sm))
                         Text(if (showSmsBody) "Hide Original Message" else "Show Original Message")
                     }
                 }
-                
+
                 if (showSmsBody) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(Spacing.sm))
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.surfaceVariant,
