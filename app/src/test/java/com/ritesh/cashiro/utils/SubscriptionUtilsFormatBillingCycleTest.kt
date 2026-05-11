@@ -2,6 +2,7 @@ package com.ritesh.cashiro.utils
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.math.BigDecimal
 
 class SubscriptionUtilsFormatBillingCycleTest {
 
@@ -74,7 +75,7 @@ class SubscriptionUtilsFormatBillingCycleTest {
     @Test
     fun `cycle subtitle for monthly returns just the cycle label`() {
         val subtitle = SubscriptionUtils.cycleSubtitle(
-            amount = java.math.BigDecimal("500"),
+            amount = BigDecimal("500"),
             currency = "INR",
             billingCycle = "monthly"
         )
@@ -84,7 +85,7 @@ class SubscriptionUtilsFormatBillingCycleTest {
     @Test
     fun `cycle subtitle for non-monthly appends the per-month equivalent`() {
         val subtitle = SubscriptionUtils.cycleSubtitle(
-            amount = java.math.BigDecimal("1390"),
+            amount = BigDecimal("1390"),
             currency = "INR",
             billingCycle = "annual"
         )
@@ -95,17 +96,18 @@ class SubscriptionUtilsFormatBillingCycleTest {
     @Test
     fun `cycle subtitle for custom cycle with valid count appends per-month equivalent`() {
         val subtitle = SubscriptionUtils.cycleSubtitle(
-            amount = java.math.BigDecimal("100"),
+            amount = BigDecimal("100"),
             currency = "INR",
             billingCycle = "custom_2_week"
         )
+        // 100 * 52 / 12 / 2 = 216.67
         assertEquals("Every 2 weeks · ≈ ₹216.67/mo", subtitle)
     }
 
     @Test
     fun `cycle subtitle for malformed custom cycle returns just Monthly`() {
         val subtitle = SubscriptionUtils.cycleSubtitle(
-            amount = java.math.BigDecimal("250"),
+            amount = BigDecimal("250"),
             currency = "INR",
             billingCycle = "custom_abc_day"
         )
