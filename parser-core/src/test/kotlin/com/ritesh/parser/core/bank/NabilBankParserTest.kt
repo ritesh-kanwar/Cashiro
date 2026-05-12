@@ -4,6 +4,9 @@ import com.ritesh.parser.core.TransactionType
 import com.ritesh.parser.core.test.ExpectedTransaction
 import com.ritesh.parser.core.test.ParserTestCase
 import com.ritesh.parser.core.test.ParserTestUtils
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -41,5 +44,27 @@ Download App: https://rebrand.ly/nBank""",
         )
 
         ParserTestUtils.runTestSuite(parser, cases, handleCases, "Nabil Bank Parser Tests")
+    }
+
+    @Test
+    fun `nabil parser only extracts account last4 from account-like context`() {
+        val parser = NabilBankParser()
+
+        val accountLikeMessage = parser.parse(
+            "Dear Customer, Your 091##04118 has been withdrawn by NPR 20,008.00 on 17/04/2026 07:58:06, Remarks: MTXN0000517374-130",
+            "NABIL_ALERT",
+            System.currentTimeMillis()
+        )
+
+        assertNotNull(accountLikeMessage)
+        assertEquals("4118", accountLikeMessage?.accountLast4)
+
+        assertNull(
+            parser.parse(
+                "Dear Customer, NPR 20,008.00 was debited on 17/04/2026 07:58:06, Remarks: MTXN0000517374-130",
+                "NABIL_ALERT",
+                System.currentTimeMillis()
+            )?.accountLast4
+        )
     }
 }

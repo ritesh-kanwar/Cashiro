@@ -8,6 +8,33 @@ import java.math.BigDecimal
  */
 class NabilBankParser : BankParser() {
 
+    companion object {
+        private val accountKeywordPatterns = listOf(
+            Regex(
+                """(?i)\b(?:acct|a/c|account|card|ending|last)\b(?:\s+(?:no\.?|number))?[\s:.#\-]*([0-9]{4,})\b"""
+            ),
+            Regex(
+                """(?i)\b(?:no\.?|number)\b[\s:.#\-]*([0-9]{4,})\b"""
+            )
+        )
+
+        private val fallbackPattern = Regex(
+            """(?<![A-Za-z0-9/₹$€£])([0-9]{4,})(?![A-Za-z0-9/₹$€£])"""
+        )
+
+        private val moneyContextWords = listOf(
+            "npr",
+            "rs",
+            "rs.",
+            "inr",
+            "usd",
+            "eur",
+            "gbp",
+            "amount",
+            "balance"
+        )
+    }
+
     override fun getBankName() = "Nabil Bank"
 
     override fun getCurrency() = "NPR"
@@ -48,13 +75,27 @@ class NabilBankParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
-        // Look for visible digit groups and return last 4
-        val digitPattern = Regex("""(\d{4,})""")
-        digitPattern.findAll(message).forEach { match ->
-            val num = match.groupValues[1]
-            if (num.length >= 4) return num.takeLast(4)
+        val normalizedMessage = message.replace('\u00A0', ' ')
+
+        accountKeywordPatterns.forEach { pattern ->
+            pattern.find(normalizedMessage)?.let { match ->
+                return match.groupValues[1].takeLast(4)
+            }
         }
-        return super.extractAccountLast4(message)
+
+        fallbackPattern.findAll(normalizedMessage).forEach { match ->
+            if (isLikelyAccountContext(normalizedMessage, match.range.first)) {
+                return match.groupValues[1].takeLast(4)
+            }
+        }
+
+        return null
+    }
+
+    private fun isLikelyAccountContext(message: String, startIndex: Int): Boolean {
+        val prefix = message.substring(maxOf(0, startIndex - 24), startIndex).lowercase()
+
+        return moneyContextWords.none { prefix.contains(it) }
     }
 
 }
