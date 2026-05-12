@@ -63,10 +63,14 @@ Your parser will not be used until it is registered in the factory.
 To ensure the bank logo appears in the transaction list:
 
 1.  **Icon Resource**: Add a logo file (PNG/WebP) to `app/src/main/res/drawable-nodpi/`.
-    *   **Naming Convention**: `ic_brand_new_bank.png`
+    *   **Naming Convention**: `ic_brand_new_bank.webp`
+    *   **Example**: `ic_brand_nabil_bank.webp`, `ic_brand_manjushree_finance.webp`
 2.  **Icon Mapping**: Update `app/src/main/java/com/ritesh/cashiro/presentation/common/icons/BrandIcons.kt`.
     *   Add entry to `brandMappings`: `"new bank" to R.drawable.ic_brand_new_bank`
 3.  **Brand Color**: In the same file, add the bank's primary color to the `getBrandColor` function.
+
+> [!NOTE]
+> For banks with separate branding, add separate assets and mappings instead of reusing another bank's logo.
 
 ---
 

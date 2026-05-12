@@ -94,9 +94,9 @@ Supporting **80+ banks** across **14 countries** with **multi-currency** capabil
 - **First Abu Dhabi Bank (FAB)**, **Abu Dhabi Commercial Bank (ADCB)**
 - **Emirates NBD**, **Liv Bank**, **Mashreq Bank**
 
-### 🇳🇵 Nepal (5 banks) - NPR ₨
-- **Laxmi Sunrise Bank**, **Everest Bank**, **NMB Bank (Nabil Bank)**
-- **Siddhartha Bank**, **Prime Commercial Bank**
+### 🇳🇵 Nepal (7 banks) - NPR ₨
+- **Laxmi Sunrise Bank**, **Everest Bank**, **NMB Bank**, **Nabil Bank**
+- **Manjushree Finance**, **Siddhartha Bank**, **Prime Commercial Bank**
 
 ### 🇹🇭 Thailand (11 banks/cards) - THB ฿
 - **Bangkok Bank**, **Kasikorn Bank**, **Siam Commercial Bank**, **Krungthai Bank**
