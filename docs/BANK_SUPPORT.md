@@ -44,7 +44,9 @@
 | **Bank Muscat** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Everest Bank** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **AU Bank** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **NMB/Nabil Bank** | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **NMB Bank** | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Nabil Bank** | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Manjushree Finance** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Alinma Bank** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Dashnep Bank** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Zemen Bank** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -194,7 +196,9 @@
 | **Alinma Bank** | `AlinmaBank`, `ALINMA` |
 | **Bancolombia** | `Bancolombi`, `Bancolombia` |
 | **CIB Egypt** | `CIB Egypt`, `CIB_Alert`, `CIBBank` |
-| **NMB Bank** | `NMBBank`, `NABIL` |
+| **NMB Bank** | `NMBBank`, `NMB_ALERT`, `NMBBANK` |
+| **Nabil Bank** | `NABIL`, `NABIL_ALERT`, `NABILBANK` |
+| **Manjushree Finance** | `MFL`, `MFL_ALERT`, `MANJUSHREE` |
 | **AU Bank** | `AU-BNK`, `AUBANK`, `AU-SMALL` |
 | **Everest Bank** | `EverestBnk`, `EBL`, `EBL_Alert` |
 | **Mashreq Bank** | `Mashreq`, `MashreqBank` |

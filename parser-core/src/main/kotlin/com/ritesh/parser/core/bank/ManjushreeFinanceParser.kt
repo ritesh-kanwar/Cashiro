@@ -48,7 +48,7 @@ class ManjushreeFinanceParser : BankParser() {
             if (isValidMerchantName(cleaned)) return cleaned
         }
 
-        return "Manjushree Finance"
+        return super.extractMerchant(message, sender)
     }
 
 }

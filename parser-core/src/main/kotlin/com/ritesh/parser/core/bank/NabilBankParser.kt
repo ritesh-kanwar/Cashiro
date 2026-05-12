@@ -21,18 +21,6 @@ class NabilBankParser : BankParser() {
         private val fallbackPattern = Regex(
             """(?<![A-Za-z0-9/₹$€£])([0-9]{4,})(?![A-Za-z0-9/₹$€£])"""
         )
-
-        private val moneyContextWords = listOf(
-            "npr",
-            "rs",
-            "rs.",
-            "inr",
-            "usd",
-            "eur",
-            "gbp",
-            "amount",
-            "balance"
-        )
     }
 
     override fun getBankName() = "Nabil Bank"
@@ -79,23 +67,21 @@ class NabilBankParser : BankParser() {
 
         accountKeywordPatterns.forEach { pattern ->
             pattern.find(normalizedMessage)?.let { match ->
-                return match.groupValues[1].takeLast(4)
+                val last4 = match.groupValues[1].takeLast(4)
+                if (super.isValidAccountLast4(last4, match.value, normalizedMessage)) {
+                    return last4
+                }
             }
         }
 
         fallbackPattern.findAll(normalizedMessage).forEach { match ->
-            if (isLikelyAccountContext(normalizedMessage, match.range.first)) {
-                return match.groupValues[1].takeLast(4)
+            val last4 = match.groupValues[1].takeLast(4)
+            if (super.isValidAccountLast4(last4, match.value, normalizedMessage)) {
+                return last4
             }
         }
 
         return null
-    }
-
-    private fun isLikelyAccountContext(message: String, startIndex: Int): Boolean {
-        val prefix = message.substring(maxOf(0, startIndex - 24), startIndex).lowercase()
-
-        return moneyContextWords.none { prefix.contains(it) }
     }
 
 }

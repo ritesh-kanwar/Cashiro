@@ -324,7 +324,7 @@ abstract class BankParser {
      * Validates that the extracted 4 digits are actually part of an account number,
      * not a date, RRN, or other numeric field.
      */
-    private fun isValidAccountLast4(last4: String, matchedText: String, fullMessage: String): Boolean {
+    protected open fun isValidAccountLast4(last4: String, matchedText: String, fullMessage: String): Boolean {
         // Escape the last4 for safe regex usage
         val escapedLast4 = Regex.escape(last4)
 

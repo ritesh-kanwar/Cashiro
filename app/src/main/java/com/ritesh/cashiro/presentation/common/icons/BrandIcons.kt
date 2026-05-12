@@ -229,7 +229,9 @@ object BrandIcons {
         // Banks - Nepal
         "laxmi sunrise" to R.drawable.ic_brand_laxmi_sunrise_bank,
         "nmb bank" to R.drawable.ic_brand_nmb_bank,
-        "nabil bank" to R.drawable.ic_brand_nmb_bank,
+        "nabil bank" to R.drawable.ic_brand_nabil_bank,
+        "nabil" to R.drawable.ic_brand_nabil_bank,
+        "manjushree finance" to R.drawable.ic_brand_manjushree_finance,
         "siddhartha bank" to R.drawable.ic_brand_siddhartha_bank,
         // Banks - Africa / Mobile Money
         "m-pesa" to R.drawable.ic_brand_mpesa,
@@ -298,6 +300,8 @@ object BrandIcons {
         merchantName.contains("mbank", ignoreCase = true) -> "#ED1C24"
         merchantName.contains("al rajhi", ignoreCase = true) -> "#0066CC"
         merchantName.contains("chase", ignoreCase = true) -> "#117ACA"
+        merchantName.contains("nabil", ignoreCase = true) -> "#25A64C"
+        merchantName.contains("manjushree", ignoreCase = true) -> "#EF2F1A"
         merchantName.contains("tbank", ignoreCase = true) || 
         merchantName.contains("t-bank", ignoreCase = true) ||
         merchantName.contains("tinkoff", ignoreCase = true) -> "#FFDD2D"
