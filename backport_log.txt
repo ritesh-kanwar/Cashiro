@@ -11573,3 +11573,21 @@ Patch failed at 0001 fix: share budget-impact reducer between single- and unifie
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0262-fix-share-budget-impact-reducer-between-single-and-u.patch:175
 error: corrupt patch at ../filtered_patches/0262-fix-share-budget-impact-reducer-between-single-and-u.patch:175
+[backport-fixes-upstream 2ce16f13] fix: share budget-impact reducer between single- and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu May 14 00:42:20 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0263-fix-reflect-Refund-DEDUCT_SPENT-in-the-cumulative-sp.patch
+Applying: fix: reflect Refund (DEDUCT_SPENT) in the cumulative spending pace chart
+error: corrupt patch at .git/rebase-apply/patch:35
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: reflect Refund (DEDUCT_SPENT) in the cumulative spending pace chart
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0263-fix-reflect-Refund-DEDUCT_SPENT-in-the-cumulative-sp.patch:51
+error: corrupt patch at ../filtered_patches/0263-fix-reflect-Refund-DEDUCT_SPENT-in-the-cumulative-sp.patch:51
