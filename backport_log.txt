@@ -11555,3 +11555,21 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBank
 Checking patch parser-core/src/test/kotlin/TestKotakBankParser.kt...
 error: parser-core/src/test/kotlin/TestKotakBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/KotakBankParser.kt cleanly.
+[backport-fixes-upstream 97d59d9] fix: anchor Kotak "sent" rule on "sent rs" to avoid
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed May 13 23:27:50 2026 +0530
+ 2 files changed, 28 insertions(+), 3 deletions(-)
+===================================
+Applying 0262-fix-share-budget-impact-reducer-between-single-and-u.patch
+Applying: fix: share budget-impact reducer between single- and unified-currency paths
+error: corrupt patch at .git/rebase-apply/patch:150
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: share budget-impact reducer between single- and unified-currency paths
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0262-fix-share-budget-impact-reducer-between-single-and-u.patch:175
+error: corrupt patch at ../filtered_patches/0262-fix-share-budget-impact-reducer-between-single-and-u.patch:175
