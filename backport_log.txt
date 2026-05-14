@@ -11591,3 +11591,21 @@ Patch failed at 0001 fix: reflect Refund (DEDUCT_SPENT) in the cumulative spendi
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0263-fix-reflect-Refund-DEDUCT_SPENT-in-the-cumulative-sp.patch:51
 error: corrupt patch at ../filtered_patches/0263-fix-reflect-Refund-DEDUCT_SPENT-in-the-cumulative-sp.patch:51
+[backport-fixes-upstream bd52bb28] fix: reflect Refund (DEDUCT_SPENT) in the cumulative
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu May 14 01:20:31 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0264-fix-carry-pace-chart-running-total-unclamped-so-refu.patch
+Applying: fix: carry pace-chart running total unclamped so refund-first months still subtract
+error: corrupt patch at .git/rebase-apply/patch:31
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: carry pace-chart running total unclamped so refund-first months still subtract
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0264-fix-carry-pace-chart-running-total-unclamped-so-refu.patch:48
+error: corrupt patch at ../filtered_patches/0264-fix-carry-pace-chart-running-total-unclamped-so-refu.patch:48
