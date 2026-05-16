@@ -11627,3 +11627,21 @@ Patch failed at 0001 fix: exclude categorised Refunds from totalIncome and use s
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0270-fix-exclude-categorised-Refunds-from-totalIncome-and.patch:59
 error: corrupt patch at ../filtered_patches/0270-fix-exclude-categorised-Refunds-from-totalIncome-and.patch:59
+[backport-fixes-upstream abae468c] fix: exclude categorised Refunds from totalIncome and
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Fri May 15 01:56:34 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0271-feat-let-users-mark-a-partial-loan-amount-when-taggi.patch
+Applying: feat: let users mark a partial loan amount when tagging a transaction
+error: corrupt patch at .git/rebase-apply/patch:1867
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: let users mark a partial loan amount when tagging a transaction
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0271-feat-let-users-mark-a-partial-loan-amount-when-taggi.patch:1896
+error: corrupt patch at ../filtered_patches/0271-feat-let-users-mark-a-partial-loan-amount-when-taggi.patch:1896
