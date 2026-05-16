@@ -11645,3 +11645,21 @@ Patch failed at 0001 feat: let users mark a partial loan amount when tagging a t
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0271-feat-let-users-mark-a-partial-loan-amount-when-taggi.patch:1896
 error: corrupt patch at ../filtered_patches/0271-feat-let-users-mark-a-partial-loan-amount-when-taggi.patch:1896
+[backport-fixes-upstream 882e5712] feat: let users mark a partial loan amount when
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat May 16 16:54:50 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0272-fix-thread-partial-loan-amount-through-the-repayment.patch
+Applying: fix: thread partial loan amount through the repayment branch and sync getInstance migration list
+error: corrupt patch at .git/rebase-apply/patch:66
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: thread partial loan amount through the repayment branch and sync getInstance migration list
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0272-fix-thread-partial-loan-amount-through-the-repayment.patch:91
+error: corrupt patch at ../filtered_patches/0272-fix-thread-partial-loan-amount-through-the-repayment.patch:91
