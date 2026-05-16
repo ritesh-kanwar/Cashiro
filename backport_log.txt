@@ -11663,3 +11663,21 @@ Patch failed at 0001 fix: thread partial loan amount through the repayment branc
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0272-fix-thread-partial-loan-amount-through-the-repayment.patch:91
 error: corrupt patch at ../filtered_patches/0272-fix-thread-partial-loan-amount-through-the-repayment.patch:91
+[backport-fixes-upstream 6435a7be] fix: thread partial loan amount through the repayment
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sat May 16 17:15:44 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0274-fix-move-balances-between-accounts-on-TRANSFER-save.patch
+Applying: fix: move balances between accounts on TRANSFER save
+error: corrupt patch at .git/rebase-apply/patch:59
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: move balances between accounts on TRANSFER save
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0274-fix-move-balances-between-accounts-on-TRANSFER-save.patch:83
+error: corrupt patch at ../filtered_patches/0274-fix-move-balances-between-accounts-on-TRANSFER-save.patch:83
