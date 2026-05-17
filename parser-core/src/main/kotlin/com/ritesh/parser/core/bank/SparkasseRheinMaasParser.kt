@@ -3,6 +3,37 @@ package com.ritesh.parser.core.bank
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
 
+<<<<<<< ours
+=======
+/**
+ * Parser for Sparkasse Rhein-Maas (Germany) SMS notifications.
+ *
+ * Sender: "Sparkasse"
+ * Currency: EUR
+ *
+ * Supported message types ("Wecker" = alarm / push notification):
+ *  - Kartenwecker      -> card purchase (EXPENSE), signed negative amount.
+ *      Kartenwecker:
+ *      1 neuer Kartenumsatz auf dem Konto *NNNN:
+ *      MERCHANT: -70,85 EUR
+ *      Neuer Saldo: 991,84 EUR
+ *      Ihre Sparkasse
+ *
+ *  - Gehaltswecker     -> salary credit (INCOME), unsigned amount.
+ *      Gehaltswecker:
+ *      Gehalt ist auf Konto *NNNN eingegangen:
+ *      SOURCE: 1.415,62 EUR
+ *      Neuer Saldo: 1.415,67 EUR
+ *      Ihre Sparkasse
+ *
+ *  - Kontostandswecker -> pure balance notification, no transaction amount/merchant.
+ *      Rejected via isTransactionMessage so the base parse() returns null.
+ *
+ * Notes on number formatting (German locale):
+ *  - `.` is the thousands separator, `,` is the decimal separator.
+ *  - Strip `.` and replace `,` with `.` before constructing BigDecimal.
+ */
+>>>>>>> theirs
 class SparkasseRheinMaasParser : BankParser() {
 
     override fun getBankName() = "Sparkasse Rhein-Maas"
@@ -16,6 +47,10 @@ class SparkasseRheinMaasParser : BankParser() {
     override fun isTransactionMessage(message: String): Boolean {
         val lower = message.lowercase()
 
+<<<<<<< ours
+=======
+        // Skip OTP / verification codes if they ever appear.
+>>>>>>> theirs
         if (lower.contains("otp") ||
             lower.contains("tan") && lower.contains("code") ||
             lower.contains("verifizierungscode")
@@ -23,14 +58,27 @@ class SparkasseRheinMaasParser : BankParser() {
             return false
         }
 
+<<<<<<< ours
+=======
+        // Kontostandswecker = balance-only push, no parseable transaction.
+>>>>>>> theirs
         if (lower.contains("kontostandswecker")) {
             return false
         }
 
+<<<<<<< ours
+=======
+        // Must be one of the known transaction "Wecker" variants.
+>>>>>>> theirs
         return lower.contains("kartenwecker") || lower.contains("gehaltswecker")
     }
 
     override fun extractAmount(message: String): BigDecimal? {
+<<<<<<< ours
+=======
+        // Find the first transaction line of the form "<label>: [+/-]<number> EUR"
+        // and explicitly skip the "Neuer Saldo:" balance line.
+>>>>>>> theirs
         val transactionLine = findTransactionLine(message) ?: return null
         val amountMatch = TRANSACTION_AMOUNT_REGEX.find(transactionLine) ?: return null
         val raw = amountMatch.groupValues[2]
@@ -43,6 +91,10 @@ class SparkasseRheinMaasParser : BankParser() {
             return TransactionType.INCOME
         }
 
+<<<<<<< ours
+=======
+        // Fall back to the sign on the amount line.
+>>>>>>> theirs
         val transactionLine = findTransactionLine(message)
         if (transactionLine != null) {
             val signMatch = TRANSACTION_AMOUNT_REGEX.find(transactionLine)
@@ -59,6 +111,10 @@ class SparkasseRheinMaasParser : BankParser() {
 
     override fun extractMerchant(message: String, sender: String): String? {
         val transactionLine = findTransactionLine(message) ?: return null
+<<<<<<< ours
+=======
+        // Merchant is everything before the colon on the transaction line.
+>>>>>>> theirs
         val colonIdx = transactionLine.indexOf(':')
         if (colonIdx <= 0) return null
         val candidate = transactionLine.substring(0, colonIdx).trim()
@@ -67,6 +123,10 @@ class SparkasseRheinMaasParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
+<<<<<<< ours
+=======
+        // Pattern: "Konto *1832"
+>>>>>>> theirs
         ACCOUNT_REGEX.find(message)?.let { match ->
             return extractLast4Digits(match.groupValues[1])
         }
@@ -85,6 +145,12 @@ class SparkasseRheinMaasParser : BankParser() {
                 message.lowercase().contains("kartenumsatz")
     }
 
+<<<<<<< ours
+=======
+    /**
+     * Returns the first non-balance line that contains a `<label>: <amount> EUR` payload.
+     */
+>>>>>>> theirs
     private fun findTransactionLine(message: String): String? {
         for (rawLine in message.lines()) {
             val line = rawLine.trim()
@@ -98,6 +164,10 @@ class SparkasseRheinMaasParser : BankParser() {
     }
 
     private fun parseGermanNumber(raw: String): BigDecimal? {
+<<<<<<< ours
+=======
+        // German format: "1.415,62" -> "1415.62"; "70,85" -> "70.85"
+>>>>>>> theirs
         val normalized = raw
             .replace(".", "")
             .replace(",", ".")
@@ -109,16 +179,29 @@ class SparkasseRheinMaasParser : BankParser() {
     }
 
     companion object {
+<<<<<<< ours
+=======
+        // Matches "[+/-]<german-number> EUR" anywhere on the line.
+        // Group 1: optional sign. Group 2: the numeric body (with German separators).
+>>>>>>> theirs
         private val TRANSACTION_AMOUNT_REGEX = Regex(
             """([+-])?\s*(\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?|\d+(?:,\d{1,2})?)\s*EUR""",
             RegexOption.IGNORE_CASE
         )
 
+<<<<<<< ours
+=======
+        // "Neuer Saldo: 991,84 EUR" or "Neuer Saldo 991,84 EUR"
+>>>>>>> theirs
         private val BALANCE_REGEX = Regex(
             """Neuer\s+Saldo:?\s*([+-]?\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?|\d+(?:,\d{1,2})?)\s*EUR""",
             RegexOption.IGNORE_CASE
         )
 
+<<<<<<< ours
+=======
+        // "Konto *1832" - capture the digits after the asterisk.
+>>>>>>> theirs
         private val ACCOUNT_REGEX = Regex(
             """Konto\s*\*+\s*(\d{3,})""",
             RegexOption.IGNORE_CASE

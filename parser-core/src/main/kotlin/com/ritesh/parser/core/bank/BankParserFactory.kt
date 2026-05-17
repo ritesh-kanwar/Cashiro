@@ -150,9 +150,13 @@ object BankParserFactory {
 >>>>>>> theirs
         MBankCZParser(),  // mBank CZ (Czech Republic)
 <<<<<<< ours
+<<<<<<< ours
         BankMuscatParser()  // Bank Muscat (Oman)
 >>>>>>> theirs
 =======
+=======
+        SparkasseRheinMaasParser(),  // Sparkasse Rhein-Maas (Germany)
+>>>>>>> theirs
         BankMuscatParser(),  // Bank Muscat (Oman)
         GreaterBankParser()  // Greater Bank (India)
 >>>>>>> theirs

@@ -11783,3 +11783,50 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SabbBankP
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SabbBankParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 600bb16a] feat: add SABB (Saudi Awwal Bank) SMS parser
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon May 18 00:08:00 2026 +0530
+ 5 files changed, 168 insertions(+), 85 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0278-feat-add-Sparkasse-Rhein-Maas-Germany-SMS-parser.patch
+Applying: feat: add Sparkasse Rhein-Maas (Germany) SMS parser
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Sparkasse Rhein-Maas (Germany) SMS parser
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParserTest.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParser.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        STCBankParser(),  // STC Bank (Saudi Arabia)
+        SabbBankParser(),  // SABB - Saudi Awwal Bank (Saudi Arabia)
+        MBankCZParser(),  // mBank CZ (Czech Republic)
+        BankMuscatParser(),  // Bank Muscat (Oman)
+        GreaterBankParser()  // Greater Bank (India)
+        // Add more bank parsers here as we implement them
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:105
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
