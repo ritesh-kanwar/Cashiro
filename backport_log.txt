@@ -11681,3 +11681,55 @@ Patch failed at 0001 fix: move balances between accounts on TRANSFER save
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0274-fix-move-balances-between-accounts-on-TRANSFER-save.patch:83
 error: corrupt patch at ../filtered_patches/0274-fix-move-balances-between-accounts-on-TRANSFER-save.patch:83
+[backport-fixes-upstream 48e8bc10] fix: move balances between accounts on TRANSFER save
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun May 17 02:11:09 2026 +0530
+ 1 file changed, 18 insertions(+)
+===================================
+Applying 0275-fix-address-Greptile-findings-on-TRANSFER-balance-up.patch
+Applying: fix: address Greptile findings on TRANSFER balance update
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: address Greptile findings on TRANSFER balance update
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt:1
+error: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt...
+error: while searching for:
+package com.ritesh.cashiro.data.repository
+
+import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.ProfileEntity
+import kotlinx.coroutines.flow.Flow
+import java.math.BigDecimal
+import java.time.LocalDateTime
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt:1
+error: while searching for:
+
+@Singleton
+class AccountBalanceRepository @Inject constructor(
+    private val accountBalanceDao: AccountBalanceDao
+) {
+    
+    suspend fun insertBalance(balance: AccountBalanceEntity): Long {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt:11
+error: while searching for:
+    suspend fun setAccountProfile(bankName: String, accountLast4: String, profileId: Long): Int {
+        return accountBalanceDao.setAccountProfile(bankName, accountLast4, profileId)
+    }
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt:164
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
