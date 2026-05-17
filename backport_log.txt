@@ -11733,3 +11733,53 @@ Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalan
 Rejected hunk #1.
 Rejected hunk #2.
 Rejected hunk #3.
+[backport-fixes-upstream b585a3d8] fix: address Greptile findings on TRANSFER balance
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Sun May 17 13:49:18 2026 +0530
+ 2 files changed, 137 insertions(+)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt.rej
+===================================
+Applying 0276-docs-add-TRADEMARKS.md-declaring-brand-assets-outsid.patch
+Applying: docs: add TRADEMARKS.md declaring brand assets outside AGPL grant
+Successfully applied via git am
+===================================
+Applying 0277-feat-add-SABB-Saudi-Awwal-Bank-SMS-parser.patch
+Applying: feat: add SABB (Saudi Awwal Bank) SMS parser
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SabbBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SabbBankParser.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add SABB (Saudi Awwal Bank) SMS parser
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SabbBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SabbBankParserTest.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SabbBankParser.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
+        SNBAlAhliBankParser(),  // Saudi National Bank / Al Ahli Bank (Saudi Arabia)
+        STCBankParser(),  // STC Bank (Saudi Arabia)
+        MBankCZParser(),  // mBank CZ (Czech Republic)
+        BankMuscatParser(),  // Bank Muscat (Oman)
+        GreaterBankParser()  // Greater Bank (India)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:103
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SabbBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SabbBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SabbBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SabbBankParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
