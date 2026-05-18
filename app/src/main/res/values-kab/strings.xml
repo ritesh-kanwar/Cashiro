@@ -6,12 +6,12 @@
     <string name="add_subscription">Add Subscription</string>
     <string name="add_transfer">Add Transfer</string>
     <!-- Add Screen -->
-    <string name="add_new">Add New</string>
+    <string name="add_new">Rnu amaynut</string>
     <string name="transaction">Transaction</string>
     <string name="subscription">Subscription</string>
     <!-- Data Privacy Screen -->
     <string name="data_privacy_title">Data Privacy</string>
-    <string name="security_section">Security</string>
+    <string name="security_section">Taɣellist</string>
     <string name="app_lock">App Lock</string>
     <string name="app_lock_biometric_sub">Protect your data with biometric authentication</string>
     <string name="lock_timeout">Lock Timeout</string>
@@ -30,7 +30,7 @@
     <string name="immediately">Immediately</string>
     <string name="one_minute">1 minute</string>
     <string name="minutes_format">%1$d minutes</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Semmet</string>
     <string name="export">Export</string>
     <string name="select_data_to_backup">Select data to backup:</string>
     <string name="transactional_data">Transactional Data</string>
@@ -39,12 +39,12 @@
     <string name="app_preferences">App Preferences</string>
     <!-- NumberPad -->
     <string name="enter_amount">Enter Amount</string>
-    <string name="done">Done</string>
+    <string name="done">Yemmug</string>
     <string name="backspace">Backspace</string>
     <!-- Merge Accounts Dialogs -->
     <string name="merge_accounts_title">Merge Accounts</string>
     <string name="merge_accounts_desc">Select accounts to merge into %1$s (...%2$s). Selected accounts will be deleted after merging.</string>
-    <string name="next">Next</string>
+    <string name="next">Uḍfiṛ</string>
     <string name="update_balance_title">Update Balance?</string>
     <string name="merge_option_sum">Sum available balances</string>
     <string name="merge_option_sum_desc">New balance: %1$s</string>
@@ -61,17 +61,17 @@
     <string name="no_balance_history_available">No balance history available</string>
     <string name="delete_balance_record_title">Delete Balance Record</string>
     <string name="delete_balance_record_confirm">Are you sure you want to delete this balance record? This action cannot be undone.</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
+    <string name="delete">Kkes</string>
+    <string name="edit">Ẓreg</string>
     <string name="new_balance_label">New Balance</string>
-    <string name="save">Save</string>
+    <string name="save">Sekles</string>
     <string name="source_transaction">Transaction</string>
     <string name="source_sms">SMS</string>
     <string name="source_card_link">Card Link</string>
     <string name="source_manual">Manual</string>
-    <string name="source_system">System</string>
+    <string name="source_system">Anagraw</string>
     <string name="sms_source">SMS Source</string>
-    <string name="copy">Copy</string>
+    <string name="copy">Nɣel</string>
     <!-- AccountDetailScreen -->
     <string name="account_details">Account Details</string>
     <string name="transactions_count">Transactions (%1$d)</string>
@@ -90,7 +90,7 @@
     <string name="add_account_info">Add accounts not tracked via SMS like cash, wallets, or investment accounts.</string>
     <string name="account_type_label">Account Type</string>
     <string name="account_icon_label">Account Icon</string>
-    <string name="account_name_required_label">Account Name *</string>
+    <string name="account_name_required_label">Isem n uimḍan *</string>
     <string name="placeholder_bank_name">e.g., HDFC Bank</string>
     <string name="placeholder_credit_name">e.g., HDFC Credit Card</string>
     <string name="placeholder_wallet_name">e.g., Cash</string>
@@ -111,20 +111,20 @@
     <string name="type_bank">Bank</string>
     <string name="type_card">Card</string>
     <string name="type_wallet">Wallet</string>
-    <string name="preview_bank_name">Bank Name</string>
+    <string name="preview_bank_name">Isem n tabanka</string>
     <string name="preview_label">Preview</string>
     <string name="outstanding_label">Outstanding</string>
     <string name="balance_label">Balance</string>
     <string name="available_credit_label">Available Credit: %1$s</string>
     <string name="utilization_label">Utilization: %1$d%%</string>
     <string name="wallet_name_label">Wallet Name</string>
-    <string name="bank_name_label">Bank Name</string>
+    <string name="bank_name_label">Isem n tabanka</string>
     <string name="account_number_last_4_label">Account Number (Last 4)</string>
     <string name="delete_account_desc">Delete account</string>
     <string name="save_changes">Save Changes</string>
     <string name="type_wallet_lowercase">wallet</string>
     <!-- ManageAccountsScreen -->
-    <string name="title_accounts">Accounts</string>
+    <string name="title_accounts">Imiḍanen</string>
     <string name="no_accounts_yet">No accounts yet</string>
     <string name="add_account_fab_desc">Add Account</string>
     <string name="add_account_fab_text">Add Account</string>
@@ -143,9 +143,9 @@
     <string name="linked_cards_label">Linked Cards</string>
     <string name="label_inactive">(Inactive)</string>
     <string name="unlink_card_desc">Unlink card</string>
-    <string name="more_options_desc">More options</string>
-    <string name="link_to_account">Link to Account</string>
-    <string name="action_delete">Delete</string>
+    <string name="more_options_desc">Ugar n textiṛiyin</string>
+    <string name="link_to_account">Qqen ɣer umiḍan</string>
+    <string name="action_delete">Kkes</string>
     <string name="credit_card">Credit</string>
     <string name="debit_card">Debit</string>
     <string name="last_balance">Last Balance: %1$s</string>
@@ -154,28 +154,28 @@
     <string name="link_card_title">Link Card</string>
     <string name="no_accounts_found_link">No %1$s accounts found. Please add a corresponding bank account first.</string>
     <string name="select_account_link_prompt">Select an account to link this card to:</string>
-    <string name="action_cancel">Cancel</string>
+    <string name="action_cancel">Semmet</string>
     <string name="action_link">Link</string>
     <!-- SubscriptionTabContent & TransactionTabContent -->
     <string name="subscription_info">Track recurring expenses. You\'ll need to add transactions manually each month.</string>
     <string name="billing_cycle_label">Billing Cycle</string>
-    <string name="cycle_monthly">Monthly</string>
+    <string name="cycle_monthly">Yal ayyur</string>
     <string name="cycle_quarterly">Quarterly</string>
     <string name="cycle_semi_annual">Semi-Annual</string>
-    <string name="cycle_annual">Annual</string>
-    <string name="cycle_weekly">Weekly</string>
-    <string name="cycle_custom">Custom</string>
+    <string name="cycle_annual">Yal aseggas</string>
+    <string name="cycle_weekly">Yal ddurt</string>
+    <string name="cycle_custom">Udmawan</string>
     <string name="date_picker_desc">Date Picker</string>
-    <string name="select_account">Select Account</string>
-    <string name="category_label">Category</string>
+    <string name="select_account">Fren amiḍan</string>
+    <string name="category_label">Taggayt</string>
     <string name="subcategory_label">Subcategory</string>
     <string name="none_label">None</string>
     <string name="enter_interval_title">Enter Interval</string>
-    <string name="service_name_required">Service Name *</string>
+    <string name="service_name_required">Isem n tanfa *</string>
     <string name="service_name_placeholder">e.g., Netflix, Spotify</string>
     <string name="notes_optional">Notes (Optional)</string>
     <string name="notes_placeholder">Add any additional information...</string>
-    <string name="action_save">Save</string>
+    <string name="action_save">Sekles</string>
     <string name="search_fruits">Search Fruits</string>
     <string name="search_shopping">Search Shopping</string>
     <string name="search_fitness">Search Fitness</string>
@@ -200,16 +200,16 @@
     <string name="track">Track</string>
     <string name="track_info">Track Info</string>
     <string name="added">Added</string>
-    <string name="all">All</string>
+    <string name="all">Akk</string>
     <string name="type">Type</string>
     <string name="type_info">Type Info</string>
     <string name="expense">Expense</string>
     <string name="savings">Savings</string>
-    <string name="accounts">Accounts</string>
+    <string name="accounts">Imiḍanen</string>
     <string name="all_accounts">All Accounts</string>
     <string name="accounts_selected_format">%1$d Accounts Selected</string>
     <string name="amount">Amount</string>
-    <string name="color">Color</string>
+    <string name="color">Ini</string>
     <string name="budget_name_optional">Budget Name (optional)</string>
     <string name="category_limits">Category Limits</string>
     <string name="add_limit">Add Limit</string>
@@ -247,19 +247,19 @@
     <string name="all_transactions_desc">All transactions within selected categories and filters\nUseful for long term budgets over multiple periods</string>
     <string name="all_transactions_example">Example: \'Monthly Spending\' budget</string>
     <!-- Categories Screen -->
-    <string name="categories">Categories</string>
-    <string name="add_category">Add Category</string>
+    <string name="categories">Taggayin</string>
+    <string name="add_category">Rnu taggayt</string>
     <string name="clear_search">Clear search</string>
     <string name="expense_categories">Expense Categories</string>
     <string name="income_categories">Income Categories</string>
     <!-- Edit Category Sheet -->
-    <string name="category_name">Category Name</string>
+    <string name="category_name">Isem n taggayt</string>
     <string name="category_description_placeholder">description about the category</string>
     <string name="add_subcategory">Add Subcategory</string>
     <string name="preview">Preview</string>
     <string name="income">Income</string>
-    <string name="name_label">Name</string>
-    <string name="description_label">Description</string>
+    <string name="name_label">Isem</string>
+    <string name="description_label">Aglam</string>
     <string name="description_hint">e.g., Eating out, Swiggy, Zomato etc.</string>
     <string name="delete_category">Delete category</string>
     <string name="update_category">Update Category</string>
@@ -291,11 +291,11 @@
     <string name="toggle_view">Toggle View</string>
     <!-- Chat Screen -->
     <string name="cashiro_ai">Cashiro AI</string>
-    <string name="more_options">More options</string>
+    <string name="more_options">Ugar n textiṛiyin</string>
     <string name="clear_chat">Clear Chat</string>
     <string name="qwen_model_required">Qwen Model Required</string>
     <string name="download_ai_model_prompt">Download the AI model from Settings to start chatting</string>
-    <string name="go_to_settings">Go to Settings</string>
+    <string name="go_to_settings">Ddu ɣer iɣewwaren</string>
     <string name="model_required">Model Required</string>
     <string name="download_to_continue_chatting">Download to continue chatting</string>
     <string name="download">Download</string>
@@ -305,17 +305,17 @@
     <string name="this_may_take_a_few_seconds">This may take a few seconds</string>
     <string name="dismiss">Dismiss</string>
     <string name="ask_about_expenses_placeholder">Ask about your expenses...</string>
-    <string name="send">Send</string>
+    <string name="send">Azen</string>
     <string name="chat_memory_full_warning">Chat memory almost full! Clear chat to continue.</string>
     <string name="chat_memory_almost_full_warning_format">Chat memory is %1$d%% full. Consider clearing soon.</string>
     <string name="chat_memory_usage_format">Chat memory is %1$d%% full.</string>
-    <string name="clear">Clear</string>
+    <string name="clear">Sfeḍ</string>
     <string name="qwen_model_messages_format">Qwen 2.5 • %1$d messages</string>
     <string name="tokens_format">%1$s tokens</string>
     <string name="context_usage">Context Usage</string>
     <string name="percentage_format_no_brackets">%1$d%%</string>
     <string name="tokens_usage_format">%1$s / %2$s tokens</string>
-    <string name="system_tokens_format">System: %1$s</string>
+    <string name="system_tokens_format">Anagraw: %1$s</string>
     <!-- Home Screen & Widgets -->
     <string name="edit_widgets">Edit Widgets</string>
     <string name="edit_widgets_desc">Reorder or hide sections on your home screen.</string>
@@ -324,14 +324,14 @@
     <string name="transaction_deleted">Transaction deleted</string>
     <string name="undo">Undo</string>
     <string name="cashiro_title">Cashiro</string>
-    <string name="profile">Profile</string>
+    <string name="profile">Amaɣnu</string>
     <string name="banner">Banner</string>
     <string name="recent">Recent</string>
     <string name="search_transactions">Search transactions</string>
-    <string name="search">Search</string>
+    <string name="search">Nadi</string>
     <string name="view_all">View All</string>
-    <string name="settings">Settings</string>
-    <string name="ask_ai">Ask AI</string>
+    <string name="settings">Iɣewwaren</string>
+    <string name="ask_ai">Suter AI</string>
     <string name="sync_sms">Sync SMS</string>
     <string name="long_press_for_full_resync">Long press for full resync</string>
     <string name="show_banner_image">Show Banner Image</string>
@@ -339,9 +339,9 @@
     <string name="expenses">Expenses</string>
     <string name="net_balance">Net Balance</string>
     <string name="breakdown_formula_description">Formula: Income - Expenses = Net Balance\nGreen (+) = Savings | Red (-) = Overspending</string>
-    <string name="close">Close</string>
+    <string name="close">Mdel</string>
     <string name="subscriptions_count_format">%1$d Subscriptions</string>
-    <string name="per_month">/ Month</string>
+    <string name="per_month">/ Ayyur</string>
     <string name="last_days_format">Last %1$d days</string>
     <!-- Edit Profile & Profile -->
     <string name="edit_profile">Edit Profile</string>
@@ -376,12 +376,12 @@
     <string name="enter_primary_account_details">Enter your primary account details to get started.</string>
     <string name="bank_name_hint">Bank Name (e.g., HDFC, SBI)</string>
     <string name="last_4_digits_hint">Last 4 Digits of Account</string>
-    <string name="last_4_digits_placeholder">e.g. 1234</string>
+    <string name="last_4_digits_placeholder">amedya 1234</string>
     <string name="get_started">Get Started</string>
     <string name="enable_tracking">Enable Tracking</string>
     <string name="stay_informed">Stay Informed</string>
     <string name="scanning_ellipsis">Scanning...</string>
-    <string name="continue_action">Continue</string>
+    <string name="continue_action">Kemmel</string>
     <string name="finish_setup">Finish Setup</string>
     <!-- Mock Messages -->
     <string name="mock_msg_electric_bill">Electric bill due: ₹2,450</string>
@@ -405,7 +405,7 @@
     <string name="due_today">Due today</string>
     <string name="due_tomorrow">Due tomorrow</string>
     <string name="due_in_days_format">Due in %1$d days</string>
-    <string name="sms_available">SMS available</string>
+    <string name="sms_available">SMS yella</string>
     <string name="notes">Notes</string>
     <string name="original_sms">Original SMS</string>
     <string name="track_payment">Track Payment</string>
@@ -415,7 +415,7 @@
     <string name="overdue_since_format">Overdue since %1$s</string>
     <string name="due_on_format">Due on %1$s</string>
     <string name="is_subscription_paid">Is this subscription paid?</string>
-    <string name="no">No</string>
+    <string name="no">Uhu</string>
     <string name="yes_its_paid">Yes, it\'s paid</string>
     <string name="hide_original_message">Hide Original Message</string>
     <string name="show_original_message">Show Original Message</string>
@@ -451,11 +451,11 @@
     <string name="recurring_transaction">Recurring Transaction</string>
     <string name="mark_as_repeating_payment">Mark this as a repeating payment</string>
     <string name="billing_cycle">Billing Cycle</string>
-    <string name="category">Category</string>
+    <string name="category">Taggayt</string>
     <string name="date_picker">Date Picker</string>
     <string name="balance">Balance</string>
     <string name="next_billing">Next Billing</string>
-    <string name="description">Description</string>
+    <string name="description">Aglam</string>
     <string name="from">FROM</string>
     <string name="to_destination">TO</string>
     <string name="matches_preview">Matches Preview</string>
@@ -470,15 +470,15 @@
     <string name="transactions_plural">transactions</string>
     <string name="updated_transactions_format">Updated %1$d transactions</string>
     <string name="repeat_every">Repeat every</string>
-    <string name="date">Date</string>
-    <string name="source">Source</string>
-    <string name="account">Account</string>
-    <string name="weekly_recurring">Weekly</string>
-    <string name="monthly_recurring">Monthly</string>
+    <string name="date">Azemz</string>
+    <string name="source">Aɣbalu</string>
+    <string name="account">Amiḍan</string>
+    <string name="weekly_recurring">Yal ddurt</string>
+    <string name="monthly_recurring">Yal ayyur</string>
     <string name="quarterly_recurring">Quarterly</string>
     <string name="semi_annual_recurring">Semi-Annual</string>
-    <string name="annual_recurring">Annual</string>
-    <string name="custom_recurring">Custom</string>
+    <string name="annual_recurring">Yal aseggas</string>
+    <string name="custom_recurring">Udmawan</string>
     <!-- TransactionsFilterBottomSheet -->
     <string name="filters">Filters</string>
     <string name="reset">Reset</string>
@@ -507,7 +507,7 @@
     <string name="version_format">Version %1$s, db-v%2$d</string>
     <string name="developed_by">Developed By Ritesh</string>
     <string name="lead_developer_cd">lead developer</string>
-    <string name="website">Website</string>
+    <string name="website">Asmel web</string>
     <string name="github">Github</string>
     <string name="discord">Discord</string>
     <string name="join_community">Join our community</string>
@@ -530,7 +530,7 @@
     <string name="built_with_love">Built with ❤️ for privacy</string>
     <string name="delete_all_data_confirm_title">Delete All Data?</string>
     <string name="delete_all_data_confirm_desc">This action will permanently delete all your transactions, budgets, subscriptions, and settings. This cannot be undone.</string>
-    <string name="delete_all">Delete All</string>
+    <string name="delete_all">Kkes-iten akk</string>
     <!-- Licenses Screen -->
     <string name="license_version_format">v%1$s, db-v%2$d</string>
     <string name="license_disclaimer_software">THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
@@ -596,7 +596,7 @@
     <string name="webhooks">Webhooks</string>
     <string name="add_webhook">Add webhook</string>
     <string name="pick_a_date">Pick a date</string>
-    <string name="add">Add</string>
+    <string name="add">Rnu</string>
     <string name="webhook_endpoint_section">Endpoint</string>
     <string name="webhook_name_label">Webhook name</string>
     <string name="webhook_url_label">Webhook URL</string>
@@ -747,7 +747,7 @@
     <string name="delete_subcategory_confirm">Are you sure you want to delete \u2018%1$s\u2019? This action cannot be undone.</string>
     <!-- User & Profile Greeting Card -->
     <string name="profile_desc">Profile Image</string>
-    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_morning">Azul fell-ak⋅am</string>
     <string name="greeting_afternoon">Good afternoon</string>
     <string name="greeting_evening">Good evening</string>
     <string name="greeting_night">Good night</string>
