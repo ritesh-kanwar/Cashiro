@@ -156,6 +156,10 @@ object BankParserFactory {
 =======
 =======
         SparkasseRheinMaasParser(),  // Sparkasse Rhein-Maas (Germany)
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        EnparaBankParser(),  // Enpara (Turkey) — push notifications
 >>>>>>> theirs
         BankMuscatParser(),  // Bank Muscat (Oman)
         GreaterBankParser()  // Greater Bank (India)

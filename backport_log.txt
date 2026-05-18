@@ -11848,3 +11848,58 @@ Patch failed at 0001 fix: budget shows 'Spent X of ₹0' when per-category limit
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0279-fix-budget-shows-Spent-X-of-0-when-per-category-limi.patch:75
 error: corrupt patch at ../filtered_patches/0279-fix-budget-shows-Spent-X-of-0-when-per-category-limi.patch:75
+[backport-fixes-upstream 44ce47ea] =?UTF-8?q?fix:=20budget=20shows=20'Spent=20X=20of?=
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Mon May 18 17:12:00 2026 +0530
+ 2 files changed, 18 insertions(+), 9 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0280-feat-add-Enpara-Turkey-push-notification-parser-330.patch
+Applying: feat: add Enpara (Turkey) push-notification parser (#330)
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Enpara (Turkey) push-notification parser (#330)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EnparaBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EnparaBankParserTest.kt' cleanly.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EnparaBankParser.kt
+Checking patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt...
+error: while searching for:
+
+    private val allowedPackages: Map<String, String> = mapOf(
+        // Faysal Bank (Pakistan) – alias must match FaysalBankParser.canHandle()
+        "com.avanza.ambitwizfbl" to "FaysalBank"
+    )
+
+    fun isAllowed(packageName: String): Boolean =
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt:12
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        SabbBankParser(),  // SABB - Saudi Awwal Bank (Saudi Arabia)
+        MBankCZParser(),  // mBank CZ (Czech Republic)
+        SparkasseRheinMaasParser(),  // Sparkasse Rhein-Maas (Germany)
+        BankMuscatParser(),  // Bank Muscat (Oman)
+        GreaterBankParser()  // Greater Bank (India)
+        // Add more bank parsers here as we implement them
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:106
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EnparaBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/EnparaBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EnparaBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/EnparaBankParserTest.kt: already exists in working directory
+Applying patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt with 1 reject...
+Rejected hunk #1.
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
