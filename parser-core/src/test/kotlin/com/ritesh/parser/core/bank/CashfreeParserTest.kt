@@ -34,12 +34,24 @@ class CashfreeParserTest {
                 shouldParse = false
             ),
             ParserTestCase(
+<<<<<<< ours
+=======
+                // Cashfree-sender message that lacks the "confirmed for order"
+                // phrasing — must fall through isTransactionMessage to the
+                // base class and ultimately return null (no amount extractable).
+>>>>>>> theirs
                 name = "Cashfree sender without confirmation phrasing returns null",
                 message = "Payment options are available on our portal. Powered by Cashfree",
                 sender = "JX-CSHfre-S",
                 shouldParse = false
             ),
             ParserTestCase(
+<<<<<<< ours
+=======
+                // Multi-word merchant containing a space — the merchant regex
+                // (`[^.\n\r]+?` stopping at `.`) must capture the full name
+                // and not bleed into the trailing "Powered by Cashfree" line.
+>>>>>>> theirs
                 name = "Multi-word merchant is captured up to the period",
                 message = "Payment INR 299.00 (ID:9988776655) confirmed for order #order_001 on Sun Direct.\nPowered by Cashfree",
                 sender = "VK-CSHfre-S",

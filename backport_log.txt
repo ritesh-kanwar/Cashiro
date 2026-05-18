@@ -12137,3 +12137,54 @@ Hunk #1 applied cleanly.
 Rejected hunk #2.
 Rejected hunk #3.
 Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetSnapshotDao.kt cleanly.
+[backport-fixes-upstream 1a5ed002] fix: backup loans, transaction groups, profiles, and
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Tue May 19 00:55:03 2026 +0530
+ 10 files changed, 680 insertions(+), 25 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0282-feat-add-Cashfree-India-payment-gateway-SMS-parser-3.patch
+Applying: feat: add Cashfree (India) payment-gateway SMS parser (#334)
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CashfreeParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CashfreeParser.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CashfreeParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CashfreeParserTest.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: add Cashfree (India) payment-gateway SMS parser (#334)
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' cleanly.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CashfreeParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CashfreeParserTest.kt' with conflicts.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CashfreeParser.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CashfreeParserTest.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        IndianBankParser(),
+        FederalBankParser(),
+        JuspayParser(),
+        SliceParser(),
+        CredParser(),
+        LazyPayParser(),
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:14
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CashfreeParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/CashfreeParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CashfreeParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/CashfreeParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
+Rejected hunk #1.
