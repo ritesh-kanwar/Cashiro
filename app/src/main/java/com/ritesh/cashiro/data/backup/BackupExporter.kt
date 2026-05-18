@@ -182,6 +182,15 @@ class BackupExporter @Inject constructor(
         val exportedTransactionSplits = if (privacy == ExportPrivacy.FULL) transactionSplits else emptyList()
         val exportedBankNotifications = if (privacy == ExportPrivacy.FULL) bankNotifications else emptyList()
         val exportedRuleApplications = if (privacy == ExportPrivacy.FULL) ruleApplications else emptyList()
+        // Loans / groups / profiles / budget snapshots: kept on FULL only, like
+        // every other relational table; in MASKED/ANONYMOUS the transaction
+        // references are stripped to "Merchant" anyway so re-attaching them is
+        // not useful.
+        val exportedLoans = if (privacy == ExportPrivacy.FULL) loans else emptyList()
+        val exportedTransactionGroups = if (privacy == ExportPrivacy.FULL) transactionGroups else emptyList()
+        val exportedProfiles = if (privacy == ExportPrivacy.FULL) profiles else emptyList()
+        val exportedBudgetMonthSnapshots = if (privacy == ExportPrivacy.FULL) budgetMonthSnapshots else emptyList()
+        val exportedBudgetCategoryMonthSnapshots = if (privacy == ExportPrivacy.FULL) budgetCategoryMonthSnapshots else emptyList()
         
         return CashiroBackup(
             metadata = BackupMetadata(

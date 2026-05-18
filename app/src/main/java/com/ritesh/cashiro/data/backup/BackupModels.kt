@@ -10,7 +10,7 @@ import java.time.LocalDateTime
  */
 data class CashiroBackup(
     @SerializedName("_format")
-    val format: String = "Cashiro Backup v1.0",
+    val format: String = "Cashiro Backup v1.1",
     
     @SerializedName("_warning")
     val warning: String = "Contains sensitive financial data. Keep this file secure.",

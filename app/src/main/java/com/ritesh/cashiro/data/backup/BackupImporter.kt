@@ -152,7 +152,7 @@ class BackupImporter @Inject constructor(
     private suspend fun replaceAllData(backup: CashiroBackup): ImportResult {
         var importedTransactions = 0
         var importedCategories = 0
-        
+
         return database.withTransaction {
             try {
                 // Clear existing data
@@ -256,7 +256,7 @@ class BackupImporter @Inject constructor(
         var importedTransactions = 0
         var importedCategories = 0
         var skippedDuplicates = 0
-        
+
         return database.withTransaction {
             try {
                 // Get existing data for duplicate checking

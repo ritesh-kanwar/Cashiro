@@ -11903,3 +11903,237 @@ Applying patch app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationCon
 Rejected hunk #1.
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 00d04a8d] feat: add Enpara (Turkey) push-notification parser
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Mon May 18 18:44:49 2026 +0530
+ 6 files changed, 210 insertions(+), 1 deletion(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/receiver/BankNotificationConfig.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0281-fix-backup-loans-transaction-groups-profiles-and-bud.patch
+Applying: fix: backup loans, transaction groups, profiles, and budget snapshots (#333)
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: backup loans, transaction groups, profiles, and budget snapshots (#333)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:74
+error: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:88
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:105
+error: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt:9
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt:86
+error: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/LoanDao.kt: does not exist in index
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionGroupDao.kt: does not exist in index
+Checking patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt...
+error: while searching for:
+        val budgetCategories = database.budgetDao().getAllBudgetCategories().first()
+        val transactionSplits = database.transactionSplitDao().getAllSplits().first()
+        val bankNotifications = database.bankNotificationDao().getAllNotifications().first()
+        
+        // Get preferences from repository
+        val prefs = userPreferencesRepository.userPreferences.first()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:74
+Hunk #2 succeeded at 182 (offset 60 lines).
+error: while searching for:
+                    totalBudgetCategories = exportedBudgetCategories.size,
+                    totalTransactionSplits = exportedTransactionSplits.size,
+                    totalBankNotifications = exportedBankNotifications.size,
+                    dateRange = dateRange
+                )
+            ),
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:137
+error: while searching for:
+                budgets = exportedBudgets,
+                budgetCategories = exportedBudgetCategories,
+                transactionSplits = exportedTransactionSplits,
+                bankNotifications = exportedBankNotifications
+            ),
+            preferences = PreferencesSnapshot(
+                theme = ThemePreferences(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt:155
+Checking patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt...
+Hunk #1 succeeded at 152 (offset 64 lines).
+error: while searching for:
+                database.budgetDao().deleteAllBudgets()
+                database.exchangeRateDao().deleteAllRates()
+                database.bankNotificationDao().deleteAllNotifications()
+                // Note: budget categories and transaction splits are deleted via cascade (budget categories via budget deletion, transaction splits via transaction deletion)
+                
+                // Import all data
+                backup.database.categories.forEach { category ->
+                    database.categoryDao().insertCategory(category)
+                    importedCategories++
+                }
+                
+                backup.database.transactions.forEach { transaction ->
+                    database.transactionDao().insertTransaction(transaction)
+                    importedTransactions++
+                }
+                
+                backup.database.cards.forEach { card ->
+                    database.cardDao().insertCard(card)
+                }
+                
+                backup.database.accountBalances.forEach { balance ->
+                    database.accountBalanceDao().insertBalance(balance)
+                }
+                
+                backup.database.subscriptions.forEach { subscription ->
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:105
+error: while searching for:
+                backup.database.bankNotifications.forEach { notification ->
+                    database.bankNotificationDao().insertOrReplace(notification)
+                }
+                
+                // Import preferences
+                importPreferences(backup.preferences)
+                
+                ImportResult.Success(
+                    importedTransactions = importedTransactions,
+                    importedCategories = importedCategories,
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:164
+Hunk #4 succeeded at 256 (offset 7 lines).
+error: while searching for:
+                    .getAllTransactions().first()
+                val existingTransactionHashes = existingTransactions.map { it.transactionHash }.toSet()
+                val existingHashToIdMap = existingTransactions.associateBy({ it.transactionHash }, { it.id })
+                
+                val existingCategories = database.categoryDao()
+                    .getAllCategories().first()
+                    .map { it.name }
+                    .toSet()
+                
+                // Import categories (merge by name)
+                backup.database.categories.forEach { category ->
+                    if (!existingCategories.contains(category.name)) {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:194
+error: while searching for:
+                        importedCategories++
+                    }
+                }
+                
+                // Import transactions (skip duplicates by hash)
+                // Build mapping from old transaction IDs to new IDs for split/application imports
+                val oldToNewTransactionIdMap = mutableMapOf<Long, Long>()
+                
+                backup.database.transactions.forEach { transaction ->
+                    if (!existingTransactionHashes.contains(transaction.transactionHash)) {
+                        val oldId = transaction.id
+                        val newTransaction = transaction.copy(id = 0)
+                        val newId = database.transactionDao().insertTransaction(newTransaction)
+                        // Track old ID -> new ID mapping directly from insert result
+                        if (oldId != 0L) {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:209
+error: while searching for:
+                
+                // Import other entities with duplicate checking
+                importCardsWithMerge(backup.database.cards)
+                importAccountBalancesWithMerge(backup.database.accountBalances)
+                importSubscriptionsWithMerge(backup.database.subscriptions)
+                importMerchantMappingsWithMerge(backup.database.merchantMappings)
+                
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:236
+error: while searching for:
+                backup.database.bankNotifications.forEach { notification ->
+                    database.bankNotificationDao().insertOrReplace(notification)
+                }
+                
+                // Import preferences (merge with existing)
+                importPreferences(backup.preferences)
+                
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:287
+error: while searching for:
+    }
+    
+    /**
+     * Import account balances with duplicate checking
+     */
+    private suspend fun importAccountBalancesWithMerge(balances: List<AccountBalanceEntity>) {
+        // For balances, we'll import all as they represent historical data
+        balances.forEach { balance ->
+            val newBalance = balance.copy(id = 0)
+            database.accountBalanceDao().insertBalance(newBalance)
+        }
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:319
+error: while searching for:
+        }
+    }
+    
+    /**
+     * Import user preferences
+     */
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt:388
+Checking patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt...
+Hunk #1 succeeded at 10 (offset 1 line).
+error: while searching for:
+    
+    @SerializedName("total_bank_notifications")
+    val totalBankNotifications: Int = 0,
+    
+    @SerializedName("date_range")
+    val dateRange: DateRange?
+)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt:86
+error: while searching for:
+    val transactionSplits: List<TransactionSplitEntity> = emptyList(),
+    
+    @SerializedName("bank_notifications")
+    val bankNotifications: List<BankNotificationEntity> = emptyList()
+)
+
+/**
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt:149
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetSnapshotDao.kt...
+Hunk #1 succeeded at 26 (offset -14 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/LoanDao.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/LoanDao.kt: No such file or directory
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionGroupDao.kt...
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionGroupDao.kt: No such file or directory
+Applying patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupExporter.kt with 3 rejects...
+Rejected hunk #1.
+Hunk #2 applied cleanly.
+Rejected hunk #3.
+Rejected hunk #4.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupImporter.kt with 8 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Hunk #4 applied cleanly.
+Rejected hunk #5.
+Rejected hunk #6.
+Rejected hunk #7.
+Rejected hunk #8.
+Rejected hunk #9.
+Rejected hunk #10.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/backup/BackupModels.kt with 2 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/BudgetSnapshotDao.kt cleanly.
