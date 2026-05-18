@@ -11830,3 +11830,21 @@ Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/Sparkasse
 error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/SparkasseRheinMaasParserTest.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 25204edf] feat: add Sparkasse Rhein-Maas (Germany) SMS parser
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon May 18 00:51:00 2026 +0530
+ 4 files changed, 138 insertions(+), 4 deletions(-)
+===================================
+Applying 0279-fix-budget-shows-Spent-X-of-0-when-per-category-limi.patch
+Applying: fix: budget shows 'Spent X of ₹0' when per-category limits left blank (#332)
+error: corrupt patch at .git/rebase-apply/patch:27
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: budget shows 'Spent X of ₹0' when per-category limits left blank (#332)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0279-fix-budget-shows-Spent-X-of-0-when-per-category-limi.patch:75
+error: corrupt patch at ../filtered_patches/0279-fix-budget-shows-Spent-X-of-0-when-per-category-limi.patch:75
