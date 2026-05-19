@@ -12256,3 +12256,232 @@ Patch failed at 0001 feat: replace UPI VPAs with contact names at display time (
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0287-feat-replace-UPI-VPAs-with-contact-names-at-display-.patch:373
 error: corrupt patch at ../filtered_patches/0287-feat-replace-UPI-VPAs-with-contact-names-at-display-.patch:373
+[backport-fixes-upstream 97f468f9] feat: replace UPI VPAs with contact names at display
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Thu May 21 13:15:03 2026 +0530
+ 1 file changed, 22 insertions(+)
+===================================
+Applying 0288-Fix-GPay-UPI-SMS-duplicates.patch
+Applying: Fix GPay UPI SMS duplicates
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Fix GPay UPI SMS duplicates
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt:183
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:187
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt: patch does not apply
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt:224
+error: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:6
+error: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:14
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestSouthIndianBankParser.kt: does not exist in index
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt...
+Hunk #1 succeeded at 153 (offset -4 lines).
+error: while searching for:
+
+    @Query("UPDATE account_balances SET profile_id = :profileId WHERE bank_name = :bankName AND account_last4 = :accountLast4")
+    suspend fun setAccountProfile(bankName: String, accountLast4: String, profileId: Long): Int
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt:183
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt...
+error: while searching for:
+    @Query("SELECT * FROM transactions WHERE reference = :reference AND is_deleted = 0 LIMIT 1")
+    suspend fun getTransactionByReference(reference: String): TransactionEntity?
+
+    @Query("""
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:187
+error: while searching for:
+        dateStart: LocalDateTime,
+        dateEnd: LocalDateTime
+    ): List<TransactionEntity>
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:198
+Checking patch app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt...
+Hunk #1 succeeded at 135 (offset -2 lines).
+error: while searching for:
+            )
+        )
+    }
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt:224
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.TransactionSplitEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.database.entity.TransactionWithSplits
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.math.BigDecimal
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:6
+error: while searching for:
+    suspend fun getTransactionByReference(reference: String): TransactionEntity? =
+        transactionDao.getTransactionByReference(reference)
+
+    suspend fun getTransactionByAmountAndDate(
+        amount: BigDecimal,
+        dateStart: LocalDateTime,
+        dateEnd: LocalDateTime
+    ): List<TransactionEntity> =
+        transactionDao.getTransactionByAmountAndDate(amount, dateStart, dateEnd)
+    
+    suspend fun undoDeleteTransaction(transaction: TransactionEntity) {
+        transactionDao.updateTransaction(transaction.copy(isDeleted = false))
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:137
+error: while searching for:
+     */
+    suspend fun deleteSplit(split: TransactionSplitEntity) =
+        transactionSplitDao.deleteSplit(split)
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:398
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.CardType
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+import com.ritesh.cashiro.data.mapper.toEntity
+import com.ritesh.cashiro.data.mapper.toEntityType
+import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:14
+error: while searching for:
+        val processed = AtomicInteger(0)
+        val parsed    = AtomicInteger(0)
+        val saved     = AtomicInteger(0)
+        val blocked   = AtomicInteger(0)
+        val startTime = System.currentTimeMillis()
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:215
+error: while searching for:
+        }
+    }
+
+    // ─── Expedited work ───────────────────────────────────────────────────────
+
+    override suspend fun getForegroundInfo(): ForegroundInfo =
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:265
+error: while searching for:
+                            stats.parsed.incrementAndGet()
+                            Trace.beginSection("saveTransaction")
+                            try {
+                                if (saveTransaction(result.parsed, result.sms, stats)) {
+                                    stats.saved.incrementAndGet()
+                                    widgetNeedsUpdate = true
+                                }
+                            } finally {
+                                Trace.endSection()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:402
+error: while searching for:
+
+    // ─── Stage 3b: Regular transactions ──────────────────────────────────────
+
+    private suspend fun saveTransaction(parsed: ParsedTransaction, sms: SmsMessage, stats: ProcessingStats): Boolean {
+        return try {
+            val entity = parsed.toEntity()
+
+            // getTransactionByHash returns rows where is_deleted=1 too, so
+            // soft-deleted transactions are never re-imported.
+            if (transactionRepository.getTransactionByHash(entity.transactionHash) != null) return false
+
+            val customCategory = merchantMappingCache[entity.merchantName]
+            val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:580
+error: while searching for:
+            val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
+            if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
+                stats.blocked.incrementAndGet()
+                return false
+            }
+
+            val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:594
+error: while searching for:
+                withRules.copy(isRecurring = true)
+            } else withRules
+
+            val rowId = transactionRepository.insertTransaction(finalEntity)
+            if (rowId == -1L) return false
+
+            if (ruleApps.isNotEmpty()) ruleRepository.saveRuleApplications(ruleApps)
+            processBalanceUpdate(parsed, finalEntity, rowId)
+            true
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saving transaction: ${e.message}")
+            false
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:609
+error: while searching for:
+        │  Processed : ${stats.processed.get()}
+        │  Parsed    : ${stats.parsed.get()}
+        │  Saved     : ${stats.saved.get()}
+        │  Elapsed   : ${elapsedMs}ms
+        │  Speed     : ${"%.1f".format(stats.msgPerSec())} msg/s
+        └──────────────────────────────────────────────
+    """.trimIndent()
+}
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:936
+Checking patch app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestSouthIndianBankParser.kt...
+error: parser-core/src/test/kotlin/TestSouthIndianBankParser.kt: No such file or directory
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 8 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Rejected hunk #7.
+Rejected hunk #8.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt cleanly.
