@@ -12485,3 +12485,113 @@ Rejected hunk #7.
 Rejected hunk #8.
 Applied patch app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt cleanly.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SouthIndianBankParser.kt cleanly.
+[backport-fixes-upstream 94514b25] Fix GPay UPI SMS duplicates
+ Date: Tue May 19 22:29:25 2026 +0530
+ 11 files changed, 662 insertions(+), 2 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ create mode 100644 app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt
+===================================
+Applying 0289-Address-GPay-duplicate-review-feedback.patch
+Applying: Address GPay duplicate review feedback
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Address GPay duplicate review feedback
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/RuleRepositoryImpl.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:162
+error: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/domain/repository/RuleRepository.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:639
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/RuleRepositoryImpl.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt...
+error: while searching for:
+    ): List<TransactionEntity> =
+        transactionDao.getTransactionByAmountAndDate(amount, dateStart, dateEnd)
+
+    suspend fun cleanupGPayDuplicates(): Int {
+        val candidates = transactionDao.findPotentialDuplicatesByReference()
+        val duplicateIds = TransactionDeduplication.duplicateIdsToDelete(candidates)
+        duplicateIds.forEach { id -> transactionDao.softDeleteTransaction(id) }
+        return duplicateIds.size
+    }
+    
+    suspend fun undoDeleteTransaction(transaction: TransactionEntity) {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:162
+Checking patch app/src/main/java/com/ritesh/cashiro/domain/repository/RuleRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+                    )
+                    transactionRepository.updateTransaction(replacement)
+                    accountBalanceRepository.deleteBalancesForTransaction(duplicate.id)
+                    processBalanceUpdate(parsed, replacement, duplicate.id)
+                    return SaveOutcome.UPDATED_DUPLICATE
+                }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:639
+error: while searching for:
+            val rowId = transactionRepository.insertTransaction(finalEntity)
+            if (rowId == -1L) return SaveOutcome.SKIPPED
+
+            if (ruleApps.isNotEmpty()) ruleRepository.saveRuleApplications(ruleApps)
+            processBalanceUpdate(parsed, finalEntity, rowId)
+            SaveOutcome.SAVED
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:648
+error: while searching for:
+        }
+    }
+
+    // ─── Balance update ───────────────────────────────────────────────────────
+
+// ─── Balance update ───────────────────────────────────────────────────────
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:658
+error: while searching for:
+    private suspend fun cleanUpAndFinalize(stats: ProcessingStats) {
+        try { unrecognizedSmsRepository.cleanupOldEntries() }
+        catch (e: Exception) { Log.e(TAG, "Cleanup error: ${e.message}") }
+        if (stats.saved.get() > 0) {
+            try { llmRepository.updateSystemPrompt() }
+            catch (e: Exception) { Log.e(TAG, "Prompt update error: ${e.message}") }
+        }
+    }
+
+    // ─── Progress ─────────────────────────────────────────────────────────────
+
+    private suspend fun reportProgress(stats: ProcessingStats) {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:773
+Checking patch app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt...
+Applied patch app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/RuleRepositoryImpl.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt with 1 reject...
+Rejected hunk #1.
+Applied patch app/src/main/java/com/ritesh/cashiro/domain/repository/RuleRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt cleanly.

@@ -1,53 +1,15 @@
 diff a/app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt b/app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt	(rejected hunks)
-@@ -6,6 +6,7 @@ import com.ritesh.cashiro.data.database.entity.TransactionEntity
- import com.ritesh.cashiro.data.database.entity.TransactionSplitEntity
- import com.ritesh.cashiro.data.database.entity.TransactionType
- import com.ritesh.cashiro.data.database.entity.TransactionWithSplits
-+import com.ritesh.cashiro.data.manager.TransactionDeduplication
- import kotlinx.coroutines.flow.Flow
- import kotlinx.coroutines.flow.map
- import java.math.BigDecimal
-@@ -137,12 +138,36 @@ class TransactionRepository @Inject constructor(
-     suspend fun getTransactionByReference(reference: String): TransactionEntity? =
-         transactionDao.getTransactionByReference(reference)
- 
-+    suspend fun findPotentialDuplicates(transaction: TransactionEntity): List<TransactionEntity> {
-+        if (!TransactionDeduplication.hasUpiReference(transaction)) return emptyList()
-+
-+        return transactionDao.findPotentialDuplicatesByReference(
-+            reference = transaction.reference.orEmpty(),
-+            amount = transaction.amount,
-+            transactionType = transaction.transactionType,
-+            currency = transaction.currency,
-+            accountNumber = transaction.accountNumber,
-+            startDate = transaction.dateTime.minus(TransactionDeduplication.UPI_DUPLICATE_WINDOW),
-+            endDate = transaction.dateTime.plus(TransactionDeduplication.UPI_DUPLICATE_WINDOW)
-+        ).filter { candidate ->
-+            candidate.id != transaction.id &&
-+                    TransactionDeduplication.isSameUpiTransaction(candidate, transaction)
-+        }
-+    }
-+
-     suspend fun getTransactionByAmountAndDate(
-         amount: BigDecimal,
-         dateStart: LocalDateTime,
-         dateEnd: LocalDateTime
+@@ -162,11 +162,9 @@ class TransactionRepository @Inject constructor(
      ): List<TransactionEntity> =
          transactionDao.getTransactionByAmountAndDate(amount, dateStart, dateEnd)
-+
-+    suspend fun cleanupGPayDuplicates(): Int {
-+        val candidates = transactionDao.findPotentialDuplicatesByReference()
-+        val duplicateIds = TransactionDeduplication.duplicateIdsToDelete(candidates)
-+        duplicateIds.forEach { id -> transactionDao.softDeleteTransaction(id) }
-+        return duplicateIds.size
-+    }
+ 
+-    suspend fun cleanupGPayDuplicates(): Int {
++    suspend fun findGPayDuplicateIdsForCleanup(): List<Long> {
+         val candidates = transactionDao.findPotentialDuplicatesByReference()
+-        val duplicateIds = TransactionDeduplication.duplicateIdsToDelete(candidates)
+-        duplicateIds.forEach { id -> transactionDao.softDeleteTransaction(id) }
+-        return duplicateIds.size
++        return TransactionDeduplication.duplicateIdsToDelete(candidates)
+     }
      
      suspend fun undoDeleteTransaction(transaction: TransactionEntity) {
-         transactionDao.updateTransaction(transaction.copy(isDeleted = false))
-@@ -398,4 +423,4 @@ class TransactionRepository @Inject constructor(
-      */
-     suspend fun deleteSplit(split: TransactionSplitEntity) =
-         transactionSplitDao.deleteSplit(split)
--}
-\ No newline at end of file
-+}
