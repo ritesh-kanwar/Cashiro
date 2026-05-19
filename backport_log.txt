@@ -12753,3 +12753,27 @@ Rejected hunk #1.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt cleanly.
 Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 545317a9] Address Greptile review: anonymize test PII, narrow
+ Date: Thu May 21 03:16:51 2026 +0530
+ 5 files changed, 94 insertions(+), 22 deletions(-)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt.rej
+===================================
+Applying 0293-ui-redesign-transactions-list-ui.patch
+Applying: ui: redesign transactions list ui
+Successfully applied via git am
+===================================
+Applying 0298-Reduce-duplicated-app-code.patch
+Applying: Reduce duplicated app code
+error: corrupt patch at .git/rebase-apply/patch:339
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Reduce duplicated app code
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0298-Reduce-duplicated-app-code.patch:344
+error: corrupt patch at ../filtered_patches/0298-Reduce-duplicated-app-code.patch:344

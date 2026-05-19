@@ -1,9 +1,0 @@
-diff a/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt b/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt	(rejected hunks)
-@@ -48,6 +48,7 @@ class BPCEParser : BankParser() {
-         val lowerMessage = message.lowercase()
- 
-         return when {
-+            lowerMessage.contains("virement instantané") && lowerMessage.contains("reçu") -> TransactionType.INCOME
-             lowerMessage.contains("virement instantané") -> TransactionType.EXPENSE
-             else -> super.extractTransactionType(message)
-         }
