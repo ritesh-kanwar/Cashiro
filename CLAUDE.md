@@ -85,10 +85,12 @@ Bank parsers are now in the `parser-core` module for reusability across platform
 - Use `com.ritesh.tracker.data.mapper.toEntity()` to convert ParsedTransaction to TransactionEntity
 - The mapper handles type conversions between modules
 
-## Supported Banks (44 parsers)
+## Supported Banks (53 parsers)
 - Airtel Payments Bank
 - **Alinma Bank (Saudi Arabia)** - Arabic SMS support
+- **Altana Federal Credit Union (USA)**
 - American Express (AMEX)
+- **Cashfree payment gateway (India)**
 - Axis Bank
 - Bank of Baroda
 - Bank of India
@@ -96,7 +98,9 @@ Bank parsers are now in the `parser-core` module for reusability across platform
 - Central Bank of India
 - City Union Bank
 - DBS Bank
+- **Enpara (Turkey)**
 - Federal Bank
+- **Greater Bank (India)**
 - HDFC Bank
 - HSBC Bank
 - **Huntington Bank (USA)**
@@ -121,12 +125,17 @@ Bank parsers are now in the `parser-core` module for reusability across platform
 - **NMB Bank / Nabil Bank (Nepal)**
 - OneCard
 - **Priorbank (Belarus)** - Russian/Belarusian SMS support
+- **Punjab & Sind Bank (India)**
 - Punjab National Bank (PNB)
 - Saraswat Co-operative Bank
 - State Bank of India (SBI)
 - Slice
 - South Indian Bank
 - **Standard Chartered Bank**
+- **STC Bank (Saudi Arabia)**
+- **SABB / Saudi Awwal Bank (Saudi Arabia)**
+- **SNB - Saudi National Bank / Al Ahli (Saudi Arabia)**
+- **Sparkasse Rhein-Maas (Germany)**
 - Union Bank
 - Utkarsh Bank
 

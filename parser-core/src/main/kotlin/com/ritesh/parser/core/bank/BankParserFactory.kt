@@ -56,6 +56,7 @@ object BankParserFactory {
         CitiBankParser(),  // Citi Bank (USA)
         DiscoverCardParser(),  // Discover Card (USA)
         OldHickoryParser(),  // Old Hickory Credit Union (USA)
+        AltanaFCUParser(),  // Altana Federal Credit Union (USA) - must be before Everest Bank (numeric catch-all)
         LaxmiBankParser(),  // Laxmi Sunrise Bank (Nepal)
         CBEBankParser(),  // Commercial Bank of Ethiopia
         EverestBankParser(),  // Everest Bank (Nepal)
@@ -103,7 +104,15 @@ object BankParserFactory {
         ChaseBankParser(),  // Chase Bank (USA)
         TBankParser(),  // T-Bank / Tinkoff (Russia)
         BankMuscatParser(),  // Bank Muscat (Oman)
-        BPCEParser()      // BPCE (France)
+        BPCEParser(),      // BPCE (France)
+        CashfreeParser(),  // Cashfree payment gateway (India)
+        EnparaBankParser(),  // Enpara (Turkey)
+        GreaterBankParser(),  // Greater Bank (India)
+        PunjabSindBankParser(),  // Punjab & Sind Bank (India)
+        SNBAlAhliBankParser(),  // Saudi National Bank / Al Ahli (Saudi Arabia)
+        STCBankParser(),  // STC Bank (Saudi Arabia)
+        SabbBankParser(),  // SABB / Saudi Awwal Bank (Saudi Arabia)
+        SparkasseRheinMaasParser()  // Sparkasse Rhein-Maas (Germany)
         // Add more bank parsers here as we implement them
     )
 
