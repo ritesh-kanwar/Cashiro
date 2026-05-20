@@ -12689,3 +12689,67 @@ error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTe
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream a77af4a7] Add BPCE, Manjushree Finance, and Nabil Bank parsers
+ Date: Thu May 21 03:06:42 2026 +0530
+ 11 files changed, 276 insertions(+), 89 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0292-Address-Greptile-review-anonymize-test-PII-narrow-MF.patch
+Applying: Address Greptile review: anonymize test PII, narrow MFL match, handle incoming instant transfers
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Address Greptile review: anonymize test PII, narrow MFL match, handle incoming instant transfers
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt:48
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt:23
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt: patch does not apply
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt...
+error: while searching for:
+        val lowerMessage = message.lowercase()
+
+        return when {
+            lowerMessage.contains("virement instantané") -> TransactionType.EXPENSE
+            else -> super.extractTransactionType(message)
+        }
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt:48
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt...
+Hunk #1 succeeded at 17 (offset 6 lines).
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt...
+error: while searching for:
+        val cases = listOf(
+            ParserTestCase(
+                name = "Debited example with merchant",
+                message = """Your A/C ##0168658000001, has been debited by NPR 15,000.00 on 01/04/2026 10:27,Remarks:9769780059~2309320,IBFT,transfer laxmi paudyal~RBB
+Manjushree Finance""",
+                sender = "MFL_ALERT",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("15000.00"),
+                    currency = "NPR",
+                    type = TransactionType.EXPENSE,
+                    reference = "9769780059~2309320",
+                    merchant = "laxmi paudyal"
+                )
+            )
+        )
+
+error: patch failed: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt:23
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt with 1 reject...
+Rejected hunk #1.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt cleanly.
+Applying patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt with 1 reject...
+Rejected hunk #1.
