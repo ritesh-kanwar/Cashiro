@@ -19,6 +19,9 @@ interface MerchantMappingDao {
     @Query("DELETE FROM merchant_mappings WHERE merchant_name = :merchantName")
     suspend fun deleteMapping(merchantName: String)
     
+    @Query("SELECT * FROM merchant_mappings")
+    suspend fun getAllMappingsList(): List<MerchantMappingEntity>
+
     @Query("SELECT * FROM merchant_mappings ORDER BY merchant_name ASC")
     fun getAllMappings(): Flow<List<MerchantMappingEntity>>
     

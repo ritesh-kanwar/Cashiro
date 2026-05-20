@@ -34,6 +34,11 @@ class MerchantMappingRepository @Inject constructor(
         return merchantMappingDao.getAllMappings()
     }
     
+    suspend fun getAllMappingsAsMap(): Map<String, String> {
+        val allMappings = merchantMappingDao.getAllMappingsList()
+        return allMappings.associate { it.merchantName to it.category }
+    }
+
     suspend fun getMappingCount(): Int {
         return merchantMappingDao.getMappingCount()
     }

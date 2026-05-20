@@ -110,7 +110,7 @@ class SouthIndianBankParser : BankParser() {
             )
         ) {
             // Pattern for "Info: IMPS/FDRL/528005821348/EPIFI ACCOUN." - capture everything up to period
-            val impsPattern = Regex("""Info:\s*IMPS/[^/]+/[^/]+/([^.]+)""", RegexOption.IGNORE_CASE)
+            val impsPattern = Regex("""Info:\s*IMPS/[^/]+/[^/]+/([^,\s]+)""", RegexOption.IGNORE_CASE)
             impsPattern.find(message)?.let { match ->
                 val merchant = match.groupValues[1].trim()
                 if (merchant.isNotEmpty()) {

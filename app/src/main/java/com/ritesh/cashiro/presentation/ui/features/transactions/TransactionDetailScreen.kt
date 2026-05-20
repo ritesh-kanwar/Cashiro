@@ -47,6 +47,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.automirrored.filled.TrendingDown
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.SubdirectoryArrowRight
@@ -2204,6 +2205,23 @@ private fun TransactionReceipt(
                              } else null
                         }
                     )
+
+                    val referenceValue = transaction.reference ?: transaction.smsSender
+                    if (referenceValue != null) {
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                        ReceiptInfoRow(
+                            label = "Reference",
+                            value = referenceValue,
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Tag,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp),
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        )
+                    }
 
                     val fromAccount = transaction.fromAccount ?: transaction.accountNumber
                     val toAccount = transaction.toAccount

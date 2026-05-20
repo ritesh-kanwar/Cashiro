@@ -4,9 +4,9 @@ import android.util.Log
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 interface PdfStatementParser {
     fun canHandle(text: String): Boolean
@@ -14,137 +14,185 @@ interface PdfStatementParser {
 }
 
 class GPayPdfParser : PdfStatementParser {
+
+    companion object {
+        private const val TAG = "GPayPdfParser"
+        private const val DATE_FORMAT_PATTERN = "dd MMM, yyyy hh:mm a"
+        private const val DATE_BUFFER_SIZE = 8
+    }
+
+    private val IST = TimeZone.getTimeZone("Asia/Kolkata")
+
+    private val merchantAnchorRegex = Regex("""^Paid\s+to\s+(.+)$""", RegexOption.IGNORE_CASE)
+    private val receivedAnchorRegex = Regex("""^Received\s+from\s+(.+)$""", RegexOption.IGNORE_CASE)
+    private val bankAccountLineRegex = Regex("""^Paid\s+(?:by|to)\s+(.+)\s+(Bank|Card|A/c)\s+(\d{4})$""", RegexOption.IGNORE_CASE)
+    private val upiIdRegex = Regex("""UPI\s+Transaction\s+ID[:\s]+(\d+)""", RegexOption.IGNORE_CASE)
+    private val amountRegex = Regex("""^(?:₹|Rs\.?)\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)$""")
+    private val dateLineRegex = Regex("""^(\d{1,2})\s+(\w{3}),?$""")
+    private val yearLineRegex = Regex("""^(20\d{2})$""")
+    private val timeLineRegex = Regex("""^(\d{1,2}:\d{2})\s*([AaPp][Mm])$""")
+
     override fun canHandle(text: String): Boolean {
-        val canHandle = (text.contains("GPay", ignoreCase = true) || text.contains("Google Pay", ignoreCase = true)) 
-                        && text.contains("UPI Transaction ID", ignoreCase = true)
-        Log.d("PDF_PARSER_DEBUG", "GPayPdfParser canHandle: $canHandle")
-        return canHandle
+        val lower = text.lowercase()
+        val result = ("google pay" in lower || "gpay" in lower) && "upi transaction id" in lower
+        Log.d(TAG, "canHandle=$result")
+        return result
     }
 
     override fun parse(text: String): List<ParsedTransaction> {
-        Log.d("PDF_PARSER_DEBUG", "GPayPdfParser starting parse. Text size: ${text.length}")
-        val transactions = mutableListOf<ParsedTransaction>()
-
-        // Regex to find start of a transaction (Date pattern)
-        // More flexible date: "01 Aug 2025" or "01 Aug, 2025"
-        // Also handling possible newlines between date and time
-        val dateRegex = Regex(
-            """(\d{1,2}\s+[A-Za-z]{3},?\s+\d{4})\s*(\d{1,2}:\d{2}\s+[AP]M)""",
-            RegexOption.IGNORE_CASE
-        )
-
-        val matches = dateRegex.findAll(text).toList()
-        if (matches.isEmpty()) return emptyList()
-
-        val allRows = mutableListOf<String>()
-        for (i in matches.indices) {
-            val start = matches[i].range.first
-            val end = if (i + 1 < matches.size) matches[i + 1].range.first else text.length
-            allRows.add(text.substring(start, end).replace(Regex("""\s+"""), " "))
-        }
-
-        val amountRegex = Regex("""(?:₹|Rs\.?)\s*([0-9,]+(?:\.\d+)?)""", RegexOption.IGNORE_CASE)
-
-        for (row in allRows) {
-            val dateMatch = dateRegex.find(row) ?: continue
-            val dateStr = dateMatch.groupValues[1]
-            val timeStr = dateMatch.groupValues[2]
-
-            val dateTime = try {
-                val cleanedDate = dateStr.replace(",", "")
-                LocalDateTime.parse(
-                    "$cleanedDate $timeStr",
-                    DateTimeFormatter.ofPattern("d MMM yyyy h:mm a", Locale.ENGLISH)
-                )
-            } catch (e: Exception) {
-                try {
-                    val cleanedDate = dateStr.replace(",", "")
-                    LocalDateTime.parse(
-                        "$cleanedDate $timeStr",
-                        DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a", Locale.ENGLISH)
-                    )
-                } catch (e2: Exception) {
-                    continue
-                }
-            }
-
-            val amountMatch = amountRegex.find(row)
-            val amountStr = amountMatch?.groupValues?.get(1)?.replace(",", "") ?: continue
-            val amount = BigDecimal(amountStr)
-
-            val isIncome = row.contains("Received from", ignoreCase = true)
-            val type = if (isIncome) TransactionType.INCOME else TransactionType.EXPENSE
-
-            // Non-greedy merchant extraction
-            val merchantMatch = if (isIncome) {
-                Regex(
-                    """(?:Received from|Paid by)\s+(.+?)(?=\s+UPI Transaction ID|Paid to|Paid by|$)""",
-                    RegexOption.IGNORE_CASE
-                ).find(row)
-            } else {
-                Regex(
-                    """Paid to\s+(.+?)(?=\s+UPI Transaction ID|Paid to|Paid by|$)""",
-                    RegexOption.IGNORE_CASE
-                ).find(row)
-            }
-
-            val merchant = merchantMatch?.groupValues?.get(1)?.trim() ?: "Unknown"
-
-            // Bank info is usually at the end before the amount
-            // For Expense: "Paid by [Bank] [Last4] [Amount]"
-            // For Income: "Paid to [Bank] [Last4] [Amount]"
-            val bankMatch = if (isIncome) {
-                Regex(
-                    """Paid to\s+(.+?)\s+(\d{4})(?=\s*[₹Rs])""",
-                    RegexOption.IGNORE_CASE
-                ).find(row)
-            } else {
-                Regex(
-                    """Paid by\s+(.+?)\s+(\d{4})(?=\s*[₹Rs])""",
-                    RegexOption.IGNORE_CASE
-                ).find(row)
-            }
-            val bankName = bankMatch?.groupValues?.get(1)?.trim()
-            val accountLast4 = bankMatch?.groupValues?.get(2)
-
-            val upiMatch = Regex("""UPI Transaction ID:\s*(\d+)""").find(row)
-            val upiId = upiMatch?.groupValues?.get(1)
-
-            val originalMessage = buildString {
-                if (isIncome) {
-                    append("Received from $merchant\n")
-                } else {
-                    append("Paid to $merchant\n")
-                }
-                if (upiId != null) append("UPI Transaction ID: $upiId\n")
-                if (bankName != null && accountLast4 != null) {
-                    if (isIncome) {
-                        append("Paid to $bankName $accountLast4")
-                    } else {
-                        append("Paid by $bankName $accountLast4")
-                    }
-                }
-            }.trim()
-
-            transactions.add(
-                ParsedTransaction(
-                    amount = amount,
-                    type = type,
-                    merchant = merchant,
-                    reference = upiId,
-                    accountLast4 = accountLast4,
-                    bankName = bankName ?: "GPay",
-                    smsBody = originalMessage,
-                    timestamp = dateTime.atZone(java.time.ZoneId.systemDefault()).toInstant()
-                        .toEpochMilli(),
-                    sender = "GPay PDF",
-                    balance = null
-                )
-            )
-        }
-
+        Log.i(TAG, "Starting parse — text length=${text.length}")
+        val blocks = splitIntoBlocks(text)
+        Log.i(TAG, "Split into ${blocks.size} blocks")
+        val transactions = blocks.mapIndexedNotNull { index, block -> parseBlock(block, index) }
+        Log.i(TAG, "Finished: ${transactions.size}/${blocks.size} transactions parsed")
         return transactions
     }
+
+    private fun splitIntoBlocks(text: String): List<String> {
+        val blocks = mutableListOf<String>()
+        val buffer = ArrayDeque<String>()
+        val current = StringBuilder()
+        var inBlock = false
+
+        for (rawLine in text.lines()) {
+            val line = rawLine.trim()
+            if (line.isEmpty()) continue
+
+            if (isTransactionAnchor(line)) {
+                if (inBlock && current.isNotEmpty()) {
+                    blocks.add(current.toString().trim())
+                    current.clear()
+                }
+                buffer.forEach { current.appendLine(it) }
+                buffer.clear()
+                inBlock = true
+            }
+
+            if (inBlock) {
+                current.appendLine(line)
+            } else {
+                buffer.addLast(line)
+                if (buffer.size > DATE_BUFFER_SIZE) buffer.removeFirst()
+            }
+        }
+
+        if (current.isNotEmpty()) blocks.add(current.toString().trim())
+        return blocks
+    }
+
+    private fun isTransactionAnchor(line: String): Boolean {
+        if (receivedAnchorRegex.matches(line)) return true
+        if (merchantAnchorRegex.matches(line)) {
+            return !bankAccountLineRegex.matches(line)
+        }
+        return false
+    }
+
+    private fun parseBlock(block: String, index: Int): ParsedTransaction? {
+        val lines = block.lines().map { it.trim() }.filter { it.isNotEmpty() }
+        val anchorLine = lines.firstOrNull { isTransactionAnchor(it) }
+        if (anchorLine == null) {
+            Log.w(TAG, "Block[$index] — no anchor found, skipping")
+            return null
+        }
+
+        val isExpense = merchantAnchorRegex.matches(anchorLine)
+        val type = if (isExpense) TransactionType.EXPENSE else TransactionType.INCOME
+        val merchant = extractMerchant(anchorLine, isExpense)
+        if (merchant == null) {
+            Log.w(TAG, "Block[$index] — could not extract merchant from: '$anchorLine'")
+            return null
+        }
+
+        val amount = extractAmount(lines)
+        if (amount == null) {
+            Log.w(TAG, "Block[$index] merchant='$merchant' — no amount found")
+            return null
+        }
+
+        val timestamp = extractTimestamp(lines, merchant)
+        val upiId = lines.firstNotNullOfOrNull { upiIdRegex.find(it)?.groupValues?.get(1) }
+        val account = extractAccountInfo(lines)
+
+        return ParsedTransaction(
+            amount = amount,
+            type = type,
+            merchant = merchant,
+            reference = upiId,
+            accountLast4 = account.last4,
+            balance = null,
+            smsBody = block,
+            sender = "GPay PDF",
+            timestamp = timestamp ?: System.currentTimeMillis(),
+            bankName = account.bankName ?: "Google Pay"
+        )
+    }
+
+    private fun extractMerchant(anchorLine: String, isExpense: Boolean): String? {
+        val regex = if (isExpense) merchantAnchorRegex else receivedAnchorRegex
+        return regex.find(anchorLine)?.groupValues?.get(1)?.trim()?.takeIf { it.isNotEmpty() }
+    }
+
+    private fun extractAmount(lines: List<String>): BigDecimal? {
+        for (line in lines) {
+            val raw = amountRegex.find(line)?.groupValues?.get(1) ?: continue
+            val cleaned = raw.replace(",", "")
+            val amount = cleaned.toBigDecimalOrNull()
+            if (amount != null) return amount
+        }
+        return null
+    }
+
+    private fun extractTimestamp(lines: List<String>, merchant: String): Long? {
+        var dateLine: String? = null
+        var yearLine: String? = null
+        var timeLine: String? = null
+
+        for (line in lines) {
+            when {
+                dateLine == null && dateLineRegex.matches(line) -> dateLine = line
+                yearLine == null && yearLineRegex.matches(line) -> yearLine = line
+                timeLine == null && timeLineRegex.matches(line) -> timeLine = line
+            }
+            if (dateLine != null && yearLine != null && timeLine != null) break
+        }
+
+        if (dateLine == null || yearLine == null || timeLine == null) {
+            Log.e(TAG, "Incomplete timestamp for '$merchant'")
+            return null
+        }
+
+        val dateClean = dateLine.trimEnd(',', ' ')
+        val timeClean = timeLine.replace(Regex("""\s+"""), " ").uppercase()
+        val combined = "$dateClean, $yearLine $timeClean"
+
+        return try {
+            val sdf = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.ENGLISH).apply {
+                timeZone = IST
+                isLenient = false
+            }
+            sdf.parse(combined)?.time
+        } catch (e: Exception) {
+            Log.e(TAG, "Date parse exception for '$merchant' — input='$combined': ${e.message}")
+            null
+        }
+    }
+
+    private fun extractAccountInfo(lines: List<String>): AccountInfo {
+        val accountLine = lines.firstOrNull { bankAccountLineRegex.matches(it) }
+        if (accountLine == null) return AccountInfo(null, null)
+
+        val match = bankAccountLineRegex.find(accountLine)
+        val bankName = if (match != null) {
+            val first = match.groupValues.getOrNull(1)?.trim()
+            val second = match.groupValues.getOrNull(2)?.trim()
+            listOfNotNull(first, second).joinToString(" ").takeIf { it.isNotBlank() }
+        } else null
+        val last4 = match?.groupValues?.getOrNull(3)?.trim()
+        return AccountInfo(bankName, last4)
+    }
+
+    private data class AccountInfo(val bankName: String?, val last4: String?)
 }
 
 

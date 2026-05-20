@@ -5,8 +5,12 @@ import com.ritesh.parser.core.bank.PNBBankParser
 import com.ritesh.parser.core.test.ExpectedTransaction
 import com.ritesh.parser.core.test.ParserTestCase
 import com.ritesh.parser.core.test.ParserTestUtils
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import java.math.BigDecimal
 
 class PNBBankParserTest {
@@ -84,15 +88,56 @@ class PNBBankParserTest {
                 )
             ),
             ParserTestCase(
-                name = "UPI-Mandate creation message",
-                message = "Your UPI-Mandate is successfully created towards Google for Rs.1500.00 from A/c No.XXXXXX4356. UMN:1d478c77808c410281f435rer5qwerty6@ybl-PNB",
-                sender = "AX-PNBSMS-S",
+                name = "IMPS transfer debit message",
+                message = "Your a/c no XX1234 is debited for Rs 1000 on 01-01-25 12:00:00 and a/c XX456 credited (IMPS Ref no 123456789012) .If not done by you, pl. forward this SMS from registered mobile to 9264092640 to report unauthorized txn & block IBS/MBS. Download PNB ONE.-PNB",
+                sender = "VM-PNBSMS-S",
                 expected = ExpectedTransaction(
-                    amount = BigDecimal("1500.00"),
+                    amount = BigDecimal("1000"),
                     currency = "INR",
                     type = TransactionType.EXPENSE,
-                    accountLast4 = "4356",
-                    merchant = "Google"
+                    accountLast4 = "1234",
+                    reference = "123456789012",
+                    merchant = "IMPS Transfer"
+                )
+            ),
+            ParserTestCase(
+                name = "IMPS transfer debit to different account",
+                message = "Your a/c no XX847 is debited for Rs 3200 on 11-07-25 03:14:52 and a/c XX291 credited (IMPS Ref no 712845931206) .If not done by you, pl. forward this SMS from registered mobile to 9264092640 to report unauthorized txn & block IBS/MBS. Download PNB ONE.-PNB",
+                sender = "VM-PNBSMS-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("3200"),
+                    currency = "INR",
+                    type = TransactionType.EXPENSE,
+                    accountLast4 = "847",
+                    reference = "712845931206",
+                    merchant = "IMPS Transfer"
+                )
+            ),
+            ParserTestCase(
+                name = "IMPS transfer original message format",
+                message = "Your a/c no XX847 is debited for Rs 6140 on 15-07-25 09:37:44 and a/c XX583 credited (IMPS Ref no 713092476185) .If not done by you, pl. forward this SMS from registered mobile to 9264092640 to report unauthorized txn & block IBS/MBS. Download PNB ONE.-PNB",
+                sender = "VM-PNBSMS-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("6140"),
+                    currency = "INR",
+                    type = TransactionType.EXPENSE,
+                    accountLast4 = "847",
+                    reference = "713092476185",
+                    merchant = "IMPS Transfer"
+                )
+            ),
+            ParserTestCase(
+                name = "UPI credit message with Ref ID",
+                message = "Ac XX7582 Credited with Rs.4750.00 11-07-2025 08:53:21 thru UPI . Aval Bal Rs.82431.67 CR. (UPI Ref ID:714628305917) Helpline 18001800/18002021-PNB",
+                sender = "VM-PNBSMS-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("4750.00"),
+                    currency = "INR",
+                    type = TransactionType.INCOME,
+                    accountLast4 = "7582",
+                    reference = "714628305917",
+                    balance = BigDecimal("82431.67"),
+                    merchant = "UPI Transaction"
                 )
             )
         )
@@ -106,12 +151,35 @@ class PNBBankParserTest {
             "UNKNOWN" to false
         )
 
-
         return ParserTestUtils.runTestSuite(
             parser = parser,
             testCases = testCases,
             handleCases = handleChecks,
             suiteName = "PNB Parser"
+        )
+    }
+
+    @TestFactory
+    fun `pnb mandate creation is treated as subscription not expense`(): List<DynamicTest> {
+        val parser = PNBBankParser()
+        val sender = "AX-PNBSMS-S"
+        val message =
+            "Your UPI-Mandate is successfully created towards Google for Rs.1500.00 from A/c No.XXXXXX4356. UMN:1d478c77808c410281f435rer5qwerty6@ybl-PNB"
+
+        return listOf(
+            dynamicTest("detect mandate notification") {
+                assertEquals(true, parser.isUPIMandateNotification(message))
+            },
+            dynamicTest("do not parse mandate creation as transaction") {
+                assertNull(parser.parse(message, sender, System.currentTimeMillis()))
+            },
+            dynamicTest("parse mandate subscription details") {
+                val mandate = parser.parseUPIMandateSubscription(message)
+                assertNotNull(mandate)
+                assertEquals(BigDecimal("1500.00"), mandate?.amount)
+                assertEquals("Google", mandate?.merchant)
+                assertEquals("1d478c77808c410281f435rer5qwerty6@ybl-PNB", mandate?.umn)
+            }
         )
     }
 }
