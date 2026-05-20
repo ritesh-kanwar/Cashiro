@@ -18,7 +18,6 @@ class GPayPdfParser : PdfStatementParser {
     companion object {
         private const val TAG = "GPayPdfParser"
         private const val DATE_FORMAT_PATTERN = "dd MMM, yyyy hh:mm a"
-        private const val DATE_BUFFER_SIZE = 8
     }
 
     private val IST = TimeZone.getTimeZone("Asia/Kolkata")
@@ -50,33 +49,46 @@ class GPayPdfParser : PdfStatementParser {
 
     private fun splitIntoBlocks(text: String): List<String> {
         val blocks = mutableListOf<String>()
-        val buffer = ArrayDeque<String>()
         val current = StringBuilder()
+        var pendingDate: String? = null
+        var pendingYear: String? = null
+        var pendingTime: String? = null
         var inBlock = false
 
         for (rawLine in text.lines()) {
             val line = rawLine.trim()
             if (line.isEmpty()) continue
 
+            val isDate = dateLineRegex.matches(line)
+            val isYear = yearLineRegex.matches(line)
+            val isTime = timeLineRegex.matches(line)
+
             if (isTransactionAnchor(line)) {
                 if (inBlock && current.isNotEmpty()) {
                     blocks.add(current.toString().trim())
                     current.clear()
                 }
-                buffer.forEach { current.appendLine(it) }
-                buffer.clear()
+                pendingDate?.let { current.appendLine(it) }
+                pendingYear?.let { current.appendLine(it) }
+                pendingTime?.let { current.appendLine(it) }
+                pendingDate = null
+                pendingYear = null
+                pendingTime = null
+                current.appendLine(line)
                 inBlock = true
+                continue
             }
 
-            if (inBlock) {
-                current.appendLine(line)
-            } else {
-                buffer.addLast(line)
-                if (buffer.size > DATE_BUFFER_SIZE) buffer.removeFirst()
-            }
+            if (isDate) { pendingDate = line; continue }
+            if (isYear) { pendingYear = line; continue }
+            if (isTime) { pendingTime = line; continue }
+
+            if (inBlock) current.appendLine(line)
         }
 
         if (current.isNotEmpty()) blocks.add(current.toString().trim())
+
+        Log.d(TAG, "splitIntoBlocks: ${blocks.size} blocks found")
         return blocks
     }
 
@@ -90,9 +102,11 @@ class GPayPdfParser : PdfStatementParser {
 
     private fun parseBlock(block: String, index: Int): ParsedTransaction? {
         val lines = block.lines().map { it.trim() }.filter { it.isNotEmpty() }
+        Log.v(TAG, "Block[$index] lines: $lines")
+
         val anchorLine = lines.firstOrNull { isTransactionAnchor(it) }
         if (anchorLine == null) {
-            Log.w(TAG, "Block[$index] — no anchor found, skipping")
+            Log.w(TAG, "Block[$index] — no anchor found, skipping. Preview: ${lines.take(3)}")
             return null
         }
 
@@ -106,13 +120,15 @@ class GPayPdfParser : PdfStatementParser {
 
         val amount = extractAmount(lines)
         if (amount == null) {
-            Log.w(TAG, "Block[$index] merchant='$merchant' — no amount found")
+            Log.w(TAG, "Block[$index] merchant='$merchant' — no amount found. Lines: $lines")
             return null
         }
 
         val timestamp = extractTimestamp(lines, merchant)
         val upiId = lines.firstNotNullOfOrNull { upiIdRegex.find(it)?.groupValues?.get(1) }
         val account = extractAccountInfo(lines)
+
+        Log.i(TAG, "Block[$index] OK — $type merchant='$merchant' amount=$amount upi=$upiId bank='${account.bankName}' last4=${account.last4}")
 
         return ParsedTransaction(
             amount = amount,
@@ -158,7 +174,7 @@ class GPayPdfParser : PdfStatementParser {
         }
 
         if (dateLine == null || yearLine == null || timeLine == null) {
-            Log.e(TAG, "Incomplete timestamp for '$merchant'")
+            Log.e(TAG, "Incomplete timestamp for '$merchant' — date='$dateLine' year='$yearLine' time='$timeLine'")
             return null
         }
 
@@ -171,7 +187,14 @@ class GPayPdfParser : PdfStatementParser {
                 timeZone = IST
                 isLenient = false
             }
-            sdf.parse(combined)?.time
+            val parsed = sdf.parse(combined)
+            if (parsed == null) {
+                Log.e(TAG, "Date parsed to null for '$merchant' — input='$combined'")
+                null
+            } else {
+                Log.d(TAG, "Timestamp OK for '$merchant' — '$combined' → ${parsed.time}")
+                parsed.time
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Date parse exception for '$merchant' — input='$combined': ${e.message}")
             null
@@ -180,7 +203,10 @@ class GPayPdfParser : PdfStatementParser {
 
     private fun extractAccountInfo(lines: List<String>): AccountInfo {
         val accountLine = lines.firstOrNull { bankAccountLineRegex.matches(it) }
-        if (accountLine == null) return AccountInfo(null, null)
+        if (accountLine == null) {
+            Log.d(TAG, "No account line found in lines: $lines")
+            return AccountInfo(null, null)
+        }
 
         val match = bankAccountLineRegex.find(accountLine)
         val bankName = if (match != null) {
@@ -189,6 +215,8 @@ class GPayPdfParser : PdfStatementParser {
             listOfNotNull(first, second).joinToString(" ").takeIf { it.isNotBlank() }
         } else null
         val last4 = match?.groupValues?.getOrNull(3)?.trim()
+
+        Log.d(TAG, "Account — bank='$bankName' last4='$last4' from '$accountLine'")
         return AccountInfo(bankName, last4)
     }
 
