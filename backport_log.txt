@@ -12595,3 +12595,97 @@ Rejected hunk #2.
 Rejected hunk #3.
 Rejected hunk #4.
 Applied patch app/src/test/java/com/ritesh/cashiro/data/manager/TransactionDeduplicationTest.kt cleanly.
+[backport-fixes-upstream 61c4ba50] Address GPay duplicate review feedback
+ Date: Tue May 19 22:42:56 2026 +0530
+ 10 files changed, 239 insertions(+), 236 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/AccountBalanceDao.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/AccountBalanceRepository.kt.rej
+===================================
+Applying 0290-Fix-GPay-cleanup-keeper-priority.patch
+Applying: Fix GPay cleanup keeper priority
+Successfully applied via git am
+===================================
+Applying 0291-Add-BPCE-Manjushree-Finance-and-Nabil-Bank-parsers-f.patch
+Applying: Add BPCE, Manjushree Finance, and Nabil Bank parsers from Cashiro
+Using index info to reconstruct a base tree...
+M	parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Falling back to patching base and 3-way merge...
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+CONFLICT (content): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt
+Auto-merging parser-core/src/main/kotlin/com/ritesh/parser/core/bank/NabilBankParser.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/main/kotlin/com/ritesh/parser/core/bank/NabilBankParser.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BPCEParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BPCEParserTest.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt
+Auto-merging parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTest.kt
+CONFLICT (add/add): Merge conflict in parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTest.kt
+error: Failed to merge in the changes.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Add BPCE, Manjushree Finance, and Nabil Bank parsers from Cashiro
+Conflict detected! Falling back to apply --reject
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt' with conflicts.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/NabilBankParser.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BPCEParserTest.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt' with conflicts.
+Performing three-way merge...
+Applied patch to 'parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTest.kt' with conflicts.
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt
+U parser-core/src/main/kotlin/com/ritesh/parser/core/bank/NabilBankParser.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BPCEParserTest.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt
+U parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTest.kt
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt...
+error: while searching for:
+        AlecuBankParser(),  // ALECU Credit Union (USA)
+        PriorbankParser(),  // Priorbank (Belarus)
+        AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
+        NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
+        SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
+        PrimeCommercialBankParser(),  // Prime Commercial Bank (Nepal)
+        MPesaTanzaniaParser(),  // M-Pesa Tanzania (must be before Kenya M-PESA)
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:69
+error: while searching for:
+        SparkasseRheinMaasParser(),  // Sparkasse Rhein-Maas (Germany)
+        EnparaBankParser(),  // Enpara (Turkey) — push notifications
+        BankMuscatParser(),  // Bank Muscat (Oman)
+        GreaterBankParser()  // Greater Bank (India)
+        // Add more bank parsers here as we implement them
+    )
+
+
+error: patch failed: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt:109
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParser.kt: already exists in working directory
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/NabilBankParser.kt...
+error: parser-core/src/main/kotlin/com/ritesh/parser/core/bank/NabilBankParser.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BPCEParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/BPCEParserTest.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt: already exists in working directory
+Checking patch parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTest.kt...
+error: parser-core/src/test/kotlin/com/ritesh/parser/core/bank/NabilBankParserTest.kt: already exists in working directory
+Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.

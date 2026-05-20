@@ -70,8 +70,13 @@ object BankParserFactory {
         AlecuBankParser(),  // ALECU Credit Union (USA)
         PriorbankParser(),  // Priorbank (Belarus)
         AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
+<<<<<<< ours
         NabilBankParser(),  // Nabil Bank (Nepal)
         NMBBankParser(),  // NMB Bank (Nepal)
+=======
+        NabilBankParser(),  // Nabil Bank (Nepal) — must be before NMBBankParser (NMB handles NABIL senders broadly)
+        NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
+>>>>>>> theirs
         ManjushreeFinanceParser(), // Manjushree Finance (Nepal)
         SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
 <<<<<<< ours
@@ -163,7 +168,12 @@ object BankParserFactory {
         EnparaBankParser(),  // Enpara (Turkey) — push notifications
 >>>>>>> theirs
         BankMuscatParser(),  // Bank Muscat (Oman)
+<<<<<<< ours
         GreaterBankParser()  // Greater Bank (India)
+>>>>>>> theirs
+=======
+        GreaterBankParser(),  // Greater Bank (India)
+        BPCEParser()  // BPCE (France)
 >>>>>>> theirs
         // Add more bank parsers here as we implement them
     )

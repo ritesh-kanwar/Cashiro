@@ -3,9 +3,12 @@ package com.ritesh.parser.core.bank
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
 
+<<<<<<< ours
 /**
  * Parser for Manjushree Finance (Nepal) SMS messages
  */
+=======
+>>>>>>> theirs
 class ManjushreeFinanceParser : BankParser() {
 
     override fun getBankName() = "Manjushree Finance"
@@ -33,14 +36,20 @@ class ManjushreeFinanceParser : BankParser() {
     }
 
     override fun extractReference(message: String): String? {
+<<<<<<< ours
         // Capture the first part of Remarks up to the first comma
+=======
+>>>>>>> theirs
         val remarks = Regex("""Remarks[:\s]*([^,]+)""", RegexOption.IGNORE_CASE)
         remarks.find(message)?.let { return it.groupValues[1].trim() }
         return null
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
+<<<<<<< ours
         // Try to extract a transfer counterparty: 'transfer laxmi paudyal~RBB' -> 'laxmi paudyal'
+=======
+>>>>>>> theirs
         val transfer = Regex("""transfer\s+([^,~\n]+)""", RegexOption.IGNORE_CASE)
         transfer.find(message)?.let {
             val name = it.groupValues[1].trim()
@@ -50,5 +59,8 @@ class ManjushreeFinanceParser : BankParser() {
 
         return super.extractMerchant(message, sender)
     }
+<<<<<<< ours
 
+=======
+>>>>>>> theirs
 }
