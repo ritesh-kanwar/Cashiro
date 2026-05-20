@@ -30,6 +30,7 @@ data class TransactionEntity(
         @ColumnInfo(name = "currency", defaultValue = "INR") val currency: String = "INR",
         @ColumnInfo(name = "from_account") val fromAccount: String? = null,
         @ColumnInfo(name = "to_account") val toAccount: String? = null,
+        @ColumnInfo(name = "reference") val reference: String? = null,
         @ColumnInfo(name = "billing_cycle") val billingCycle: String? = null,
         @ColumnInfo(name = "attachments", defaultValue = "") val attachments: String = "",
         @ColumnInfo(name = "is_sample", defaultValue = "0") val isSample: Boolean = false

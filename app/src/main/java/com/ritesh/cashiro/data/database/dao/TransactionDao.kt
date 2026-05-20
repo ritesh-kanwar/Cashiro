@@ -3,6 +3,7 @@ package com.ritesh.cashiro.data.database.dao
 import androidx.room.*
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlinx.coroutines.flow.Flow
 
@@ -153,6 +154,35 @@ interface TransactionDao {
     
     @Query("DELETE FROM transactions WHERE is_sample = 1")
     suspend fun deleteSampleTransactions()
+
+    @Query("""
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+        AND reference = :reference
+        AND amount = :amount
+        AND transaction_type = :transactionType
+        AND currency = :currency
+        AND date_time BETWEEN :startDate AND :endDate
+        AND (:accountNumber IS NULL OR account_number = :accountNumber OR account_number IS NULL)
+        ORDER BY date_time ASC
+    """)
+    suspend fun findPotentialDuplicatesByReference(
+        reference: String,
+        amount: BigDecimal,
+        transactionType: TransactionType,
+        currency: String,
+        accountNumber: String?,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): List<TransactionEntity>
+
+    @Query("""
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+        AND reference GLOB '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+        ORDER BY reference ASC, date_time ASC
+    """)
+    suspend fun findPotentialDuplicatesByReference(): List<TransactionEntity>
 
     @Query("UPDATE transactions SET category = :newCategory WHERE merchant_name = :merchantName")
     suspend fun updateCategoryForMerchant(merchantName: String, newCategory: String)

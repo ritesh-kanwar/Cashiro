@@ -123,7 +123,7 @@ class SouthIndianBankParser : BankParser() {
         if (message.contains("UPI", ignoreCase = true)) {
             // Pattern for "Info:UPI/IPOS/number/MERCHANT NAME on" format
             val infoPattern =
-                Regex("""Info:UPI/[^/]+/[^/]+/([^/]+?)\s+on""", RegexOption.IGNORE_CASE)
+                Regex("""Info:\s*UPI/[^/]+/\d{12}/\s*([^/]+?)\s+on""", RegexOption.IGNORE_CASE)
             infoPattern.find(message)?.let { match ->
                 val merchant = match.groupValues[1].trim()
                 if (merchant.isNotEmpty()) {
@@ -229,13 +229,33 @@ class SouthIndianBankParser : BankParser() {
                 ignoreCase = true
             )
         ) {
-            val impsRefPattern = Regex("""Info:\s*IMPS/[^/]+/([^/]+)/""", RegexOption.IGNORE_CASE)
+            val impsRefPattern = Regex(
+                """Info:\s*IMPS/[^/]+/(\d+)(?:/\s*|\s+)""",
+                RegexOption.IGNORE_CASE
+            )
             impsRefPattern.find(message)?.let { match ->
                 val ref = match.groupValues[1].trim()
                 if (ref.isNotEmpty()) {
                     return ref
                 }
             }
+
+            val impsRefPattern2 = Regex("""Info:\s*IMPS/[^/]+/([^/]+)/""", RegexOption.IGNORE_CASE)
+            impsRefPattern2.find(message)?.let { match ->
+                val ref = match.groupValues[1].trim()
+                if (ref.isNotEmpty() && ref.all { it.isDigit() }) {
+                    return ref
+                }
+            }
+        }
+
+        // Pattern for UPI reference in "Info: UPI/provider/rrn/..." format.
+        val upiInfoPattern = Regex(
+            """Info:\s*UPI/[^/]+/(\d{12})(?:/|\s|$)""",
+            RegexOption.IGNORE_CASE
+        )
+        upiInfoPattern.find(message)?.let { match ->
+            return match.groupValues[1].trim()
         }
 
         // Pattern for RRN (e.g., "RRN:523273398527" or "RRN:567304295699.")

@@ -48,7 +48,8 @@ fun ParsedTransaction.toEntity(): TransactionEntity {
         updatedAt = dateTime,
         currency = currency,
         fromAccount = fromAccount,
-        toAccount = toAccount
+        toAccount = toAccount,
+        reference = reference
     )
 }
 

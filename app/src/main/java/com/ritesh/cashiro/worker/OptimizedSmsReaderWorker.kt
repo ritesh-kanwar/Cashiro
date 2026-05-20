@@ -22,6 +22,7 @@ import com.ritesh.cashiro.data.repository.TransactionRepository
 import com.ritesh.cashiro.data.repository.UnrecognizedSmsRepository
 import com.ritesh.cashiro.domain.repository.RuleRepository
 import com.ritesh.cashiro.domain.service.RuleEngine
+import com.ritesh.cashiro.data.manager.TransactionDeduplication
 import com.ritesh.cashiro.utils.CurrencyFormatter
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.bank.BankParserFactory
@@ -81,6 +82,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
         val parsed = AtomicInteger(0)
         val saved = AtomicInteger(0)
         val blocked = AtomicInteger(0)
+        val duplicates = AtomicInteger(0)
         val subscription = AtomicInteger(0)
         private val startMs = System.currentTimeMillis()
 
@@ -103,6 +105,13 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
         val body: String,
         val type: Int
     )
+
+    private enum class SaveOutcome {
+        SAVED,
+        UPDATED_DUPLICATE,
+        SKIPPED_DUPLICATE,
+        SKIPPED
+    }
 
     private sealed interface ParseResult {
         data class Regular(val parsed: ParsedTransaction, val sms: SmsMessage) : ParseResult
@@ -198,8 +207,17 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                         stats.subscription.incrementAndGet()
                     }
                     is ParseResult.Regular -> {
-                        if (saveTransaction(result.parsed, result.sms, merchantMappingCache, ruleCache)) {
-                            stats.saved.incrementAndGet()
+                        when (saveTransaction(result.parsed, result.sms, merchantMappingCache, ruleCache, stats)) {
+                            SaveOutcome.SAVED -> {
+                                stats.saved.incrementAndGet()
+                            }
+                            SaveOutcome.UPDATED_DUPLICATE -> {
+                                stats.duplicates.incrementAndGet()
+                            }
+                            SaveOutcome.SKIPPED_DUPLICATE -> {
+                                stats.duplicates.incrementAndGet()
+                            }
+                            SaveOutcome.SKIPPED -> Unit
                         }
                     }
                 }
@@ -315,16 +333,19 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
         parsed: ParsedTransaction,
         sms: SmsMessage,
         merchantMappingCache: Map<String, String>,
-        ruleCache: Map<com.ritesh.cashiro.data.database.entity.TransactionType, List<com.ritesh.cashiro.data.database.entity.RuleEntity>>
-    ): Boolean {
+        ruleCache: Map<com.ritesh.cashiro.data.database.entity.TransactionType, List<com.ritesh.cashiro.domain.model.rule.TransactionRule>>,
+        stats: ProcessingStats
+    ): SaveOutcome {
         return try {
             val entity = parsed.toEntity()
-            if (transactionRepository.getTransactionByHash(entity.transactionHash) != null) return false
+            if (transactionRepository.getTransactionByHash(entity.transactionHash) != null) return SaveOutcome.SKIPPED
 
-            val mapped = merchantMappingCache[entity.merchantName]?.let { entity.copy(category = it) } ?: entity
+            val customCategory = merchantMappingCache[entity.merchantName]
+            val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
             val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
             if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
-                return false
+                stats.blocked.incrementAndGet()
+                return SaveOutcome.SKIPPED
             }
 
             val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
@@ -334,15 +355,34 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                 withRules.copy(isRecurring = true)
             } else withRules
 
-            val rowId = transactionRepository.insertTransaction(finalEntity)
-            if (rowId == -1L) return false
+            val duplicate = transactionRepository.findPotentialDuplicates(finalEntity).firstOrNull()
+            if (duplicate != null) {
+                if (TransactionDeduplication.shouldReplaceWithIncoming(duplicate, finalEntity)) {
+                    val replacement = finalEntity.copy(
+                        id = duplicate.id,
+                        transactionHash = duplicate.transactionHash,
+                        isRecurring = duplicate.isRecurring || finalEntity.isRecurring,
+                        createdAt = duplicate.createdAt
+                    )
+                    transactionRepository.updateTransaction(replacement)
+                    accountBalanceRepository.deleteBalancesForTransaction(duplicate.id)
+                    replaceRuleApplications(duplicate.id, ruleApps)
+                    processBalanceUpdate(parsed, replacement, duplicate.id)
+                    return SaveOutcome.UPDATED_DUPLICATE
+                }
+                return SaveOutcome.SKIPPED_DUPLICATE
+            }
 
-            if (ruleApps.isNotEmpty()) ruleRepository.saveRuleApplications(ruleApps)
+            val rowId = transactionRepository.insertTransaction(finalEntity)
+            if (rowId == -1L) return SaveOutcome.SKIPPED
+
+            saveRuleApplications(rowId, ruleApps)
             processBalanceUpdate(parsed, finalEntity, rowId)
-            true
+            SaveOutcome.SAVED
+
         } catch (e: Exception) {
             Log.e(TAG, "Error saving transaction: ${e.message}")
-            false
+            SaveOutcome.SKIPPED
         }
     }
 
@@ -400,6 +440,24 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
         Log.i(TAG, "Balance saved for ${parsed.bankName} **$targetAccount: ${CurrencyFormatter.formatCurrency(newBalance, parsed.currency)}")
     }
 
+    private suspend fun replaceRuleApplications(
+        transactionId: Long,
+        ruleApps: List<com.ritesh.cashiro.domain.model.rule.RuleApplication>
+    ) {
+        ruleRepository.deleteRuleApplicationsForTransaction(transactionId.toString())
+        saveRuleApplications(transactionId, ruleApps)
+    }
+
+    private suspend fun saveRuleApplications(
+        transactionId: Long,
+        ruleApps: List<com.ritesh.cashiro.domain.model.rule.RuleApplication>
+    ) {
+        if (ruleApps.isEmpty()) return
+        ruleRepository.saveRuleApplications(
+            ruleApps.map { it.copy(transactionId = transactionId.toString()) }
+        )
+    }
+
     private suspend fun flushUnrecognizedBatch(batch: ArrayList<SmsMessage>) {
         for (sms in batch) {
             try {
@@ -421,9 +479,27 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
 
     private suspend fun cleanUpAndFinalize(stats: ProcessingStats) {
         try { unrecognizedSmsRepository.cleanupOldEntries() } catch (e: Exception) { Log.e(TAG, "Cleanup error: ${e.message}") }
+        try {
+            val deletedDuplicates = cleanupExistingGPayDuplicates()
+            if (deletedDuplicates > 0) {
+                Log.i(TAG, "Cleaned up $deletedDuplicates existing GPay duplicate transactions")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "GPay duplicate cleanup error: ${e.message}")
+        }
         if (stats.saved.get() > 0) {
             try { llmRepository.updateSystemPrompt() } catch (e: Exception) { Log.e(TAG, "Prompt update error: ${e.message}") }
         }
+    }
+
+    private suspend fun cleanupExistingGPayDuplicates(): Int {
+        val duplicateIds = transactionRepository.findGPayDuplicateIdsForCleanup()
+        duplicateIds.forEach { id ->
+            transactionRepository.deleteTransactionById(id)
+            accountBalanceRepository.deleteBalancesForTransaction(id)
+            ruleRepository.deleteRuleApplicationsForTransaction(id.toString())
+        }
+        return duplicateIds.size
     }
 
     private suspend fun reportProgress(stats: ProcessingStats) {
@@ -500,7 +576,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
     private fun readRcsMessages(scanStartSeconds: Long): List<SmsMessage> {
         val result = mutableListOf<SmsMessage>()
         applicationContext.contentResolver.query(
-            "content://mms".toUri(), arrayOf("_id", "thread_id", "date", "tr_id", "m_id"),
+            Uri.parse("content://mms"), arrayOf("_id", "thread_id", "date", "tr_id", "m_id"),
             "date >= ?", arrayOf(scanStartSeconds.toString()), "date DESC"
         )?.use { c ->
             while (c.moveToNext()) {
@@ -531,7 +607,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
     } catch (_: Exception) { null }
 
     private fun getRcsMessageText(messageId: Long): String? = try {
-        applicationContext.contentResolver.query("content://mms/part".toUri(), null, "mid = ?", arrayOf(messageId.toString()), null)?.use { c ->
+        applicationContext.contentResolver.query(Uri.parse("content://mms/part"), null, "mid = ?", arrayOf(messageId.toString()), null)?.use { c ->
             while (c.moveToNext()) {
                 val ct = c.getColumnIndex("ct").takeIf { it >= 0 }?.let { c.getString(it) } ?: continue
                 if (!ct.startsWith("text/") && ct != "application/smil") continue
@@ -540,7 +616,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                 }
                 val partId = c.getLong(c.getColumnIndexOrThrow("_id"))
                 try {
-                    applicationContext.contentResolver.openInputStream("content://mms/part/$partId".toUri())
+                    applicationContext.contentResolver.openInputStream(Uri.parse("content://mms/part/$partId"))
                         ?.bufferedReader()?.use { it.readText() }?.takeIf { it.isNotEmpty() }?.let { return it }
                 } catch (_: Exception) {}
             }
@@ -577,6 +653,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
         │  Processed : ${stats.processed.get()}
         │  Parsed    : ${stats.parsed.get()}
         │  Saved     : ${stats.saved.get()}
+        │  Duplicates: ${stats.duplicates.get()}
         │  Elapsed   : ${stats.elapsedMs()}ms
         │  Speed     : ${"%.1f".format(stats.msgPerSec())} msg/s
         └──────────────────────────────────────────────

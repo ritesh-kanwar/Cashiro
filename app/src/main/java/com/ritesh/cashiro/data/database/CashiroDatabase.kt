@@ -75,7 +75,7 @@ import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
             WebhookLogEntity::class,
             WebhookCursorEntity::class
         ],
-    version = 51,
+    version = 52,
     exportSchema = true,
     autoMigrations =
         [
@@ -149,7 +149,8 @@ abstract class CashiroDatabase : RoomDatabase() {
                                 MIGRATION_29_30,
                                 MIGRATION_48_49,
                                 MIGRATION_49_50,
-                                MIGRATION_50_51
+                                MIGRATION_50_51,
+                                MIGRATION_51_52
                             )
                             .build()
                     INSTANCE = instance
@@ -1424,9 +1425,22 @@ class Migration46To47 : AutoMigrationSpec {
             "Refund" to "type_finance_currency_exchange",
             "Other" to "type_stationary_clipboard"
         )
-        
+
         subcategoryMappings.forEach { (name, iconName) ->
             db.execSQL("UPDATE subcategories SET icon_name = ?, default_icon_name = ? WHERE name = ? AND is_system = 1", arrayOf(iconName, iconName, name))
         }
     }
 }
+
+/**
+ * Manual migration 51 -> 52.
+ *
+ * Adds the `reference` column to the transactions table for UPI transaction
+ * deduplication support.
+ */
+val MIGRATION_51_52 =
+    object : Migration(51, 52) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE transactions ADD COLUMN reference TEXT")
+        }
+    }

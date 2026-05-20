@@ -3,6 +3,7 @@ package com.ritesh.cashiro.data.repository
 import com.ritesh.cashiro.data.database.dao.TransactionDao
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.manager.TransactionDeduplication
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -389,5 +390,27 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     ): List<TransactionEntity> {
         return transactionDao.findPotentialDuplicates(startDate, endDate)
             .filter { it.amount.compareTo(amount) == 0 }
+    }
+
+    suspend fun findPotentialDuplicates(transaction: TransactionEntity): List<TransactionEntity> {
+        if (!TransactionDeduplication.hasUpiReference(transaction)) return emptyList()
+
+        return transactionDao.findPotentialDuplicatesByReference(
+            reference = transaction.reference.orEmpty(),
+            amount = transaction.amount,
+            transactionType = transaction.transactionType,
+            currency = transaction.currency,
+            accountNumber = transaction.accountNumber,
+            startDate = transaction.dateTime.minus(TransactionDeduplication.UPI_DUPLICATE_WINDOW),
+            endDate = transaction.dateTime.plus(TransactionDeduplication.UPI_DUPLICATE_WINDOW)
+        ).filter { candidate ->
+            candidate.id != transaction.id &&
+                TransactionDeduplication.isSameUpiTransaction(candidate, transaction)
+        }
+    }
+
+    suspend fun findGPayDuplicateIdsForCleanup(): List<Long> {
+        val candidates = transactionDao.findPotentialDuplicatesByReference()
+        return TransactionDeduplication.duplicateIdsToDelete(candidates)
     }
 }

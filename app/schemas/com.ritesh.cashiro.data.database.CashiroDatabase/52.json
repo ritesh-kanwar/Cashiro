@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 52,
-    "identityHash": "7af7c786b43a1ea50bbb1592e2df5bfb",
+    "identityHash": "042e41f1724f251d405ab9be9978193f",
     "entities": [
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` TEXT NOT NULL, `merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `subcategory` TEXT, `transaction_type` TEXT NOT NULL, `date_time` TEXT NOT NULL, `description` TEXT, `sms_body` TEXT, `bank_name` TEXT, `sms_sender` TEXT, `account_number` TEXT, `balance_after` TEXT, `transaction_hash` TEXT NOT NULL DEFAULT '', `is_recurring` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL DEFAULT 0, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR', `from_account` TEXT, `to_account` TEXT, `billing_cycle` TEXT, `attachments` TEXT NOT NULL DEFAULT '', `is_sample` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` TEXT NOT NULL, `merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `subcategory` TEXT, `transaction_type` TEXT NOT NULL, `date_time` TEXT NOT NULL, `description` TEXT, `sms_body` TEXT, `bank_name` TEXT, `sms_sender` TEXT, `account_number` TEXT, `balance_after` TEXT, `transaction_hash` TEXT NOT NULL DEFAULT '', `is_recurring` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL DEFAULT 0, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `currency` TEXT NOT NULL DEFAULT 'INR', `from_account` TEXT, `to_account` TEXT, `reference` TEXT, `billing_cycle` TEXT, `attachments` TEXT NOT NULL DEFAULT '', `is_sample` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -126,6 +126,11 @@
           {
             "fieldPath": "toAccount",
             "columnName": "to_account",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "reference",
+            "columnName": "reference",
             "affinity": "TEXT"
           },
           {
@@ -313,7 +318,7 @@
       },
       {
         "tableName": "merchant_mappings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `subcategory` TEXT, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, PRIMARY KEY(`merchant_name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, PRIMARY KEY(`merchant_name`))",
         "fields": [
           {
             "fieldPath": "merchantName",
@@ -326,11 +331,6 @@
             "columnName": "category",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "subcategory",
-            "columnName": "subcategory",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "createdAt",
@@ -1691,7 +1691,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7af7c786b43a1ea50bbb1592e2df5bfb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '042e41f1724f251d405ab9be9978193f')"
     ]
   }
 }
