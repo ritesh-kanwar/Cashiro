@@ -1,0 +1,16 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt b/app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt	(rejected hunks)
+@@ -187,6 +187,14 @@ interface TransactionDao {
+     @Query("SELECT * FROM transactions WHERE reference = :reference AND is_deleted = 0 LIMIT 1")
+     suspend fun getTransactionByReference(reference: String): TransactionEntity?
+ 
++    @Query("""
++        SELECT * FROM transactions
++        WHERE reference = :reference
++        AND is_deleted = 0
++        ORDER BY date_time ASC
++    """)
++    suspend fun getTransactionsByReference(reference: String): List<TransactionEntity>
++
+     @Query("""
+         SELECT * FROM transactions
+         WHERE is_deleted = 0

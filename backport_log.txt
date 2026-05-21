@@ -12824,3 +12824,97 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBank
 Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
 error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
+[backport-fixes-upstream 4d239188] fix: address Greptile review on ICICI transfer PR
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu May 21 19:21:29 2026 +0530
+ 2 files changed, 37 insertions(+), 12 deletions(-)
+===================================
+Applying 0301-fix-support-AU-Bank-s-new-Dr-INR-short-form-debit-fo.patch
+Applying: fix: support AU Bank's new "Dr INR" short-form debit format (#342)
+Successfully applied via git am
+===================================
+Applying 0302-fix-address-Greptile-review-on-AU-Bank-PR.patch
+Applying: fix: address Greptile review on AU Bank PR
+Successfully applied via git am
+===================================
+Applying 0303-feat-enrich-transactions-from-GPay-statements.patch
+Applying: feat: enrich transactions from GPay statements
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: enrich transactions from GPay statements
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:187
+error: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:6
+error: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Falling back to direct application...
+Falling back to direct application...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt...
+error: while searching for:
+    @Query("SELECT * FROM transactions WHERE reference = :reference AND is_deleted = 0 LIMIT 1")
+    suspend fun getTransactionByReference(reference: String): TransactionEntity?
+
+    @Query("""
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt:187
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.entity.TransactionSplitEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.database.entity.TransactionWithSplits
+import com.ritesh.cashiro.data.manager.TransactionDeduplication
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:6
+error: while searching for:
+    suspend fun getTransactionByReference(reference: String): TransactionEntity? =
+        transactionDao.getTransactionByReference(reference)
+
+    suspend fun findPotentialDuplicates(transaction: TransactionEntity): List<TransactionEntity> {
+        if (!TransactionDeduplication.hasUpiReference(transaction)) return emptyList()
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt:138
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/ImportStatementUseCase.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportProcessor.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportResult.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricher.kt...
+Checking patch app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt...
+Checking patch app/src/test/java/com/ritesh/cashiro/data/statement/StatementImportProcessorTest.kt...
+Checking patch app/src/test/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricherTest.kt...
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/GPayPdfParser.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/ImportStatementUseCase.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportProcessor.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportResult.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricher.kt cleanly.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt cleanly.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/StatementImportProcessorTest.kt cleanly.
+Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricherTest.kt cleanly.
