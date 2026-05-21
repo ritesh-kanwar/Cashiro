@@ -12801,3 +12801,26 @@ Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBank
 Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
 error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
+[backport-fixes-upstream ac7f61e0] fix: detect ICICI dual-account IMPS pattern as
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Thu May 21 18:28:02 2026 +0530
+ 2 files changed, 85 insertions(+), 5 deletions(-)
+===================================
+Applying 0300-fix-address-Greptile-review-on-ICICI-transfer-PR.patch
+Applying: fix: address Greptile review on ICICI transfer PR
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: address Greptile review on ICICI transfer PR
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
