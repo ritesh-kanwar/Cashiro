@@ -12234,3 +12234,25 @@ Patch failed at 0001 feat: add ENDED state and 'Cancelled' section for subscript
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0284-feat-add-ENDED-state-and-Cancelled-section-for-subsc.patch:176
 error: corrupt patch at ../filtered_patches/0284-feat-add-ENDED-state-and-Cancelled-section-for-subsc.patch:176
+[backport-fixes-upstream e5800a43] feat: add ENDED state and 'Cancelled' section for
+ Author: Sarim Ahmed <50093514+sarim2000@users.noreply.github.com>
+ Date: Tue May 19 17:11:15 2026 +0530
+ 1 file changed, 19 insertions(+)
+===================================
+Applying 0286-fix-backup-import-NPE-when-older-backups-omit-new-li.patch
+Applying: fix: backup import NPE when older backups omit new list fields (#341)
+Successfully applied via git am
+===================================
+Applying 0287-feat-replace-UPI-VPAs-with-contact-names-at-display-.patch
+Applying: feat: replace UPI VPAs with contact names at display time (#344)
+error: corrupt patch at .git/rebase-apply/patch:264
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: replace UPI VPAs with contact names at display time (#344)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0287-feat-replace-UPI-VPAs-with-contact-names-at-display-.patch:373
+error: corrupt patch at ../filtered_patches/0287-feat-replace-UPI-VPAs-with-contact-names-at-display-.patch:373
