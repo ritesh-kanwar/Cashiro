@@ -12777,3 +12777,27 @@ Patch failed at 0001 Reduce duplicated app code
 Conflict detected! Falling back to apply --reject
 error: corrupt patch at ../filtered_patches/0298-Reduce-duplicated-app-code.patch:344
 error: corrupt patch at ../filtered_patches/0298-Reduce-duplicated-app-code.patch:344
+[backport-fixes-upstream 69265af1] Reduce duplicated app code
+ Date: Wed May 20 00:30:49 2026 +0530
+ 3 files changed, 24 insertions(+), 29 deletions(-)
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BPCEParser.kt.rej
+ delete mode 100644 parser-core/src/test/kotlin/com/ritesh/parser/core/bank/ManjushreeFinanceParserTest.kt.rej
+===================================
+Applying 0299-fix-detect-ICICI-dual-account-IMPS-pattern-as-transf.patch
+Applying: fix: detect ICICI dual-account IMPS pattern as transfer (#282)
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: detect ICICI dual-account IMPS pattern as transfer (#282)
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/ICICIBankParser.kt cleanly.
