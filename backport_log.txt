@@ -12918,3 +12918,34 @@ Applied patch app/src/main/java/com/ritesh/cashiro/data/statement/StatementTrans
 Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/GPayPdfParserTest.kt cleanly.
 Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/StatementImportProcessorTest.kt cleanly.
 Applied patch app/src/test/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricherTest.kt cleanly.
+[backport-fixes-upstream f9da1ba5] feat: enrich transactions from GPay statements
+ Date: Thu May 21 17:56:18 2026 +0530
+ 11 files changed, 876 insertions(+), 64 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/dao/TransactionDao.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/TransactionRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/StatementImportProcessor.kt
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricher.kt
+ create mode 100644 app/src/test/java/com/ritesh/cashiro/data/statement/StatementImportProcessorTest.kt
+ create mode 100644 app/src/test/java/com/ritesh/cashiro/data/statement/StatementTransactionEnricherTest.kt
+===================================
+Applying 0304-ci-compile-standard-debug-Kotlin-in-tests.patch
+Applying: ci: compile standard debug Kotlin in tests
+Successfully applied via git am
+===================================
+Applying 0305-fix-do-not-discard-amoutn-adn-time-match-as-duplciat.patch
+Applying: fix: do not discard amoutn adn time match as duplciate and actually enrich the tx
+Successfully applied via git am
+===================================
+Applying 0306-feat-swipe-left-to-change-category-on-a-transaction-.patch
+Applying: feat: swipe-left to change category on a transaction (#353)
+error: corrupt patch at .git/rebase-apply/patch:36
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: swipe-left to change category on a transaction (#353)
+Conflict detected! Falling back to apply --reject
+error: corrupt patch at ../filtered_patches/0306-feat-swipe-left-to-change-category-on-a-transaction-.patch:74
+error: corrupt patch at ../filtered_patches/0306-feat-swipe-left-to-change-category-on-a-transaction-.patch:74
