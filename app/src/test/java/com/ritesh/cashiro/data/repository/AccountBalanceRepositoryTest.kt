@@ -32,14 +32,26 @@ class AccountBalanceRepositoryTest {
         assertEquals("99", repository.resolveAccountLast4("Test Bank", "99"))
     }
 
+    @Test
+    fun resolveAccountLast4DoesNotQueryForBlankSuffix() = runTest {
+        val dao = FakeAccountBalanceDao()
+        val repository = AccountBalanceRepository(dao, null)
+
+        assertEquals("", repository.resolveAccountLast4("Test Bank", ""))
+        assertEquals(0, dao.suffixLookupCount)
+    }
+
     private class FakeAccountBalanceDao(
         private val suffixMatches: Map<String, Map<String, List<String>>> = emptyMap()
     ) : AccountBalanceDao {
+        var suffixLookupCount = 0
+
         override suspend fun insertBalance(balance: AccountBalanceEntity): Long = 1
 
         override suspend fun getLatestBalance(bankName: String, accountLast4: String): AccountBalanceEntity? = null
 
         override suspend fun getAccountLast4sEndingWith(bankName: String, suffix: String): List<String> {
+            suffixLookupCount++
             return suffixMatches[bankName]?.get(suffix).orEmpty()
         }
 

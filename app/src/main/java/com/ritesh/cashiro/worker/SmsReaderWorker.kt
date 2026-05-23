@@ -456,10 +456,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                 } else {
                                     // This is a direct account transaction - always create balance entry
                                     Log.d(TAG, "Transaction identified as ACCOUNT transaction - will create balance entry")
-                                    accountBalanceRepository.resolveAccountLast4(
-                                        parsedTransaction.bankName,
-                                        parsedAccountLast4
-                                    )
+                                    finalEntityForInsert.accountNumber?.takeIf { it.isNotBlank() } ?: parsedAccountLast4
                                 }
                                 
                                 // Only create balance entry if we have a target account

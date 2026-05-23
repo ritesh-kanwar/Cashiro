@@ -255,10 +255,7 @@ class SmsTransactionProcessor @Inject constructor(
                 }
             }
         } else {
-            accountBalanceRepository.resolveAccountLast4(
-                parsedTransaction.bankName,
-                parsedAccountLast4
-            )
+            entity.accountNumber?.takeIf { it.isNotBlank() } ?: parsedAccountLast4
         }
 
         if (targetAccountLast4 != null) {

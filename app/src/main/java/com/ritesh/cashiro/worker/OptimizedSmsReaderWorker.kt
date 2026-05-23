@@ -1239,10 +1239,7 @@ private suspend fun processBalanceUpdate(
         } else {
             // This is a direct account transaction - always create balance entry
             Log.d(TAG, "Transaction identified as ACCOUNT transaction - will create balance entry")
-            accountBalanceRepository.resolveAccountLast4(
-                parsedTransaction.bankName,
-                parsedAccountLast4
-            )
+            entity.accountNumber?.takeIf { it.isNotBlank() } ?: parsedAccountLast4
         }
 
         // Create balance entry if we have a target account

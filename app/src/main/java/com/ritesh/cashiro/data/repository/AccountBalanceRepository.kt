@@ -31,6 +31,10 @@ class AccountBalanceRepository @Inject constructor(
     }
 
     suspend fun resolveAccountLast4(bankName: String, accountLast4: String): String {
+        if (accountLast4.isBlank()) {
+            return accountLast4
+        }
+
         if (accountLast4.length >= 4) {
             return accountLast4
         }
