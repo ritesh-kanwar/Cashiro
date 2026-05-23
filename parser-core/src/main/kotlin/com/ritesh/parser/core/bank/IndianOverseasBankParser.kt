@@ -24,6 +24,8 @@ class IndianOverseasBankParser : BankParser() {
     override fun extractAmount(message: String): BigDecimal? {
         // List of amount patterns for IOB
         val amountPatterns = listOf(
+            Regex("""Rs\.?\s*([0-9,]+(?:\.\d{2})?)\s+Debited\s+to\s+(?:SB|CA|CC)-""", RegexOption.IGNORE_CASE),
+            Regex("""Rs\.?\s*([0-9,]+(?:\.\d{2})?)\s+Credited\s+to\s+(?:SB|CA|CC)-""", RegexOption.IGNORE_CASE),
             // "credited by Rs.906.00"
             Regex("""credited\s+by\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
             // "debited by Rs.906.00"
@@ -31,7 +33,8 @@ class IndianOverseasBankParser : BankParser() {
             // "credited with Rs.906.00"
             Regex("""credited\s+with\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
             // "debited for Rs.906.00"
-            Regex("""debited\s+for\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""debited\s+for\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+            Regex("""debited\s+towards\s+[Xx]*\d{2,4}\s+for\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         )
 
         for (pattern in amountPatterns) {
@@ -54,10 +57,13 @@ class IndianOverseasBankParser : BankParser() {
             lowerMessage.contains("credited by") -> TransactionType.INCOME
             lowerMessage.contains("credited with") -> TransactionType.INCOME
             lowerMessage.contains("is credited") -> TransactionType.INCOME
+            lowerMessage.contains("credited to") -> TransactionType.INCOME
 
             lowerMessage.contains("debited by") -> TransactionType.EXPENSE
             lowerMessage.contains("debited for") -> TransactionType.EXPENSE
             lowerMessage.contains("is debited") -> TransactionType.EXPENSE
+            lowerMessage.contains("debited to") -> TransactionType.EXPENSE
+            lowerMessage.contains("debited towards") -> TransactionType.EXPENSE
 
             else -> super.extractTransactionType(message)
         }
@@ -158,29 +164,54 @@ class IndianOverseasBankParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
-        val shortAccountPattern = Regex(
-            """\b(?:SB|CA|CC)-[xX]*(\d{2,4})\b""",
-            RegexOption.IGNORE_CASE
+        val accountPatterns = listOf(
+            Regex("""\b(?:SB|CA|CC)-[xX]*(\d{2,4})\b""", RegexOption.IGNORE_CASE),
+            Regex("""a/c\s+no\.\s+[Xx]*(\d{2,4})""", RegexOption.IGNORE_CASE),
+            Regex("""a/c:?\s*[Xx]*(\d{2,4})""", RegexOption.IGNORE_CASE),
+            Regex("""account\s+has\s+been\s+debited\s+towards\s+[Xx]*(\d{2,4})""", RegexOption.IGNORE_CASE),
+            Regex("""IOB\s+account\s+[Xx]*(\d{2,4})""", RegexOption.IGNORE_CASE),
+            Regex("""Acct:\s*\d*[xX]+(\d{2,4})""", RegexOption.IGNORE_CASE)
         )
-        shortAccountPattern.find(message)?.let { match ->
-            val digits = match.groupValues[1]
-            return if (digits.length >= 4) digits.takeLast(4) else digits
-        }
 
-        // Pattern: "Your a/c no. XXXXX92"
-        val accountPattern = Regex(
-            """a/c\s+no\.\s+[X]*(\d{2,4})""",
-            RegexOption.IGNORE_CASE
-        )
-        accountPattern.find(message)?.let { match ->
-            val digits = match.groupValues[1]
-            return if (digits.length >= 4) digits.takeLast(4) else digits
+        for (pattern in accountPatterns) {
+            pattern.find(message)?.let { match ->
+                val digits = match.groupValues[1]
+                return if (digits.length >= 4) digits.takeLast(4) else digits
+            }
         }
 
         return super.extractAccountLast4(message)
     }
 
+    override fun extractBalance(message: String): BigDecimal? {
+        val balancePatterns = listOf(
+            Regex("""AcBal:\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+            Regex("""Avl\s+Balance\s+in\s+Acct:[^\s]+\s+is\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+        )
+
+        for (pattern in balancePatterns) {
+            pattern.find(message)?.let { match ->
+                val balance = match.groupValues[1].replace(",", "")
+                return try {
+                    BigDecimal(balance)
+                } catch (e: NumberFormatException) {
+                    null
+                }
+            }
+        }
+
+        return super.extractBalance(message)
+    }
+
     override fun extractReference(message: String): String? {
+        val bracketRefPattern = Regex(
+            """\[(?:UPI|IMPS)/\s*(\d+)""",
+            RegexOption.IGNORE_CASE
+        )
+        bracketRefPattern.find(message)?.let { match ->
+            return match.groupValues[1]
+        }
+
         // Pattern: "(UPI Ref no 560699645381)"
         val upiRefPattern = Regex(
             """\(UPI\s+Ref\s+no\s+(\d+)\)""",
@@ -223,8 +254,11 @@ class IndianOverseasBankParser : BankParser() {
         // Check for IOB specific transaction patterns
         if (lowerMessage.contains("is credited by") ||
             lowerMessage.contains("is debited by") ||
+            lowerMessage.contains("debited to") ||
+            lowerMessage.contains("credited to") ||
             lowerMessage.contains("credited with") ||
-            lowerMessage.contains("debited for")
+            lowerMessage.contains("debited for") ||
+            lowerMessage.contains("debited towards")
         ) {
             return true
         }
