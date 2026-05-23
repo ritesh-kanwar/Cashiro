@@ -14,11 +14,11 @@ import javax.inject.Singleton
 @Singleton
 class AccountBalanceRepository @Inject constructor(
     private val accountBalanceDao: AccountBalanceDao,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context?
 ) {
     
     suspend fun insertBalance(balance: AccountBalanceEntity): Long {
-        val balanceWithIconName = if (balance.iconName.isEmpty() && balance.iconResId != 0) {
+        val balanceWithIconName = if (context != null && balance.iconName.isEmpty() && balance.iconResId != 0) {
             balance.copy(iconName = IconResolutionUtils.resIdToName(context, balance.iconResId))
         } else {
             balance
@@ -28,6 +28,15 @@ class AccountBalanceRepository @Inject constructor(
     
     suspend fun getLatestBalance(bankName: String, accountLast4: String): AccountBalanceEntity? {
         return accountBalanceDao.getLatestBalance(bankName, accountLast4)
+    }
+
+    suspend fun resolveAccountLast4(bankName: String, accountLast4: String): String {
+        if (accountLast4.length >= 4) {
+            return accountLast4
+        }
+
+        val matches = accountBalanceDao.getAccountLast4sEndingWith(bankName, accountLast4)
+        return if (matches.size == 1) matches.first() else accountLast4
     }
     
     fun getLatestBalanceFlow(bankName: String, accountLast4: String): Flow<AccountBalanceEntity?> {

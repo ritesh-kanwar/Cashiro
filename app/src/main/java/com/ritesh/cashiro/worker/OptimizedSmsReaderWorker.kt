@@ -1099,12 +1099,25 @@ private suspend fun saveParsedTransaction(
         } else {
             entityWithRules
         }
+        val finalEntityForInsert = if (!parsedTransaction.isFromCard &&
+            finalEntity.bankName != null &&
+            finalEntity.accountNumber != null
+        ) {
+            finalEntity.copy(
+                accountNumber = accountBalanceRepository.resolveAccountLast4(
+                    finalEntity.bankName,
+                    finalEntity.accountNumber
+                )
+            )
+        } else {
+            finalEntity
+        }
 
-        val rowId = transactionRepository.insertTransaction(finalEntity)
+        val rowId = transactionRepository.insertTransaction(finalEntityForInsert)
         if (rowId != -1L) {
             Log.d(
                 TAG,
-                "Saved new transaction with ID: $rowId${if (finalEntity.isRecurring) " (Recurring)" else ""}"
+                "Saved new transaction with ID: $rowId${if (finalEntityForInsert.isRecurring) " (Recurring)" else ""}"
             )
 
             // Save rule applications if any rules were applied
@@ -1120,7 +1133,7 @@ private suspend fun saveParsedTransaction(
             }
 
             // Process balance updates
-            processBalanceUpdate(parsedTransaction, finalEntity, rowId)
+            processBalanceUpdate(parsedTransaction, finalEntityForInsert, rowId)
             return true
         } else {
             Log.d(
@@ -1140,7 +1153,8 @@ private suspend fun processBalanceUpdate(
     entity: com.ritesh.cashiro.data.database.entity.TransactionEntity,
     rowId: Long
 ) {
-    if (parsedTransaction.accountLast4 != null) {
+    val parsedAccountLast4 = parsedTransaction.accountLast4
+    if (parsedAccountLast4 != null) {
         // Determine if this transaction is from a card based on the message pattern
         val isFromCard = parsedTransaction.isFromCard
 
@@ -1225,7 +1239,10 @@ private suspend fun processBalanceUpdate(
         } else {
             // This is a direct account transaction - always create balance entry
             Log.d(TAG, "Transaction identified as ACCOUNT transaction - will create balance entry")
-            parsedTransaction.accountLast4
+            accountBalanceRepository.resolveAccountLast4(
+                parsedTransaction.bankName,
+                parsedAccountLast4
+            )
         }
 
         // Create balance entry if we have a target account

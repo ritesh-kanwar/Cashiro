@@ -345,11 +345,24 @@ class SmsReaderWorker @AssistedInject constructor(
                             } else {
                                 entityWithRules
                             }
+                            val finalEntityForInsert = if (!parsedTransaction.isFromCard &&
+                                finalEntity.bankName != null &&
+                                finalEntity.accountNumber != null
+                            ) {
+                                finalEntity.copy(
+                                    accountNumber = accountBalanceRepository.resolveAccountLast4(
+                                        finalEntity.bankName,
+                                        finalEntity.accountNumber
+                                    )
+                                )
+                            } else {
+                                finalEntity
+                            }
                             
-                            val rowId = transactionRepository.insertTransaction(finalEntity)
+                            val rowId = transactionRepository.insertTransaction(finalEntityForInsert)
                             if (rowId != -1L) {
                                 savedCount++
-                                Log.d(TAG, "Saved new transaction with ID: $rowId${if (finalEntity.isRecurring) " (Recurring)" else ""}")
+                                Log.d(TAG, "Saved new transaction with ID: $rowId${if (finalEntityForInsert.isRecurring) " (Recurring)" else ""}")
 
                                 // Save rule applications if any rules were applied
                                 if (ruleApplications.isNotEmpty()) {
@@ -362,7 +375,8 @@ class SmsReaderWorker @AssistedInject constructor(
                                 
                                 // Only save balance/credit limit information for NEW transactions (not duplicates)
                                 // This prevents incorrect balance accumulation from duplicate SMS messages
-                                if (parsedTransaction.accountLast4 != null) {
+                                val parsedAccountLast4 = parsedTransaction.accountLast4
+                                if (parsedAccountLast4 != null) {
                                 
                                 // Determine if this transaction is from a card based on the message pattern
                                 val isFromCard = parsedTransaction.isFromCard
@@ -442,7 +456,10 @@ class SmsReaderWorker @AssistedInject constructor(
                                 } else {
                                     // This is a direct account transaction - always create balance entry
                                     Log.d(TAG, "Transaction identified as ACCOUNT transaction - will create balance entry")
-                                    parsedTransaction.accountLast4
+                                    accountBalanceRepository.resolveAccountLast4(
+                                        parsedTransaction.bankName,
+                                        parsedAccountLast4
+                                    )
                                 }
                                 
                                 // Only create balance entry if we have a target account

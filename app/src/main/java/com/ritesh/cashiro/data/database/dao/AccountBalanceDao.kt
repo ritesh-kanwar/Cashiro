@@ -19,6 +19,14 @@ interface AccountBalanceDao {
         LIMIT 1
     """)
     suspend fun getLatestBalance(bankName: String, accountLast4: String): AccountBalanceEntity?
+
+    @Query("""
+        SELECT DISTINCT account_last4 FROM account_balances
+        WHERE bank_name = :bankName
+        AND LENGTH(account_last4) >= 4
+        AND account_last4 LIKE '%' || :suffix
+    """)
+    suspend fun getAccountLast4sEndingWith(bankName: String, suffix: String): List<String>
     
     @Query("""
         SELECT * FROM account_balances 
