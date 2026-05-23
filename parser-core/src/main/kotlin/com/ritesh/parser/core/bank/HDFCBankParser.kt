@@ -192,6 +192,29 @@ class HDFCBankParser : BankParser() {
             }
         }
 
+        // Pattern 6b: HDFC UPI send format:
+        // "Sent Rs.x From HDFC Bank A/C *1234 To merchant_or_vpa On dd/MM/yy"
+        if (message.contains("Sent Rs", ignoreCase = true) &&
+            message.contains("From HDFC Bank", ignoreCase = true)
+        ) {
+            val sentToPattern = Regex(
+                """\bTo\s+(.+?)\s+On\s+\d{1,2}[/-]\d{1,2}[/-]\d{2,4}""",
+                RegexOption.IGNORE_CASE
+            )
+            sentToPattern.find(message)?.let { match ->
+                val payee = match.groupValues[1].trim()
+                val merchant = if (payee.contains("@")) {
+                    val vpaName = payee.substringBefore("@").trim()
+                    if (vpaName.any { it.isLetter() }) cleanMerchantName(vpaName) else "UPI Payee"
+                } else {
+                    cleanMerchantName(payee)
+                }
+                if (isValidMerchantName(merchant)) {
+                    return merchant
+                }
+            }
+        }
+
         // Pattern 7: "towards [Merchant Name]" (for payment alerts)
         if (message.contains("towards", ignoreCase = true)) {
             val towardsPattern = Regex(

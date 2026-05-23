@@ -64,6 +64,41 @@ class IndianOverseasBankParser : BankParser() {
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
+        val bracketedDescriptionPattern = Regex("""\[\s*([^\]]+?)\s*]""", RegexOption.IGNORE_CASE)
+        bracketedDescriptionPattern.find(message)?.let { match ->
+            val description = match.groupValues[1].trim()
+            val normalizedDescription = when {
+                description.contains("CHRGS", ignoreCase = true) &&
+                    description.contains("SMS", ignoreCase = true) -> "SMS Charges"
+                description.startsWith("NEFT-", ignoreCase = true) -> {
+                    description.split("-").getOrNull(1)?.takeIf { it.isNotBlank() } ?: description
+                }
+                description.startsWith("UPI/", ignoreCase = true) -> "UPI"
+                else -> description
+            }
+            val merchant = cleanMerchantName(normalizedDescription)
+            if (isValidMerchantName(merchant)) {
+                return merchant
+            }
+        }
+
+        val payeePattern = Regex(
+            """debited\s+for\s+payee\s+(.+?)\s+for\s+Rs\.?""",
+            RegexOption.IGNORE_CASE
+        )
+        payeePattern.find(message)?.let { match ->
+            val payee = match.groupValues[1].trim()
+            val merchant = if (payee.contains("@")) {
+                val vpaName = payee.substringBefore("@").trim()
+                if (vpaName.any { it.isLetter() }) cleanMerchantName(vpaName) else "UPI Payee"
+            } else {
+                cleanMerchantName(payee)
+            }
+            if (isValidMerchantName(merchant)) {
+                return merchant
+            }
+        }
+
         // UPI transaction with payer details
         // Pattern: "from SIDDHANT SIN-7737219900@su(UPI Ref"
         val upiPayerPattern = Regex(
@@ -165,7 +200,13 @@ class IndianOverseasBankParser : BankParser() {
         if (lowerMessage.contains("otp") ||
             lowerMessage.contains("verification") ||
             lowerMessage.contains("request") ||
-            lowerMessage.contains("failed")
+            lowerMessage.contains("failed") ||
+            lowerMessage.contains("will be debited") ||
+            lowerMessage.contains("will be deducted") ||
+            lowerMessage.contains("applicable sms charges") ||
+            lowerMessage.contains("txn is not enabled") ||
+            lowerMessage.contains("transaction declined") ||
+            lowerMessage.contains("never respond")
         ) {
             return false
         }

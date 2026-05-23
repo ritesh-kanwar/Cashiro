@@ -40,6 +40,44 @@ T&C. Ignore if paid""",
                     accountLast4 = "1234",
                     reference = "123456789012"
                 )
+            ),
+            ParserTestCase(
+                name = "Sent UPI transaction to named payee",
+                message = """Sent Rs.45.00
+From HDFC Bank A/C *1234
+To Sample Friend
+On 23/05/26
+Ref 123456789012
+Not You?
+Contact bank support/SMS BLOCK UPI""",
+                sender = "JD-HDFCBK-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("45.00"),
+                    currency = "INR",
+                    type = com.ritesh.parser.core.TransactionType.EXPENSE,
+                    merchant = "Sample Friend",
+                    accountLast4 = "1234",
+                    reference = "123456789012"
+                )
+            ),
+            ParserTestCase(
+                name = "Sent UPI transaction to numeric VPA",
+                message = """Sent Rs.70.00
+From HDFC Bank A/C *1234
+To 0000000000@bank
+On 23/05/26
+Ref 123456789013
+Not You?
+Contact bank support/SMS BLOCK UPI""",
+                sender = "AD-HDFCBK-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("70.00"),
+                    currency = "INR",
+                    type = com.ritesh.parser.core.TransactionType.EXPENSE,
+                    merchant = "UPI Payee",
+                    accountLast4 = "1234",
+                    reference = "123456789013"
+                )
             )
         )
 
