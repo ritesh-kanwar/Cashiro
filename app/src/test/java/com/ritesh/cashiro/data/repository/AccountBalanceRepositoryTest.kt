@@ -218,6 +218,48 @@ class AccountBalanceRepositoryTest {
         assertEquals(0, dao.suffixLookupCount)
     }
 
+    @Test
+    fun insertTransactionBalanceReducesCreditCardBalanceForIncomePayment() = runTest {
+        val transactionTime = LocalDateTime.of(2026, 5, 23, 20, 35)
+        val dao = FakeAccountBalanceDao(
+            latestBalances = mutableMapOf(
+                accountKey("Test Bank", "1234") to balance(
+                    id = 1,
+                    bankName = "Test Bank",
+                    accountLast4 = "1234",
+                    balance = BigDecimal("100.00"),
+                    timestamp = transactionTime.minusMinutes(5),
+                    isCreditCard = true
+                )
+            ),
+            balanceAtOrBefore = balance(
+                id = 1,
+                bankName = "Test Bank",
+                accountLast4 = "1234",
+                balance = BigDecimal("100.00"),
+                timestamp = transactionTime.minusMinutes(5),
+                isCreditCard = true
+            )
+        )
+        val repository = AccountBalanceRepository(dao, ContextWrapper(null))
+
+        repository.insertTransactionBalance(
+            bankName = "Test Bank",
+            accountLast4 = "1234",
+            amount = BigDecimal("30.00"),
+            transactionType = TransactionType.INCOME,
+            explicitBalance = null,
+            timestamp = transactionTime,
+            transactionId = 11,
+            creditLimit = null,
+            isCreditCard = true,
+            smsSource = "payment alert",
+            currency = "INR"
+        )
+
+        assertEquals(BigDecimal("70.00"), dao.insertedBalances.single().balance)
+    }
+
     private class FakeAccountBalanceDao(
         private val latestBalances: MutableMap<String, AccountBalanceEntity> = mutableMapOf(),
         private val balanceAtOrBefore: AccountBalanceEntity? = null,
@@ -321,13 +363,15 @@ class AccountBalanceRepositoryTest {
             bankName: String,
             accountLast4: String,
             balance: BigDecimal,
-            timestamp: LocalDateTime
+            timestamp: LocalDateTime,
+            isCreditCard: Boolean = false
         ) = AccountBalanceEntity(
             id = id,
             bankName = bankName,
             accountLast4 = accountLast4,
             balance = balance,
-            timestamp = timestamp
+            timestamp = timestamp,
+            isCreditCard = isCreditCard
         )
     }
 }

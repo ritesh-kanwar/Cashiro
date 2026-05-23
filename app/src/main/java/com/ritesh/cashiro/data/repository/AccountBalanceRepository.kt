@@ -235,8 +235,8 @@ class AccountBalanceRepository @Inject constructor(
         isCreditCard: Boolean
     ): BigDecimal {
         return when {
-            // Credit card payments reduce debt before this generic recalculation path.
-            isCreditCard && transactionType == TransactionType.INCOME -> currentBalance
+            isCreditCard && transactionType == TransactionType.INCOME ->
+                (currentBalance - amount).max(BigDecimal.ZERO)
             isCreditCard -> currentBalance + amount
             transactionType == TransactionType.INCOME -> currentBalance + amount
             transactionType == TransactionType.EXPENSE || transactionType == TransactionType.INVESTMENT ->

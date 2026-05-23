@@ -1250,8 +1250,10 @@ private suspend fun processBalanceUpdate(
                     currentBalance + parsedTransaction.amount
                 }
 
-                existingAccount?.isCreditCard == true && parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
+                existingAccount != null &&
+                    existingAccount.isCreditCard &&
+                    parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
+                    val currentBalance = existingAccount.balance
                     (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                 }
 

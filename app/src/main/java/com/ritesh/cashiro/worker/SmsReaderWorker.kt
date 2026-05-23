@@ -473,8 +473,10 @@ class SmsReaderWorker @AssistedInject constructor(
                                             currentBalance + parsedTransaction.amount
                                         }
                                         // Check if this is a payment TO a credit card (reducing debt)
-                                        existingAccount?.isCreditCard == true && parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                                            val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
+                                        existingAccount != null &&
+                                            existingAccount.isCreditCard &&
+                                            parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
+                                            val currentBalance = existingAccount.balance
                                             // Payment to credit card, reduce outstanding
                                             (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                                         }

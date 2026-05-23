@@ -2,6 +2,7 @@ package com.ritesh.cashiro.domain.usecase
 
 import android.content.ContextWrapper
 import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.AccountBalanceTransactionInfo
 import com.ritesh.cashiro.data.database.dao.SubscriptionDao
 import com.ritesh.cashiro.data.database.dao.TransactionDao
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
@@ -511,6 +512,21 @@ class AddTransactionUseCaseTest {
         }
 
         override suspend fun getAccountLast4sEndingWith(bankName: String, suffix: String): List<String> = emptyList()
+        override suspend fun getLatestBalanceOnOrBefore(
+            bankName: String,
+            accountLast4: String,
+            timestamp: LocalDateTime
+        ): AccountBalanceEntity? {
+            val key = Pair(bankName, accountLast4)
+            return balances[key]
+                ?.filter { !it.timestamp.isAfter(timestamp) }
+                ?.maxByOrNull { it.timestamp }
+        }
+        override suspend fun getBalancesAfterWithTransactions(
+            bankName: String,
+            accountLast4: String,
+            timestamp: LocalDateTime
+        ): List<AccountBalanceTransactionInfo> = emptyList()
         override fun getLatestBalanceFlow(bankName: String, accountLast4: String): Flow<AccountBalanceEntity?> = flowOf(null)
         override fun getAllLatestBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
         override fun getAllBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
