@@ -17,7 +17,6 @@ import com.ritesh.parser.core.bank.IndianBankParser
 import com.ritesh.parser.core.bank.SBIBankParser
 import com.ritesh.parser.core.bank.IndusIndBankParser
 import com.ritesh.parser.core.SmsFilter
-import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
 import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
 import com.ritesh.cashiro.data.mapper.toEntity
@@ -1252,7 +1251,7 @@ private suspend fun processBalanceUpdate(
                 }
 
                 existingAccount?.isCreditCard == true && parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                    val currentBalance = existingAccount.balance ?: BigDecimal.ZERO
+                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
                     (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                 }
 
@@ -1318,11 +1317,12 @@ private suspend fun processBalanceUpdate(
             }
 
             if (shouldSaveBalance) {
-                // Create the balance entity using the target account
-                val balanceEntity = AccountBalanceEntity(
+                accountBalanceRepository.insertTransactionBalance(
                     bankName = parsedTransaction.bankName,
                     accountLast4 = targetAccountLast4,
-                    balance = newBalance,
+                    amount = parsedTransaction.amount,
+                    transactionType = parsedTransaction.type.toEntityType(),
+                    explicitBalance = parsedTransaction.balance,
                     timestamp = entity.dateTime,
                     transactionId = if (rowId != -1L) rowId else null,
                     creditLimit = if (isCreditCard) {
@@ -1331,12 +1331,9 @@ private suspend fun processBalanceUpdate(
                         existingAccount?.creditLimit
                     },
                     isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
-                    smsSource = parsedTransaction.smsBody.take(500),  // Store SMS snippet
-                    sourceType = "TRANSACTION",
+                    smsSource = parsedTransaction.smsBody,
                     currency = parsedTransaction.currency
                 )
-
-                accountBalanceRepository.insertBalance(balanceEntity)
 
                 if (BuildConfig.DEBUG) {
                     val logMsg = if (parsedTransaction.creditLimit != null) {

@@ -4,7 +4,6 @@ import android.util.Log
 import com.ritesh.cashiro.BuildConfig
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.bank.BankParserFactory
-import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.CardType
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
@@ -264,7 +263,7 @@ class SmsTransactionProcessor @Inject constructor(
                     currentBalance + parsedTransaction.amount
                 }
                 existingAccount?.isCreditCard == true && parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                    val currentBalance = existingAccount.balance ?: BigDecimal.ZERO
+                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
                     (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                 }
                 parsedTransaction.balance != null -> parsedTransaction.balance!!
@@ -289,10 +288,12 @@ class SmsTransactionProcessor @Inject constructor(
                 }
             }
 
-            val balanceEntity = AccountBalanceEntity(
+            accountBalanceRepository.insertTransactionBalance(
                 bankName = parsedTransaction.bankName,
                 accountLast4 = targetAccountLast4,
-                balance = newBalance,
+                amount = parsedTransaction.amount,
+                transactionType = parsedTransaction.type.toEntityType(),
+                explicitBalance = parsedTransaction.balance,
                 timestamp = entity.dateTime,
                 transactionId = if (rowId != -1L) rowId else null,
                 creditLimit = if (isCreditCard) {
@@ -301,12 +302,10 @@ class SmsTransactionProcessor @Inject constructor(
                     existingAccount?.creditLimit
                 },
                 isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
-                smsSource = parsedTransaction.smsBody.take(500),
-                sourceType = "TRANSACTION",
+                smsSource = parsedTransaction.smsBody,
                 currency = parsedTransaction.currency
             )
 
-            accountBalanceRepository.insertBalance(balanceEntity)
             if (BuildConfig.DEBUG) {
                 Log.d(TAG, "Saved balance update for ${parsedTransaction.bankName} **$targetAccountLast4")
             }

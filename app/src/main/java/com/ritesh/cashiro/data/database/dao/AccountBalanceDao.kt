@@ -27,6 +27,41 @@ interface AccountBalanceDao {
         AND account_last4 LIKE '%' || :suffix
     """)
     suspend fun getAccountLast4sEndingWith(bankName: String, suffix: String): List<String>
+
+    @Query("""
+        SELECT * FROM account_balances
+        WHERE bank_name = :bankName AND account_last4 = :accountLast4
+        AND timestamp <= :timestamp
+        ORDER BY timestamp DESC, id DESC
+        LIMIT 1
+    """)
+    suspend fun getLatestBalanceOnOrBefore(
+        bankName: String,
+        accountLast4: String,
+        timestamp: LocalDateTime
+    ): AccountBalanceEntity?
+
+    @Query("""
+        SELECT
+            ab.id AS id,
+            ab.balance AS balance,
+            ab.source_type AS sourceType,
+            ab.is_credit_card AS isCreditCard,
+            ab.transaction_id AS transactionId,
+            t.amount AS transactionAmount,
+            t.transaction_type AS transactionType,
+            t.balance_after AS transactionBalanceAfter
+        FROM account_balances ab
+        LEFT JOIN transactions t ON t.id = ab.transaction_id
+        WHERE ab.bank_name = :bankName AND ab.account_last4 = :accountLast4
+        AND ab.timestamp > :timestamp
+        ORDER BY ab.timestamp ASC, ab.id ASC
+    """)
+    suspend fun getBalancesAfterWithTransactions(
+        bankName: String,
+        accountLast4: String,
+        timestamp: LocalDateTime
+    ): List<AccountBalanceTransactionInfo>
     
     @Query("""
         SELECT * FROM account_balances 
@@ -184,3 +219,14 @@ interface AccountBalanceDao {
     """)
     suspend fun getAccountByLast4(accountLast4: String): AccountBalanceEntity?
 }
+
+data class AccountBalanceTransactionInfo(
+    val id: Long,
+    val balance: BigDecimal,
+    val sourceType: String?,
+    val isCreditCard: Boolean,
+    val transactionId: Long?,
+    val transactionAmount: BigDecimal?,
+    val transactionType: String?,
+    val transactionBalanceAfter: BigDecimal?
+)

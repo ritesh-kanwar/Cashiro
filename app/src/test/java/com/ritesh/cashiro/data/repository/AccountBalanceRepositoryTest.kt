@@ -2,7 +2,9 @@ package com.ritesh.cashiro.data.repository
 
 import android.content.ContextWrapper
 import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.AccountBalanceTransactionInfo
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -12,6 +14,163 @@ import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 class AccountBalanceRepositoryTest {
+
+    @Test
+    fun insertTransactionBalanceCalculatesFromBalanceAtTransactionTimeAndRecalculatesLaterCalculatedRows() = runTest {
+        val transactionTime = LocalDateTime.of(2026, 5, 23, 20, 35)
+        val dao = FakeAccountBalanceDao(
+            latestBalances = mutableMapOf(
+                accountKey("Test Bank", "1234") to balance(
+                    id = 1,
+                    bankName = "Test Bank",
+                    accountLast4 = "1234",
+                    balance = BigDecimal("100.00"),
+                    timestamp = transactionTime.minusMinutes(5)
+                )
+            ),
+            balanceAtOrBefore = balance(
+                id = 1,
+                bankName = "Test Bank",
+                accountLast4 = "1234",
+                balance = BigDecimal("100.00"),
+                timestamp = transactionTime.minusMinutes(5)
+            ),
+            balancesAfter = listOf(
+                AccountBalanceTransactionInfo(
+                    id = 2,
+                    balance = BigDecimal("90.00"),
+                    sourceType = "TRANSACTION_CALCULATED",
+                    isCreditCard = false,
+                    transactionId = 22,
+                    transactionAmount = BigDecimal("10.00"),
+                    transactionType = TransactionType.EXPENSE.name,
+                    transactionBalanceAfter = null
+                )
+            )
+        )
+        val repository = AccountBalanceRepository(dao, ContextWrapper(null))
+
+        repository.insertTransactionBalance(
+            bankName = "Test Bank",
+            accountLast4 = "1234",
+            amount = BigDecimal("50.00"),
+            transactionType = TransactionType.INCOME,
+            explicitBalance = null,
+            timestamp = transactionTime,
+            transactionId = 11,
+            creditLimit = null,
+            isCreditCard = false,
+            smsSource = "credited alert",
+            currency = "INR"
+        )
+
+        assertEquals(BigDecimal("150.00"), dao.insertedBalances.single().balance)
+        assertEquals(BigDecimal("140.00"), dao.updatedBalances[2])
+    }
+
+    @Test
+    fun insertTransactionBalanceDoesNotRecalculateAfterExplicitBalanceBoundary() = runTest {
+        val transactionTime = LocalDateTime.of(2026, 5, 23, 20, 35)
+        val dao = FakeAccountBalanceDao(
+            latestBalances = mutableMapOf(
+                accountKey("Test Bank", "1234") to balance(
+                    id = 1,
+                    bankName = "Test Bank",
+                    accountLast4 = "1234",
+                    balance = BigDecimal("100.00"),
+                    timestamp = transactionTime.minusMinutes(5)
+                )
+            ),
+            balanceAtOrBefore = balance(
+                id = 1,
+                bankName = "Test Bank",
+                accountLast4 = "1234",
+                balance = BigDecimal("100.00"),
+                timestamp = transactionTime.minusMinutes(5)
+            ),
+            balancesAfter = listOf(
+                AccountBalanceTransactionInfo(
+                    id = 2,
+                    balance = BigDecimal("200.00"),
+                    sourceType = "TRANSACTION_SMS_BALANCE",
+                    isCreditCard = false,
+                    transactionId = 22,
+                    transactionAmount = BigDecimal("10.00"),
+                    transactionType = TransactionType.EXPENSE.name,
+                    transactionBalanceAfter = BigDecimal("200.00")
+                )
+            )
+        )
+        val repository = AccountBalanceRepository(dao, ContextWrapper(null))
+
+        repository.insertTransactionBalance(
+            bankName = "Test Bank",
+            accountLast4 = "1234",
+            amount = BigDecimal("50.00"),
+            transactionType = TransactionType.INCOME,
+            explicitBalance = null,
+            timestamp = transactionTime,
+            transactionId = 11,
+            creditLimit = null,
+            isCreditCard = false,
+            smsSource = "credited alert",
+            currency = "INR"
+        )
+
+        assertEquals(emptyMap(), dao.updatedBalances)
+    }
+
+    @Test
+    fun insertTransactionBalanceDoesNotRecalculateAfterManualBalanceBoundary() = runTest {
+        val transactionTime = LocalDateTime.of(2026, 5, 23, 20, 35)
+        val dao = FakeAccountBalanceDao(
+            latestBalances = mutableMapOf(
+                accountKey("Test Bank", "1234") to balance(
+                    id = 1,
+                    bankName = "Test Bank",
+                    accountLast4 = "1234",
+                    balance = BigDecimal("100.00"),
+                    timestamp = transactionTime.minusMinutes(5)
+                )
+            ),
+            balanceAtOrBefore = balance(
+                id = 1,
+                bankName = "Test Bank",
+                accountLast4 = "1234",
+                balance = BigDecimal("100.00"),
+                timestamp = transactionTime.minusMinutes(5)
+            ),
+            balancesAfter = listOf(
+                AccountBalanceTransactionInfo(
+                    id = 2,
+                    balance = BigDecimal("200.00"),
+                    sourceType = "MANUAL",
+                    isCreditCard = false,
+                    transactionId = 22,
+                    transactionAmount = BigDecimal("10.00"),
+                    transactionType = TransactionType.EXPENSE.name,
+                    transactionBalanceAfter = null
+                )
+            )
+        )
+        val repository = AccountBalanceRepository(dao, ContextWrapper(null))
+
+        repository.insertTransactionBalance(
+            bankName = "Test Bank",
+            accountLast4 = "1234",
+            amount = BigDecimal("50.00"),
+            transactionType = TransactionType.INCOME,
+            explicitBalance = null,
+            timestamp = transactionTime,
+            transactionId = 11,
+            creditLimit = null,
+            isCreditCard = false,
+            smsSource = "credited alert",
+            currency = "INR"
+        )
+
+        assertEquals(emptyMap(), dao.updatedBalances)
+    }
 
     @Test
     fun resolveAccountLast4ExpandsUniqueSameBankSuffix() = runTest {
@@ -60,27 +219,52 @@ class AccountBalanceRepositoryTest {
     }
 
     private class FakeAccountBalanceDao(
+        private val latestBalances: MutableMap<String, AccountBalanceEntity> = mutableMapOf(),
+        private val balanceAtOrBefore: AccountBalanceEntity? = null,
+        private val balancesAfter: List<AccountBalanceTransactionInfo> = emptyList(),
         private val suffixMatches: Map<String, Map<String, List<String>>> = emptyMap()
     ) : AccountBalanceDao {
+        val insertedBalances = mutableListOf<AccountBalanceEntity>()
+        val updatedBalances = mutableMapOf<Long, BigDecimal>()
         var suffixLookupCount = 0
 
-        override suspend fun insertBalance(balance: AccountBalanceEntity): Long = 1
+        override suspend fun insertBalance(balance: AccountBalanceEntity): Long {
+            val id = (insertedBalances.size + 100).toLong()
+            val inserted = balance.copy(id = id)
+            insertedBalances += inserted
+            latestBalances[accountKey(balance.bankName, balance.accountLast4)] = inserted
+            return id
+        }
 
-        override suspend fun getLatestBalance(bankName: String, accountLast4: String): AccountBalanceEntity? = null
+        override suspend fun getLatestBalance(bankName: String, accountLast4: String): AccountBalanceEntity? {
+            return latestBalances[accountKey(bankName, accountLast4)]
+        }
 
         override suspend fun getAccountLast4sEndingWith(bankName: String, suffix: String): List<String> {
             suffixLookupCount++
             return suffixMatches[bankName]?.get(suffix).orEmpty()
         }
 
+        override suspend fun getLatestBalanceOnOrBefore(
+            bankName: String,
+            accountLast4: String,
+            timestamp: LocalDateTime
+        ): AccountBalanceEntity? = balanceAtOrBefore
+
+        override suspend fun getBalancesAfterWithTransactions(
+            bankName: String,
+            accountLast4: String,
+            timestamp: LocalDateTime
+        ): List<AccountBalanceTransactionInfo> = balancesAfter
+
         override fun getLatestBalanceFlow(
             bankName: String,
             accountLast4: String
-        ): Flow<AccountBalanceEntity?> = flowOf(null)
+        ): Flow<AccountBalanceEntity?> = flowOf(latestBalances[accountKey(bankName, accountLast4)])
 
-        override fun getAllLatestBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
+        override fun getAllLatestBalances(): Flow<List<AccountBalanceEntity>> = flowOf(latestBalances.values.toList())
 
-        override fun getAllBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
+        override fun getAllBalances(): Flow<List<AccountBalanceEntity>> = flowOf(latestBalances.values.toList())
 
         override suspend fun deleteAllBalances() = Unit
 
@@ -112,7 +296,9 @@ class AccountBalanceRepositoryTest {
 
         override suspend fun deleteBalanceById(id: Long) = Unit
 
-        override suspend fun updateBalanceById(id: Long, newBalance: BigDecimal) = Unit
+        override suspend fun updateBalanceById(id: Long, newBalance: BigDecimal) {
+            updatedBalances[id] = newBalance
+        }
 
         override suspend fun getBalanceCountForAccount(bankName: String, accountLast4: String): Int = 0
 
@@ -125,5 +311,23 @@ class AccountBalanceRepositoryTest {
         ): Int = 0
 
         override suspend fun getAccountByLast4(accountLast4: String): AccountBalanceEntity? = null
+    }
+
+    private companion object {
+        fun accountKey(bankName: String, accountLast4: String) = "$bankName:$accountLast4"
+
+        fun balance(
+            id: Long,
+            bankName: String,
+            accountLast4: String,
+            balance: BigDecimal,
+            timestamp: LocalDateTime
+        ) = AccountBalanceEntity(
+            id = id,
+            bankName = bankName,
+            accountLast4 = accountLast4,
+            balance = balance,
+            timestamp = timestamp
+        )
     }
 }

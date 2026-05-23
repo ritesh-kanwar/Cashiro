@@ -25,7 +25,6 @@ import com.ritesh.cashiro.data.repository.TransactionRepository
 import com.ritesh.cashiro.data.repository.UnrecognizedSmsRepository
 import com.ritesh.cashiro.domain.repository.RuleRepository
 import com.ritesh.cashiro.domain.service.RuleEngine
-import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
 import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
@@ -475,7 +474,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                         }
                                         // Check if this is a payment TO a credit card (reducing debt)
                                         existingAccount?.isCreditCard == true && parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                                            val currentBalance = existingAccount.balance ?: BigDecimal.ZERO
+                                            val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
                                             // Payment to credit card, reduce outstanding
                                             (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                                         }
@@ -514,11 +513,12 @@ class SmsReaderWorker @AssistedInject constructor(
                                     }
                                     
                                     if (shouldSaveBalance) {
-                                        // Create the balance entity using the target account
-                                        val balanceEntity = AccountBalanceEntity(
+                                        accountBalanceRepository.insertTransactionBalance(
                                             bankName = parsedTransaction.bankName,
                                             accountLast4 = targetAccountLast4,
-                                            balance = newBalance,
+                                            amount = parsedTransaction.amount,
+                                            transactionType = parsedTransaction.type.toEntityType(),
+                                            explicitBalance = parsedTransaction.balance,
                                             timestamp = finalEntity.dateTime,
                                             transactionId = if (rowId != -1L) rowId else null,
                                             creditLimit = if (isCreditCard) {
@@ -527,12 +527,9 @@ class SmsReaderWorker @AssistedInject constructor(
                                                 existingAccount?.creditLimit
                                             },
                                             isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
-                                            smsSource = parsedTransaction.smsBody.take(500),  // Store SMS snippet
-                                            sourceType = "TRANSACTION",
+                                            smsSource = parsedTransaction.smsBody,
                                             currency = parsedTransaction.currency
                                         )
-                                        
-                                        accountBalanceRepository.insertBalance(balanceEntity)
                                         
                                         if (BuildConfig.DEBUG) {
                                             val logMsg = if (parsedTransaction.creditLimit != null) {
