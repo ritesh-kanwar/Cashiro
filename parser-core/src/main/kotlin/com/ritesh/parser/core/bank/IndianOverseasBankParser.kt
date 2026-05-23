@@ -158,6 +158,15 @@ class IndianOverseasBankParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
+        val shortAccountPattern = Regex(
+            """\b(?:SB|CA|CC)-[xX]*(\d{2,4})\b""",
+            RegexOption.IGNORE_CASE
+        )
+        shortAccountPattern.find(message)?.let { match ->
+            val digits = match.groupValues[1]
+            return if (digits.length >= 4) digits.takeLast(4) else digits
+        }
+
         // Pattern: "Your a/c no. XXXXX92"
         val accountPattern = Regex(
             """a/c\s+no\.\s+[X]*(\d{2,4})""",

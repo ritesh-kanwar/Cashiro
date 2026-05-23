@@ -4,12 +4,13 @@ import com.ritesh.parser.core.TransactionType
 import com.ritesh.parser.core.test.ExpectedTransaction
 import com.ritesh.parser.core.test.ParserTestCase
 import com.ritesh.parser.core.test.ParserTestUtils
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
 import java.math.BigDecimal
 
 class IndianOverseasBankParserTest {
-    @Test
-    fun `iob parser handles debit credit and notice formats`() {
+    @TestFactory
+    fun `iob parser handles debit credit and notice formats`(): List<DynamicTest> {
         val parser = IndianOverseasBankParser()
 
         val cases = listOf(
@@ -88,6 +89,6 @@ class IndianOverseasBankParserTest {
             "" to false
         )
 
-        ParserTestUtils.runTestSuite(parser, cases, handleCases, "Indian Overseas Bank Parser Tests")
+        return ParserTestUtils.runTestSuite(parser, cases, handleCases, "Indian Overseas Bank Parser Tests")
     }
 }
