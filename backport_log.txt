@@ -13030,3 +13030,33 @@ error: fastlane/metadata/android/en-US/changelogs/default.txt: No such file or d
 Applying patch app/build.gradle.kts with 1 reject...
 Rejected hunk #1.
 Applied patch fastlane/metadata/android/en-US/changelogs/89.txt cleanly.
+[backport-fixes-upstream b74cd41a] chore(release): bump version to 2.15.54 [skip ci]
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Mon May 25 13:36:11 2026 +0530
+ 4 files changed, 66 insertions(+), 26 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ create mode 100644 fastlane/metadata/android/en-US/changelogs/89.txt
+===================================
+Applying 0312-fix-remove-wrong-BHIM-logo-fall-back-to-neutral-icon.patch
+Applying: fix: remove wrong BHIM logo, fall back to neutral icon
+Using index info to reconstruct a base tree...
+A	app/src/main/res/drawable-nodpi/ic_brand_bhim.png
+Falling back to patching base and 3-way merge...
+No changes -- Patch already applied.
+Successfully applied via git am
+===================================
+Applying 0313-test-kotak-add-issue-360-regression-cases-for-Sent-U.patch
+Applying: test(kotak): add issue #360 regression cases for 'Sent' UPI format
+error: sha1 information is lacking or useless (parser-core/src/test/kotlin/TestKotakBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 test(kotak): add issue #360 regression cases for 'Sent' UPI format
+Conflict detected! Falling back to apply --reject
+error: parser-core/src/test/kotlin/TestKotakBankParser.kt: does not exist in index
+Checking patch parser-core/src/test/kotlin/TestKotakBankParser.kt...
+error: parser-core/src/test/kotlin/TestKotakBankParser.kt: No such file or directory
