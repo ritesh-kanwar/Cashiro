@@ -173,7 +173,12 @@ object BankParserFactory {
 >>>>>>> theirs
 =======
         GreaterBankParser(),  // Greater Bank (India)
+<<<<<<< ours
         BPCEParser()  // BPCE (France)
+>>>>>>> theirs
+=======
+        BPCEParser(),  // BPCE (France)
+        SampathBankParser()  // Sampath Bank (Sri Lanka)
 >>>>>>> theirs
         // Add more bank parsers here as we implement them
     )

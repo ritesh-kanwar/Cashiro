@@ -1,0 +1,11 @@
+diff a/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt b/parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt	(rejected hunks)
+@@ -112,7 +112,8 @@ object BankParserFactory {
+         EnparaBankParser(),  // Enpara (Turkey) — push notifications
+         BankMuscatParser(),  // Bank Muscat (Oman)
+         GreaterBankParser(),  // Greater Bank (India)
+-        BPCEParser()  // BPCE (France)
++        BPCEParser(),  // BPCE (France)
++        SampathBankParser()  // Sampath Bank (Sri Lanka)
+         // Add more bank parsers here as we implement them
+     )
+ 
