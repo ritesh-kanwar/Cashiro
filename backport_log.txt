@@ -13102,3 +13102,48 @@ Checking patch parser-core/src/test/kotlin/TestSampathBankParser.kt...
 error: parser-core/src/test/kotlin/TestSampathBankParser.kt: already exists in working directory
 Applying patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 1feb70aa] feat: add Sampath Bank (Sri Lanka) parser
+ Author: sarim2000 <sarimbleedblue@gmail.com>
+ Date: Wed May 27 13:52:33 2026 +0530
+ 5 files changed, 305 insertions(+)
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+ create mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/SampathBankParser.kt
+ create mode 100644 parser-core/src/test/kotlin/TestSampathBankParser.kt
+===================================
+Applying 0315-refactor-simplify-Sampath-canHandle-to-containment-c.patch
+Applying: refactor: simplify Sampath canHandle to containment checks
+Successfully applied via git am
+===================================
+Applying 0316-fix-mark-Sampath-credit-card-txns-as-isFromCard.patch
+Applying: fix: mark Sampath credit-card txns as isFromCard
+Successfully applied via git am
+===================================
+Applying 0317-Remove-sender-filter-for-Punjab-National-Bank.patch
+Applying: Remove sender filter for Punjab National Bank
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 Remove sender filter for Punjab National Bank
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:931
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+                if (!trId.startsWith("proto:")) continue
+
+                val sender = extractRcsSender(trId) ?: continue
+                if (!sender.uppercase().contains("PUNJAB NATIONAL BANK")) continue
+
+                var text = getRcsMessageText(messageId) ?: continue
+                if (text.trim().startsWith("{")) text = extractTextFromRcsJson(text) ?: continue
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:931
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Rejected hunk #1.
