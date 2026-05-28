@@ -13547,3 +13547,56 @@ Applied patch gradle/wrapper/gradle-wrapper.properties cleanly.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt cleanly.
 Applied patch shared/build.gradle.kts cleanly.
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFacade.kt cleanly.
+[backport-fixes-upstream 6622c122] feat: upgrade to latest agp
+ Date: Fri May 29 04:36:10 2026 +0530
+ 24 files changed, 590 insertions(+), 39 deletions(-)
+ create mode 100644 app/build.gradle.kts.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/CashiroApp.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/MainActivity.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ create mode 100644 gradle.properties.rej
+ create mode 100644 gradle/libs.versions.toml.rej
+===================================
+Applying 0323-Update-app-src-main-java-com-pennywiseai-tracker-dat.patch
+Applying: Update app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt
+Successfully applied via git am
+===================================
+Applying 0324-fix-remove-busy-spin-progress-monitor-report-progres.patch
+Applying: fix: remove busy-spin progress monitor, report progress on every item
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: remove busy-spin progress monitor, report progress on every item
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:440
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+Hunk #1 succeeded at 93 (offset 6 lines).
+error: while searching for:
+                com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(applicationContext)
+        }
+
+        // Real-time UI refresh every 50ms
+        val progressMonitor = launch(Dispatchers.IO) {
+            while (stats.processed.get() < stats.total) {
+                reportProgress(stats)
+            }
+        }
+
+        saver.join()
+        reportProgress(stats)
+        progressMonitor.cancel()
+    }
+
+    // ─── Stage 2: Parse (plain fun — no suspend overhead on the hot path) ─────
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:440
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
