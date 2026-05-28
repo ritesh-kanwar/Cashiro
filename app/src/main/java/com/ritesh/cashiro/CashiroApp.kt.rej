@@ -1,0 +1,57 @@
+diff a/app/src/main/java/com/ritesh/cashiro/CashiroApp.kt b/app/src/main/java/com/ritesh/cashiro/CashiroApp.kt	(rejected hunks)
+@@ -27,15 +27,19 @@ import com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker
+ 
+ @Composable
+ fun CashiroApp(
+-    themeViewModel: ThemeViewModel = hiltViewModel(),
+-    appLockViewModel: AppLockViewModel = hiltViewModel(),
++    themeViewModel: ThemeViewModel? = null,
++    appLockViewModel: AppLockViewModel? = null,
+     editTransactionId: Long? = null,
+     openAddTransaction: Boolean = false,
+-    onEditComplete: () -> Unit = {},
+-    onAddTransactionShortcutHandled: () -> Unit = {}
++    onEditComplete: (() -> Unit)? = null,
++    onAddTransactionShortcutHandled: (() -> Unit)? = null
+ ) {
+-    val themeUiState by themeViewModel.themeUiState.collectAsStateWithLifecycle()
+-    val appLockUiState by appLockViewModel.uiState.collectAsStateWithLifecycle()
++    val owner = androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner.current ?: error("No ViewModelStoreOwner")
++    val actualThemeViewModel: ThemeViewModel = themeViewModel ?: hiltViewModel(viewModelStoreOwner = owner, key = null)
++    val actualAppLockViewModel: AppLockViewModel = appLockViewModel ?: hiltViewModel(viewModelStoreOwner = owner, key = null)
++
++    val themeUiState by actualThemeViewModel.themeUiState.collectAsStateWithLifecycle()
++    val appLockUiState by actualAppLockViewModel.uiState.collectAsStateWithLifecycle()
+     val context = LocalContext.current
+ 
+     val darkTheme = themeUiState.isDarkTheme ?: isSystemInDarkTheme()
+@@ -70,7 +74,7 @@ fun CashiroApp(
+                 context, Manifest.permission.READ_SMS
+             ) == PackageManager.PERMISSION_GRANTED
+             if (hasSmsPermission) {
+-                themeViewModel.markOnboardingCompleted()
++                actualThemeViewModel.markOnboardingCompleted()
+             }
+         }
+     }
+@@ -110,7 +114,7 @@ fun CashiroApp(
+             navController.navigate(com.ritesh.cashiro.navigation.AddTransaction) {
+                 launchSingleTop = true
+             }
+-            onAddTransactionShortcutHandled()
++            onAddTransactionShortcutHandled?.invoke()
+         }
+     }
+ 
+@@ -130,9 +134,9 @@ fun CashiroApp(
+     ) {
+         CashiroNavHost(
+             navController = navController,
+-            themeViewModel = themeViewModel,
++            themeViewModel = actualThemeViewModel,
+             startDestination = startDestination,
+-            onEditComplete = onEditComplete
++            onEditComplete = onEditComplete ?: {}
+         )
+     }
+ }

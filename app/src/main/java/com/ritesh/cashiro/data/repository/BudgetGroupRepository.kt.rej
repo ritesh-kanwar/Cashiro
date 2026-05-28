@@ -1,0 +1,19 @@
+diff a/app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt b/app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt	(rejected hunks)
+@@ -183,7 +183,7 @@ class BudgetGroupRepository @Inject constructor(
+                 displayOrder = bwc.budget.displayOrder
+             )
+         }
+-        val categorySnapshots = budgets.flatMap { bwc ->
++        val categorySnapshots = budgets.map { bwc ->
+             bwc.categories.map { cat ->
+                 BudgetCategoryMonthSnapshotEntity(
+                     budgetId = bwc.budget.id,
+@@ -193,7 +193,7 @@ class BudgetGroupRepository @Inject constructor(
+                     budgetAmount = cat.budgetAmount
+                 )
+             }
+-        }
++        }.flatten()
+         snapshotDao.replaceMonthSnapshots(year, month, groupSnapshots, categorySnapshots)
+     }
+ 

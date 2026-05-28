@@ -154,7 +154,7 @@ class BudgetGroupRepository @Inject constructor(
 
     private suspend fun recomputeGroupTotal(budgetId: Long) {
         val categories = budgetDao.getCategoriesForBudgetList(budgetId)
-        val total = categories.sumOf { it.budgetAmount }
+        val total = categories.fold(BigDecimal.ZERO) { acc, cat -> acc + cat.budgetAmount }
         budgetDao.updateBudgetLimitAmount(budgetId, total)
     }
 

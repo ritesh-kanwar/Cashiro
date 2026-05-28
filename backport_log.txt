@@ -13219,3 +13219,331 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
 Hunk #1 applied cleanly.
 Rejected hunk #2.
+[backport-fixes-upstream 077ac62c] remove artificial delay on progress monitor
+ Date: Fri May 29 02:43:05 2026 +0530
+ 3 files changed, 53 insertions(+), 1 deletion(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+===================================
+Applying 0322-feat-upgrade-to-latest-agp.patch
+Applying: feat: upgrade to latest agp
+error: sha1 information is lacking or useless (app/build.gradle.kts).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 feat: upgrade to latest agp
+Conflict detected! Falling back to apply --reject
+Applied patch to '.gitignore' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/build.gradle.kts:2
+error: app/build.gradle.kts: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/MainActivity.kt:37
+error: app/src/main/java/com/ritesh/cashiro/MainActivity.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:27
+error: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/AiContextRepository.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:183
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/utils/TokenUtils.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:317
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Applied patch to 'build.gradle.kts' cleanly.
+Applied patch to 'gradle.properties' with conflicts.
+Applied patch to 'gradle/libs.versions.toml' with conflicts.
+Applied patch to 'gradle/wrapper/gradle-wrapper.properties' cleanly.
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch .gitignore...
+Checking patch app/build.gradle.kts...
+error: while searching for:
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+}
+
+android {
+    namespace = "com.ritesh.cashiro"
+    compileSdk = 36
+    
+    buildFeatures {
+        buildConfig = true
+
+error: patch failed: app/build.gradle.kts:2
+error: while searching for:
+    rename { "whats_new.txt" }
+}
+
+android.sourceSets["main"].assets.srcDir(generatedAssetsDir)
+
+tasks.matching { it.name.startsWith("merge") && it.name.contains("Assets") }.configureEach {
+    dependsOn("copyChangelog")
+
+error: patch failed: app/build.gradle.kts:181
+Checking patch app/src/main/java/com/ritesh/cashiro/MainActivity.kt...
+error: while searching for:
+        // Handle intent if activity is launched from notification
+        handleEditIntent(intent)
+
+        setContent {
+            CashiroApp(
+                editTransactionId = editTransactionId,
+                openAddTransaction = openAddTransaction,
+                onEditComplete = { editTransactionId = null },
+                onAddTransactionShortcutHandled = { openAddTransaction = false }
+            )
+        }
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/MainActivity.kt:37
+Checking patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt...
+error: while searching for:
+
+@Composable
+fun CashiroApp(
+    themeViewModel: ThemeViewModel = hiltViewModel(),
+    appLockViewModel: AppLockViewModel = hiltViewModel(),
+    editTransactionId: Long? = null,
+    openAddTransaction: Boolean = false,
+    onEditComplete: () -> Unit = {},
+    onAddTransactionShortcutHandled: () -> Unit = {}
+) {
+    val themeUiState by themeViewModel.themeUiState.collectAsStateWithLifecycle()
+    val appLockUiState by appLockViewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    val darkTheme = themeUiState.isDarkTheme ?: isSystemInDarkTheme()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:27
+Hunk #3 succeeded at 51 (offset -1 lines).
+error: while searching for:
+                context, Manifest.permission.READ_SMS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (hasSmsPermission) {
+                themeViewModel.markOnboardingCompleted()
+            }
+        }
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:70
+error: while searching for:
+            navController.navigate(com.ritesh.cashiro.navigation.AddTransaction) {
+                launchSingleTop = true
+            }
+            onAddTransactionShortcutHandled()
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:110
+error: while searching for:
+    ) {
+        CashiroNavHost(
+            navController = navController,
+            themeViewModel = themeViewModel,
+            startDestination = startDestination,
+            onEditComplete = onEditComplete
+        )
+    }
+}
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/CashiroApp.kt:130
+Checking patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt...
+Hunk #1 succeeded at 305 (offset -4 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetWithCategories.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt...
+Hunk #1 succeeded at 63 (offset -2 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/AiContextRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+Hunk #1 succeeded at 154 (offset -7 lines).
+error: while searching for:
+                displayOrder = bwc.budget.displayOrder
+            )
+        }
+        val categorySnapshots = budgets.flatMap { bwc ->
+            bwc.categories.map { cat ->
+                BudgetCategoryMonthSnapshotEntity(
+                    budgetId = bwc.budget.id,
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:183
+error: while searching for:
+                    budgetAmount = cat.budgetAmount
+                )
+            }
+        }
+        snapshotDao.replaceMonthSnapshots(year, month, groupSnapshots, categorySnapshots)
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:193
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt...
+Hunk #1 succeeded at 82 (offset -2 lines).
+Hunk #2 succeeded at 189 (offset -2 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/TokenUtils.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            } finally {
+                Trace.endSection()
+            }
+            Log.i(TAG, "Caches: ${merchantMappingCache.size} merchant mappings, ${ruleCache.values.sumOf { it.size }} rules")
+
+            val parserConcurrency = maxOf(1, Runtime.getRuntime().availableProcessors() - 1)
+            Log.i(TAG, "Pipeline: $parserConcurrency parsers | 1 saver | ${messages.size} messages")
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:317
+error: while searching for:
+        val decoded = String(android.util.Base64.decode(trId.removePrefix("proto:"), android.util.Base64.DEFAULT))
+        Regex("""([a-z_]+)_[a-z0-9]+_agent@rbm\.goog""").find(decoded)?.let { m ->
+            return m.groupValues[1].split("_")
+                .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
+        }
+        Regex("""[\x12\x1a][\x00-\x20]([A-Za-z][A-Za-z\s]+)""").find(decoded)?.let { m ->
+            val name = m.groupValues[1].trim()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:944
+Checking patch build.gradle.kts...
+Checking patch gradle.properties...
+error: while searching for:
+android.usesSdkInManifest.disallowed=false
+android.uniquePackageNames=false
+android.dependency.useConstraints=true
+android.r8.strictFullModeForKeepRules=false
+android.r8.optimizedResourceShrinking=false
+android.builtInKotlin=false
+android.newDsl=false
+android.sourceset.disallowProvider=false
+error: patch failed: gradle.properties:29
+Checking patch gradle/libs.versions.toml...
+error: while searching for:
+[versions]
+agp = "9.1.0"
+appUpdate = "2.1.0"
+appUpdateKtx = "2.1.0"
+biometric = "1.1.0"
+colorpickerCompose = "1.1.3"
+coreSplashscreen = "1.2.0"
+datastorePreferences = "1.2.0"
+glance = "1.1.1"
+gson = "2.13.2"
+hiltAndroid = "2.58"
+hiltAndroidCompiler = "2.58"
+hiltCompiler = "1.3.0"
+hiltNavigationCompose = "1.3.0"
+hiltWork = "1.3.0"
+kotlin = "2.3.0"
+coreKtx = "1.17.0"
+junit = "4.13.2"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+kotlinxSerializationJson = "1.9.0"
+ktorVersion = "2.3.12"
+lifecycleRuntimeCompose = "2.10.0"
+lifecycleRuntimeKtx = "2.10.0"
+activityCompose = "1.12.2"
+composeBom = "2026.01.00"
+lifecycleViewmodelCompose = "2.10.0"
+markdown = "0.7.3"
+mockk = "1.13.13"
+navVersion = "2.9.6"
+opencsv = "5.12.0"
+pdfboxAndroid = "2.0.27.0"
+
+error: patch failed: gradle/libs.versions.toml:1
+error: while searching for:
+roomVersion = "2.8.4"
+litertlm = "0.+"
+visionInternalVkp = "18.2.3"
+workVersion = "2.11.0"
+coil = "2.7.0"
+material3 = "1.5.0-alpha12"
+haze = "1.7.1"
+composeCharts = "0.2.0"
+
+[libraries]
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+error: patch failed: gradle/libs.versions.toml:35
+error: while searching for:
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+error: patch failed: gradle/libs.versions.toml:103
+Checking patch gradle/wrapper/gradle-wrapper.properties...
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt...
+Checking patch shared/build.gradle.kts...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFacade.kt...
+Applied patch .gitignore cleanly.
+Applying patch app/build.gradle.kts with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/MainActivity.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/CashiroApp.kt with 4 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/BudgetWithCategories.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/entity/TransactionWithSplits.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/manager/TransactionDeduplication.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/mapper/ParsedTransactionMapper.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/AiContextRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 2 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/LlmRepository.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/utils/TokenUtils.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch build.gradle.kts cleanly.
+Applying patch gradle.properties with 1 reject...
+Rejected hunk #1.
+Applying patch gradle/libs.versions.toml with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch gradle/wrapper/gradle-wrapper.properties cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/UnionBankParser.kt cleanly.
+Applied patch shared/build.gradle.kts cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/CashiroSharedFacade.kt cleanly.
