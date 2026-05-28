@@ -13175,3 +13175,47 @@ Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
 error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt cleanly.
 Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt cleanly.
+[backport-fixes-upstream 79671ca9] fix: mark dividend as income
+ Author: Kaushal Jyanni <nimbus@Kaushals-MacBook-Pro.local>
+ Date: Thu May 28 17:40:14 2026 +0530
+ 4 files changed, 44 insertions(+), 10 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+===================================
+Applying 0319-remove-from-base-parser.patch
+Applying: remove from base parser
+Successfully applied via git am
+===================================
+Applying 0320-refactoring.patch
+Applying: refactoring
+Successfully applied via git am
+===================================
+Applying 0321-remove-artificial-delay-on-progress-monitor.patch
+Applying: remove artificial delay on progress monitor
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 remove artificial delay on progress monitor
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:444
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+Hunk #1 succeeded at 94 (offset 6 lines).
+error: while searching for:
+        // Real-time UI refresh every 50ms
+        val progressMonitor = launch(Dispatchers.IO) {
+            while (stats.processed.get() < stats.total) {
+                delay(PROGRESS_MONITOR_INTERVAL)
+                reportProgress(stats)
+            }
+        }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:444
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.

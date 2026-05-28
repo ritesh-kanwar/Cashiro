@@ -1,0 +1,9 @@
+diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
+@@ -444,7 +443,6 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+         // Real-time UI refresh every 50ms
+         val progressMonitor = launch(Dispatchers.IO) {
+             while (stats.processed.get() < stats.total) {
+-                delay(PROGRESS_MONITOR_INTERVAL)
+                 reportProgress(stats)
+             }
+         }
