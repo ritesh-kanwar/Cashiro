@@ -13147,3 +13147,31 @@ error: while searching for:
 error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:931
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 1c0b5300] Remove sender filter for Punjab National Bank
+ Date: Thu May 28 05:15:41 2026 +0530
+ 3 files changed, 55 insertions(+), 11 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt.rej
+ delete mode 100644 parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParserFactory.kt.rej
+===================================
+Applying 0318-fix-mark-dividend-as-income.patch
+Applying: fix: mark dividend as income
+error: sha1 information is lacking or useless (parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: mark dividend as income
+Conflict detected! Falling back to apply --reject
+Applied patch to 'parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: does not exist in index
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt...
+Hunk #1 succeeded at 206 (offset 4 lines).
+Checking patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt...
+Checking patch parser-core/src/test/kotlin/TestICICIBankParser.kt...
+error: parser-core/src/test/kotlin/TestICICIBankParser.kt: No such file or directory
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BankParser.kt cleanly.
+Applied patch parser-core/src/main/kotlin/com/ritesh/parser/core/bank/BaseIndianBankParser.kt cleanly.
