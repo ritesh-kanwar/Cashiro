@@ -13680,3 +13680,130 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
 Hunk #1 applied cleanly.
 Rejected hunk #2.
+[backport-fixes-upstream 7ea16a0f] fix: inline progress reporting in save loop no extra
+ Date: Fri May 29 05:43:28 2026 +0530
+ 3 files changed, 37 insertions(+), 4 deletions(-)
+===================================
+Applying 0330-perf-batch-unrecognized-insert-long-isRecent-early-b.patch
+Applying: perf: batch unrecognized insert, long isRecent, early break msgPerSec scan
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 perf: batch unrecognized insert, long isRecent, early break msgPerSec scan
+Conflict detected! Falling back to apply --reject
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/database/dao/UnrecognizedSmsDao.kt' cleanly.
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/repository/UnrecognizedSmsRepository.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:124
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/dao/UnrecognizedSmsDao.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/UnrecognizedSmsRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+    private val systemZone: ZoneId = ZoneId.systemDefault()
+
+    /** Set once at the start of doWork to avoid calling LocalDateTime.now() per SMS. */
+    private lateinit var thirtyDaysAgo: LocalDateTime
+
+    /** O(1) sender-to-parser lookup. Factory is only called once per unique sender string. */
+    private class ParserHolder(val parser: BankParser?)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:124
+error: while searching for:
+        val blocked   = AtomicInteger(0)
+        val startTime = System.currentTimeMillis()
+
+        // Must be a power of 2 (for bitmask) and large enough that the ring never
+        // wraps within ETA_WINDOW_MS at peak throughput. 8192 / 3 ≈ 2730 msg/s max.
+        private val RING_SIZE          = 8192
+        private val MIN_SAMPLES        = 10
+        private val ring               = java.util.concurrent.atomic.AtomicLongArray(RING_SIZE)   // zeros = epoch 1970, never in window
+        private val head               = AtomicInteger(0)
+
+        fun recordCompletion() {
+            // Bitmask modulo: (RING_SIZE - 1) works because RING_SIZE is power of 2
+            val pos = head.getAndIncrement() and (RING_SIZE - 1)
+            ring.lazySet(pos, System.currentTimeMillis())
+        }
+
+        fun elapsedMs() = System.currentTimeMillis() - startTime
+
+        /**
+         * Instantaneous msg/s over the last [ETA_WINDOW_MS].
+         * Falls back to overall average during warmup so ETA is always meaningful.
+         */
+        fun msgPerSec(): Float {
+            val now      = System.currentTimeMillis()
+            val cutoff   = now - ETA_WINDOW_MS
+            var count    = 0
+            for (i in 0 until RING_SIZE) {
+                val ts = ring.get(i)
+                if (ts in (cutoff + 1)..now) count++   // bounds-check: exclude zeros AND future timestamps
+            }
+            return when {
+                count >= MIN_SAMPLES ->
+                    count / (ETA_WINDOW_MS / 1000f)     // accurate window rate
+
+                else -> {
+                    // Warmup or very slow: fall back to overall elapsed average
+                    val elapsedSec = elapsedMs() / 1000f
+                    val done       = processed.get()
+                    if (elapsedSec > 0.1f && done > 0) done / elapsedSec else 0f
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:218
+error: while searching for:
+
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
+        thirtyDaysAgo = LocalDateTime.now(systemZone).minusDays(30)
+
+        Trace.beginSection("SmsWorker.doWork")
+        try {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:281
+error: while searching for:
+            else
+                ParseResult.Discard(sms)
+
+        val isRecent = sms.timestamp.toLocalDateTime().isAfter(thirtyDaysAgo)
+
+        checkSubscriptionOrBalance(parser, sms, isRecent)?.let { return it }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:457
+error: while searching for:
+    // ─── Unrecognized SMS batch ────────────────────────────────────────────────
+
+    private suspend fun flushUnrecognizedBatch(batch: ArrayList<SmsMessage>) {
+        for (sms in batch) {
+            try {
+                if (!unrecognizedSmsRepository.exists(sms.sender, sms.body)) {
+                    unrecognizedSmsRepository.insert(
+                        UnrecognizedSmsEntity(
+                            sender     = sms.sender,
+                            smsBody    = sms.body,
+                            receivedAt = sms.timestamp.toLocalDateTime()
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error storing unrecognized SMS: ${e.message}")
+            }
+        }
+        batch.clear()
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:758
+Applied patch app/src/main/java/com/ritesh/cashiro/data/database/dao/UnrecognizedSmsDao.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/UnrecognizedSmsRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 5 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
