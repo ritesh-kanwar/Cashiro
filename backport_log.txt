@@ -14277,3 +14277,78 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 18b7ce31] fix: count RCS messages too so total includes all
+ Date: Fri May 29 06:30:24 2026 +0530
+ 2 files changed, 64 insertions(+), 254 deletions(-)
+===================================
+Applying 0337-fix-rcs-count-shimmer-stuck-on-rate-fail-type-label-.patch
+Applying: fix: rcs count, shimmer stuck on rate fail, type label on home
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: rcs count, shimmer stuck on rate fail, type label on home
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt:142
+error: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt: patch does not apply
+Applied patch to 'app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt' cleanly.
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:916
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt...
+Hunk #1 succeeded at 29 (offset -1 lines).
+error: while searching for:
+            println("Currency rates are fresh, skipping refresh")
+            return // Rates are still fresh, no need to refresh
+        }
+        println("Currency rates are stale, refreshing from API")
+
+        // Fetch all exchange rates for the base currency at once with metadata
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt:142
+Hunk #3 succeeded at 157 (offset -4 lines).
+error: while searching for:
+                    }
+                }
+            }
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt:201
+Checking patch app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt...
+error: while searching for:
+                        baseCurrency = exchangeRateResponse.base_code
+                    )
+                } else {
+                    null
+                }
+            }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt:86
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            applicationContext.contentResolver.query(
+                "content://mms".toUri(),
+                arrayOf("COUNT(*)"),
+                "date >= ?",
+                arrayOf(scanStartSeconds.toString()),
+                null
+            )?.use { c ->
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:916
+Applying patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt with 2 rejects...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Hunk #3 applied cleanly.
+Rejected hunk #4.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt with 1 reject...
+Rejected hunk #1.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Rejected hunk #1.

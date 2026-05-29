@@ -29,6 +29,10 @@ class CurrencyConversionService @Inject constructor(
     private val rateCache = mutableMapOf<String, BigDecimal>()
     private var lastCacheUpdate: LocalDateTime = LocalDateTime.MIN
 
+    // Cooldown to avoid hammering the API when it keeps failing
+    private var lastFailedRefreshTime: Long = 0L
+    private val failedRefreshCooldownMs = 5 * 60 * 1000L // 5 minutes
+
     /**
      * Convert amount from one currency to another
      */
@@ -153,6 +157,8 @@ class CurrencyConversionService @Inject constructor(
 
         if (response != null) {
             val allRates = response.rates
+            // Reset failed cooldown on success
+            lastFailedRefreshTime = 0L
             val nextUpdateTime = LocalDateTime.ofInstant(
                 Instant.ofEpochSecond(response.nextUpdateTimeUnix),
                 ZoneId.systemDefault()
