@@ -14802,3 +14802,52 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream d81b1640] fix: make countRcsMessages robust on custom OEM MMS
+ Date: Sat May 30 01:03:44 2026 +0530
+ 3 files changed, 99 insertions(+), 113 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+===================================
+Applying 0341-fix-defer-scan-state-updates-until-saver-and-balance.patch
+Applying: fix: defer scan state updates until saver and balanceUpdater finish successfully in streamPipeline
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: defer scan state updates until saver and balanceUpdater finish successfully in streamPipeline
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:367
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            } finally {
+                feed.close()
+            }
+            // Persist scan state after all messages are fed
+            userPreferencesRepository.setLastScanTimestamp(now)
+            if (needsFullScan) {
+                val scanMonths = userPreferencesRepository.getSmsScanMonths()
+                val scanAllTime = userPreferencesRepository.getSmsScanAllTime()
+                userPreferencesRepository.setLastScanPeriod(if (scanAllTime) -1 else scanMonths)
+            }
+        }
+
+        // Stage 2 – Parse (all available CPU cores)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:367
+error: while searching for:
+        saver.join()
+        balanceUpdates.close()
+        balanceUpdater.join()
+        reportProgress(stats)
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:475
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
