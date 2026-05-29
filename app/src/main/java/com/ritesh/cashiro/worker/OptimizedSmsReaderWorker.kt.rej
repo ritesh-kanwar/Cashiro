@@ -1,115 +1,87 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -270,6 +270,12 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-         SKIPPED
-     }
+@@ -27,6 +27,7 @@ import dagger.assisted.Assisted
+ import dagger.assisted.AssistedInject
+ import kotlinx.coroutines.*
+ import kotlinx.coroutines.channels.Channel
++import kotlinx.coroutines.channels.SendChannel
+ import kotlinx.coroutines.flow.first
+ import kotlinx.datetime.toJavaLocalDateTime
+ import java.math.BigDecimal
+@@ -387,10 +388,18 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+         }
  
-+    private data class DeferredBalanceUpdate(
-+        val parsed: ParsedTransaction,
-+        val entity: com.ritesh.cashiro.data.database.entity.TransactionEntity,
-+        val transactionId: Long
-+    )
+         // Stage 3 – Save (single sequential coroutine — no balance race conditions)
++        // Balance updates run concurrently via a dedicated consumer so they never block the saver.
++        val balanceUpdates = Channel<DeferredBalanceUpdate>(Channel.BUFFERED)
++        val balanceUpdater = launch(Dispatchers.IO) {
++            for (update in balanceUpdates) {
++                try { processBalanceUpdate(update.parsed, update.entity, update.transactionId) }
++                catch (e: Exception) { Log.e(TAG, "Balance update failed: ${e.message}") }
++            }
++        }
 +
-     // ─── Expedited work ───────────────────────────────────────────────────────
- 
-     override suspend fun getForegroundInfo(): ForegroundInfo =
-@@ -384,6 +390,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
          val saver = launch(Dispatchers.IO) {
              Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
              val unrecognizedBatch = ArrayList<SmsMessage>(UNRECOGNIZED_BATCH_SIZE)
-+            val deferredBalanceUpdates = ArrayList<DeferredBalanceUpdate>()
+-            val deferredBalanceUpdates = ArrayList<DeferredBalanceUpdate>()
              var widgetNeedsUpdate = false
  
              Trace.beginSection("save")
-@@ -407,7 +414,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+@@ -414,7 +423,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                              stats.parsed.incrementAndGet()
                              Trace.beginSection("saveTransaction")
                              try {
--                                when (saveTransaction(result.parsed, result.sms, stats)) {
-+                                when (saveTransaction(result.parsed, result.sms, stats, deferredBalanceUpdates)) {
+-                                when (saveTransaction(result.parsed, result.sms, stats, deferredBalanceUpdates)) {
++                                when (saveTransaction(result.parsed, result.sms, stats, balanceUpdates)) {
                                      SaveOutcome.SAVED -> {
                                          stats.saved.incrementAndGet()
                                          widgetNeedsUpdate = true
-@@ -433,6 +440,14 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+@@ -440,19 +449,13 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
              }
  
              if (unrecognizedBatch.isNotEmpty()) flushUnrecognizedBatch(unrecognizedBatch)
-+            Trace.beginSection("processDeferredBalanceUpdates")
-+            try {
-+                for (update in deferredBalanceUpdates) {
-+                    processBalanceUpdate(update.parsed, update.entity, update.transactionId)
-+                }
-+            } finally {
-+                Trace.endSection()
-+            }
+-            Trace.beginSection("processDeferredBalanceUpdates")
+-            try {
+-                for (update in deferredBalanceUpdates) {
+-                    processBalanceUpdate(update.parsed, update.entity, update.transactionId)
+-                }
+-            } finally {
+-                Trace.endSection()
+-            }
              if (widgetNeedsUpdate)
                  com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(applicationContext)
          }
-@@ -586,13 +601,15 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
  
-     // ─── Stage 3b: Regular transactions ──────────────────────────────────────
+         saver.join()
++        balanceUpdates.close()
++        balanceUpdater.join()
+         reportProgress(stats)
+     }
  
--    private suspend fun saveTransaction(parsed: ParsedTransaction, sms: SmsMessage, stats: ProcessingStats): SaveOutcome {
--        return try {
-+    private suspend fun saveTransaction(
-+        parsed: ParsedTransaction,
-+        sms: SmsMessage,
-+        stats: ProcessingStats,
-+        deferredBalanceUpdates: MutableList<DeferredBalanceUpdate>
-+    ): SaveOutcome = try {
-+        coroutineScope {
+@@ -605,7 +608,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+         parsed: ParsedTransaction,
+         sms: SmsMessage,
+         stats: ProcessingStats,
+-        deferredBalanceUpdates: MutableList<DeferredBalanceUpdate>
++        balanceUpdates: SendChannel<DeferredBalanceUpdate>
+     ): SaveOutcome = try {
+         coroutineScope {
              val entity = parsed.toEntity()
--
--            // getTransactionByHash returns rows where is_deleted=1 too, so
--            // soft-deleted transactions are never re-imported.
--            if (transactionRepository.getTransactionByHash(entity.transactionHash) != null) return SaveOutcome.SKIPPED
-+            val hashDeferred = async { transactionRepository.getTransactionByHash(entity.transactionHash) }
- 
-             val customCategory = merchantMappingCache[entity.merchantName]
-             val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
-@@ -600,11 +617,13 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-             val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
-             if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
-                 stats.blocked.incrementAndGet()
--                return SaveOutcome.SKIPPED
-+                return@coroutineScope SaveOutcome.SKIPPED
-             }
- 
-             val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
- 
-+            if (hashDeferred.await() != null) return@coroutineScope SaveOutcome.SKIPPED
-+
-             val matchedSub = subscriptionRepository.matchTransactionToSubscription(
-                 withRules.merchantName, withRules.amount
-             )
-@@ -627,23 +646,22 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+@@ -646,7 +649,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                      transactionRepository.updateTransaction(replacement)
                      accountBalanceRepository.deleteBalancesForTransaction(duplicate.id)
                      replaceRuleApplications(duplicate.id, ruleApps)
--                    processBalanceUpdate(parsed, replacement, duplicate.id)
--                    return SaveOutcome.UPDATED_DUPLICATE
-+                    deferredBalanceUpdates.add(DeferredBalanceUpdate(parsed, replacement, duplicate.id))
-+                    return@coroutineScope SaveOutcome.UPDATED_DUPLICATE
+-                    deferredBalanceUpdates.add(DeferredBalanceUpdate(parsed, replacement, duplicate.id))
++                    balanceUpdates.send(DeferredBalanceUpdate(parsed, replacement, duplicate.id))
+                     return@coroutineScope SaveOutcome.UPDATED_DUPLICATE
                  }
--                return SaveOutcome.SKIPPED_DUPLICATE
-+                return@coroutineScope SaveOutcome.SKIPPED_DUPLICATE
-             }
- 
-             val rowId = transactionRepository.insertTransaction(finalEntity)
--            if (rowId == -1L) return SaveOutcome.SKIPPED
-+            if (rowId == -1L) return@coroutineScope SaveOutcome.SKIPPED
+                 return@coroutineScope SaveOutcome.SKIPPED_DUPLICATE
+@@ -656,7 +659,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+             if (rowId == -1L) return@coroutineScope SaveOutcome.SKIPPED
  
              saveRuleApplications(rowId, ruleApps)
--            processBalanceUpdate(parsed, finalEntity, rowId)
-+            deferredBalanceUpdates.add(DeferredBalanceUpdate(parsed, finalEntity, rowId))
+-            deferredBalanceUpdates.add(DeferredBalanceUpdate(parsed, finalEntity, rowId))
++            balanceUpdates.send(DeferredBalanceUpdate(parsed, finalEntity, rowId))
              SaveOutcome.SAVED
--
--        } catch (e: Exception) {
--            Log.e(TAG, "Error saving transaction: ${e.message}")
--            SaveOutcome.SKIPPED
          }
-+    } catch (e: Exception) {
-+        Log.e(TAG, "Error saving transaction: ${e.message}")
-+        SaveOutcome.SKIPPED
-     }
- 
-     private suspend fun replaceRuleApplications(
+     } catch (e: Exception) {
