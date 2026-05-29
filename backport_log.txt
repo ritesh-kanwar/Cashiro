@@ -14577,3 +14577,167 @@ Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/core/SharedTimeC
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultCategoryData.kt cleanly.
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultSharedCategories.kt cleanly.
 Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageExchangeRateUseCase.kt cleanly.
+[backport-fixes-upstream 26be7bed] refactor: deduplicate URL builder, category seed
+ Date: Sat May 30 00:38:07 2026 +0530
+ 16 files changed, 449 insertions(+), 73 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/core/TimeConstants.kt
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/utils/SmsReportUrlBuilder.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/core/SharedTimeConstants.kt
+ create mode 100644 shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultCategoryData.kt
+===================================
+Applying 0339-fix-rethrow-CancellationException-in-worker-streamin.patch
+Applying: fix: rethrow CancellationException in worker streaming functions & fix UI card compilation errors
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: rethrow CancellationException in worker streaming functions & fix UI card compilation errors
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:237
+error: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:385
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt...
+error: while searching for:
+        }
+    }
+
+    fun getGroupSpending(year: Int, month: Int, currency: String): Flow<BudgetOverallSummary> {
+        val yearMonth = YearMonth.of(year, month)
+        val startDate = yearMonth.atDay(1).atStartOfDay()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:237
+error: while searching for:
+                val totalActual = totalAllExpenses
+                val remaining = totalBudget - totalActual
+                val pctUsed = if (totalBudget > BigDecimal.ZERO) {
+                    (totalActual.toFloat() / totalBudget.toFloat() * 100f).coerceAtLeast(0f)
+                } else 0f
+                val dailyAllowance = if (daysRemaining > 0 && remaining > BigDecimal.ZERO) {
+                    remaining.divide(BigDecimal(daysRemaining), 0, RoundingMode.HALF_UP)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:417
+error: while searching for:
+                    val actual = categoryAmounts[cat.categoryName] ?: BigDecimal.ZERO
+                    val effectiveBudget = cat.budgetAmount + (categoryLimitBoosts[cat.categoryName] ?: BigDecimal.ZERO)
+                    val pctUsed = if (effectiveBudget > BigDecimal.ZERO) {
+                        (actual.toFloat() / effectiveBudget.toFloat() * 100f).coerceAtLeast(0f)
+                    } else 0f
+                    val dailySpend = if (daysElapsed > 0 && actual > BigDecimal.ZERO) {
+                        actual.divide(BigDecimal(daysElapsed), 0, RoundingMode.HALF_UP)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:444
+error: while searching for:
+                val totalActual = catSpending.fold(BigDecimal.ZERO) { acc, c -> acc + c.actualAmount }
+                val remaining = totalBudget - totalActual
+                val pctUsed = if (totalBudget > BigDecimal.ZERO) {
+                    (totalActual.toFloat() / totalBudget.toFloat() * 100f).coerceAtLeast(0f)
+                } else 0f
+                val dailyAllowance = if (daysRemaining > 0 && remaining > BigDecimal.ZERO) {
+                    remaining.divide(BigDecimal(daysRemaining), 0, RoundingMode.HALF_UP)
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt:468
+Hunk #5 succeeded at 311 (offset -200 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+                        try {
+                            results.send(parseSms(sms))
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing SMS from ${sms.sender}: ${e.message}")
+                            results.send(ParseResult.Discard(sms))
+                        }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:385
+error: while searching for:
+        val balanceUpdater = launch(Dispatchers.IO) {
+            for (update in balanceUpdates) {
+                try { processBalanceUpdate(update.parsed, update.entity, update.transactionId) }
+                catch (e: Exception) { Log.e(TAG, "Balance update failed: ${e.message}") }
+            }
+        }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:407
+error: while searching for:
+            SaveOutcome.SAVED
+        }
+    } catch (e: Exception) {
+        Log.e(TAG, "Error saving transaction: ${e.message}")
+        SaveOutcome.SKIPPED
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:677
+error: while searching for:
+        try {
+            unrecognizedSmsRepository.insertAll(entities)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error storing unrecognized SMS batch: ${e.message}")
+        }
+        batch.clear()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:801
+error: while searching for:
+
+    private suspend fun cleanUpAndFinalize(stats: ProcessingStats) {
+        try { unrecognizedSmsRepository.cleanupOldEntries() }
+        catch (e: Exception) { Log.e(TAG, "Cleanup error: ${e.message}") }
+        try {
+            val deletedDuplicates = cleanupExistingGPayDuplicates()
+            if (deletedDuplicates > 0) {
+                Log.i(TAG, "Cleaned up $deletedDuplicates existing GPay duplicate transactions")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "GPay duplicate cleanup error: ${e.message}")
+        }
+        if (stats.saved.get() > 0) {
+            try { llmRepository.updateSystemPrompt() }
+            catch (e: Exception) { Log.e(TAG, "Prompt update error: ${e.message}") }
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:810
+error: while searching for:
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error streaming SMS", e)
+        }
+        Log.i(TAG, "Streamed $count SMS messages to pipeline")
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:960
+error: while searching for:
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error streaming RCS", e)
+        }
+        Log.i(TAG, "Streamed $count RCS messages to pipeline")
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:995
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt with 4 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Hunk #5 applied cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 7 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Rejected hunk #7.

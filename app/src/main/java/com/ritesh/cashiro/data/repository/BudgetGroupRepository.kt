@@ -311,7 +311,7 @@ class BudgetGroupRepository @Inject constructor(
 
         val netSavings = totalIncome - totalLimitSpent
         val savingsRate = if (totalIncome > BigDecimal.ZERO) {
-            (netSavings.toFloat() / totalIncome.toFloat() * 100f)
+            percentOf(netSavings, totalIncome, coerceMinZero = false)
         } else 0f
 
         val limitRemaining = totalLimitBudget - totalLimitSpent
