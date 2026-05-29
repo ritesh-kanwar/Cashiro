@@ -14,6 +14,7 @@ import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
 import com.ritesh.cashiro.data.database.dao.BankNotificationDao
 import com.ritesh.cashiro.data.database.dao.BudgetDao
 import com.ritesh.cashiro.data.database.dao.CardDao
+import com.cashiroai.shared.data.bootstrap.DefaultCategoryData
 import com.ritesh.cashiro.data.database.dao.CategoryDao
 import com.ritesh.cashiro.data.database.dao.ChatDao
 import com.ritesh.cashiro.data.database.dao.ExchangeRateDao

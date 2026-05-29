@@ -14352,3 +14352,228 @@ Applying patch app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRatePr
 Rejected hunk #1.
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream dcec7148] fix: rcs count, shimmer stuck on rate fail, type
+ Date: Fri May 29 06:41:57 2026 +0530
+ 5 files changed, 125 insertions(+), 39 deletions(-)
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/currency/ExchangeRateProvider.kt.rej
+===================================
+Applying 0338-refactor-deduplicate-URL-builder-category-seed-data-.patch
+Applying: refactor: deduplicate URL builder, category seed data, time constants, UI transitions
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 refactor: deduplicate URL builder, category seed data, time constants, UI transitions
+Conflict detected! Falling back to apply --reject
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:517
+error: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt: patch does not apply
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/AppLockRepository.kt:1
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt:1
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt:1
+error: app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt: patch does not apply
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:11
+error: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt: patch does not apply
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:17
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Falling back to direct application...
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+Checking patch app/src/main/java/com/ritesh/cashiro/core/TimeConstants.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt...
+Hunk #2 succeeded at 32 (offset -1 lines).
+Checking patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt...
+Hunk #1 succeeded at 14 (offset -1 lines).
+error: while searching for:
+        super.onPostMigrate(db)
+        
+        // Insert default categories
+        val categories = listOf(
+            Triple("Food & Dining", "#FC8019", false),
+            Triple("Groceries", "#5AC85A", false),
+            Triple("Transportation", "#000000", false),
+            Triple("Shopping", "#FF9900", false),
+            Triple("Bills & Utilities", "#4CAF50", false),
+            Triple("Entertainment", "#E50914", false),
+            Triple("Healthcare", "#10847E", false),
+            Triple("Investments", "#00D09C", false),
+            Triple("Banking", "#004C8F", false),
+            Triple("Personal Care", "#6A4C93", false),
+            Triple("Education", "#673AB7", false),
+            Triple("Mobile", "#2A3890", false),
+            Triple("Fitness", "#FF3278", false),
+            Triple("Insurance", "#0066CC", false),
+            Triple("Travel", "#00BCD4", false),
+            Triple("Salary", "#4CAF50", true),
+            Triple("Income", "#4CAF50", true),
+            Triple("Others", "#757575", false)
+        )
+        
+        categories.forEachIndexed { index, (name, color, isIncome) ->
+            db.execSQL("""
+                INSERT INTO categories (name, color, is_system, is_income, display_order, created_at, updated_at)
+                VALUES (?, ?, 1, ?, ?, datetime('now'), datetime('now'))
+            """.trimIndent(), arrayOf<Any>(name, color, if (isIncome) 1 else 0, index + 1))
+        }
+    }
+}
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt:517
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/AppLockRepository.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt...
+error: while searching for:
+package com.ritesh.cashiro.data.repository
+
+import com.ritesh.cashiro.data.database.dao.CategoryDao
+import com.ritesh.cashiro.data.database.entity.CategoryEntity
+import kotlinx.coroutines.flow.Flow
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt:1
+error: while searching for:
+    suspend fun initializeDefaultCategories() {
+        // Only initialize if no categories exist
+        if (categoryDao.getCategoryCount() == 0) {
+            val defaultCategories = listOf(
+                CategoryEntity(name = "Food & Dining", color = "#FC8019", isSystem = true, isIncome = false, displayOrder = 1),
+                CategoryEntity(name = "Groceries", color = "#5AC85A", isSystem = true, isIncome = false, displayOrder = 2),
+                CategoryEntity(name = "Transportation", color = "#000000", isSystem = true, isIncome = false, displayOrder = 3),
+                CategoryEntity(name = "Shopping", color = "#FF9900", isSystem = true, isIncome = false, displayOrder = 4),
+                CategoryEntity(name = "Bills & Utilities", color = "#4CAF50", isSystem = true, isIncome = false, displayOrder = 5),
+                CategoryEntity(name = "Entertainment", color = "#E50914", isSystem = true, isIncome = false, displayOrder = 6),
+                CategoryEntity(name = "Healthcare", color = "#10847E", isSystem = true, isIncome = false, displayOrder = 7),
+                CategoryEntity(name = "Investments", color = "#00D09C", isSystem = true, isIncome = false, displayOrder = 8),
+                CategoryEntity(name = "Banking", color = "#004C8F", isSystem = true, isIncome = false, displayOrder = 9),
+                CategoryEntity(name = "Personal Care", color = "#6A4C93", isSystem = true, isIncome = false, displayOrder = 10),
+                CategoryEntity(name = "Education", color = "#673AB7", isSystem = true, isIncome = false, displayOrder = 11),
+                CategoryEntity(name = "Mobile", color = "#2A3890", isSystem = true, isIncome = false, displayOrder = 12),
+                CategoryEntity(name = "Fitness", color = "#FF3278", isSystem = true, isIncome = false, displayOrder = 13),
+                CategoryEntity(name = "Insurance", color = "#0066CC", isSystem = true, isIncome = false, displayOrder = 14),
+                CategoryEntity(name = "Travel", color = "#00BCD4", isSystem = true, isIncome = false, displayOrder = 15),
+                CategoryEntity(name = "Salary", color = "#4CAF50", isSystem = true, isIncome = true, displayOrder = 16),
+                CategoryEntity(name = "Income", color = "#4CAF50", isSystem = true, isIncome = true, displayOrder = 17),
+                CategoryEntity(name = "Others", color = "#757575", isSystem = true, isIncome = false, displayOrder = 18)
+            )
+            categoryDao.insertCategories(defaultCategories)
+        }
+    }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt:70
+Checking patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.database.dao.BudgetDao
+import com.ritesh.cashiro.data.database.dao.BudgetSnapshotDao
+import com.ritesh.cashiro.data.database.dao.CardDao
+import com.ritesh.cashiro.data.database.dao.CategoryDao
+import com.ritesh.cashiro.data.database.dao.ChatDao
+import com.ritesh.cashiro.data.database.dao.ExchangeRateDao
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:11
+error: while searching for:
+    }
+    
+    private fun seedCategories(db: SupportSQLiteDatabase) {
+        val categories = listOf(
+            Triple("Food & Dining", "#FC8019", false),
+            Triple("Groceries", "#5AC85A", false),
+            Triple("Transportation", "#000000", false),
+            Triple("Shopping", "#FF9900", false),
+            Triple("Bills & Utilities", "#4CAF50", false),
+            Triple("Entertainment", "#E50914", false),
+            Triple("Healthcare", "#10847E", false),
+            Triple("Investments", "#00D09C", false),
+            Triple("Banking", "#004C8F", false),
+            Triple("Personal Care", "#6A4C93", false),
+            Triple("Education", "#673AB7", false),
+            Triple("Mobile", "#2A3890", false),
+            Triple("Fitness", "#FF3278", false),
+            Triple("Insurance", "#0066CC", false),
+            Triple("Travel", "#00BCD4", false),
+            Triple("Salary", "#4CAF50", true),
+            Triple("Income", "#4CAF50", true),
+            Triple("Others", "#757575", false)
+        )
+        
+        categories.forEachIndexed { index, (name, color, isIncome) ->
+            db.execSQL("""
+                INSERT OR IGNORE INTO categories (name, color, is_system, is_income, display_order, created_at, updated_at)
+                VALUES (?, ?, 1, ?, ?, datetime('now'), datetime('now'))
+            """.trimIndent(), arrayOf<Any>(name, color, if (isIncome) 1 else 0, index + 1))
+        }
+    }
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt:286
+Checking patch app/src/main/java/com/ritesh/cashiro/utils/SmsReportUrlBuilder.kt...
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+import com.ritesh.cashiro.data.manager.TransactionDeduplication
+import com.ritesh.cashiro.data.mapper.toEntity
+import com.ritesh.cashiro.data.mapper.toEntityType
+import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+import com.ritesh.cashiro.data.repository.*
+import com.ritesh.cashiro.domain.model.rule.TransactionRule
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:17
+error: while searching for:
+                PROGRESS_SAVED                    to stats.saved.get(),
+                PROGRESS_BLOCKED                  to stats.blocked.get(),
+                PROGRESS_TIME_ELAPSED             to stats.elapsedMs(),
+                PROGRESS_ESTIMATED_TIME_REMAINING to (eta * 1000L),
+                PROGRESS_ETA_SECONDS              to eta,
+                PROGRESS_MSG_PER_SEC              to mps,
+                PROGRESS_CURRENT_BATCH            to p,
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:848
+error: while searching for:
+                set(java.util.Calendar.SECOND, 0);      set(java.util.Calendar.MILLISECOND, 0)
+            }.timeInMillis
+        } else {
+            val threeDaysAgo = now - 3 * 24 * 60 * 60 * 1000L
+            val periodLimit  = java.util.Calendar.getInstance().apply {
+                add(java.util.Calendar.MONTH, -scanMonths)
+            }.timeInMillis
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:881
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/core/SharedTimeConstants.kt...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultCategoryData.kt...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultSharedCategories.kt...
+Checking patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageExchangeRateUseCase.kt...
+Applied patch app/src/main/java/com/ritesh/cashiro/core/TimeConstants.kt cleanly.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/currency/CurrencyConversionService.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/data/repository/AppLockRepository.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applying patch app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Applied patch app/src/main/java/com/ritesh/cashiro/utils/SmsReportUrlBuilder.kt cleanly.
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 3 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/core/SharedTimeConstants.kt cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultCategoryData.kt cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/data/bootstrap/DefaultSharedCategories.kt cleanly.
+Applied patch shared/src/commonMain/kotlin/com/cashiroai/shared/domain/usecase/ManageExchangeRateUseCase.kt cleanly.

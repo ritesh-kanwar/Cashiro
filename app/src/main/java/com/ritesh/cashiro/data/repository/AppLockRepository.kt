@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.data.repository
 
+import com.ritesh.cashiro.core.TimeConstants
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -69,7 +70,7 @@ class AppLockRepository @Inject constructor(
         if (lastAuthTimestamp == 0L) return true
 
         val currentTime = System.currentTimeMillis()
-        val timeoutMillis = timeoutMinutes * 60 * 1000L
+        val timeoutMillis = timeoutMinutes * TimeConstants.MILLIS_PER_MINUTE
         val timeSinceAuth = currentTime - lastAuthTimestamp
 
         return timeSinceAuth >= timeoutMillis
@@ -93,7 +94,7 @@ class AppLockRepository @Inject constructor(
         if (lastAuthTimestamp == 0L) return@combine true
 
         val currentTime = System.currentTimeMillis()
-        val timeoutMillis = timeoutMinutes * 60 * 1000L
+        val timeoutMillis = timeoutMinutes * TimeConstants.MILLIS_PER_MINUTE
         val timeSinceAuth = currentTime - lastAuthTimestamp
 
         timeSinceAuth >= timeoutMillis

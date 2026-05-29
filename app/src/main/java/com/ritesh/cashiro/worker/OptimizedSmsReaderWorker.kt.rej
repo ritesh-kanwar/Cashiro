@@ -1,10 +1,27 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -916,7 +916,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-             applicationContext.contentResolver.query(
-                 "content://mms".toUri(),
-                 arrayOf("COUNT(*)"),
--                "date >= ?",
-+                "date >= ? AND tr_id LIKE 'proto:%'",
-                 arrayOf(scanStartSeconds.toString()),
-                 null
-             )?.use { c ->
+@@ -17,6 +17,7 @@ import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
+ import com.ritesh.cashiro.data.manager.TransactionDeduplication
+ import com.ritesh.cashiro.data.mapper.toEntity
+ import com.ritesh.cashiro.data.mapper.toEntityType
++import com.ritesh.cashiro.core.TimeConstants
+ import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
+ import com.ritesh.cashiro.data.repository.*
+ import com.ritesh.cashiro.domain.model.rule.TransactionRule
+@@ -848,7 +849,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+                 PROGRESS_SAVED                    to stats.saved.get(),
+                 PROGRESS_BLOCKED                  to stats.blocked.get(),
+                 PROGRESS_TIME_ELAPSED             to stats.elapsedMs(),
+-                PROGRESS_ESTIMATED_TIME_REMAINING to (eta * 1000L),
++                PROGRESS_ESTIMATED_TIME_REMAINING to (eta * TimeConstants.MILLIS_PER_SECOND),
+                 PROGRESS_ETA_SECONDS              to eta,
+                 PROGRESS_MSG_PER_SEC              to mps,
+                 PROGRESS_CURRENT_BATCH            to p,
+@@ -881,7 +882,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+                 set(java.util.Calendar.SECOND, 0);      set(java.util.Calendar.MILLISECOND, 0)
+             }.timeInMillis
+         } else {
+-            val threeDaysAgo = now - 3 * 24 * 60 * 60 * 1000L
++            val threeDaysAgo = now - TimeConstants.MILLIS_PER_3_DAYS
+             val periodLimit  = java.util.Calendar.getInstance().apply {
+                 add(java.util.Calendar.MONTH, -scanMonths)
+             }.timeInMillis
