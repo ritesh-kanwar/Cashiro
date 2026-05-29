@@ -14851,3 +14851,59 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 349ba879] fix: defer scan state updates until saver and
+ Date: Sat May 30 01:10:53 2026 +0530
+ 2 files changed, 77 insertions(+), 43 deletions(-)
+===================================
+Applying 0342-perf-fix-avoid-unnecessary-DB-wait-for-blocked-trans.patch
+Applying: perf/fix: avoid unnecessary DB wait for blocked transactions & fix ring-buffer ETA undercount
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 perf/fix: avoid unnecessary DB wait for blocked transactions & fix ring-buffer ETA undercount
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:244
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            for (i in 0 until limit) {
+                val pos = (currentHead - 1 - i) and mask
+                val ts  = ring.get(pos)
+                if (ts <= cutoff) break
+                if (ts <= now) count++
+            }
+            return when {
+                count >= MIN_SAMPLES ->
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:244
+error: while searching for:
+        stats: ProcessingStats,
+        balanceUpdates: SendChannel<DeferredBalanceUpdate>
+    ): SaveOutcome = try {
+        coroutineScope {
+            val entity = parsed.toEntity()
+            val hashDeferred = async { transactionRepository.getTransactionByHash(entity.transactionHash) }
+
+            val customCategory = merchantMappingCache[entity.merchantName]
+            val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
+
+            val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
+            if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
+                stats.blocked.incrementAndGet()
+                return@coroutineScope SaveOutcome.SKIPPED
+            }
+
+            val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
+
+            if (hashDeferred.await() != null) return@coroutineScope SaveOutcome.SKIPPED
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:631
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
