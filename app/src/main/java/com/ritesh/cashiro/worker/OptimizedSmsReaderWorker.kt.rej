@@ -1,18 +1,10 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -440,16 +440,8 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-                 com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(applicationContext)
-         }
- 
--        // Real-time UI refresh every 50ms
--        val progressMonitor = launch(Dispatchers.IO) {
--            while (stats.processed.get() < stats.total) {
--                reportProgress(stats)
--            }
--        }
--
-         saver.join()
-         reportProgress(stats)
--        progressMonitor.cancel()
-     }
- 
-     // ─── Stage 2: Parse (plain fun — no suspend overhead on the hot path) ─────
+@@ -429,7 +429,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+                             }
+                         }
+                     }
+-                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) reportProgress(stats)
++                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) launch { reportProgress(stats) }
+                 }
+             } finally {
+                 Trace.endSection()

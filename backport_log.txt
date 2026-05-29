@@ -13600,3 +13600,49 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
 Hunk #1 applied cleanly.
 Rejected hunk #2.
+[backport-fixes-upstream 1d656fe7] fix: remove busy-spin progress monitor, report
+ Date: Fri May 29 04:45:38 2026 +0530
+ 9 files changed, 70 insertions(+), 224 deletions(-)
+ delete mode 100644 app/build.gradle.kts.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/CashiroApp.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/MainActivity.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ delete mode 100644 gradle.properties.rej
+ delete mode 100644 gradle/libs.versions.toml.rej
+===================================
+Applying 0325-ci-split-test-workflow-into-3-parallel-jobs.patch
+Applying: ci: split test workflow into 3 parallel jobs
+Successfully applied via git am
+===================================
+Applying 0326-ci-run-all-3-test-jobs-in-parallel.patch
+Applying: ci: run all 3 test jobs in parallel
+Successfully applied via git am
+===================================
+Applying 0327-fix-fire-progress-updates-async-so-save-loop-isnt-bl.patch
+Applying: fix: fire progress updates async so save loop isnt blocked
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: fire progress updates async so save loop isnt blocked
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:429
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+                            }
+                        }
+                    }
+                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) reportProgress(stats)
+                }
+            } finally {
+                Trace.endSection()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:429
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Rejected hunk #1.
