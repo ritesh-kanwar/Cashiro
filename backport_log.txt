@@ -14234,3 +14234,46 @@ Rejected hunk #3.
 Rejected hunk #4.
 Rejected hunk #5.
 Rejected hunk #6.
+[backport-fixes-upstream 083170a6] perf: stream SMS cursor directly into feed channel no
+ Date: Fri May 29 06:18:40 2026 +0530
+ 2 files changed, 454 insertions(+), 74 deletions(-)
+===================================
+Applying 0336-fix-count-RCS-messages-too-so-total-includes-all-pip.patch
+Applying: fix: count RCS messages too so total includes all pipeline messages
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: count RCS messages too so total includes all pipeline messages
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:318
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            }
+            Log.i(TAG, "Caches: ${merchantMappingCache.size} merchant mappings, ${ruleCache.values.map { it.size }.sum()} rules")
+
+            // Fast COUNT query — avoids loading all messages before the pipeline
+            val total = countSmsMessages(scanStartTime)
+            val parserConcurrency = maxOf(1, Runtime.getRuntime().availableProcessors() - 1)
+            Log.i(TAG, "Pipeline: $parserConcurrency parsers | 1 saver | $total messages")
+
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:318
+error: while searching for:
+        return count
+    }
+
+    /** Streams SMS cursor rows directly into the feed channel — no intermediate list. */
+    private suspend fun streamSmsToChannel(
+        feed: SendChannel<SmsMessage>,
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:907
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
