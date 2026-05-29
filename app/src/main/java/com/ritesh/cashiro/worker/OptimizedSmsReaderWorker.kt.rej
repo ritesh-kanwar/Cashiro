@@ -1,34 +1,23 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -929,6 +929,23 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+@@ -412,6 +412,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+             Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
+             val unrecognizedBatch = ArrayList<SmsMessage>(UNRECOGNIZED_BATCH_SIZE)
+             var widgetNeedsUpdate = false
++            var lastReportTime = 0L
  
-     /** Robust query for RCS messages. */
-     private suspend fun countRcsMessages(scanStartSeconds: Long): Int {
-+        try {
-+            applicationContext.contentResolver.query(
-+                "content://mms".toUri(),
-+                arrayOf("COUNT(*)"),
-+                "date >= ? AND tr_id LIKE 'proto:%'",
-+                arrayOf(scanStartSeconds.toString()),
-+                null
-+            )?.use { c ->
-+                if (c.moveToFirst()) {
-+                    return c.getInt(0)
-+                }
-+            }
-+        } catch (e: Exception) {
-+            if (e is CancellationException) throw e
-+            Log.w(TAG, "Fast RCS count failed, falling back to cursor iteration: ${e.message}")
-+        }
+             Trace.beginSection("save")
+             try {
+@@ -453,7 +454,12 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+                             }
+                         }
+                     }
+-                    reportProgress(stats)
 +
-         var count = 0
-         try {
-             applicationContext.contentResolver.query(
-@@ -950,7 +967,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-             }
-         } catch (e: Exception) {
-             if (e is CancellationException) throw e
--            Log.e(TAG, "Error counting RCS", e)
-+            Log.e(TAG, "Error counting RCS via fallback scan", e)
-         }
-         return count
-     }
++                    val nowMs = System.currentTimeMillis()
++                    if (nowMs - lastReportTime >= 250L || p == 1 || p == stats.total) {
++                        reportProgress(stats)
++                        lastReportTime = nowMs
++                    }
+                 }
+             } finally {
+                 Trace.endSection()

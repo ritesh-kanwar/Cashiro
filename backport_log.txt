@@ -14996,3 +14996,45 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 5b472a87] perf: optimize RCS messages pre-counting with fast
+ Date: Sat May 30 01:52:45 2026 +0530
+ 2 files changed, 72 insertions(+), 34 deletions(-)
+===================================
+Applying 0346-perf-throttle-reportProgress-inside-saver-loop-to-re.patch
+Applying: perf: throttle reportProgress inside saver loop to reduce WorkManager DB write overhead
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 perf: throttle reportProgress inside saver loop to reduce WorkManager DB write overhead
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:412
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
+            val unrecognizedBatch = ArrayList<SmsMessage>(UNRECOGNIZED_BATCH_SIZE)
+            var widgetNeedsUpdate = false
+
+            Trace.beginSection("save")
+            try {
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:412
+error: while searching for:
+                            }
+                        }
+                    }
+                    reportProgress(stats)
+                }
+            } finally {
+                Trace.endSection()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:453
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
