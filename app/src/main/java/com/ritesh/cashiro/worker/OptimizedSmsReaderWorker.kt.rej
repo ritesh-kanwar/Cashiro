@@ -1,111 +1,115 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -124,7 +124,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-     private val systemZone: ZoneId = ZoneId.systemDefault()
- 
-     /** Set once at the start of doWork to avoid calling LocalDateTime.now() per SMS. */
--    private lateinit var thirtyDaysAgo: LocalDateTime
-+    private var thirtyDaysAgoMillis: Long = 0L
- 
-     /** O(1) sender-to-parser lookup. Factory is only called once per unique sender string. */
-     private class ParserHolder(val parser: BankParser?)
-@@ -218,39 +218,37 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-         val blocked   = AtomicInteger(0)
-         val startTime = System.currentTimeMillis()
- 
--        // Must be a power of 2 (for bitmask) and large enough that the ring never
--        // wraps within ETA_WINDOW_MS at peak throughput. 8192 / 3 ≈ 2730 msg/s max.
-         private val RING_SIZE          = 8192
-         private val MIN_SAMPLES        = 10
--        private val ring               = java.util.concurrent.atomic.AtomicLongArray(RING_SIZE)   // zeros = epoch 1970, never in window
-+        private val ring               = java.util.concurrent.atomic.AtomicLongArray(RING_SIZE)
-         private val head               = AtomicInteger(0)
-+        private val writtenCount       = AtomicInteger(0)
- 
-         fun recordCompletion() {
--            // Bitmask modulo: (RING_SIZE - 1) works because RING_SIZE is power of 2
-             val pos = head.getAndIncrement() and (RING_SIZE - 1)
-             ring.lazySet(pos, System.currentTimeMillis())
-+            if (writtenCount.get() < RING_SIZE) writtenCount.incrementAndGet()
-         }
- 
-         fun elapsedMs() = System.currentTimeMillis() - startTime
- 
--        /**
--         * Instantaneous msg/s over the last [ETA_WINDOW_MS].
--         * Falls back to overall average during warmup so ETA is always meaningful.
--         */
-         fun msgPerSec(): Float {
-             val now      = System.currentTimeMillis()
-             val cutoff   = now - ETA_WINDOW_MS
-             var count    = 0
--            for (i in 0 until RING_SIZE) {
--                val ts = ring.get(i)
--                if (ts in (cutoff + 1)..now) count++   // bounds-check: exclude zeros AND future timestamps
-+            val mask     = RING_SIZE - 1
-+            val limit    = writtenCount.get()
-+            for (i in 0 until limit) {
-+                val pos = (head.get() - 1 - i) and mask
-+                val ts  = ring.get(pos)
-+                if (ts <= cutoff) break
-+                if (ts <= now) count++
-             }
-             return when {
-                 count >= MIN_SAMPLES ->
--                    count / (ETA_WINDOW_MS / 1000f)     // accurate window rate
-+                    count / (ETA_WINDOW_MS / 1000f)
- 
-                 else -> {
--                    // Warmup or very slow: fall back to overall elapsed average
-                     val elapsedSec = elapsedMs() / 1000f
-                     val done       = processed.get()
-                     if (elapsedSec > 0.1f && done > 0) done / elapsedSec else 0f
-@@ -281,7 +279,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
- 
-     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
--        thirtyDaysAgo = LocalDateTime.now(systemZone).minusDays(30)
-+        thirtyDaysAgoMillis = System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000
- 
-         Trace.beginSection("SmsWorker.doWork")
-         try {
-@@ -457,7 +455,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-             else
-                 ParseResult.Discard(sms)
- 
--        val isRecent = sms.timestamp.toLocalDateTime().isAfter(thirtyDaysAgo)
-+        val isRecent = sms.timestamp > thirtyDaysAgoMillis
- 
-         checkSubscriptionOrBalance(parser, sms, isRecent)?.let { return it }
- 
-@@ -758,20 +756,17 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-     // ─── Unrecognized SMS batch ────────────────────────────────────────────────
- 
-     private suspend fun flushUnrecognizedBatch(batch: ArrayList<SmsMessage>) {
--        for (sms in batch) {
--            try {
--                if (!unrecognizedSmsRepository.exists(sms.sender, sms.body)) {
--                    unrecognizedSmsRepository.insert(
--                        UnrecognizedSmsEntity(
--                            sender     = sms.sender,
--                            smsBody    = sms.body,
--                            receivedAt = sms.timestamp.toLocalDateTime()
--                        )
--                    )
--                }
--            } catch (e: Exception) {
--                Log.e(TAG, "Error storing unrecognized SMS: ${e.message}")
--            }
-+        val entities = batch.map { sms ->
-+            UnrecognizedSmsEntity(
-+                sender     = sms.sender,
-+                smsBody    = sms.body,
-+                receivedAt = sms.timestamp.toLocalDateTime()
-+            )
-+        }
-+        try {
-+            unrecognizedSmsRepository.insertAll(entities)
-+        } catch (e: Exception) {
-+            Log.e(TAG, "Error storing unrecognized SMS batch: ${e.message}")
-         }
-         batch.clear()
+@@ -270,6 +270,12 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+         SKIPPED
      }
+ 
++    private data class DeferredBalanceUpdate(
++        val parsed: ParsedTransaction,
++        val entity: com.ritesh.cashiro.data.database.entity.TransactionEntity,
++        val transactionId: Long
++    )
++
+     // ─── Expedited work ───────────────────────────────────────────────────────
+ 
+     override suspend fun getForegroundInfo(): ForegroundInfo =
+@@ -384,6 +390,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+         val saver = launch(Dispatchers.IO) {
+             Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
+             val unrecognizedBatch = ArrayList<SmsMessage>(UNRECOGNIZED_BATCH_SIZE)
++            val deferredBalanceUpdates = ArrayList<DeferredBalanceUpdate>()
+             var widgetNeedsUpdate = false
+ 
+             Trace.beginSection("save")
+@@ -407,7 +414,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+                             stats.parsed.incrementAndGet()
+                             Trace.beginSection("saveTransaction")
+                             try {
+-                                when (saveTransaction(result.parsed, result.sms, stats)) {
++                                when (saveTransaction(result.parsed, result.sms, stats, deferredBalanceUpdates)) {
+                                     SaveOutcome.SAVED -> {
+                                         stats.saved.incrementAndGet()
+                                         widgetNeedsUpdate = true
+@@ -433,6 +440,14 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+             }
+ 
+             if (unrecognizedBatch.isNotEmpty()) flushUnrecognizedBatch(unrecognizedBatch)
++            Trace.beginSection("processDeferredBalanceUpdates")
++            try {
++                for (update in deferredBalanceUpdates) {
++                    processBalanceUpdate(update.parsed, update.entity, update.transactionId)
++                }
++            } finally {
++                Trace.endSection()
++            }
+             if (widgetNeedsUpdate)
+                 com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(applicationContext)
+         }
+@@ -586,13 +601,15 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+ 
+     // ─── Stage 3b: Regular transactions ──────────────────────────────────────
+ 
+-    private suspend fun saveTransaction(parsed: ParsedTransaction, sms: SmsMessage, stats: ProcessingStats): SaveOutcome {
+-        return try {
++    private suspend fun saveTransaction(
++        parsed: ParsedTransaction,
++        sms: SmsMessage,
++        stats: ProcessingStats,
++        deferredBalanceUpdates: MutableList<DeferredBalanceUpdate>
++    ): SaveOutcome = try {
++        coroutineScope {
+             val entity = parsed.toEntity()
+-
+-            // getTransactionByHash returns rows where is_deleted=1 too, so
+-            // soft-deleted transactions are never re-imported.
+-            if (transactionRepository.getTransactionByHash(entity.transactionHash) != null) return SaveOutcome.SKIPPED
++            val hashDeferred = async { transactionRepository.getTransactionByHash(entity.transactionHash) }
+ 
+             val customCategory = merchantMappingCache[entity.merchantName]
+             val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
+@@ -600,11 +617,13 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+             val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
+             if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
+                 stats.blocked.incrementAndGet()
+-                return SaveOutcome.SKIPPED
++                return@coroutineScope SaveOutcome.SKIPPED
+             }
+ 
+             val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
+ 
++            if (hashDeferred.await() != null) return@coroutineScope SaveOutcome.SKIPPED
++
+             val matchedSub = subscriptionRepository.matchTransactionToSubscription(
+                 withRules.merchantName, withRules.amount
+             )
+@@ -627,23 +646,22 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+                     transactionRepository.updateTransaction(replacement)
+                     accountBalanceRepository.deleteBalancesForTransaction(duplicate.id)
+                     replaceRuleApplications(duplicate.id, ruleApps)
+-                    processBalanceUpdate(parsed, replacement, duplicate.id)
+-                    return SaveOutcome.UPDATED_DUPLICATE
++                    deferredBalanceUpdates.add(DeferredBalanceUpdate(parsed, replacement, duplicate.id))
++                    return@coroutineScope SaveOutcome.UPDATED_DUPLICATE
+                 }
+-                return SaveOutcome.SKIPPED_DUPLICATE
++                return@coroutineScope SaveOutcome.SKIPPED_DUPLICATE
+             }
+ 
+             val rowId = transactionRepository.insertTransaction(finalEntity)
+-            if (rowId == -1L) return SaveOutcome.SKIPPED
++            if (rowId == -1L) return@coroutineScope SaveOutcome.SKIPPED
+ 
+             saveRuleApplications(rowId, ruleApps)
+-            processBalanceUpdate(parsed, finalEntity, rowId)
++            deferredBalanceUpdates.add(DeferredBalanceUpdate(parsed, finalEntity, rowId))
+             SaveOutcome.SAVED
+-
+-        } catch (e: Exception) {
+-            Log.e(TAG, "Error saving transaction: ${e.message}")
+-            SaveOutcome.SKIPPED
+         }
++    } catch (e: Exception) {
++        Log.e(TAG, "Error saving transaction: ${e.message}")
++        SaveOutcome.SKIPPED
+     }
+ 
+     private suspend fun replaceRuleApplications(

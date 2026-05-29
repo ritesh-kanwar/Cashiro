@@ -13807,3 +13807,124 @@ Rejected hunk #2.
 Rejected hunk #3.
 Rejected hunk #4.
 Rejected hunk #5.
+[backport-fixes-upstream d61d2efd] perf: batch unrecognized insert, long isRecent, early
+ Date: Fri May 29 06:06:56 2026 +0530
+ 4 files changed, 244 insertions(+), 9 deletions(-)
+===================================
+Applying 0331-perf-defer-balance-updates-out-of-save-hot-path-para.patch
+Applying: perf: defer balance updates out of save hot path, parallelize hash lookup
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 perf: defer balance updates out of save hot path, parallelize hash lookup
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:270
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+        SKIPPED
+    }
+
+    // ─── Expedited work ───────────────────────────────────────────────────────
+
+    override suspend fun getForegroundInfo(): ForegroundInfo =
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:270
+error: while searching for:
+        val saver = launch(Dispatchers.IO) {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
+            val unrecognizedBatch = ArrayList<SmsMessage>(UNRECOGNIZED_BATCH_SIZE)
+            var widgetNeedsUpdate = false
+
+            Trace.beginSection("save")
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:384
+error: while searching for:
+                            stats.parsed.incrementAndGet()
+                            Trace.beginSection("saveTransaction")
+                            try {
+                                when (saveTransaction(result.parsed, result.sms, stats)) {
+                                    SaveOutcome.SAVED -> {
+                                        stats.saved.incrementAndGet()
+                                        widgetNeedsUpdate = true
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:407
+error: while searching for:
+            }
+
+            if (unrecognizedBatch.isNotEmpty()) flushUnrecognizedBatch(unrecognizedBatch)
+            if (widgetNeedsUpdate)
+                com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(applicationContext)
+        }
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:433
+error: while searching for:
+
+    // ─── Stage 3b: Regular transactions ──────────────────────────────────────
+
+    private suspend fun saveTransaction(parsed: ParsedTransaction, sms: SmsMessage, stats: ProcessingStats): SaveOutcome {
+        return try {
+            val entity = parsed.toEntity()
+
+            // getTransactionByHash returns rows where is_deleted=1 too, so
+            // soft-deleted transactions are never re-imported.
+            if (transactionRepository.getTransactionByHash(entity.transactionHash) != null) return SaveOutcome.SKIPPED
+
+            val customCategory = merchantMappingCache[entity.merchantName]
+            val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:586
+error: while searching for:
+            val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
+            if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
+                stats.blocked.incrementAndGet()
+                return SaveOutcome.SKIPPED
+            }
+
+            val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
+
+            val matchedSub = subscriptionRepository.matchTransactionToSubscription(
+                withRules.merchantName, withRules.amount
+            )
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:600
+error: while searching for:
+                    transactionRepository.updateTransaction(replacement)
+                    accountBalanceRepository.deleteBalancesForTransaction(duplicate.id)
+                    replaceRuleApplications(duplicate.id, ruleApps)
+                    processBalanceUpdate(parsed, replacement, duplicate.id)
+                    return SaveOutcome.UPDATED_DUPLICATE
+                }
+                return SaveOutcome.SKIPPED_DUPLICATE
+            }
+
+            val rowId = transactionRepository.insertTransaction(finalEntity)
+            if (rowId == -1L) return SaveOutcome.SKIPPED
+
+            saveRuleApplications(rowId, ruleApps)
+            processBalanceUpdate(parsed, finalEntity, rowId)
+            SaveOutcome.SAVED
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saving transaction: ${e.message}")
+            SaveOutcome.SKIPPED
+        }
+    }
+
+    private suspend fun replaceRuleApplications(
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:627
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 7 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
+Rejected hunk #3.
+Rejected hunk #4.
+Rejected hunk #5.
+Rejected hunk #6.
+Rejected hunk #7.
