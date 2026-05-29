@@ -14741,3 +14741,64 @@ Rejected hunk #4.
 Rejected hunk #5.
 Rejected hunk #6.
 Rejected hunk #7.
+[backport-fixes-upstream 7728dbcb] fix: rethrow CancellationException in worker
+ Date: Sat May 30 00:51:40 2026 +0530
+ 7 files changed, 285 insertions(+), 155 deletions(-)
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/database/CashiroDatabase.kt.rej
+ create mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/BudgetGroupRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/data/repository/CategoryRepository.kt.rej
+ delete mode 100644 app/src/main/java/com/ritesh/cashiro/di/DatabaseModule.kt.rej
+===================================
+Applying 0340-fix-make-countRcsMessages-robust-on-custom-OEM-MMS-p.patch
+Applying: fix: make countRcsMessages robust on custom OEM MMS providers & fix non-atomic head reads in msgPerSec
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: make countRcsMessages robust on custom OEM MMS providers & fix non-atomic head reads in msgPerSec
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:240
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+error: while searching for:
+            var count    = 0
+            val mask     = RING_SIZE - 1
+            val limit    = writtenCount.get()
+            for (i in 0 until limit) {
+                val pos = (head.get() - 1 - i) and mask
+                val ts  = ring.get(pos)
+                if (ts <= cutoff) break
+                if (ts <= now) count++
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:240
+error: while searching for:
+        return count
+    }
+
+    /** Fast COUNT-only query for RCS messages. */
+    private suspend fun countRcsMessages(scanStartSeconds: Long): Int {
+        var count = 0
+        try {
+            applicationContext.contentResolver.query(
+                "content://mms".toUri(),
+                arrayOf("COUNT(*)"),
+                "date >= ? AND tr_id LIKE 'proto:%'",
+                arrayOf(scanStartSeconds.toString()),
+                null
+            )?.use { c ->
+                if (c.moveToFirst()) count = c.getInt(0)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error counting RCS", e)
+        }
+        return count
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:923
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
+Rejected hunk #1.
+Rejected hunk #2.
