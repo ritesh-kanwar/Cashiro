@@ -1,10 +1,10 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -429,7 +429,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+@@ -429,7 +428,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                              }
                          }
                      }
--                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) reportProgress(stats)
-+                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) launch { reportProgress(stats) }
+-                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) launch { reportProgress(stats) }
++                    reportProgress(stats)
                  }
              } finally {
                  Trace.endSection()

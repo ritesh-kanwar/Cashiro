@@ -13646,3 +13646,37 @@ error: while searching for:
 error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:429
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
 Rejected hunk #1.
+[backport-fixes-upstream 88fef5c] fix: fire progress updates async so save loop isnt
+ Date: Fri May 29 05:33:10 2026 +0530
+ 2 files changed, 55 insertions(+), 17 deletions(-)
+===================================
+Applying 0329-fix-inline-progress-reporting-in-save-loop-no-extra-.patch
+Applying: fix: inline progress reporting in save loop no extra coroutines
+error: sha1 information is lacking or useless (app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Patch failed at 0001 fix: inline progress reporting in save loop no extra coroutines
+Conflict detected! Falling back to apply --reject
+error: repository lacks the necessary blob to perform 3-way merge.
+Falling back to direct application...
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:429
+error: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt: patch does not apply
+Checking patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt...
+Hunk #1 succeeded at 93 (offset 6 lines).
+error: while searching for:
+                            }
+                        }
+                    }
+                    if (p % PROGRESS_REPORT_INTERVAL == 0 || p == stats.total) launch { reportProgress(stats) }
+                }
+            } finally {
+                Trace.endSection()
+
+error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt:429
+Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 1 reject...
+Hunk #1 applied cleanly.
+Rejected hunk #2.
