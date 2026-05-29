@@ -1,38 +1,34 @@
 diff a/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt b/app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt	(rejected hunks)
-@@ -630,22 +630,25 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
-         stats: ProcessingStats,
-         balanceUpdates: SendChannel<DeferredBalanceUpdate>
-     ): SaveOutcome = try {
--        val entity = parsed.toEntity()
--        val customCategory = merchantMappingCache[entity.merchantName]
--        val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
--
--        val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
--        if (ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null) {
--            stats.blocked.incrementAndGet()
--            return SaveOutcome.SKIPPED
--        }
--
-         coroutineScope {
-+            val entity = parsed.toEntity()
-             val hashDeferred = async { transactionRepository.getTransactionByHash(entity.transactionHash) }
--            val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
-+
-+            val customCategory = merchantMappingCache[entity.merchantName]
-+            val mapped = if (customCategory != null) entity.copy(category = customCategory) else entity
-+
-+            val activeRules = ruleCache[mapped.transactionType] ?: emptyList()
-+            val isBlocked = ruleEngine.shouldBlockTransaction(mapped, sms.body, activeRules) != null
+@@ -929,6 +929,23 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
  
-             if (hashDeferred.await() != null) return@coroutineScope SaveOutcome.SKIPPED
- 
-+            if (isBlocked) {
-+                stats.blocked.incrementAndGet()
-+                return@coroutineScope SaveOutcome.SKIPPED
+     /** Robust query for RCS messages. */
+     private suspend fun countRcsMessages(scanStartSeconds: Long): Int {
++        try {
++            applicationContext.contentResolver.query(
++                "content://mms".toUri(),
++                arrayOf("COUNT(*)"),
++                "date >= ? AND tr_id LIKE 'proto:%'",
++                arrayOf(scanStartSeconds.toString()),
++                null
++            )?.use { c ->
++                if (c.moveToFirst()) {
++                    return c.getInt(0)
++                }
 +            }
++        } catch (e: Exception) {
++            if (e is CancellationException) throw e
++            Log.w(TAG, "Fast RCS count failed, falling back to cursor iteration: ${e.message}")
++        }
 +
-+            val (withRules, ruleApps) = ruleEngine.evaluateRules(mapped, sms.body, activeRules)
-+
-             val matchedSub = subscriptionRepository.matchTransactionToSubscription(
-                 withRules.merchantName, withRules.amount
-             )
+         var count = 0
+         try {
+             applicationContext.contentResolver.query(
+@@ -950,7 +967,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
+             }
+         } catch (e: Exception) {
+             if (e is CancellationException) throw e
+-            Log.e(TAG, "Error counting RCS", e)
++            Log.e(TAG, "Error counting RCS via fallback scan", e)
+         }
+         return count
+     }
