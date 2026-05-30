@@ -20,9 +20,9 @@ object StatementTransactionEnricher {
     )
 
     fun isStatementMatch(existing: TransactionEntity, statement: TransactionEntity): Boolean {
-        // val existingReference = existing.reference?.trim().orEmpty()
-        // val statementReference = statement.reference?.trim().orEmpty()
-        // if (existingReference.isBlank() || existingReference != statementReference) return false
+        val existingReference = existing.reference?.trim().orEmpty()
+        val statementReference = statement.reference?.trim().orEmpty()
+        if (existingReference.isBlank() || existingReference != statementReference) return false
         return hasSameTransactionDetails(existing, statement)
     }
 

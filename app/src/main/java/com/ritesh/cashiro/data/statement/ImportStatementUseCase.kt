@@ -46,7 +46,7 @@ class ImportStatementUseCase @Inject constructor(
         override suspend fun findStatementMergeCandidate(
             transaction: TransactionEntity
         ): TransactionEntity? =
-            null
+            transactionRepository.findStatementMergeCandidate(transaction)
 
         override suspend fun updateTransaction(transaction: TransactionEntity) {
             transactionRepository.updateTransaction(transaction)
