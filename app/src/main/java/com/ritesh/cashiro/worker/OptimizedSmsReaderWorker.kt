@@ -456,7 +456,7 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                     }
 
                     val nowMs = System.currentTimeMillis()
-                    if (nowMs - lastReportTime >= 250L || p == 1 || p == stats.total) {
+                    if (nowMs - lastReportTime >= 50L || p == 1 || p == stats.total) {
                         reportProgress(stats)
                         lastReportTime = nowMs
                     }

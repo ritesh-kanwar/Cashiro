@@ -26,7 +26,9 @@ import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
@@ -114,11 +116,12 @@ fun SmsParsingProgressDialog(
 
                     // Progress Bar
                     if (workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0) > 0) {
-                        val progress = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0).toFloat() /
+                        val targetProgress = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0).toFloat() /
                                 workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 1).toFloat()
+                        val animatedProgress by animateFloatAsState(targetValue = targetProgress, label = "progress")
 
                         LinearWavyProgressIndicator(
-                            progress = { progress },
+                            progress = { animatedProgress },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(8.dp),
@@ -377,13 +380,16 @@ fun SmsParsingProgressIndicator(
         val processedMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0)
 
         if (totalMessages > 0) {
+            val targetProgress = processedMessages.toFloat() / totalMessages.toFloat()
+            val animatedProgress by animateFloatAsState(targetValue = targetProgress, label = "progress")
+
             Column(
                 modifier = modifier,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 LinearWavyProgressIndicator(
-                    progress = { processedMessages.toFloat() / totalMessages.toFloat() },
+                    progress = { animatedProgress },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(4.dp),
