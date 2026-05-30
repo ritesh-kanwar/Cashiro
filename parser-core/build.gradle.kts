@@ -42,9 +42,3 @@ tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
 
     maxParallelForks = maxOf(1, Runtime.getRuntime().availableProcessors() / 2)
 }
-
-// Keep compatibility with existing CI/scripts that invoke :parser-core:test
-tasks.named("test") {
-    group = "verification"
-    dependsOn("jvmTest")
-}
