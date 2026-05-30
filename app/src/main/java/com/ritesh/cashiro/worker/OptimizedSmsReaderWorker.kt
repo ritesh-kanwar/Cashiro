@@ -408,6 +408,9 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
             }
         }
 
+        var lastReportTime = 0L
+        var progressJob: kotlinx.coroutines.Job? = null
+
         val saver = launch(Dispatchers.IO) {
             Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
             val unrecognizedBatch = ArrayList<SmsMessage>(UNRECOGNIZED_BATCH_SIZE)
@@ -456,9 +459,10 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                     }
 
                     val nowMs = System.currentTimeMillis()
-                    if (nowMs - lastReportTime >= 250L || p == 1 || p == stats.total) {
-                        reportProgress(stats)
+                    if (nowMs - lastReportTime >= 25L || p == 1 || p == stats.total) {
                         lastReportTime = nowMs
+                        progressJob?.cancel()
+                        progressJob = launch { reportProgress(stats) }
                     }
                 }
             } finally {
