@@ -2,16 +2,18 @@ import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.TransactionType
 import com.ritesh.parser.core.bank.FABParser
 import com.ritesh.parser.core.test.ParserTestUtils
-import com.ritesh.parser.core.test.TestResult
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.Assertions.fail
-import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
 class FABXmlTest {
 
-    @Test
-    fun `fab parser validates XML driven scenarios`() {
+    @TestFactory
+    fun `fab parser validates XML driven scenarios`(): List<DynamicTest> {
         val parser = FABParser()
+        val allTests = mutableListOf<DynamicTest>()
 
         ParserTestUtils.printTestHeader(
             parserName = "FAB XML Validation",

@@ -130,7 +130,8 @@ abstract class BankParser {
         // Must contain transaction keywords
         val transactionKeywords = listOf(
             "debited", "credited", "withdrawn", "deposited",
-            "spent", "received", "transferred", "paid"
+            "spent", "received", "transferred", "paid",
+            "debit", "credit"
         )
 
         return transactionKeywords.any { lowerMessage.contains(it) }
@@ -180,6 +181,7 @@ abstract class BankParser {
 
         return when {
             lowerMessage.contains("debited") -> TransactionType.EXPENSE
+            lowerMessage.contains("debit") -> TransactionType.EXPENSE
             lowerMessage.contains("withdrawn") -> TransactionType.EXPENSE
             lowerMessage.contains("spent") -> TransactionType.EXPENSE
             lowerMessage.contains("charged") -> TransactionType.EXPENSE
@@ -188,6 +190,7 @@ abstract class BankParser {
             lowerMessage.contains("deducted") -> TransactionType.EXPENSE
 
             lowerMessage.contains("credited") -> TransactionType.INCOME
+            lowerMessage.contains("credit") -> TransactionType.INCOME
             lowerMessage.contains("deposited") -> TransactionType.INCOME
             lowerMessage.contains("received") -> TransactionType.INCOME
             lowerMessage.contains("refund") -> TransactionType.INCOME

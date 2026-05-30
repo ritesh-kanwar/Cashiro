@@ -526,6 +526,11 @@ class FederalBankParser : BaseIndianBankParser() {
             return false
         }
 
+        // Skip future/pending payment notifications ("payment due for <merchant> will be processed")
+        if (isFutureDebitNotification(message)) {
+            return false
+        }
+
         // Federal Bank specific transaction keywords
         val federalKeywords = listOf(
             "sent via upi",
@@ -677,6 +682,14 @@ class FederalBankParser : BaseIndianBankParser() {
 
         return (lowerMessage.contains("e-mandate") || lowerMessage.contains("payment of")) &&
                 lowerMessage.contains("declined")
+    }
+
+    override fun isFutureDebitNotification(message: String): Boolean {
+        val lowerMessage = message.lowercase()
+        if (lowerMessage.contains("payment due") && lowerMessage.contains("will be processed")) {
+            return true
+        }
+        return super.isFutureDebitNotification(message)
     }
 
     fun parseEMandateSubscription(message: String): EMandateInfo? {

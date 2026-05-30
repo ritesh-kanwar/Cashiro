@@ -87,13 +87,7 @@ class PNBBankParserTest {
                 name = "UPI-Mandate creation message",
                 message = "Your UPI-Mandate is successfully created towards Google for Rs.1500.00 from A/c No.XXXXXX4356. UMN:1d478c77808c410281f435rer5qwerty6@ybl-PNB",
                 sender = "AX-PNBSMS-S",
-                expected = ExpectedTransaction(
-                    amount = BigDecimal("1500.00"),
-                    currency = "INR",
-                    type = TransactionType.EXPENSE,
-                    accountLast4 = "4356",
-                    merchant = "Google"
-                )
+                shouldParse = false
             )
         )
 

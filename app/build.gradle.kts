@@ -17,6 +17,12 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
     defaultConfig {
         applicationId = "com.ritesh.cashiro"
         minSdk = 26
@@ -264,4 +270,8 @@ dependencies {
 
     // PDF Box for Android
     implementation(libs.pdfbox.android)
+}
+
+tasks.withType<Test>().configureEach {
+    jvmArgs("--add-opens", "java.base/java.time=ALL-UNNAMED")
 }

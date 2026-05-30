@@ -16,12 +16,17 @@ class PhonePePdfParser : PdfStatementParser {
             SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH),
             SimpleDateFormat("dd MMM, yyyy", Locale.ENGLISH),
             SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH),
-            SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+            SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH),
+            SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH),
+            SimpleDateFormat("dd MMMM, yyyy", Locale.ENGLISH),
+            SimpleDateFormat("MMMM dd yyyy", Locale.ENGLISH),
+            SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH)
         ).onEach { it.timeZone = TimeZone.getTimeZone("Asia/Kolkata") }
 
         private val AMOUNT_PATTERN = Regex("""[₹Rs.]+\s*([\d,]+(?:\.\d{1,2})?)""")
-        private val TXN_ID_PATTERN = Regex("""(?:Transaction\s+ID|UTR(?:\s+No)?)[:\s]*([A-Za-z0-9]+)""", RegexOption.IGNORE_CASE)
-        private val DATE_PATTERN = Regex("""(\d{1,2}\s+\w{3}[,]?\s+\d{4}|\w{3}\s+\d{1,2}[,]?\s+\d{4})""")
+        private val TXN_ID_PATTERN = Regex("""Transact\s*ion\s+ID[:\s]*([A-Za-z0-9]+)""", RegexOption.IGNORE_CASE)
+        private val UTR_PATTERN = Regex("""UTR(?:\s+No)?[:\s.]*([A-Za-z0-9]+)""", RegexOption.IGNORE_CASE)
+        private val DATE_PATTERN = Regex("""(\d{1,2}\s+\w{3,9}[,]?\s+\d{4}|\w{3,9}\s+\d{1,2}[,]?\s+\d{4})""")
         private val MERCHANT_PATTERN = Regex("""(?:Paid\s+to|Sent\s+to|Transferred\s+to|Received\s+from)\s+(.+?)(?:\n|$)""", RegexOption.IGNORE_CASE)
     }
 
@@ -49,14 +54,12 @@ class PhonePePdfParser : PdfStatementParser {
 
         for (line in lines) {
             val trimmed = line.trim()
-            val isDebit = trimmed.equals("DEBIT", ignoreCase = true) ||
-                    trimmed.startsWith("DEBIT ", ignoreCase = true)
-            val isCredit = trimmed.equals("CREDIT", ignoreCase = true) ||
-                    trimmed.startsWith("CREDIT ", ignoreCase = true)
-            val isPaidTo = trimmed.startsWith("Paid to", ignoreCase = true) ||
+            val isDebit = trimmed.startsWith("DEBIT", ignoreCase = true)
+            val isCredit = trimmed.startsWith("CREDIT", ignoreCase = true)
+            val isPaidTo = trimmed.contains("Paid to", ignoreCase = true) ||
                     trimmed.startsWith("Sent to", ignoreCase = true) ||
                     trimmed.startsWith("Transferred to", ignoreCase = true)
-            val isReceivedFrom = trimmed.startsWith("Received from", ignoreCase = true)
+            val isReceivedFrom = trimmed.contains("Received from", ignoreCase = true)
 
             if (isDebit || isCredit || isPaidTo || isReceivedFrom) {
                 if (inTransaction && currentBlock.isNotEmpty()) {
@@ -144,6 +147,7 @@ class PhonePePdfParser : PdfStatementParser {
 
     private fun extractTransactionId(block: String): String? {
         return TXN_ID_PATTERN.find(block)?.groupValues?.get(1)
+            ?: UTR_PATTERN.find(block)?.groupValues?.get(1)
     }
 
     private fun extractTimestamp(block: String): Long? {

@@ -2,7 +2,7 @@ package com.ritesh.cashiro.data.backup
 
 import com.google.gson.GsonBuilder
 import com.ritesh.cashiro.data.database.entity.*
-import com.ritesh.cashiro.utils.LocalDateTimeAdapter
+import com.ritesh.cashiro.data.backup.LocalDateTimeTypeAdapter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 class BackupModelsTest {
 
     private val gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeTypeAdapter())
         .create()
 
     @Test

@@ -204,7 +204,12 @@ class PhonePePdfParser : PdfStatementParser {
                     "MMM d, yyyy h:mm a",
                     "dd MMM yyyy h:mm a",
                     "d MMM yyyy h:mm a",
-                    "MMM dd, yyyy hh:mm a"
+                    "MMM dd, yyyy hh:mm a",
+                    "MMMM dd, yyyy h:mm a",
+                    "MMMM d, yyyy h:mm a",
+                    "dd MMMM yyyy h:mm a",
+                    "d MMMM yyyy h:mm a",
+                    "MMMM dd, yyyy hh:mm a"
                 )
                 
                 var parsedDate: LocalDateTime? = null
@@ -313,7 +318,7 @@ class PhonePePdfParser : PdfStatementParser {
                     amount = amount,
                     type = type,
                     merchant = merchant,
-                    reference = utrNo ?: transId,
+                    reference = transId ?: utrNo,
                     accountLast4 = accountLast4,
                     bankName = "PhonePe",
                     smsBody = originalMessage,

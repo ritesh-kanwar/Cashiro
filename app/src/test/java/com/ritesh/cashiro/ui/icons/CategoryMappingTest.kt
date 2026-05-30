@@ -7,27 +7,27 @@ class CategoryMappingTest {
     @Test
     fun testCategoryMapping() {
         // Test some key merchants from each category
-        assertEquals("Food & Dining", getCategory("Piri Piri Flaming Grill"))
-        assertEquals("Food & Dining", getCategory("Naixue"))
-        assertEquals("Food & Dining", getCategory("BN-Icon Siam"))
-        assertEquals("Food & Dining", getCategory("Amici"))
+        assertEquals("Food & Drinks", getCategory("Piri Piri Flaming Grill"))
+        assertEquals("Food & Drinks", getCategory("Naixue"))
+        assertEquals("Food & Drinks", getCategory("BN-Icon Siam"))
+        assertEquals("Food & Drinks", getCategory("Amici"))
 
-        assertEquals("Food & Dining", getCategory("PF Changs"))
-        assertEquals("Food & Dining", getCategory("Bombay Bungalow"))
-        assertEquals("Food & Dining", getCategory("Heytea"))
-        assertEquals("Food & Dining", getCategory("Google Nomadtable"))
-        assertEquals("Food & Dining", getCategory("GHL*JHAROKA BY INDUS BANGKOK  11 TH"))
-        assertEquals("Food & Dining", getCategory("GHLJHAROKA BY INDUS BANGKOK  11 TH"))
-        assertEquals("Food & Dining", getCategory("Ksher  *AKARASKYROOFTOBangkok TH"))
+        assertEquals("Food & Drinks", getCategory("PF Changs"))
+        assertEquals("Food & Drinks", getCategory("Bombay Bungalow"))
+        assertEquals("Food & Drinks", getCategory("Heytea"))
+        assertEquals("Food & Drinks", getCategory("Google Nomadtable"))
+        assertEquals("Food & Drinks", getCategory("GHL*JHAROKA BY INDUS BANGKOK  11 TH"))
+        assertEquals("Food & Drinks", getCategory("GHLJHAROKA BY INDUS BANGKOK  11 TH"))
+        assertEquals("Food & Drinks", getCategory("Ksher  *AKARASKYROOFTOBangkok TH"))
 
 
         assertEquals("Groceries", getCategory("7-11"))
 
-        assertEquals("Transportation", getCategory("Airports of Thailand"))
-        assertEquals("Transportation", getCategory("Expressway"))
-        assertEquals("Transportation", getCategory("Grab A-123"))
-        assertEquals("Transportation", getCategory("SATS T1"))
-        assertEquals("Transportation", getCategory("Pyxbolt Services"))
+        assertEquals("Transport", getCategory("Airports of Thailand"))
+        assertEquals("Transport", getCategory("Expressway"))
+        assertEquals("Transport", getCategory("Grab A-123"))
+        assertEquals("Transport", getCategory("SATS T1"))
+        assertEquals("Transport", getCategory("Pyxbolt Services"))
 
         assertEquals("Shopping", getCategory("Uniqlo TRX"))
         assertEquals("Shopping", getCategory("Lyn"))
@@ -52,29 +52,29 @@ class CategoryMappingTest {
         assertEquals("Travel", getCategory("FOUR POINTS BY SHERATOBANGKOK 11 TH"))
 
 
-        assertEquals("Healthcare", getCategory("Life Pharm"))
-        assertEquals("Healthcare", getCategory("Bumrungrad"))
-        assertEquals("Healthcare", getCategory("Medex"))
-        assertEquals("Healthcare", getCategory("BOOTS_4287 C.WORLD 3 FBANGKOK TH"))
+        assertEquals("Medical", getCategory("Life Pharm"))
+        assertEquals("Medical", getCategory("Bumrungrad"))
+        assertEquals("Medical", getCategory("Medex"))
+        assertEquals("Medical", getCategory("BOOTS_4287 C.WORLD 3 FBANGKOK TH"))
 
-        assertEquals("Personal Care", getCategory("Sultans of Shave"))
-        assertEquals("Personal Care", getCategory("Mandarin Oriental Spa"))
-        assertEquals("Personal Care", getCategory("Truefitt and Hill"))
-        assertEquals("Personal Care", getCategory("Phetsathorn Co.,Ltd."))
+        assertEquals("Personal", getCategory("Sultans of Shave"))
+        assertEquals("Personal", getCategory("Mandarin Oriental Spa"))
+        assertEquals("Personal", getCategory("Truefitt and Hill"))
+        assertEquals("Personal", getCategory("Phetsathorn Co.,Ltd."))
 
         assertEquals("Tax", getCategory("Abu Dhabi Judicial Dep"))
         assertEquals("Tax", getCategory("Sharjah Finance Depart"))
 
-        assertEquals("Bills & Utilities", getCategory("Tamdeed Projects"))
-        assertEquals("Bills & Utilities", getCategory("WWW.PAYSOLUT*WWW.PAYSOBANGKOK  TH"))
+        assertEquals("Bill", getCategory("Tamdeed Projects"))
+        assertEquals("Bill", getCategory("WWW.PAYSOLUT*WWW.PAYSOBANGKOK  TH"))
 
-        assertEquals("Banking", getCategory("My Fatoorah"))
-        assertEquals("Banking", getCategory("Transfer: 002 → 001"))
-        assertEquals("Banking", getCategory("Transfer from 001 to 002"))
-        assertEquals("Banking", getCategory("Transfer to 0001"))
+        assertEquals("Business", getCategory("My Fatoorah"))
+        assertEquals("Business", getCategory("Transfer: 002 → 001"))
+        assertEquals("Business", getCategory("Transfer from 001 to 002"))
+        assertEquals("Business", getCategory("Transfer to 0001"))
 
-        // Test some should remain as Others (too generic)
-        assertEquals("Others", getCategory("Twin Made"))
+        // Test some should remain as Miscellaneous (too generic)
+        assertEquals("Miscellaneous", getCategory("Twin Made"))
         findDuplicateKeywords()
     }
 }
