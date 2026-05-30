@@ -378,6 +378,8 @@ fun SmsParsingProgressIndicator(
     if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING) {
         val totalMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0)
         val processedMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0)
+        val timeElapsed = workInfo.progress.getLong(OptimizedSmsReaderWorker.PROGRESS_TIME_ELAPSED, 0L)
+        val estimatedTimeRemaining = workInfo.progress.getLong(OptimizedSmsReaderWorker.PROGRESS_ESTIMATED_TIME_REMAINING, 0L)
 
         if (totalMessages > 0) {
             val targetProgress = processedMessages.toFloat() / totalMessages.toFloat()
@@ -400,6 +402,27 @@ fun SmsParsingProgressIndicator(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                if (timeElapsed > 0) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = formatDuration(timeElapsed),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        if (estimatedTimeRemaining > 0) {
+                            Text(
+                                text = stringResource(R.string.time_left_format, formatDuration(estimatedTimeRemaining)),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
             }
         }
     }
