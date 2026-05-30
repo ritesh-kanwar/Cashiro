@@ -8,7 +8,7 @@ object TransactionDeduplication {
     val UPI_DUPLICATE_WINDOW: Duration = Duration.ofMinutes(3)
 
     fun hasUpiReference(transaction: TransactionEntity): Boolean =
-        transaction.transactionHash.let { upiReferencePattern.matches(it) } == true
+        transaction.reference?.let { upiReferencePattern.matches(it) } == true
 
     fun isSameUpiTransaction(
         existing: TransactionEntity,
@@ -16,7 +16,7 @@ object TransactionDeduplication {
         window: Duration = UPI_DUPLICATE_WINDOW
     ): Boolean {
         if (!hasUpiReference(existing) || !hasUpiReference(incoming)) return false
-        if (existing.transactionHash != incoming.transactionHash) return false
+        if (existing.reference != incoming.reference) return false
         if (existing.transactionType != incoming.transactionType) return false
         if (existing.currency != incoming.currency) return false
         if (existing.amount.compareTo(incoming.amount) != 0) return false
@@ -45,7 +45,7 @@ object TransactionDeduplication {
             .filter { !it.isDeleted && hasUpiReference(it) }
             .groupBy {
                 DuplicateKey(
-                    reference = it.transactionHash,
+                    reference = it.reference.orEmpty(),
                     amount = it.amount.stripTrailingZeros().toPlainString(),
                     accountNumber = it.accountNumber.orEmpty(),
                     transactionType = it.transactionType.name,
