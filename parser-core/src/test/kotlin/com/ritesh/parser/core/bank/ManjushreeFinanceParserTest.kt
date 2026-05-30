@@ -4,14 +4,6 @@ import com.ritesh.parser.core.TransactionType
 import com.ritesh.parser.core.test.ExpectedTransaction
 import com.ritesh.parser.core.test.ParserTestCase
 import com.ritesh.parser.core.test.ParserTestUtils
-<<<<<<< ours
-import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-
-class ManjushreeFinanceParserTest {
-    @Test
-    fun `manjushree parser handles debited example`() {
-=======
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.math.BigDecimal
@@ -20,7 +12,6 @@ class ManjushreeFinanceParserTest {
 
     @TestFactory
     fun `manjushree finance parser handles key paths`(): List<DynamicTest> {
->>>>>>> theirs
         val parser = ManjushreeFinanceParser()
 
         ParserTestUtils.printTestHeader(
@@ -31,11 +22,7 @@ class ManjushreeFinanceParserTest {
 
         val cases = listOf(
             ParserTestCase(
-<<<<<<< ours
-                name = "Debited example",
-=======
                 name = "Debited example with merchant",
->>>>>>> theirs
                 message = """Your A/C ##0168658000001, has been debited by NPR 15,000.00 on 01/04/2026 10:27,Remarks:9769780059~2309320,IBFT,transfer laxmi paudyal~RBB
 Manjushree Finance""",
                 sender = "MFL_ALERT",
@@ -56,15 +43,11 @@ Manjushree Finance""",
             "UNKNOWN" to false
         )
 
-<<<<<<< ours
-        ParserTestUtils.runTestSuite(parser, cases, handleCases, "Manjushree Finance Parser Tests")
-=======
         return ParserTestUtils.runTestSuite(
             parser = parser,
             testCases = cases,
             handleCases = handleCases,
             suiteName = "Manjushree Finance Parser Tests"
         )
->>>>>>> theirs
     }
 }

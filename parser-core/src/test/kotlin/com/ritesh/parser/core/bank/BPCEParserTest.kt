@@ -11,11 +11,7 @@ import java.math.BigDecimal
 class BPCEParserTest {
 
     @TestFactory
-<<<<<<< ours
-    fun `bpce parser tests`(): List<DynamicTest> {
-=======
     fun `bpce parser handles key paths`(): List<DynamicTest> {
->>>>>>> theirs
         val parser = BPCEParser()
 
         val testCases = listOf(
@@ -45,19 +41,10 @@ class BPCEParserTest {
                 name = "Ignore addition of beneficiary",
                 message = "Caisse d'Epargne : Virements - Ajout d'un bénéficiaire le 02/12/2025 sur internet. Si vous n'avez pas initié cette opération, contactez votre agence.",
                 sender = "38015",
-<<<<<<< ours
-                expected = null,
-=======
->>>>>>> theirs
                 shouldParse = false
             )
         )
 
-<<<<<<< ours
-        return ParserTestUtils.runTestSuite(
-            parser = parser,
-            testCases = testCases,
-=======
         val handleCases = listOf(
             "38015" to true,
             "UNKNOWN" to false
@@ -67,7 +54,6 @@ class BPCEParserTest {
             parser = parser,
             testCases = testCases,
             handleCases = handleCases,
->>>>>>> theirs
             suiteName = "BPCE Parser"
         )
     }
