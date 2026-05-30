@@ -285,6 +285,7 @@ fun CashiroNavHost(
                         onNavigateToBudgets = { navController.safeNavigate(Budgets()) },
                         onNavigateToDataPrivacy = { navController.safeNavigate(DataPrivacy) },
                         onNavigateToAbout = { navController.safeNavigate(About) },
+                        onNavigateToImportStatement = { navController.safeNavigate(ImportStatement) },
                         blurEffects = themeUiState.blurEffects
                     )
                 }
@@ -647,12 +648,23 @@ fun CashiroNavHost(
                         budgetId = budgetHistory.budgetId,
                         onNavigateBack = { navController.safePopBackStack() },
                         onNavigateToDetail = { id, start, end ->
-                            navController.safeNavigate(BudgetDetail(
+                    navController.safeNavigate(BudgetDetail(
                                 budgetId = id,
                                 startDate = start?.toString(),
                                 endDate = end?.toString()
                             ))
                         }
+                    )
+                }
+
+                composable<ImportStatement>(
+                    enterTransition = CashiroTransitions.horizontalSlideEnter,
+                    exitTransition = CashiroTransitions.horizontalSlideExit,
+                    popEnterTransition = CashiroTransitions.horizontalSlidePopEnter,
+                    popExitTransition = CashiroTransitions.horizontalSlidePopExit
+                ) {
+                    com.ritesh.cashiro.presentation.ui.features.settings.importstatement.ImportStatementScreen(
+                        onNavigateBack = { navController.safePopBackStack() }
                     )
                 }
             }

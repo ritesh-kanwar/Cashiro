@@ -15,26 +15,72 @@ class ImportStatementUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
     @ApplicationContext private val context: Context
 ) {
-    suspend fun import(uri: Uri): StatementImportResult = withContext(Dispatchers.IO) {
-        try {
-            val text = PdfTextExtractor.extractText(context, uri)
+    suspend fun import(
+        uris: List<Uri>,
+        onProgress: (Float) -> Unit = {}
+    ): StatementImportResult = withContext(Dispatchers.IO) {
+        var totalParsed = 0
+        var totalImported = 0
+        var totalEnriched = 0
+        var totalSkippedDuplicates = 0
+        var totalSkippedByHash = 0
+        var totalSkippedByReference = 0
+        var totalSkippedByAmountDate = 0
+        var errorMessage: String? = null
 
-            val parser = PdfParserFactory.getParser(text)
-                ?: return@withContext StatementImportResult.Error(
-                    "Unsupported statement format. Currently supported: Google Pay, PhonePe."
-                )
+        val totalFiles = uris.size
 
-            val parsedTransactions = parser.parse(text)
-            if (parsedTransactions.isEmpty()) {
-                return@withContext StatementImportResult.Error(
-                    "No transactions found in the statement."
-                )
+        for ((index, uri) in uris.withIndex()) {
+            try {
+                val baseProgress = index.toFloat() / totalFiles
+                val fileProgressWeight = 1f / totalFiles
+
+                val text = PdfTextExtractor.extractText(context, uri)
+
+                val parser = PdfParserFactory.getParser(text)
+                if (parser == null) {
+                    errorMessage = "Unsupported statement format in one or more files."
+                    continue
+                }
+
+                val parsedTransactions = parser.parse(text)
+                if (parsedTransactions.isEmpty()) {
+                    continue
+                }
+
+                val result = StatementImportProcessor(repositoryStore()).process(parsedTransactions) { fileProgress ->
+                    val overallProgress = baseProgress + (fileProgress * fileProgressWeight)
+                    onProgress(overallProgress)
+                }
+
+                totalParsed += result.totalParsed
+                totalImported += result.imported
+                totalEnriched += result.enriched
+                totalSkippedDuplicates += result.skippedDuplicates
+                totalSkippedByHash += result.skippedByHash
+                totalSkippedByReference += result.skippedByReference
+                totalSkippedByAmountDate += result.skippedByAmountDate
+            } catch (e: Exception) {
+                errorMessage = e.message ?: "Failed to import one or more statements."
             }
+        }
+        
+        // Ensure progress hits 1f at the very end
+        onProgress(1f)
 
-            StatementImportProcessor(repositoryStore()).process(parsedTransactions)
-        } catch (e: Exception) {
-            StatementImportResult.Error(
-                e.message ?: "Failed to import statement."
+        if (totalParsed == 0 && errorMessage != null) {
+            StatementImportResult.Error(errorMessage)
+        } else if (totalParsed == 0) {
+            StatementImportResult.Error("No transactions found in the selected statements.")
+        } else {
+            StatementImportResult.Success(
+                totalParsed = totalParsed,
+                imported = totalImported,
+                enriched = totalEnriched,
+                skippedDuplicates = totalSkippedDuplicates,
+                skippedByHash = totalSkippedByHash,
+                skippedByReference = totalSkippedByReference,
+                skippedByAmountDate = totalSkippedByAmountDate
             )
         }
     }

@@ -109,6 +109,7 @@ fun SettingsScreen(
     onNavigateToBudgets: () -> Unit = {},
     onNavigateToDataPrivacy: () -> Unit = {},
     onNavigateToAbout: () -> Unit = {},
+    onNavigateToImportStatement: () -> Unit = {},
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     blurEffects: Boolean
 ) {
@@ -596,6 +597,51 @@ fun SettingsScreen(
                             )
                         },
                         onClick = { onNavigateToDataPrivacy() },
+                        shape = ListItemPosition.Middle.toShape(),
+                        padding = PaddingValues(0.dp)
+                    )
+
+                    // Import Statement
+                    ListItem(
+                        headline = {
+                            Text(
+                                text = "Import Statement",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
+                        supporting = {
+                            Text(
+                                text = "Import transactions from PDF statements",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        leading = {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        color = yellow_light,
+                                        shape = CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Iconax.ImportArrow01,
+                                    contentDescription = null,
+                                    tint = yellow_dark
+                                )
+                            }
+                        },
+                        trailing = {
+                            Icon(
+                                Icons.Rounded.ChevronRight,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        onClick = { onNavigateToImportStatement() },
                         shape = ListItemPosition.Bottom.toShape(),
                         padding = PaddingValues(0.dp)
                     )

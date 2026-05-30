@@ -25,13 +25,18 @@ internal class StatementImportProcessor(
         suspend fun insertTransactions(transactions: List<TransactionEntity>)
     }
 
-    suspend fun process(parsedTransactions: List<ParsedTransaction>): StatementImportResult.Success {
+    suspend fun process(
+        parsedTransactions: List<ParsedTransaction>,
+        onProgress: ((Float) -> Unit)? = null
+    ): StatementImportResult.Success {
         var skippedByHash = 0
         var skippedByReference = 0
         var skippedByAmountDate = 0
         var enriched = 0
 
-        val toInsert = parsedTransactions.mapNotNull { parsed ->
+        val total = parsedTransactions.size
+        val toInsert = parsedTransactions.mapIndexedNotNull { index, parsed ->
+            onProgress?.invoke((index + 1).toFloat() / total.toFloat())
             val hash = parsed.transactionHash?.takeIf { it.isNotBlank() }
                 ?: parsed.generateTransactionId()
             val statementEntity = parsed.toEntity()
@@ -45,7 +50,7 @@ internal class StatementImportProcessor(
                 } else {
                     skippedByHash++
                 }
-                return@mapNotNull null
+                return@mapIndexedNotNull null
             }
 
             val ref = parsed.reference
@@ -59,7 +64,7 @@ internal class StatementImportProcessor(
                     } else {
                         skippedByReference++
                     }
-                    return@mapNotNull null
+                    return@mapIndexedNotNull null
                 }
             }
 
@@ -84,12 +89,12 @@ internal class StatementImportProcessor(
                     StatementTransactionEnricher.enrich(existing, statementEntity)
                 )
                 enriched++
-                return@mapNotNull null
+                return@mapIndexedNotNull null
             }
 
             if (amountMatches.isNotEmpty()) {
                 skippedByAmountDate++
-                return@mapNotNull null
+                return@mapIndexedNotNull null
             }
 
             statementEntity

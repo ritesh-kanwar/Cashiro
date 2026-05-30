@@ -238,6 +238,8 @@ data class Transactions(
 
 @Serializable object About
 
+@Serializable object ImportStatement
+
 @Serializable object Licenses
 
 // Routes where bottom navigation should be visible

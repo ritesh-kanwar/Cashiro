@@ -126,11 +126,6 @@ fun DataPrivacyScreen(
         onResult = { uri -> uri?.let { viewModel.importBackup(it) } }
     )
 
-    val pdfImportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri -> uri?.let { viewModel.analyzePdfStatement(it) } }
-    )
-
     // Handle export completion
     LaunchedEffect(uiState.exportedBackupFile) {
         uiState.exportedBackupFile?.let { file ->
@@ -328,36 +323,6 @@ fun DataPrivacyScreen(
                             )
                         },
                         onClick = { importLauncher.launch("*/*") },
-                        shape = ListItemPosition.Middle.toShape(),
-                        padding = PaddingValues(0.dp)
-                    )
-
-                    // Import PDF Statement
-                    ListItem(
-                        headline = { Text(stringResource(R.string.import_pdf_statement)) },
-                        supporting = { Text(stringResource(R.string.import_pdf_statement_sub)) },
-                        leading = {
-                            Box(
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .background(orange_light, CircleShape),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.PictureAsPdf,
-                                    contentDescription = null,
-                                    tint = orange_dark
-                                )
-                            }
-                        },
-                        trailing = {
-                            Icon(
-                                Icons.Default.ChevronRight,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        onClick = { pdfImportLauncher.launch("application/pdf") },
                         shape = ListItemPosition.Bottom.toShape(),
                         padding = PaddingValues(0.dp)
                     )
@@ -496,28 +461,6 @@ fun DataPrivacyScreen(
                     ) else Modifier
                 ),
             shape = RoundedCornerShape(16.dp),
-        )
-    }
-
-    // PDF Processing / Error dialog
-    if (uiState.isPdfProcessing || uiState.pdfProcessingError != null) {
-        PdfProcessingDialog(
-            isVisible = uiState.isPdfProcessing,
-            error = uiState.pdfProcessingError,
-            onDismissError = { viewModel.dismissPdfImport() },
-            blurEffects = blurEffects,
-            hazeState = hazeState
-        )
-    }
-
-    // PDF Import Review BottomSheet (Unified review of accounts and transactions)
-    uiState.pdfAnalysisResult?.let { result ->
-        PdfImportSheet(
-            analysisResult = result,
-            onConfirm = { transactionDecisions, accountDecisions -> 
-                viewModel.confirmPdfImport(accountDecisions, transactionDecisions)
-            },
-            onDismiss = { viewModel.dismissPdfImport() }
         )
     }
 }
