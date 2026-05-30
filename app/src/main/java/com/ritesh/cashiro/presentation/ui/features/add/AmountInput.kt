@@ -1,4 +1,5 @@
 package com.ritesh.cashiro.presentation.ui.features.add
+import androidx.compose.ui.text.style.TextAlign
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
@@ -89,7 +90,8 @@ fun AnimatedCounterText(
         dampingRatio = Spring.DampingRatioLowBouncy,
         stiffness = Spring.StiffnessLow
     ),
-    textStyle: TextStyle = TextStyle.Default.copy(
+    textStyle: TextStyle = TextStyle(
+        textAlign = TextAlign.Start,
         textMotion = TextMotion.Animated,
     ),
     specialKeys: Set<Char> = setOf('+', '-', '*', '/', '(', ')', '%', '×', '÷'),

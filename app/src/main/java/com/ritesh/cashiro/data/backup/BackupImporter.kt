@@ -160,19 +160,13 @@ class BackupImporter @Inject constructor(
         subscriptions = subscriptions ?: emptyList(),
         merchantMappings = merchantMappings ?: emptyList(),
         unrecognizedSms = unrecognizedSms ?: emptyList(),
-        chatMessages = chatMessages ?: emptyList(),
+        budgets = budgets ?: emptyList(),
+        budgetCategoryLimits = budgetCategoryLimits ?: emptyList(),
+        subcategories = subcategories ?: emptyList(),
         rules = rules ?: emptyList(),
         ruleApplications = ruleApplications ?: emptyList(),
-        exchangeRates = exchangeRates ?: emptyList(),
-        budgets = budgets ?: emptyList(),
-        budgetCategories = budgetCategories ?: emptyList(),
-        transactionSplits = transactionSplits ?: emptyList(),
-        bankNotifications = bankNotifications ?: emptyList(),
-        loans = loans ?: emptyList(),
-        transactionGroups = transactionGroups ?: emptyList(),
-        profiles = profiles ?: emptyList(),
-        budgetMonthSnapshots = budgetMonthSnapshots ?: emptyList(),
-        budgetCategoryMonthSnapshots = budgetCategoryMonthSnapshots ?: emptyList()
+        webhookProfiles = webhookProfiles ?: emptyList(),
+        chatMessages = chatMessages ?: emptyList()
     )
     
     /**

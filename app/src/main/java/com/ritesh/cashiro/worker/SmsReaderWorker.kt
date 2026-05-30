@@ -594,8 +594,8 @@ class SmsReaderWorker @AssistedInject constructor(
                     Log.e(TAG, "Error updating system prompt: ${e.message}")
                 }
 
-                // Update budget widget
-                com.ritesh.cashiro.widget.BudgetWidgetUpdateWorker.enqueueOneShot(applicationContext)
+                // Update budget widget (Not available in Cashiro)
+                // com.ritesh.cashiro.widget.BudgetWidgetUpdateWorker.enqueueOneShot(applicationContext)
             }
             
             Result.success()
@@ -777,8 +777,8 @@ class SmsReaderWorker @AssistedInject constructor(
             val agentPattern = Regex("""([a-z_]+)_[a-z0-9]+_agent@rbm\.goog""")
             agentPattern.find(decodedString)?.let { match ->
                 // Convert agent ID to readable name (e.g., "ask_apollo" -> "Ask Apollo")
-                return match.groupValues[1].split("_").joinToString(" ") { 
-                    it.replaceFirstChar { char -> char.uppercase() }
+                return match.groupValues[1].split("_").joinToString(" ") {
+                    it.let { str -> if (str.isNotEmpty()) str.take(1).uppercase() + str.drop(1) else str }
                 }
             }
             

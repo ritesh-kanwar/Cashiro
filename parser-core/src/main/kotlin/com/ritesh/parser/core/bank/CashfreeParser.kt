@@ -3,8 +3,6 @@ package com.ritesh.parser.core.bank
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
 
-<<<<<<< ours
-=======
 /**
  * Parser for Cashfree payment gateway confirmations.
  * Handles DLT-style senders such as JX-CSHfre-S, VK-CSHfre-S, JD-CSHfre-T, etc.
@@ -18,7 +16,6 @@ import java.math.BigDecimal
  * The gateway has no concept of balance, account, mandate, or subscription, so this
  * parser extends [BankParser] directly rather than [BaseIndianBankParser].
  */
->>>>>>> theirs
 class CashfreeParser : BankParser() {
 
     override fun getBankName() = "Cashfree"
@@ -26,24 +23,18 @@ class CashfreeParser : BankParser() {
     override fun getCurrency() = "INR"
 
     override fun canHandle(sender: String): Boolean {
-<<<<<<< ours
-=======
         // Match the CSHfre token case-insensitively. Covers headers like
         // JX-CSHfre-S, VK-CSHfre-S, JD-CSHfre-T, and plain "CSHFRE".
->>>>>>> theirs
         return sender.uppercase().contains("CSHFRE")
     }
 
     override fun isTransactionMessage(message: String): Boolean {
         val lowerMessage = message.lowercase()
 
-<<<<<<< ours
-=======
         // Reject OTP / verification messages first so a Cashfree-sender
         // promo or deep-link that happens to contain "payment" + "confirmed
         // for order" alongside OTP content can never short-circuit past the
         // guard below.
->>>>>>> theirs
         if (lowerMessage.contains("otp") ||
             lowerMessage.contains("one time password") ||
             lowerMessage.contains("verification code")
@@ -51,10 +42,7 @@ class CashfreeParser : BankParser() {
             return false
         }
 
-<<<<<<< ours
-=======
         // Cashfree-specific confirmation phrasing: "Payment ... confirmed for order ..."
->>>>>>> theirs
         if (lowerMessage.contains("payment") &&
             lowerMessage.contains("confirmed for order")
         ) {
@@ -65,10 +53,7 @@ class CashfreeParser : BankParser() {
     }
 
     override fun extractAmount(message: String): BigDecimal? {
-<<<<<<< ours
-=======
         // Pattern: "Payment INR 50.00"
->>>>>>> theirs
         val paymentPattern = Regex(
             """Payment\s+INR\s+([0-9,]+(?:\.\d{1,2})?)""",
             RegexOption.IGNORE_CASE
@@ -87,10 +72,7 @@ class CashfreeParser : BankParser() {
     override fun extractTransactionType(message: String): TransactionType? {
         val lowerMessage = message.lowercase()
 
-<<<<<<< ours
-=======
         // Cashfree messages are outgoing payment confirmations.
->>>>>>> theirs
         if (lowerMessage.contains("payment") &&
             lowerMessage.contains("confirmed for order")
         ) {
@@ -101,11 +83,8 @@ class CashfreeParser : BankParser() {
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
-<<<<<<< ours
-=======
         // Pattern: "...confirmed for order #<orderId> on <Merchant>."
         // Capture the merchant between "on " and the next period/end-of-line.
->>>>>>> theirs
         val merchantPattern = Regex(
             """confirmed\s+for\s+order\s+#\S+\s+on\s+([^.\n\r]+?)(?:\.|$)""",
             RegexOption.IGNORE_CASE
@@ -121,10 +100,7 @@ class CashfreeParser : BankParser() {
     }
 
     override fun extractReference(message: String): String? {
-<<<<<<< ours
-=======
         // Pattern: "(ID:5448114171)"
->>>>>>> theirs
         val idPattern = Regex(
             """\(ID:\s*([A-Za-z0-9]+)\)""",
             RegexOption.IGNORE_CASE
@@ -137,18 +113,12 @@ class CashfreeParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
-<<<<<<< ours
-=======
         // Cashfree confirmations carry no account/card identifier.
->>>>>>> theirs
         return null
     }
 
     override fun extractBalance(message: String): BigDecimal? {
-<<<<<<< ours
-=======
         // Cashfree confirmations carry no balance information.
->>>>>>> theirs
         return null
     }
 }

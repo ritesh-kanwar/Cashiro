@@ -20,30 +20,19 @@ object CompiledPatterns {
 
     object Account {
         val AC_WITH_MASK = Regex(
-<<<<<<< ours
-            """(?:A/c|Account|Acct)(?:\s+No)?\.?\s+(?:[Xx\*]*\**)?(\d+)""",
+            """(?:A/c|Account|Acct)(?:\s+No)?\.?\s+(\S+)""",
             RegexOption.IGNORE_CASE
         )
-<<<<<<< ours
-        val CARD_WITH_MASK = Regex("""Card\s+(?:[Xx\*]*\**)?(\d+)""", RegexOption.IGNORE_CASE)
-=======
-        val CARD_WITH_MASK = Regex("""Card\s+(?:XX+)?(\d{4})""", RegexOption.IGNORE_CASE)
-        // Keep original pattern for backward compatibility, validation will filter false positives
->>>>>>> theirs
-        val GENERIC_ACCOUNT =
-            Regex("""(?:A/c|Account).*?(\d+)(?:\s|$)""", RegexOption.IGNORE_CASE)
-        val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK, GENERIC_ACCOUNT)
-=======
-            """(?:A/c|Account|Acct)(?:\s+No)?\.?\s+(?:XX+|\*+)?(\d{3,4})""",
+        val CARD_WITH_MASK = Regex("""Card\s+(\S+)""", RegexOption.IGNORE_CASE)
+        val ENDING_PATTERN = Regex(
+            """(?:ending|ends with|ending with)\s+(\d{4})""",
             RegexOption.IGNORE_CASE
         )
-        val CARD_WITH_MASK = Regex("""Card\s+(?:XX+|\*+)?(\d{4})""", RegexOption.IGNORE_CASE)
-        // GENERIC_ACCOUNT removed - it was too loose and caused false positives
-        // by capturing dates, amounts, and reference numbers as account numbers.
-        // Bank-specific parsers should define their own patterns instead.
-        // Only use specific masked patterns that require XX or * prefix
-        val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK)
->>>>>>> theirs
+        val AC_NO_SLASH = Regex("""(?<![/])AC\s+(\S+)""", RegexOption.IGNORE_CASE)
+        val DEBIT_CREDIT_CARD = Regex("""(?:debit|credit)\s+card\s+(\S+)""", RegexOption.IGNORE_CASE)
+        val YOUR_ACCOUNT = Regex("""Your\s+(?:a/c|account|acct|card|#)\s*(\S+)""", RegexOption.IGNORE_CASE)
+        val LINKED_ACCOUNT = Regex("""linked\s+(?:a/c|account|acct)\s+(\S+)""", RegexOption.IGNORE_CASE)
+        val ALL_PATTERNS = listOf(AC_WITH_MASK, CARD_WITH_MASK, ENDING_PATTERN, AC_NO_SLASH, DEBIT_CREDIT_CARD, YOUR_ACCOUNT, LINKED_ACCOUNT)
     }
 
     object Balance {

@@ -203,7 +203,7 @@ class CurrencyConversionService @Inject constructor(
      */
     suspend fun getStoredConversions(baseCurrency: String): Pair<List<ExchangeRateEntity>, Long> {
         val rates = exchangeRateDao.getAllRatesForCurrency(baseCurrency.uppercase())
-        val lastUpdated = rates.maxOfOrNull { it.updatedAtUnix } ?: 0L
+        val lastUpdated = rates.map { it.updatedAtUnix }.maxOrNull() ?: 0L
         return Pair(rates, lastUpdated)
     }
 

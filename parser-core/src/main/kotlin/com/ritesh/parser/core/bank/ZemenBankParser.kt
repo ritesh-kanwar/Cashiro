@@ -11,26 +11,16 @@ class ZemenBankParser : BankParser() {
 
     override fun getBankName() = "Zemen Bank"
 
-<<<<<<< ours
-    override fun getCurrency() = "ETB"
-
-    override fun canHandle(sender: String): Boolean {
-        val normalized = sender.uppercase().trim()
-=======
     override fun getCurrency() = "ETB"  // Ethiopian Birr
 
     override fun canHandle(sender: String): Boolean {
         val normalized = sender.uppercase().trim()
         // Support plain and DLT-style senders for Zemen Bank
->>>>>>> theirs
         return normalized == "ZEMEN BANK" ||
                 normalized.replace(" ", "") == "ZEMENBANK" ||
                 normalized.matches(Regex("""^[A-Z]{2}-ZEMENBANK-[A-Z]$"""))
     }
 
-<<<<<<< ours
-    override fun extractAmount(message: String): BigDecimal? {
-=======
     /**
      * Zemen Bank messages use both "ETB" and "Birr" and sometimes omit
      * the decimal places (e.g., "Birr 100", "ETB 6000", "Birr 1593.9").
@@ -38,7 +28,6 @@ class ZemenBankParser : BankParser() {
      */
     override fun extractAmount(message: String): BigDecimal? {
         // Always pick the first transaction amount, not the balance
->>>>>>> theirs
         val amountPattern =
             Regex("""(?:ETB|Birr)\s+([0-9,]+(?:\.[0-9]{1,2})?)""", RegexOption.IGNORE_CASE)
 
@@ -50,29 +39,14 @@ class ZemenBankParser : BankParser() {
         return super.extractAmount(message)
     }
 
-<<<<<<< ours
-=======
     /**
      * Zemen messages have a few phrases that don't use the normal
      * "debited"/"credited" wording, so we extend the standard logic.
      */
->>>>>>> theirs
     override fun extractTransactionType(message: String): TransactionType? {
         val lowerMessage = message.lowercase()
 
         return when {
-<<<<<<< ours
-            lowerMessage.contains("has been credited") || 
-            lowerMessage.contains("credited with") -> TransactionType.INCOME
-            lowerMessage.contains("has been debited") || 
-            lowerMessage.contains("debited with") ||
-            lowerMessage.contains("fund transfer has been made from") ||
-            lowerMessage.contains("pos transaction has been made from") ||
-            lowerMessage.contains("atm cash withdrawal has been made from") ||
-            lowerMessage.contains("you have transfered") ||
-            lowerMessage.contains("you have transferred") ||
-            (lowerMessage.contains("transferred") && lowerMessage.contains("from a/c")) -> TransactionType.EXPENSE
-=======
             // Credit transactions are income
             lowerMessage.contains("has been credited") -> TransactionType.INCOME
             lowerMessage.contains("credited with") -> TransactionType.INCOME
@@ -91,27 +65,19 @@ class ZemenBankParser : BankParser() {
             lowerMessage.contains("you have transferred") -> TransactionType.EXPENSE
             lowerMessage.contains("transferred") && lowerMessage.contains("from a/c") -> TransactionType.EXPENSE
 
->>>>>>> theirs
             else -> super.extractTransactionType(message)
         }
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
-<<<<<<< ours
-=======
         // 1) Telebirr wallet transfers (income/expense)
->>>>>>> theirs
         val telebirrFromPattern = Regex(
             """from\s+(telebirr wallet\s+\d+)\s+with reference""",
             RegexOption.IGNORE_CASE
         )
         telebirrFromPattern.find(message)?.let { match ->
-<<<<<<< ours
-            return match.groupValues[1]
-=======
             val merchant = match.groupValues[1]
             if (merchant.isNotEmpty()) return merchant
->>>>>>> theirs
         }
 
         val telebirrToPattern = Regex(
@@ -119,121 +85,77 @@ class ZemenBankParser : BankParser() {
             RegexOption.IGNORE_CASE
         )
         telebirrToPattern.find(message)?.let { match ->
-<<<<<<< ours
-            return match.groupValues[1]
-        }
-
-=======
             val merchant = match.groupValues[1]
             if (merchant.isNotEmpty()) return merchant
         }
 
         // 2) External bank transfer – merchant is destination account number
->>>>>>> theirs
         val toAccountPattern = Regex(
             """to\s+A/c\s+of\s+(\d{6,})""",
             RegexOption.IGNORE_CASE
         )
         toAccountPattern.find(message)?.let { match ->
-<<<<<<< ours
-            return match.groupValues[1].trim()
-        }
-
-=======
             val merchant = match.groupValues[1].trim()
             if (merchant.isNotEmpty()) return merchant
         }
 
         // 3) Bank transfer income – "from other bank"
->>>>>>> theirs
         val fromOtherBankPattern = Regex(
             """from\s+([^,\.]+?)\s+with reference""",
             RegexOption.IGNORE_CASE
         )
         fromOtherBankPattern.find(message)?.let { match ->
-<<<<<<< ours
-            val merchant = cleanMerchantName(match.groupValues[1]).trim()
-            if (merchant.isNotEmpty() && isValidMerchantName(merchant)) return merchant
-        }
-
-=======
             val raw = match.groupValues[1]
             val merchant = cleanMerchantName(raw).trim()
             if (merchant.isNotEmpty() && isValidMerchantName(merchant)) return merchant
         }
 
         // 4) POS purchase – merchant after "at ... on <date>"
->>>>>>> theirs
         val posPurchasePattern = Regex(
             """pos purchase transaction at\s+(.+?)\s+on\s+\d{1,2}-[A-Za-z]{3}-\d{4}""",
             RegexOption.IGNORE_CASE
         )
         posPurchasePattern.find(message)?.let { match ->
-<<<<<<< ours
-            return cleanMerchantName(match.groupValues[1]).trim()
-        }
-
-=======
             val raw = match.groupValues[1]
             val merchant = cleanMerchantName(raw).trim()
             if (merchant.isNotEmpty()) return merchant
         }
 
         // 5) POS transaction with explicit POS location
->>>>>>> theirs
         val posLocationPattern = Regex(
             """transaction POS location is\s+(.+?)\s*\. """,
             RegexOption.IGNORE_CASE
         )
         posLocationPattern.find(message)?.let { match ->
-<<<<<<< ours
-            return match.groupValues[1].trim()
-        }
-
-=======
             val merchant = match.groupValues[1].trim()
             if (merchant.isNotEmpty()) return merchant
         }
 
         // 6) External bank transfer – full beneficiary and bank
->>>>>>> theirs
         val externalBeneficiaryPattern = Regex(
             """to\s+(.+?)\s+with reference""",
             RegexOption.IGNORE_CASE
         )
         externalBeneficiaryPattern.find(message)?.let { match ->
-<<<<<<< ours
-            return match.groupValues[1].trim()
-        }
-
-=======
             val merchant = match.groupValues[1].trim()
             if (merchant.isNotEmpty()) return merchant
         }
 
         // 7) ATM withdrawal – ATM location
->>>>>>> theirs
         val atmLocationPattern = Regex(
             """transaction ATM location is\s+(.+?)\s*\. """,
             RegexOption.IGNORE_CASE
         )
         atmLocationPattern.find(message)?.let { match ->
-<<<<<<< ours
-            return match.groupValues[1].trim()
-=======
             val merchant = match.groupValues[1].trim()
             if (merchant.isNotEmpty()) return merchant
->>>>>>> theirs
         }
 
         return super.extractMerchant(message, sender)
     }
 
     override fun extractAccountLast4(message: String): String? {
-<<<<<<< ours
-=======
         // Zemen masks accounts as "109xxxxxxxx7018" or inside parentheses "(109xxxxxxxx7018)"
->>>>>>> theirs
         val patterns = listOf(
             Regex("""\b\d{3}x+(\d{4})\b""", RegexOption.IGNORE_CASE),
             Regex("""\(\d{3}x+(\d{4})\)""", RegexOption.IGNORE_CASE)
@@ -249,18 +171,6 @@ class ZemenBankParser : BankParser() {
     }
 
     override fun extractBalance(message: String): BigDecimal? {
-<<<<<<< ours
-        val patterns = listOf(
-            Regex("""Your\s+Current\s+Balance\s+is\s+(?:ETB|Birr)\s+([0-9,]+(?:\.[0-9]{1,2})?)""", RegexOption.IGNORE_CASE),
-            Regex("""A/c\s+Available\s+Bal\.\s+is\s+(?:ETB|Birr)\s+([0-9,]+(?:\.[0-9]{1,2})?)""", RegexOption.IGNORE_CASE),
-            Regex("""Your\s+available\s+balance\s+is\s+(?:ETB|Birr)\s+([0-9,]+(?:\.[0-9]{1,2})?)""", RegexOption.IGNORE_CASE)
-        )
-
-        for (pattern in patterns) {
-            pattern.find(message)?.let { match ->
-                return parseScaledAmount(match.groupValues[1])
-            }
-=======
         // 1) "Your Current Balance is ETB 10823.37"
         val currentBalancePattern = Regex(
             """Your\s+Current\s+Balance\s+is\s+(?:ETB|Birr)\s+([0-9,]+(?:\.[0-9]{1,2})?)""",
@@ -286,17 +196,13 @@ class ZemenBankParser : BankParser() {
         )
         yourAvailableBalancePattern.find(message)?.let { match ->
             return parseScaledAmount(match.groupValues[1])
->>>>>>> theirs
         }
 
         return super.extractBalance(message)
     }
 
     override fun extractReference(message: String): String? {
-<<<<<<< ours
-=======
         // 1) Explicit transaction reference number
->>>>>>> theirs
         val txnRefPattern = Regex(
             """transaction reference number is\s+([A-Z0-9]+)""",
             RegexOption.IGNORE_CASE
@@ -305,10 +211,7 @@ class ZemenBankParser : BankParser() {
             return match.groupValues[1]
         }
 
-<<<<<<< ours
-=======
         // 2) "with reference 109TEIN260350016"
->>>>>>> theirs
         val withReferencePattern = Regex(
             """with reference\s+([A-Z0-9]+)""",
             RegexOption.IGNORE_CASE
@@ -317,10 +220,7 @@ class ZemenBankParser : BankParser() {
             return match.groupValues[1]
         }
 
-<<<<<<< ours
-=======
         // 3) PDF receipt link (used when no explicit reference present)
->>>>>>> theirs
         val linkPattern = Regex(
             """(https://share\.zemenbank\.com/[^\s]+?/pdf)""",
             RegexOption.IGNORE_CASE
@@ -335,13 +235,6 @@ class ZemenBankParser : BankParser() {
     override fun isTransactionMessage(message: String): Boolean {
         val lowerMessage = message.lowercase()
 
-<<<<<<< ours
-        val zemenKeywords = listOf(
-            "dear customer", "your account", "has been credited", "has been debited",
-            "fund transfer has been made from", "pos transaction has been made from",
-            "atm cash withdrawal has been made from", "current balance", "available bal.",
-            "thank you for banking with zemen bank", "etb", "birr"
-=======
         // Zemen-specific transaction keywords
         val zemenKeywords = listOf(
             "dear customer",
@@ -356,7 +249,6 @@ class ZemenBankParser : BankParser() {
             "thank you for banking with zemen bank",
             "etb",
             "birr"
->>>>>>> theirs
         )
 
         if (zemenKeywords.any { lowerMessage.contains(it) }) {
@@ -374,8 +266,4 @@ class ZemenBankParser : BankParser() {
             null
         }
     }
-<<<<<<< ours
 }
-=======
-}
->>>>>>> theirs

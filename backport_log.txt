@@ -15038,3 +15038,6 @@ error: patch failed: app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsRea
 Applying patch app/src/main/java/com/ritesh/cashiro/worker/OptimizedSmsReaderWorker.kt with 2 rejects...
 Rejected hunk #1.
 Rejected hunk #2.
+[backport-fixes-upstream 0728b25e] perf: throttle reportProgress inside saver loop to
+ Date: Sat May 30 02:02:09 2026 +0530
+ 2 files changed, 62 insertions(+), 31 deletions(-)

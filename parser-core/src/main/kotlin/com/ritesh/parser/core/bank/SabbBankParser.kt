@@ -3,8 +3,6 @@ package com.ritesh.parser.core.bank
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
 
-<<<<<<< ours
-=======
 /**
  * Parser for SABB - Saudi Awwal Bank (Saudi Arabia) SMS messages.
  *
@@ -25,7 +23,6 @@ import java.math.BigDecimal
  *
  * Sender example: SAB
  */
->>>>>>> theirs
 class SabbBankParser : BankParser() {
 
     override fun getBankName() = "SABB"
@@ -34,11 +31,6 @@ class SabbBankParser : BankParser() {
 
     override fun canHandle(sender: String): Boolean {
         val normalized = sender.uppercase().replace(Regex("[\\s\\-_]"), "")
-<<<<<<< ours
-        if (normalized == "SAB" || normalized == "SABB") return true
-        if (normalized.contains("SABBANK") || normalized.contains("SABB")) return true
-        if (Regex("""(?:^|[^A-Z])SAB(?:[^A-Z]|$)""").containsMatchIn(sender.uppercase())) return true
-=======
         // Match sender variants like "SAB", "SABB", "SAB-Bank", "JD-SAB-S".
         // Avoid catching banks with "SAB" as a sub-token only when there is
         // additional bank-identifying context.
@@ -47,36 +39,26 @@ class SabbBankParser : BankParser() {
         // DLT-style headers e.g. "JD-SAB-S", "VK-SAB-T"
         if (Regex("""(?:^|[^A-Z])SAB(?:[^A-Z]|$)""").containsMatchIn(sender.uppercase())) return true
         // Arabic name for SABB / Saudi Awwal Bank
->>>>>>> theirs
         if (sender.contains("ساب") || sender.contains("الأول")) return true
         return false
     }
 
     override fun extractAmount(message: String): BigDecimal? {
-<<<<<<< ours
-=======
         // Pattern 1: "مبلغ: SAR 56.00"
->>>>>>> theirs
         val amountSarFirst = Regex(
             """مبلغ\s*:?\s*SAR\s*([0-9,]+(?:\.\d{1,2})?)""",
             RegexOption.IGNORE_CASE
         )
         amountSarFirst.find(message)?.let { return parseSarAmount(it.groupValues[1]) }
 
-<<<<<<< ours
-=======
         // Pattern 2: "مبلغ: 126.28 SAR"
->>>>>>> theirs
         val amountSarLast = Regex(
             """مبلغ\s*:?\s*([0-9,]+(?:\.\d{1,2})?)\s*SAR""",
             RegexOption.IGNORE_CASE
         )
         amountSarLast.find(message)?.let { return parseSarAmount(it.groupValues[1]) }
 
-<<<<<<< ours
-=======
         // Pattern 3: fallback "SAR 123.45"
->>>>>>> theirs
         val looseSar = Regex(
             """SAR\s+([0-9,]+(?:\.\d{1,2})?)""",
             RegexOption.IGNORE_CASE
@@ -97,10 +79,7 @@ class SabbBankParser : BankParser() {
 
     override fun extractTransactionType(message: String): TransactionType? {
         return when {
-<<<<<<< ours
-=======
             // Incoming / deposit first so it wins over generic "حوالة"
->>>>>>> theirs
             message.contains("إيداع") -> TransactionType.INCOME
             message.contains("واردة") -> TransactionType.INCOME
 
@@ -117,19 +96,13 @@ class SabbBankParser : BankParser() {
         val isIncoming = message.contains("إيداع") || message.contains("واردة")
         val isOutgoingTransfer = message.contains("صادرة")
 
-<<<<<<< ours
-=======
         // Purchases use "لدى:" (at / with) for the merchant.
->>>>>>> theirs
         val ladaPattern = Regex("""لدى\s*:?\s*([^\n]+?)(?:\n|في\s*:|$)""")
         ladaPattern.find(message)?.let { match ->
             cleanSabbMerchant(match.groupValues[1])?.let { return it }
         }
 
-<<<<<<< ours
-=======
         // Outgoing transfer: recipient is on "إلى:" line (Arabic "to").
->>>>>>> theirs
         if (isOutgoingTransfer) {
             val toPattern = Regex("""إلى\s*:?\s*([^\n]+?)(?:\n|في\s*:|$)""")
             toPattern.find(message)?.let { match ->
@@ -137,10 +110,7 @@ class SabbBankParser : BankParser() {
             }
         }
 
-<<<<<<< ours
-=======
         // Incoming transfer: sender is on "من:" line.
->>>>>>> theirs
         if (isIncoming) {
             val fromPattern = Regex("""من\s*:?\s*([^\n]+?)(?:\n|في\s*:|$)""")
             fromPattern.find(message)?.let { match ->
@@ -151,11 +121,6 @@ class SabbBankParser : BankParser() {
         return null
     }
 
-<<<<<<< ours
-    private fun cleanSabbMerchant(raw: String): String? {
-        var value = raw.trim()
-        value = value.trimEnd('×', '*', ' ', '\t')
-=======
     /**
      * Cleans a captured field: trims, removes trailing masking chars (× and *),
      * runs base cleaning, and validates the result. Returns null if invalid
@@ -166,7 +131,6 @@ class SabbBankParser : BankParser() {
         // Strip trailing masking symbols and whitespace.
         value = value.trimEnd('×', '*', ' ', '\t')
         // Reject if what remains is just digits / mask chars (account number).
->>>>>>> theirs
         if (value.isBlank()) return null
         if (value.all { it == '*' || it == '×' || it.isDigit() || it.isWhitespace() }) return null
         val cleaned = cleanMerchantName(value)
@@ -174,18 +138,12 @@ class SabbBankParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
-<<<<<<< ours
-        val cardPattern = Regex("""بطاقة\s*:?\s*\*+\s*(\d{3,4})""")
-        cardPattern.find(message)?.let { return extractLast4Digits(it.groupValues[1]) }
-
-=======
         // "بطاقة: ***1234;..." (card with last 4)
         val cardPattern = Regex("""بطاقة\s*:?\s*\*+\s*(\d{3,4})""")
         cardPattern.find(message)?.let { return extractLast4Digits(it.groupValues[1]) }
 
         // For transfers, own account often appears as "من: **9999" (outgoing)
         // or "إلى: **9999" (incoming). Capture those too.
->>>>>>> theirs
         val ownAccountPatterns = listOf(
             Regex("""من\s*:?\s*\*+\s*(\d{3,4})"""),
             Regex("""إلى\s*:?\s*\*+\s*(\d{3,4})""")
@@ -198,10 +156,7 @@ class SabbBankParser : BankParser() {
     }
 
     override fun extractBalance(message: String): BigDecimal? {
-<<<<<<< ours
-=======
         // "الرصيد: SAR 1234.56" or "الرصيد المتاح: SAR 1234.56"
->>>>>>> theirs
         val balancePattern = Regex(
             """الرصيد(?:\s*المتاح)?\s*:?\s*SAR\s*([0-9,]+(?:\.\d{1,2})?)""",
             RegexOption.IGNORE_CASE
@@ -211,15 +166,9 @@ class SabbBankParser : BankParser() {
     }
 
     override fun detectIsCard(message: String): Boolean {
-<<<<<<< ours
-        if (message.contains("بطاقة") ||
-            message.contains("مدى") ||
-            message.contains("نقاط البيع") ||
-=======
         if (message.contains("بطاقة") ||           // card
             message.contains("مدى") ||             // Mada
             message.contains("نقاط البيع") ||      // POS in Arabic
->>>>>>> theirs
             message.contains("SamsungPay", ignoreCase = true) ||
             message.contains("Samsung Pay", ignoreCase = true) ||
             message.contains("ApplePay", ignoreCase = true) ||
@@ -238,21 +187,12 @@ class SabbBankParser : BankParser() {
         }
 
         val keywords = listOf(
-<<<<<<< ours
-            "شراء",
-            "سحب",
-            "حوالة",
-            "إيداع",
-            "خصم",
-            "سداد",
-=======
             "شراء",      // purchase
             "سحب",       // withdrawal
             "حوالة",     // transfer
             "إيداع",     // deposit
             "خصم",       // deduction
             "سداد",      // bill payment
->>>>>>> theirs
             "SAR"
         )
         return keywords.any { message.contains(it) }

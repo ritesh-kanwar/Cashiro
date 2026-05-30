@@ -398,9 +398,7 @@ fun EditBudgetSheet(
                             icon = {},
                             label = { 
                                 Text(
-                                    period.name.lowercase().replaceFirstChar {
-                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
-                                    },
+                                    period.name.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it },
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     fontSize = 12.sp

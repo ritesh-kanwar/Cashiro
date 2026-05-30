@@ -5,10 +5,7 @@ import java.math.BigDecimal
 
 /**
  * HDFC Mutual Fund parser for SIP purchase and redemption messages.
-<<<<<<< ours
-=======
  * Handles senders like "AD-HDFCMF-AC", "VM-HDFCMF".
->>>>>>> theirs
  */
 class HDFCMutualFundParser : BaseIndianBankParser() {
 

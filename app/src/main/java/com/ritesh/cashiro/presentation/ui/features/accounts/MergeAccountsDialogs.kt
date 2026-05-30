@@ -239,7 +239,7 @@ fun MergeBalanceOptionDialog(
                 fontWeight = FontWeight.Bold
             )
             val totalBalance =
-                currentAccount.balance + selectedAccounts.sumOf { it.balance }
+                currentAccount.balance + selectedAccounts.fold(java.math.BigDecimal.ZERO) { acc, account -> acc + account.balance }
             MergeOptionItem(
                 title = stringResource(R.string.merge_option_sum),
                 description = stringResource(

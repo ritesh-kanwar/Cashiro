@@ -4,11 +4,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -154,6 +153,7 @@ dependencies {
 
     // Local modules
     implementation(project(":parser-core"))
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -48,6 +48,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -580,7 +581,7 @@ fun CreateRuleScreen(
                                                         },
                                                         label = {
                                                             Text(
-                                                                type.lowercase().replaceFirstChar { it.uppercase() },
+                                                                text = type.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it },
                                                                 style = MaterialTheme.typography.bodySmall
                                                             )
                                                         }
@@ -948,8 +949,8 @@ fun CreateRuleScreen(
                                                     onClick = { actionValue = type },
                                                     label = {
                                                         Text(
-                                                            type.lowercase()
-                                                                .replaceFirstChar { it.uppercase() },
+                                                            text = type.lowercase()
+                                                                .let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it },
                                                             style = MaterialTheme.typography.bodySmall
                                                         )
                                                     }
@@ -971,7 +972,8 @@ fun CreateRuleScreen(
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
                                             commonMerchants.forEach { merchant ->
-                                                AssistChip(
+                                                FilterChip(
+                                                    selected = false,
                                                     onClick = { actionValue = merchant },
                                                     label = {
                                                         Text(

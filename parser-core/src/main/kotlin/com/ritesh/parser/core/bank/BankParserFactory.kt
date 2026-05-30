@@ -40,7 +40,6 @@ object BankParserFactory {
         JKBankParser(),
         JioPayParser(),
         IPPBParser(),
-        DOPBankParser(),
         CityUnionBankParser(),
         IndianOverseasBankParser(),
         AirtelPaymentsBankParser(),
@@ -58,9 +57,9 @@ object BankParserFactory {
         CitiBankParser(),  // Citi Bank (USA)
         DiscoverCardParser(),  // Discover Card (USA)
         OldHickoryParser(),  // Old Hickory Credit Union (USA)
-        AltanaFCUParser(),  // Altana Federal Credit Union (USA) - must be before Everest Bank (numeric catch-all)
         LaxmiBankParser(),  // Laxmi Sunrise Bank (Nepal)
         CBEBankParser(),  // Commercial Bank of Ethiopia
+        AltanaFCUParser(),  // Altana Federal Credit Union (USA) — must precede EverestBank, which greedily claims numeric senders
         EverestBankParser(),  // Everest Bank (Nepal)
         BancolombiaParser(),  // Bancolombia (Colombia)
         MashreqBankParser(),  // Mashreq Bank (UAE)
@@ -70,23 +69,11 @@ object BankParserFactory {
         AlecuBankParser(),  // ALECU Credit Union (USA)
         PriorbankParser(),  // Priorbank (Belarus)
         AlinmaBankParser(),  // Alinma Bank (Saudi Arabia)
-<<<<<<< ours
-        NabilBankParser(),  // Nabil Bank (Nepal)
-        NMBBankParser(),  // NMB Bank (Nepal)
-=======
         NabilBankParser(),  // Nabil Bank (Nepal) — must be before NMBBankParser (NMB handles NABIL senders broadly)
         NMBBankParser(),  // NMB Bank / Nabil Bank (Nepal)
->>>>>>> theirs
         ManjushreeFinanceParser(), // Manjushree Finance (Nepal)
         SiddharthaBankParser(),  // Siddhartha Bank Limited (Nepal)
-<<<<<<< ours
-<<<<<<< ours
         PrimeCommercialBankParser(),  // Prime Commercial Bank (Nepal)
-=======
->>>>>>> theirs
-=======
-        PrimeCommercialBankParser(),  // Prime Commercial Bank (Nepal)
->>>>>>> theirs
         MPesaTanzaniaParser(),  // M-Pesa Tanzania (must be before Kenya M-PESA)
         MPESAParser(),  // M-PESA (Kenya)
         SelcomPesaParser(),  // Selcom Pesa (Tanzania)
@@ -95,7 +82,6 @@ object BankParserFactory {
         DhanlaxmiBankParser(),  // Dhanlaxmi Bank (India)
         DOPBankParser(),  // Department of Post (India)
         HuntingtonBankParser(),  // Huntington Bank (USA)
-<<<<<<< ours
         StandardCharteredBankParser(),  // Standard Chartered Bank (India and Pakistan)
         EquitasBankParser(),  // Equitas Small Finance Bank (India)
         TelebirrParser(),  // Telebirr (Ethiopia)
@@ -115,71 +101,19 @@ object BankParserFactory {
         UOBThailandParser(),  // UOB Thailand
         CIMBThaiParser(),  // CIMB Thai (Thailand)
         KTCCreditCardParser(),  // KTC Credit Card (Thailand)
-<<<<<<< ours
-        MBankCZParser(),  // mBank CZ (Czech Republic)
-        AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
-        ChaseBankParser(),  // Chase Bank (USA)
         TBankParser(),  // T-Bank / Tinkoff (Russia)
-<<<<<<< ours
-        BankMuscatParser(),  // Bank Muscat (Oman)
-        BPCEParser(),      // BPCE (France)
-        CashfreeParser(),  // Cashfree payment gateway (India)
-        EnparaBankParser(),  // Enpara (Turkey)
-        GreaterBankParser(),  // Greater Bank (India)
-        PunjabSindBankParser(),  // Punjab & Sind Bank (India)
-        SNBAlAhliBankParser(),  // Saudi National Bank / Al Ahli (Saudi Arabia)
-        STCBankParser(),  // STC Bank (Saudi Arabia)
-        SabbBankParser(),  // SABB / Saudi Awwal Bank (Saudi Arabia)
-        SparkasseRheinMaasParser()  // Sparkasse Rhein-Maas (Germany)
-=======
-        StandardCharteredBankParser(),  // Standard Chartered Bank (India)
-        EquitasBankParser(),  // Equitas Small Finance Bank (India)
-        TelebirrParser(),  // Telebirr (Ethiopia)
-        ZemenBankParser(),  // Zemen Bank (Ethiopia)
-        DashenBankParser()  // Dashen Bank (Ethiopia)
->>>>>>> theirs
-=======
-        TBankParser()  // T-Bank / Tinkoff (Russia)
->>>>>>> theirs
-=======
         ChaseBankParser(),  // Chase Bank (USA)
-<<<<<<< ours
-        AlRajhiBankParser()  // Al Rajhi Bank (Saudi Arabia)
->>>>>>> theirs
-=======
         AlRajhiBankParser(),  // Al Rajhi Bank (Saudi Arabia)
-<<<<<<< ours
-=======
         SNBAlAhliBankParser(),  // Saudi National Bank / Al Ahli Bank (Saudi Arabia)
         STCBankParser(),  // STC Bank (Saudi Arabia)
         SabbBankParser(),  // SABB - Saudi Awwal Bank (Saudi Arabia)
->>>>>>> theirs
         MBankCZParser(),  // mBank CZ (Czech Republic)
-<<<<<<< ours
-<<<<<<< ours
-        BankMuscatParser()  // Bank Muscat (Oman)
->>>>>>> theirs
-=======
-=======
         SparkasseRheinMaasParser(),  // Sparkasse Rhein-Maas (Germany)
-<<<<<<< ours
->>>>>>> theirs
-=======
         EnparaBankParser(),  // Enpara (Turkey) — push notifications
->>>>>>> theirs
         BankMuscatParser(),  // Bank Muscat (Oman)
-<<<<<<< ours
-        GreaterBankParser()  // Greater Bank (India)
->>>>>>> theirs
-=======
         GreaterBankParser(),  // Greater Bank (India)
-<<<<<<< ours
-        BPCEParser()  // BPCE (France)
->>>>>>> theirs
-=======
         BPCEParser(),  // BPCE (France)
         SampathBankParser()  // Sampath Bank (Sri Lanka)
->>>>>>> theirs
         // Add more bank parsers here as we implement them
     )
 

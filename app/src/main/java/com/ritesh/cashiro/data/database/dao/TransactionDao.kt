@@ -251,6 +251,21 @@ interface TransactionDao {
     ): Flow<List<TransactionEntity>>
 
     @Query(
+        """
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+        AND amount = :amount
+        AND date_time BETWEEN :startDate AND :endDate
+        ORDER BY date_time DESC
+        """
+    )
+    suspend fun getTransactionsByAmountAndDate(
+        amount: java.math.BigDecimal,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): List<TransactionEntity>
+
+    @Query(
             "UPDATE transactions SET bank_name = :newBankName, account_number = :newAccountNumber WHERE bank_name = :oldBankName AND account_number = :oldAccountNumber"
     )
     suspend fun updateAccountForTransactions(

@@ -572,7 +572,7 @@ class TransactionDetailViewModel @Inject constructor(
         // If it's all uppercase, convert to proper case
         return if (trimmed == trimmed.uppercase()) {
             trimmed.lowercase().split(" ").joinToString(" ") { word ->
-                word.replaceFirstChar { it.uppercase() }
+                word.let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it }
             }
         } else {
             // Already has mixed case, keep as is

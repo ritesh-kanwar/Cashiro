@@ -88,15 +88,15 @@ constructor(
         ) { allBalances, baseCurrency ->
             if (allBalances.isEmpty()) return@combine BigDecimal.ZERO
 
-            allBalances.sumOf { account ->
-                if (account.currency == baseCurrency) {
+            allBalances.fold(java.math.BigDecimal.ZERO) { acc, account ->
+                acc + if (account.currency == baseCurrency) {
                     account.balance
                 } else {
                     currencyConversionService.convertAmount(
                         amount = account.balance,
                         fromCurrency = account.currency,
                         toCurrency = baseCurrency
-                    )
+                    ) ?: account.balance
                 }
             }
         }.onEach { total ->
@@ -121,8 +121,8 @@ constructor(
 
             val income = monthTransactions
                 .filter { it.transactionType == TransactionType.INCOME }
-                .sumOf { txn ->
-                    if (txn.currency == baseCurrency) {
+                .fold(java.math.BigDecimal.ZERO) { acc, txn ->
+                    acc + if (txn.currency == baseCurrency) {
                         txn.amount
                     } else {
                         currencyConversionService.convertAmount(
@@ -135,8 +135,8 @@ constructor(
 
             val expense = monthTransactions
                 .filter { it.transactionType == TransactionType.EXPENSE }
-                .sumOf { txn ->
-                    if (txn.currency == baseCurrency) {
+                .fold(java.math.BigDecimal.ZERO) { acc, txn ->
+                    acc + if (txn.currency == baseCurrency) {
                         txn.amount
                     } else {
                         currencyConversionService.convertAmount(

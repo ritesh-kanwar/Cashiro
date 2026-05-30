@@ -192,9 +192,7 @@ fun TransactionTabContent(
                             label = {
                                 Text(
                                     type.name.lowercase(Locale.getDefault())
-                                        .replaceFirstChar {
-                                            it.titlecase(Locale.getDefault())
-                                        }
+                                        .let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it }
                                 )
                             },
                             leadingIcon =

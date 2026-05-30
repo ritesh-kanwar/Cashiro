@@ -122,7 +122,6 @@ class TelebirrParser: BankParser() {
             }
         }
 
-<<<<<<< ours
         // Pattern 3a: "paid ETB X for fuel purchased from ... on ..." (keep full phrase)
         val fuelPurchasedFromPattern = Regex(
             """(for\s+fuel\s+purchased\s+from\s+[^,\n]+?)(?:\s+on\s+\d{2}/\d{2}/\d{4}|\.\s+Your\s+transaction|$)""",
@@ -136,9 +135,6 @@ class TelebirrParser: BankParser() {
         }
 
         // Pattern 3b: "paid ETB X for goods purchased from 521902 - SAMUEL..." (merchant payment)
-=======
-        // Pattern 3: "paid ETB X for goods purchased from 521902 - SAMUEL..." (merchant payment)
->>>>>>> theirs
         val purchasedFromPattern = Regex("""for\s+goods\s+purchased\s+from\s+([^,\n]+?)(?:\s+on\s+\d{2}/\d{2}/\d{4}|\.\s+Your\s+transaction|$)""", RegexOption.IGNORE_CASE)
         purchasedFromPattern.find(message)?.let { match ->
             var merchant = match.groupValues[1].trim()
@@ -221,7 +217,6 @@ class TelebirrParser: BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
-<<<<<<< ours
         // Telebirr SMS formats observed:
         // - "Dear [Name] You have ..."   -> expected: "[Name]"
         // - "Dear Name You have ..."     -> expected: "Name"
@@ -241,15 +236,6 @@ class TelebirrParser: BankParser() {
         }
 
         return null
-=======
-        // Pattern: "Dear [Name]" - extract the name in brackets
-        val dearPattern = Regex("""Dear\s+\[([^\]]+)\]""", RegexOption.IGNORE_CASE)
-        dearPattern.find(message)?.let { match ->
-            return "[${match.groupValues[1]}]"
-        }
-
-        return super.extractAccountLast4(message)
->>>>>>> theirs
     }
 
     override fun extractBalance(message: String): BigDecimal? {

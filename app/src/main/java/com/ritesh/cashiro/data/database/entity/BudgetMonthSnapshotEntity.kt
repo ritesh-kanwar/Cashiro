@@ -38,3 +38,9 @@ data class BudgetMonthSnapshotEntity(
     @ColumnInfo(name = "display_order", defaultValue = "0")
     val displayOrder: Int = 0
 )
+
+enum class BudgetGroupType {
+    LIMIT,
+    TARGET,
+    EXPECTED
+}

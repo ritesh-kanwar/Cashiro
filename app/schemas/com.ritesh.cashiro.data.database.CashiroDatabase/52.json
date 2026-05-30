@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 52,
-    "identityHash": "7af7c786b43a1ea50bbb1592e2df5bfb",
+    "identityHash": "114fcc8a79c41f9c8ab183f352783cdb",
     "entities": [
       {
         "tableName": "transactions",
@@ -313,7 +313,7 @@
       },
       {
         "tableName": "merchant_mappings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `subcategory` TEXT, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, PRIMARY KEY(`merchant_name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`merchant_name` TEXT NOT NULL, `category` TEXT NOT NULL, `created_at` TEXT NOT NULL, `updated_at` TEXT NOT NULL, PRIMARY KEY(`merchant_name`))",
         "fields": [
           {
             "fieldPath": "merchantName",
@@ -326,11 +326,6 @@
             "columnName": "category",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "subcategory",
-            "columnName": "subcategory",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "createdAt",
@@ -1004,7 +999,7 @@
       },
       {
         "tableName": "exchange_rates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `from_currency` TEXT NOT NULL, `to_currency` TEXT NOT NULL, `rate` TEXT NOT NULL, `provider` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `updated_at_unix` INTEGER NOT NULL DEFAULT 0, `expires_at` TEXT NOT NULL, `expires_at_unix` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `from_currency` TEXT NOT NULL, `to_currency` TEXT NOT NULL, `rate` TEXT NOT NULL, `provider` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `updated_at_unix` INTEGER NOT NULL DEFAULT 0, `expires_at` TEXT NOT NULL, `expires_at_unix` INTEGER NOT NULL DEFAULT 0, `is_custom_rate` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1058,6 +1053,13 @@
           {
             "fieldPath": "expiresAtUnix",
             "columnName": "expires_at_unix",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "isCustomRate",
+            "columnName": "is_custom_rate",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
@@ -1687,11 +1689,88 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "bank_notifications",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `package_name` TEXT NOT NULL, `sender_alias` TEXT NOT NULL, `message_body` TEXT NOT NULL, `message_hash` TEXT NOT NULL, `posted_at` TEXT NOT NULL, `processed` INTEGER NOT NULL, `transaction_id` INTEGER, `created_at` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "package_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "senderAlias",
+            "columnName": "sender_alias",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "messageBody",
+            "columnName": "message_body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "messageHash",
+            "columnName": "message_hash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postedAt",
+            "columnName": "posted_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "processed",
+            "columnName": "processed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transactionId",
+            "columnName": "transaction_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_bank_notifications_package_name_message_hash",
+            "unique": true,
+            "columnNames": [
+              "package_name",
+              "message_hash"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_bank_notifications_package_name_message_hash` ON `${TABLE_NAME}` (`package_name`, `message_hash`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7af7c786b43a1ea50bbb1592e2df5bfb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '114fcc8a79c41f9c8ab183f352783cdb')"
     ]
   }
 }

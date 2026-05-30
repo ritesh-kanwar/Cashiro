@@ -185,7 +185,7 @@ class SmsTransactionProcessor @Inject constructor(
                 processBalanceUpdate(parsedTransaction, finalEntity, rowId)
 
                 // Trigger widget refresh for recent transactions
-                com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(appContext)
+                // com.ritesh.cashiro.widget.RecentTransactionsWidgetUpdateWorker.enqueueOneShot(appContext)
 
                 return ProcessingResult(true, transactionId = rowId)
             } else {

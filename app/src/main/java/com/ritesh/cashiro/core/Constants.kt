@@ -89,5 +89,6 @@ object Constants {
         const val FAQ_URL = "https://ritesh-kanwar.github.io/cashiro.showcase/faq"
         const val GUIDE_URL = "https://ritesh-kanwar.github.io/cashiro.showcase/guides"
         const val REPORT_BUG_URL = "https://github.com/ritesh-kanwar/Cashiro/issues/new/choose"
+        const val WEB_PARSER_URL = "https://sarim2000.github.io/pennywise-web"
     }
 }

@@ -6,8 +6,6 @@ import java.math.BigDecimal
 
 /**
  * Parser for M-Pesa Tanzania (Vodacom) mobile money SMS messages
-<<<<<<< ours
-=======
  *
  * Handles formats like:
  * - "SGR1234567 Confirmed. You have received TZS 50,000.00 from JOHN DOE (255754XXXXXX)"
@@ -23,7 +21,6 @@ import java.math.BigDecimal
  *
  * Note: This is distinct from Kenya M-Pesa which uses KES currency
  * Country: Tanzania
->>>>>>> theirs
  */
 class MPesaTanzaniaParser : BankParser() {
 
@@ -33,10 +30,7 @@ class MPesaTanzaniaParser : BankParser() {
 
     override fun canHandle(sender: String): Boolean {
         val normalizedSender = sender.uppercase()
-<<<<<<< ours
-=======
         // M-Pesa Tanzania uses same sender IDs but we differentiate by content
->>>>>>> theirs
         return normalizedSender.contains("MPESA") ||
                 normalizedSender.contains("M-PESA") ||
                 normalizedSender == "MPESA" ||
@@ -44,12 +38,6 @@ class MPesaTanzaniaParser : BankParser() {
                 normalizedSender.contains("VODACOM")
     }
 
-<<<<<<< ours
-    override fun parse(smsBody: String, sender: String, timestamp: Long): ParsedTransaction? {
-        if (!smsBody.contains("TZS", ignoreCase = true)) {
-            return null
-        }
-=======
     /**
      * Override parse to check for TZS currency (Tanzania)
      * This helps differentiate from Kenya M-Pesa which uses KES
@@ -61,15 +49,11 @@ class MPesaTanzaniaParser : BankParser() {
             return null
         }
 
->>>>>>> theirs
         return super.parse(smsBody, sender, timestamp)
     }
 
     override fun extractAmount(message: String): BigDecimal? {
-<<<<<<< ours
-=======
         // Pattern 1: "TZS 50,000.00" with space
->>>>>>> theirs
         val tzsSpacePattern = Regex(
             """TZS\s+([0-9,]+(?:\.[0-9]{2})?)""",
             RegexOption.IGNORE_CASE
@@ -83,10 +67,7 @@ class MPesaTanzaniaParser : BankParser() {
             }
         }
 
-<<<<<<< ours
-=======
         // Pattern 2: "TZS50,000.00" without space
->>>>>>> theirs
         val tzsNoSpacePattern = Regex(
             """TZS([0-9,]+(?:\.[0-9]{2})?)""",
             RegexOption.IGNORE_CASE
@@ -107,22 +88,14 @@ class MPesaTanzaniaParser : BankParser() {
         val lowerMessage = message.lowercase()
 
         return when {
-<<<<<<< ours
-=======
             // Received money = income
->>>>>>> theirs
             lowerMessage.contains("you have received") ||
             lowerMessage.contains("received tsh") ||
             lowerMessage.contains("received tzs") -> TransactionType.INCOME
 
-<<<<<<< ours
-            lowerMessage.contains("sent to") ||
-            lowerMessage.contains("paid to") ||
-=======
             // Sent/paid money = expense
             lowerMessage.contains("sent to") -> TransactionType.EXPENSE
             lowerMessage.contains("paid to") -> TransactionType.EXPENSE
->>>>>>> theirs
             lowerMessage.contains("withdrawn") -> TransactionType.EXPENSE
 
             else -> null
@@ -130,10 +103,7 @@ class MPesaTanzaniaParser : BankParser() {
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
-<<<<<<< ours
-=======
         // Pattern 1: "received TZS X from NAME (phone)"
->>>>>>> theirs
         val fromPattern = Regex(
             """from\s+([A-Z][A-Za-z\s]+?)(?:\s*\(|$)""",
             RegexOption.IGNORE_CASE
@@ -145,10 +115,7 @@ class MPesaTanzaniaParser : BankParser() {
             }
         }
 
-<<<<<<< ours
-=======
         // Pattern 2: "sent to NAME (phone)" or "TZS X sent to NAME"
->>>>>>> theirs
         val sentToPattern = Regex(
             """sent to\s+([A-Z][A-Za-z\s]+?)(?:\s*\(|$)""",
             RegexOption.IGNORE_CASE
@@ -160,10 +127,7 @@ class MPesaTanzaniaParser : BankParser() {
             }
         }
 
-<<<<<<< ours
-=======
         // Pattern 3: "paid to MERCHANT (Merchant ID: X)"
->>>>>>> theirs
         val paidToMerchantPattern = Regex(
             """paid to\s+([A-Za-z0-9\s]+?)(?:\s*\(Merchant|\s+on|\s*$)""",
             RegexOption.IGNORE_CASE
@@ -175,10 +139,7 @@ class MPesaTanzaniaParser : BankParser() {
             }
         }
 
-<<<<<<< ours
-=======
         // Pattern 4: "paid to LUKU for account X" (utility payment)
->>>>>>> theirs
         val utilityPattern = Regex(
             """paid to\s+(\w+)\s+for\s+account""",
             RegexOption.IGNORE_CASE
@@ -191,10 +152,7 @@ class MPesaTanzaniaParser : BankParser() {
     }
 
     override fun extractBalance(message: String): BigDecimal? {
-<<<<<<< ours
-=======
         // Pattern: "New M-Pesa balance is TZS 150,000.00"
->>>>>>> theirs
         val balancePattern = Regex(
             """New M-Pesa balance is TZS\s*([0-9,]+(?:\.[0-9]{2})?)""",
             RegexOption.IGNORE_CASE
@@ -212,11 +170,8 @@ class MPesaTanzaniaParser : BankParser() {
     }
 
     override fun extractReference(message: String): String? {
-<<<<<<< ours
-=======
         // Pattern 1: Transaction ID at start (10-char alphanumeric, typically starts with SGR)
         // e.g., "SGR1234567 Confirmed"
->>>>>>> theirs
         val txnIdPattern = Regex(
             """^([A-Z0-9]{10})\s+Confirmed""",
             RegexOption.IGNORE_CASE
@@ -225,10 +180,7 @@ class MPesaTanzaniaParser : BankParser() {
             return match.groupValues[1]
         }
 
-<<<<<<< ours
-=======
         // Pattern 2: Alternative pattern without space
->>>>>>> theirs
         val txnIdAltPattern = Regex(
             """^([A-Z0-9]{10})\s+Confirmed\.""",
             RegexOption.IGNORE_CASE
@@ -237,10 +189,7 @@ class MPesaTanzaniaParser : BankParser() {
             return match.groupValues[1]
         }
 
-<<<<<<< ours
-=======
         // Pattern 3: TIPS Reference for inter-operator transfers
->>>>>>> theirs
         val tipsPattern = Regex(
             """TIPS\s+Reference[:\s]+([A-Z0-9]+)""",
             RegexOption.IGNORE_CASE
@@ -255,26 +204,16 @@ class MPesaTanzaniaParser : BankParser() {
     override fun isTransactionMessage(message: String): Boolean {
         val lowerMessage = message.lowercase()
 
-<<<<<<< ours
-=======
         // Must contain "Confirmed" (M-Pesa Tanzania standard)
->>>>>>> theirs
         if (!lowerMessage.contains("confirmed")) {
             return false
         }
 
-<<<<<<< ours
-=======
         // Must contain TZS currency indicator
->>>>>>> theirs
         if (!lowerMessage.contains("tzs")) {
             return false
         }
 
-<<<<<<< ours
-        val transactionKeywords = listOf(
-            "received", "sent to", "paid to", "withdrawn", "new m-pesa balance"
-=======
         // Must contain transaction keywords
         val transactionKeywords = listOf(
             "received",
@@ -282,7 +221,6 @@ class MPesaTanzaniaParser : BankParser() {
             "paid to",
             "withdrawn",
             "new m-pesa balance"
->>>>>>> theirs
         )
 
         return transactionKeywords.any { lowerMessage.contains(it) }
@@ -290,17 +228,10 @@ class MPesaTanzaniaParser : BankParser() {
 
     override fun cleanMerchantName(merchant: String): String {
         return merchant
-<<<<<<< ours
-            .replace(Regex("""\s*\(.*?\)\s*$"""), "")
-            .replace(Regex("""\s+on\s+\d{4}.*"""), "")
-            .replace(Regex("""\s+at\s+\d{2}:\d{2}.*"""), "")
-            .replace(Regex("""\s*-\s*$"""), "")
-=======
             .replace(Regex("""\s*\(.*?\)\s*$"""), "")  // Remove trailing parentheses
             .replace(Regex("""\s+on\s+\d{4}.*"""), "")  // Remove date suffix
             .replace(Regex("""\s+at\s+\d{2}:\d{2}.*"""), "")  // Remove time suffix
             .replace(Regex("""\s*-\s*$"""), "")  // Remove trailing dash
->>>>>>> theirs
             .trim()
     }
 }

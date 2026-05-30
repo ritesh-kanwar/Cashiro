@@ -8,6 +8,9 @@ version = "0.1.0-SNAPSHOT"
 
 // Use root project's Java toolchain; avoid forcing downloads here
 
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
+}
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -41,7 +44,7 @@ tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
 }
 
 // Keep compatibility with existing CI/scripts that invoke :parser-core:test
-tasks.register("test") {
+tasks.named("test") {
     group = "verification"
     dependsOn("jvmTest")
 }

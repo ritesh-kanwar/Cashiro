@@ -2,7 +2,6 @@ package com.ritesh.cashiro.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-<<<<<<< ours
 import androidx.room.PrimaryKey
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -12,21 +11,6 @@ import java.time.LocalDateTime
  * Users can create multiple budgets, each tied to a specific month and year.
  */
 @Entity(tableName = "budgets")
-=======
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-
-@Entity(
-    tableName = "budgets",
-    indices = [
-        Index(value = ["name"]),
-        Index(value = ["is_active"])
-    ]
-)
->>>>>>> theirs
 data class BudgetEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -35,7 +19,6 @@ data class BudgetEntity(
     @ColumnInfo(name = "name")
     val name: String,
 
-<<<<<<< ours
     @ColumnInfo(name = "amount")
     val amount: BigDecimal,
 
@@ -44,19 +27,6 @@ data class BudgetEntity(
 
     @ColumnInfo(name = "month")
     val month: Int,
-=======
-    @ColumnInfo(name = "limit_amount")
-    val limitAmount: BigDecimal,
-
-    @ColumnInfo(name = "period_type")
-    val periodType: BudgetPeriodType,
-
-    @ColumnInfo(name = "start_date")
-    val startDate: LocalDate,
-
-    @ColumnInfo(name = "end_date")
-    val endDate: LocalDate,
->>>>>>> theirs
 
     @ColumnInfo(name = "currency", defaultValue = "INR")
     val currency: String = "INR",
@@ -64,20 +34,10 @@ data class BudgetEntity(
     @ColumnInfo(name = "is_active", defaultValue = "1")
     val isActive: Boolean = true,
 
-<<<<<<< ours
-=======
-    @ColumnInfo(name = "include_all_categories", defaultValue = "0")
-    val includeAllCategories: Boolean = false,
-
-    @ColumnInfo(name = "color", defaultValue = "#1565C0")
-    val color: String = "#1565C0",
-
->>>>>>> theirs
     @ColumnInfo(name = "created_at")
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @ColumnInfo(name = "updated_at")
-<<<<<<< ours
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 
     // --- New Fields ---
@@ -122,13 +82,4 @@ enum class BudgetTrackType {
 enum class BudgetType {
     EXPENSE,
     SAVINGS
-=======
-    val updatedAt: LocalDateTime = LocalDateTime.now()
-)
-
-enum class BudgetPeriodType {
-    WEEKLY,
-    MONTHLY,
-    CUSTOM
->>>>>>> theirs
 }

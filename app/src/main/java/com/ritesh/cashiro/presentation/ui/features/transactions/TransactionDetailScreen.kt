@@ -971,7 +971,7 @@ private fun EditableTransactionHeader(
                             onClick = { viewModel.updateTransactionType(type) },
                             label = {
                                 Text(
-                                    text = type.name.lowercase().replaceFirstChar { it.uppercase() },
+                                    text = type.name.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it },
                                     maxLines = 1
                                 )
                             },
@@ -2166,7 +2166,7 @@ private fun TransactionReceipt(
 
                     ReceiptInfoRow(
                         label = stringResource(R.string.type),
-                        value = transaction.transactionType.name.lowercase().replaceFirstChar { it.uppercase() }
+                        value = transaction.transactionType.name.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it }
                     )
 
                     val subcategoryValue = transaction.subcategory

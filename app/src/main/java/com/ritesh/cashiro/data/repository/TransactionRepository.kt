@@ -21,6 +21,12 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     suspend fun getTransactionById(id: Long): TransactionEntity? =
             transactionDao.getTransactionById(id)
 
+    suspend fun getTransactionByAmountAndDate(
+        amount: java.math.BigDecimal,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): List<TransactionEntity> = transactionDao.getTransactionsByAmountAndDate(amount, startDate, endDate)
+
     suspend fun getTransactionsUpdatedBetween(
             updatedAfter: LocalDateTime,
             updatedBefore: LocalDateTime,

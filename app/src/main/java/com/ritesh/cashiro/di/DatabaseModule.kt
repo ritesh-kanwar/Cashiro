@@ -9,6 +9,7 @@ import com.ritesh.cashiro.data.database.MIGRATION_48_49
 import com.ritesh.cashiro.data.database.MIGRATION_49_50
 import com.ritesh.cashiro.data.database.MIGRATION_50_51
 import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
+import com.ritesh.cashiro.data.database.dao.BankNotificationDao
 import com.ritesh.cashiro.data.database.dao.BudgetDao
 import com.ritesh.cashiro.data.database.dao.CardDao
 import com.ritesh.cashiro.data.database.dao.CategoryDao
@@ -242,6 +243,12 @@ object DatabaseModule {
     @Singleton
     fun provideWebhookCursorDao(database: CashiroDatabase): WebhookCursorDao {
         return database.webhookCursorDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBankNotificationDao(database: CashiroDatabase): BankNotificationDao {
+        return database.bankNotificationDao()
     }
 }
 /** Database callback to seed initial data when database is first created */

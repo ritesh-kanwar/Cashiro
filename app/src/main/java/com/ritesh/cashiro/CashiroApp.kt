@@ -51,7 +51,7 @@ fun CashiroApp(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 // App came to foreground - check if it should be locked
-                actualAppLockViewModel.refreshLockState()
+                appLockViewModel.refreshLockState()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)

@@ -1,23 +1,10 @@
 package com.ritesh.cashiro.data.service
 
 import android.content.Context
-import android.util.Log
-import com.google.ai.edge.litertlm.Conversation
-import com.google.ai.edge.litertlm.ConversationConfig
-import com.google.ai.edge.litertlm.Contents
-import com.google.ai.edge.litertlm.Engine
-import com.google.ai.edge.litertlm.EngineConfig
-import com.google.ai.edge.litertlm.Message
-import com.google.ai.edge.litertlm.SamplerConfig
-import com.google.ai.edge.litertlm.Backend
 import com.ritesh.cashiro.domain.service.LlmService
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,63 +13,32 @@ class LlmServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : LlmService {
     
-    private var llmInference: LlmInference? = null
-    
-    override suspend fun initialize(modelPath: String): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            val options = LlmInference.LlmInferenceOptions.builder()
-                .setModelPath(modelPath)
-                .setMaxTokens(1280) // Match the model's KV cache size
-                .build()
-            
-            llmInference = LlmInference.createFromOptions(context, options)
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    override suspend fun initialize(modelPath: String): Result<Unit> {
+        return Result.success(Unit)
     }
     
-    override suspend fun generateResponse(prompt: String): Result<String> = withContext(Dispatchers.IO) {
-        try {
-            val inference = llmInference ?: return@withContext Result.failure(
-                IllegalStateException("LLM not initialized")
-            )
-            
-            val response = inference.generateResponse(prompt)
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    override suspend fun createConversation(
+        systemPrompt: String,
+        history: List<Pair<String, Boolean>>
+    ): Result<Unit> {
+        return Result.success(Unit)
     }
     
-    override fun generateResponseStream(prompt: String): Flow<String> = callbackFlow {
-        val inference = llmInference ?: throw IllegalStateException("LLM not initialized")
-        
-        Log.d("LlmServiceImpl", "Starting generateResponseAsync for prompt: ${prompt.take(50)}...")
-        
-        inference.generateResponseAsync(prompt) { partialResult, done ->
-            Log.d("LlmServiceImpl", "Received partial result: ${partialResult.take(20)}..., done=$done")
-            val sent = trySend(partialResult).isSuccess
-            Log.d("LlmServiceImpl", "Sent partial result: $sent")
-            
-            if (done) {
-                Log.d("LlmServiceImpl", "Response generation complete, closing channel")
-                close()
-            }
-            done
-        }
-        
-        awaitClose { 
-            Log.d("LlmServiceImpl", "Flow closed")
-        }
+    override fun sendMessage(message: String): Flow<String> {
+        return emptyFlow()
+    }
+    
+    override fun hasActiveConversation(): Boolean {
+        return false
+    }
+    
+    override suspend fun closeConversation() {
     }
     
     override suspend fun reset() {
-        withContext(Dispatchers.IO) {
-            llmInference?.close()
-            llmInference = null
-        }
     }
     
-    override fun isInitialized(): Boolean = llmInference != null
-}
+    override fun isInitialized(): Boolean {
+        return false
+    }
+}    

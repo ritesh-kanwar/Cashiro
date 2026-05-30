@@ -126,7 +126,7 @@ fun CustomBillingCycleCard(
                                 modifier = Modifier.padding(horizontal = 12.dp)
                             ) {
                                 Text(
-                                    unit.replaceFirstChar { it.uppercase() },
+                                    unit.let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it },
                                     style = MaterialTheme.typography.titleSmall.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -143,7 +143,7 @@ fun CustomBillingCycleCard(
                                 val isFirstItem = index == 0
                                 DropdownMenuItem(
                                     text = {
-                                        Text(u.replaceFirstChar { it.uppercase() })
+                                        Text(u.let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it })
                                     },
                                     onClick = {
                                         onUnitSelected(u)

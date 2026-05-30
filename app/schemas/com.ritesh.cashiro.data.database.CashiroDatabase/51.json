@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 51,
-    "identityHash": "4a4a5e2106911ff8adc261c19bba5408",
+    "identityHash": "4359ed589f3d1803e6f6064a1017ffe5",
     "entities": [
       {
         "tableName": "transactions",
@@ -999,7 +999,7 @@
       },
       {
         "tableName": "exchange_rates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `from_currency` TEXT NOT NULL, `to_currency` TEXT NOT NULL, `rate` TEXT NOT NULL, `provider` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `updated_at_unix` INTEGER NOT NULL DEFAULT 0, `expires_at` TEXT NOT NULL, `expires_at_unix` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `from_currency` TEXT NOT NULL, `to_currency` TEXT NOT NULL, `rate` TEXT NOT NULL, `provider` TEXT NOT NULL, `updated_at` TEXT NOT NULL, `updated_at_unix` INTEGER NOT NULL DEFAULT 0, `expires_at` TEXT NOT NULL, `expires_at_unix` INTEGER NOT NULL DEFAULT 0, `is_custom_rate` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1053,6 +1053,13 @@
           {
             "fieldPath": "expiresAtUnix",
             "columnName": "expires_at_unix",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "isCustomRate",
+            "columnName": "is_custom_rate",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
@@ -1686,7 +1693,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4a4a5e2106911ff8adc261c19bba5408')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4359ed589f3d1803e6f6064a1017ffe5')"
     ]
   }
 }

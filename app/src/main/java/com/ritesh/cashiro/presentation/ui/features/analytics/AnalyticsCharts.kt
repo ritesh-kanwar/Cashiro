@@ -230,7 +230,7 @@ fun SpendingBarChart(
         }
     }
 
-    val maxValue = remember(data) { (data.maxOfOrNull { it.balance.toDouble() } ?: 0.0) * 1.2 }
+    val maxValue = remember(data) { (data.map { it.balance.toDouble() }.maxOrNull() ?: 0.0) * 1.2 }
 
     ColumnChart(
         modifier = Modifier
@@ -318,7 +318,7 @@ fun CategoryPieChart(
 ) {
     if (categories.isEmpty()) return
 
-    val total = categories.sumOf { it.amount }.toDouble()
+    val total = categories.fold(java.math.BigDecimal.ZERO) { acc, category -> acc + category.amount }.toDouble()
     if (total == 0.0) return
 
     val pieData = remember(categories) {
@@ -481,7 +481,7 @@ fun SpendingHeatmap(
 ) {
     if (data.isEmpty()) return
 
-    val maxAmount = remember(data) { data.maxOfOrNull { it.balance.toDouble() } ?: 1.0 }
+    val maxAmount = remember(data) { data.map { it.balance.toDouble() }.maxOrNull() ?: 1.0 }
     val groupedData = remember(data) {
         data.associate { it.timestamp.toLocalDate() to it.balance.toDouble() }
     }

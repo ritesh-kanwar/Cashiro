@@ -106,7 +106,7 @@ fun AddAccountScreen(
         ) {
             OutlinedTextField(
                 value = formState.accountType.name.lowercase()
-                    .replaceFirstChar { it.uppercase() },
+                    .let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it },
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(stringResource(R.string.account_type_label)) },
@@ -134,7 +134,7 @@ fun AddAccountScreen(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                type.name.lowercase().replaceFirstChar { it.uppercase() }
+                                type.name.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it }
                             )
                         },
                         onClick = {

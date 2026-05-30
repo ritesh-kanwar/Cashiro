@@ -137,7 +137,7 @@ fun TransactionsFilterBottomSheet(
                                 label = {
                                     Text(
                                         type.name.lowercase()
-                                            .replaceFirstChar { it.titlecase(Locale.getDefault()) })
+                                            .let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it })
                                 },
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer,

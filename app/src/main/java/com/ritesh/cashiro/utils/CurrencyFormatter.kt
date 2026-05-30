@@ -14,36 +14,7 @@ import java.util.Locale
  */
 object CurrencyFormatter {
 
-<<<<<<< ours
     private val INDIAN_LOCALE = Locale("en", "IN")
-=======
-    private val INDIAN_LOCALE = Locale.Builder().setLanguage("en").setRegion("IN").build()
-
-    /**
-     * Currency symbol mapping for display
-     */
-    private val CURRENCY_SYMBOLS = mapOf(
-        "INR" to "₹",
-        "PKR" to "Rs",
-        "USD" to "$",
-        "EUR" to "€",
-        "GBP" to "£",
-        "AED" to "AED",
-        "SGD" to "S$",
-        "CAD" to "C$",
-        "MXN" to "MX$",
-        "AUD" to "A$",
-        "JPY" to "¥",
-        "CNY" to "¥",
-        "IRR" to "﷼",
-        "NPR" to "₨",
-        "ETB" to "ብር",
-        "THB" to "฿",
-        "MYR" to "RM",
-        "KWD" to "KD",
-        "KRW" to "₩"
-    )
->>>>>>> theirs
 
     /**
      * Locale mapping for different currencies

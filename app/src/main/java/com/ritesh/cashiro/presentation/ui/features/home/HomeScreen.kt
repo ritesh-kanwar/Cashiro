@@ -934,9 +934,9 @@ private fun BreakdownDialog(
     onDismiss: () -> Unit
 ) {
     val now = LocalDate.now()
-    val currentPeriod = "${now.month.name.lowercase().replaceFirstChar { it.uppercase() }} 1-${now.dayOfMonth}"
+    val currentPeriod = "${now.month.name.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it }} 1-${now.dayOfMonth}"
     val lastMonth = now.minusMonths(1)
-    val lastPeriod = "${lastMonth.month.name.lowercase().replaceFirstChar { it.uppercase() }} 1-${now.dayOfMonth}"
+    val lastPeriod = "${lastMonth.month.name.lowercase().let { if (it.isNotEmpty()) it.take(1).uppercase() + it.drop(1) else it }} 1-${now.dayOfMonth}"
 
     Dialog(onDismissRequest = onDismiss) {
         Card(

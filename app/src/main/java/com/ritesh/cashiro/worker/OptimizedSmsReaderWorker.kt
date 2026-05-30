@@ -1566,7 +1566,7 @@ private fun extractRcsSender(trId: String): String? {
         agentPattern.find(decodedString)?.let { match ->
             // Convert agent ID to readable name (e.g., "ask_apollo" -> "Ask Apollo")
             return match.groupValues[1].split("_").joinToString(" ") {
-                it.replaceFirstChar { char -> char.uppercase() }
+                it.let { str -> if (str.isNotEmpty()) str.take(1).uppercase() + str.drop(1) else str }
             }
         }
 

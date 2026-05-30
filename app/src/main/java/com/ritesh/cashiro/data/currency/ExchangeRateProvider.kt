@@ -159,7 +159,6 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
     override suspend fun fetchAllCurrencies(): Map<String, String>? {
         val endpoint = "currencies.json"
         return try {
-<<<<<<< ours
             withContext(Dispatchers.IO) {
                 var responseBody: String? = null
                 
@@ -192,18 +191,6 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
         } catch (e: Exception) {
             println("Failed to fetch currencies mapping: ${e.message}")
             null
-=======
-            val rates = fetchAllExchangeRates("USD")
-            rates?.keys?.toList() ?: listOf(
-                "AED", "USD", "EUR", "GBP", "INR", "THB", "MYR", "SGD", "KWD", "KRW",
-                "CAD", "MXN", "AUD", "JPY", "CNY", "NPR", "ETB"
-            )
-        } catch (e: Exception) {
-            listOf(
-                "AED", "USD", "EUR", "GBP", "INR", "THB", "MYR", "SGD", "KWD", "KRW",
-                "CAD", "MXN", "AUD", "JPY", "CNY", "NPR", "ETB"
-            )
->>>>>>> theirs
         }
     }
 

@@ -907,7 +907,7 @@ fun ManageAccountsScreen(
             onOptionSelected = { option ->
                 when (option) {
                     BalanceMergeOption.SUM -> {
-                        val sumBalance = selectedMergeAccounts.sumOf { it.balance } + accountForMerge!!.balance
+                        val sumBalance = selectedMergeAccounts.fold(java.math.BigDecimal.ZERO) { acc, account -> acc + account.balance } + accountForMerge!!.balance
                         mergeNewBalance = sumBalance
                         showMergeBalanceOption = false
                         showMergeConfirmation = true

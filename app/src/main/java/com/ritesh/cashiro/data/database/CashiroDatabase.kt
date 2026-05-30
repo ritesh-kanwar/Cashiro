@@ -14,7 +14,6 @@ import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
 import com.ritesh.cashiro.data.database.dao.BankNotificationDao
 import com.ritesh.cashiro.data.database.dao.BudgetDao
 import com.ritesh.cashiro.data.database.dao.CardDao
-import com.cashiroai.shared.data.bootstrap.DefaultCategoryData
 import com.ritesh.cashiro.data.database.dao.CategoryDao
 import com.ritesh.cashiro.data.database.dao.ChatDao
 import com.ritesh.cashiro.data.database.dao.ExchangeRateDao
@@ -23,7 +22,6 @@ import com.ritesh.cashiro.data.database.dao.RuleApplicationDao
 import com.ritesh.cashiro.data.database.dao.RuleDao
 import com.ritesh.cashiro.data.database.dao.SubcategoryDao
 import com.ritesh.cashiro.data.database.dao.SubscriptionDao
-import com.ritesh.cashiro.data.database.dao.BudgetDao
 import com.ritesh.cashiro.data.database.dao.TransactionDao
 import com.ritesh.cashiro.data.database.dao.UnrecognizedSmsDao
 import com.ritesh.cashiro.data.database.dao.WebhookCursorDao
@@ -31,6 +29,7 @@ import com.ritesh.cashiro.data.database.dao.WebhookLogDao
 import com.ritesh.cashiro.data.database.dao.WebhookProfileDao
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.BudgetCategoryLimitEntity
+import com.ritesh.cashiro.data.database.entity.BankNotificationEntity
 import com.ritesh.cashiro.data.database.entity.BudgetEntity
 import com.ritesh.cashiro.data.database.entity.CardEntity
 import com.ritesh.cashiro.data.database.entity.CategoryEntity
@@ -76,9 +75,10 @@ import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
             BudgetCategoryLimitEntity::class,
             WebhookProfileEntity::class,
             WebhookLogEntity::class,
-            WebhookCursorEntity::class
+            WebhookCursorEntity::class,
+            BankNotificationEntity::class
         ],
-    version = 51,
+    version = 52,
     exportSchema = true,
     autoMigrations =
         [
@@ -102,7 +102,8 @@ import com.ritesh.cashiro.data.database.entity.WebhookProfileEntity
             AutoMigration(from = 44, to = 45, spec = Migration44To45::class),
             AutoMigration(from = 45, to = 46, spec = Migration45To46::class),
             AutoMigration(from = 46, to = 47, spec = Migration46To47::class),
-            AutoMigration(from = 47, to = 48)
+            AutoMigration(from = 47, to = 48),
+            AutoMigration(from = 51, to = 52)
         ]
 )
 @TypeConverters(Converters::class)
@@ -120,6 +121,7 @@ abstract class CashiroDatabase : RoomDatabase() {
     abstract fun exchangeRateDao(): ExchangeRateDao
     abstract fun subcategoryDao(): SubcategoryDao
     abstract fun budgetDao(): BudgetDao
+    abstract fun bankNotificationDao(): BankNotificationDao
     abstract fun webhookProfileDao(): WebhookProfileDao
     abstract fun webhookLogDao(): WebhookLogDao
     abstract fun webhookCursorDao(): WebhookCursorDao
