@@ -41,4 +41,8 @@ class MerchantMappingRepository @Inject constructor(
     suspend fun deleteAllMappings() {
         merchantMappingDao.deleteAllMappings()
     }
+
+    suspend fun getAllMappingsAsMap(): Map<String, String> {
+        return merchantMappingDao.getAllMappingsList().associate { it.merchantName to it.category }
+    }
 }

@@ -4,6 +4,7 @@ import androidx.room.*
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
 import java.time.LocalDateTime
+import java.math.BigDecimal
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -57,6 +58,35 @@ interface TransactionDao {
             currency: String,
             transactionType: TransactionType?
     ): Flow<List<TransactionEntity>>
+
+    @Query("""
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+        AND reference = :reference
+        AND amount = :amount
+        AND transaction_type = :transactionType
+        AND currency = :currency
+        AND date_time BETWEEN :startDate AND :endDate
+        AND (:accountNumber IS NULL OR account_number = :accountNumber OR account_number IS NULL)
+        ORDER BY date_time ASC
+    """)
+    suspend fun findPotentialDuplicatesByReference(
+        reference: String,
+        amount: BigDecimal,
+        transactionType: TransactionType,
+        currency: String,
+        accountNumber: String?,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): List<TransactionEntity>
+
+    @Query("""
+        SELECT * FROM transactions
+        WHERE is_deleted = 0
+        AND reference GLOB '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+        ORDER BY reference ASC, date_time ASC
+    """)
+    suspend fun findPotentialDuplicatesByReference(): List<TransactionEntity>
 
     @Query(
             """
@@ -230,7 +260,7 @@ interface TransactionDao {
     )
     fun getTransactionsByAccount(
             bankName: String,
-            accountLast4: String
+            accountLast4: String?
     ): Flow<List<TransactionEntity>>
 
     @Query(

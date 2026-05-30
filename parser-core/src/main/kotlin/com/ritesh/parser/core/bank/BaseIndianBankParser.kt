@@ -100,7 +100,7 @@ abstract class BaseIndianBankParser : BankParser() {
         // 3. Extract date (for future debits)
         // Patterns: "on 29-May-25", "set for 29-May-25"
         // Matches DD-MMM-YY, dd/MM/yyyy formats common in Indian banks
-        val datePattern = Regex("""(?:on|for)\s+([0-9]{1,2}-[A-Za-z]{3}-[0-9]{2,4}|[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4})""", RegexOption.IGNORE_CASE)
+        val datePattern = Regex("""(?:on|for)\s+(${CompiledPatterns.Date.DD_MMM_YY.pattern}|${CompiledPatterns.Date.DD_MM_YYYY.pattern})""", RegexOption.IGNORE_CASE)
         val dateStr = datePattern.find(message)?.groupValues?.get(1)?.let { rawDate ->
             // Normalize slashes to dashes if needed or keep as is, consumer will parse
             rawDate

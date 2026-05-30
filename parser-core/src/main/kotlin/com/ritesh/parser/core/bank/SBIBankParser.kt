@@ -31,9 +31,7 @@ class SBIBankParser : BaseIndianBankParser() {
                 normalizedSender.matches(Regex("^[A-Z]{2}-SBIBK-[TPG]$")) ||
                 // Legacy patterns without suffix
                 normalizedSender.matches(Regex("^[A-Z]{2}-SBIBK$")) ||
-                normalizedSender.matches(Regex("^[A-Z]{2}-SBI$")) ||
-                // More CBSSBI patterns
-                normalizedSender.contains("CBSSBI")
+                normalizedSender.matches(Regex("^[A-Z]{2}-SBI$"))
     }
 
     // Check if this is a credit card message
@@ -153,75 +151,9 @@ class SBIBankParser : BaseIndianBankParser() {
     }
 
     override fun extractAmount(message: String): BigDecimal? {
-        // Pattern 10: has credit for [MERCHANT] of [CURRENCY] [AMOUNT]
-        val creditForPattern = Regex(
-            """has\s+credit\s+for\s+([^.\n]+?)\s+of\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
-            RegexOption.IGNORE_CASE
-        )
-        creditForPattern.find(message)?.let { match ->
-            val amount = match.groupValues[2].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
-        // Pattern 11: has a credit by [MERCHANT] of [CURRENCY] [AMOUNT]
-        val creditByPattern = Regex(
-            """has\s+a\s+credit\s+by\s+([^.\n]+?)\s+of\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
-            RegexOption.IGNORE_CASE
-        )
-        creditByPattern.find(message)?.let { match ->
-            val amount = match.groupValues[2].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
-        // Pattern 12: Credited [CURRENCY] [AMOUNT]
-        val creditedInrPattern = Regex(
-            """Credited\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
-            RegexOption.IGNORE_CASE
-        )
-        creditedInrPattern.find(message)?.let { match ->
-            val amount = match.groupValues[1].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
-        // Pattern 6a: debit by transfer of Rs 500
-        val debitTransferPattern =
-            Regex("""has\s+a\s+debit\s+by\s+transfer\s+of\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
-        debitTransferPattern.find(message)?.let { match ->
-            val amount = match.groupValues[1].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
-        // Pattern 6b: debit of Rs 500
-        val debitOfPattern =
-            Regex("""debit\s+(?:of|for)\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
-        debitOfPattern.find(message)?.let { match ->
-            val amount = match.groupValues[1].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
         // Pattern for transaction number format: "transaction number 1234 for Rs.383.00"
         val transactionNumberPattern = Regex(
-            """transaction\s+number\s+\d+\s+for\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            """transaction\s+number\s+\d+\s+for\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
         )
         transactionNumberPattern.find(message)?.let { match ->
@@ -235,7 +167,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern for credit card payment: "payment of Rs.1,644.55"
         val paymentPattern =
-            Regex("""payment\s+of\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""payment\s+of\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         paymentPattern.find(message)?.let { match ->
             val amount = match.groupValues[1].replace(",", "")
             return try {
@@ -247,7 +179,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern for credit card spending: "Rs.259.00 spent"
         val spentPattern =
-            Regex("""(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)\s+spent""", RegexOption.IGNORE_CASE)
+            Regex("""Rs\.?\s*([0-9,]+(?:\.\d{2})?)\s+spent""", RegexOption.IGNORE_CASE)
         spentPattern.find(message)?.let { match ->
             val amount = match.groupValues[1].replace(",", "")
             return try {
@@ -259,7 +191,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 0: A/C debited by 20.0 (UPI format)
         val upiDebitPattern =
-            Regex("""debited\s+by\s+([0-9,]+(?:\.\d{1,2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""debited\s+by\s+(\d+(?:,\d{3})*(?:\.\d{1,2})?)""", RegexOption.IGNORE_CASE)
         upiDebitPattern.find(message)?.let { match ->
             val amount = match.groupValues[1].replace(",", "")
             return try {
@@ -271,7 +203,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 0a: A/c credited by Rs.500 (UPI format)
         val upiCreditPattern = Regex(
-            """credited\s+by\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{1,2})?)""",
+            """credited\s+by\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{1,2})?)""",
             RegexOption.IGNORE_CASE
         )
         upiCreditPattern.find(message)?.let { match ->
@@ -285,7 +217,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 1: Rs 500 debited
         val debitPattern1 = Regex(
-            """(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)\s+(?:has\s+been\s+)?debited""",
+            """Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s+(?:has\s+been\s+)?debited""",
             RegexOption.IGNORE_CASE
         )
         debitPattern1.find(message)?.let { match ->
@@ -297,9 +229,23 @@ class SBIBankParser : BaseIndianBankParser() {
             }
         }
 
+        // Pattern 2: INR 500 debited
+        val debitPattern2 = Regex(
+            """INR\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s+(?:has\s+been\s+)?debited""",
+            RegexOption.IGNORE_CASE
+        )
+        debitPattern2.find(message)?.let { match ->
+            val amount = match.groupValues[1].replace(",", "")
+            return try {
+                BigDecimal(amount)
+            } catch (e: NumberFormatException) {
+                null
+            }
+        }
+
         // Pattern 3: Rs 500 credited
         val creditPattern1 = Regex(
-            """(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)\s+(?:has\s+been\s+)?credited""",
+            """Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s+(?:has\s+been\s+)?credited""",
             RegexOption.IGNORE_CASE
         )
         creditPattern1.find(message)?.let { match ->
@@ -311,9 +257,23 @@ class SBIBankParser : BaseIndianBankParser() {
             }
         }
 
+        // Pattern 4: INR 500 credited
+        val creditPattern2 = Regex(
+            """INR\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s+(?:has\s+been\s+)?credited""",
+            RegexOption.IGNORE_CASE
+        )
+        creditPattern2.find(message)?.let { match ->
+            val amount = match.groupValues[1].replace(",", "")
+            return try {
+                BigDecimal(amount)
+            } catch (e: NumberFormatException) {
+                null
+            }
+        }
+
         // Pattern 5: withdrawn Rs 500
         val withdrawPattern =
-            Regex("""withdrawn\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""withdrawn\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         withdrawPattern.find(message)?.let { match ->
             val amount = match.groupValues[1].replace(",", "")
             return try {
@@ -325,7 +285,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 6: transferred Rs 500
         val transferPattern =
-            Regex("""(?:transferred|transfer)\s+(?:of\s+)?(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""transferred\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         transferPattern.find(message)?.let { match ->
             val amount = match.groupValues[1].replace(",", "")
             return try {
@@ -337,7 +297,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 7: UPI patterns - "paid to MERCHANT@upi Rs 500"
         val upiPattern = Regex(
-            """paid\s+to\s+[\w.-]+@[\w]+\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            """paid\s+to\s+[\w.-]+@[\w]+\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
         )
         upiPattern.find(message)?.let { match ->
@@ -351,7 +311,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 8: ATM withdrawal - "ATM withdrawal of Rs 500"
         val atmPattern = Regex(
-            """ATM\s+withdrawal\s+of\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            """ATM\s+withdrawal\s+of\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
         )
         atmPattern.find(message)?.let { match ->
@@ -365,7 +325,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 9: YONO Cash withdrawal - "Yono Cash Rs 3000 w/d@SBI ATM"
         val yonoCashPattern =
-            Regex("""Yono\s+Cash\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""Yono\s+Cash\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         yonoCashPattern.find(message)?.let { match ->
             val amount = match.groupValues[1].replace(",", "")
             return try {
@@ -384,23 +344,11 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // SBI-specific patterns
         return when {
-            // Priority 1: Check for explicit debit indicators first, especially if followed by "credited" (transfers)
-            lowerMessage.contains("debited for") -> TransactionType.EXPENSE
-            lowerMessage.contains("is debited") -> TransactionType.EXPENSE
-            
             lowerMessage.contains("withdrawn") -> TransactionType.EXPENSE
             lowerMessage.contains("transferred") -> TransactionType.EXPENSE
-            lowerMessage.contains("transfer") -> TransactionType.EXPENSE
-            lowerMessage.contains("debit") -> TransactionType.EXPENSE
             lowerMessage.contains("paid to") -> TransactionType.EXPENSE
             lowerMessage.contains("atm withdrawal") -> TransactionType.EXPENSE
             lowerMessage.contains("by sbi debit card") -> TransactionType.EXPENSE
-
-            // Credit patterns
-            lowerMessage.contains("credited") -> TransactionType.INCOME
-            lowerMessage.contains("has credit for") -> TransactionType.INCOME
-            lowerMessage.contains("has a credit by") -> TransactionType.INCOME
-            lowerMessage.contains("received transfer") -> TransactionType.INCOME
 
             // Fall back to base class for common patterns
             else -> super.extractTransactionType(message)
@@ -478,65 +426,23 @@ class SBIBankParser : BaseIndianBankParser() {
             }
         }
 
-        // Pattern 6: Reverse ATM withdrawal / Suffix merchant
-        val reverseAtmPattern = Regex("""on\s+\d{2}/\d{2}/\d{2,4}\s*-\s*([^.\n]+)""", RegexOption.IGNORE_CASE)
-        reverseAtmPattern.find(message)?.let { match ->
-            val merchant = cleanMerchantName(match.groupValues[1].trim())
-            if (isValidMerchantName(merchant)) {
-                return merchant
-            }
-        }
-
-        // Pattern 4: credit for [MERCHANT]
-        val creditForMerchantPattern = Regex("""has\s+credit\s+for\s+([^.\n]+?)\s+of""", RegexOption.IGNORE_CASE)
-        creditForMerchantPattern.find(message)?.let { match ->
-            val merchant = cleanMerchantName(match.groupValues[1].trim())
-            if (isValidMerchantName(merchant)) {
-                return merchant
-            }
-        }
-
-        // Pattern 5: credit by [MERCHANT]
-        val creditByMerchantPattern = Regex("""has\s+a\s+credit\s+by\s+([^.\n]+?)\s+of""", RegexOption.IGNORE_CASE)
-        creditByMerchantPattern.find(message)?.let { match ->
-            val merchant = cleanMerchantName(match.groupValues[1].trim())
-            if (isValidMerchantName(merchant)) {
-                return merchant
-            }
-        }
-
         // Fall back to base class patterns
         return super.extractMerchant(message, sender)
     }
 
     override fun extractAccountLast4(message: String): String? {
-        // Pattern for debit card: "by SBI Debit Card <last4>" - can be digits or redacted
+        super.extractAccountLast4(message)?.let { return it }
+        // Pattern for debit card: "by SBI Debit Card <last4>"
         val debitCardPattern =
             Regex("""by\s+SBI\s+Debit\s+Card\s+([\w\-]+)""", RegexOption.IGNORE_CASE)
         debitCardPattern.find(message)?.let { match ->
-            val cardInfo = match.groupValues[1]
-            // If it's all digits and 4 characters, return as is
-            // Otherwise try to extract last 4 digits if present
-            return if (cardInfo.matches(Regex("""\d{4}"""))) {
-                cardInfo
-            } else {
-                // Extract last 4 digits if available
-                val digits = cardInfo.filter { it.isDigit() }
-                if (digits.length >= 4) digits.takeLast(4) else cardInfo
-            }
+            return extractLast4Digits(match.groupValues[1])
         }
 
-        // Pattern 1: A/c XNNNN or A/c XXNNNN - extract everything after A/c
-        val pattern1 = Regex("""A/c\s+(?:no\.?\s+)?([X\*]*\d+)""", RegexOption.IGNORE_CASE)
+        // Pattern 1: A/c XNNNN or A/c XXNNNN
+        val pattern1 = Regex("""A/c\s+([X*\d]+)""", RegexOption.IGNORE_CASE)
         pattern1.find(message)?.let { match ->
-            val accountStr = match.groupValues[1]
-            // Extract just the digits and take last 4
-            val digitsOnly = accountStr.filter { it.isDigit() }
-            return if (digitsOnly.length >= 4) {
-                digitsOnly.takeLast(4)
-            } else {
-                digitsOnly
-            }
+            return extractLast4Digits(match.groupValues[1])
         }
 
         // Pattern 2: from A/c ending 1234
@@ -545,50 +451,19 @@ class SBIBankParser : BaseIndianBankParser() {
             return match.groupValues[1]
         }
 
-        // Pattern 2a: AC XXXXX1234
-        val pattern2a = Regex("""AC\s+[X\*]*(\d+)""", RegexOption.IGNORE_CASE)
-        pattern2a.find(message)?.let { match ->
-            val accountStr = match.groupValues[1]
-            return if (accountStr.length >= 4) {
-                accountStr.takeLast(4)
-            } else {
-                accountStr
-            }
-        }
-
         // Pattern 3: a/c no. XX1234
-        val pattern3 = Regex("""a/c\s+no\.?\s+([X\*]+\d{4})""", RegexOption.IGNORE_CASE)
+        val pattern3 = Regex("""a/c\s+no\.?\s+([X*\d]+)""", RegexOption.IGNORE_CASE)
         pattern3.find(message)?.let { match ->
-            val accountStr = match.groupValues[1]
-            return accountStr.takeLast(4)
+            return extractLast4Digits(match.groupValues[1])
         }
 
-        // Pattern 4: a/c XXXXXXX1234 (greedy X)
-        val pattern4 = Regex("""a/c\s+[X\*]*(\d{4})""", RegexOption.IGNORE_CASE)
-        pattern4.find(message)?.let { match ->
-            return match.groupValues[1]
-        }
-
-        // Fall back to base class
-        return super.extractAccountLast4(message)
+        return null
     }
 
     override fun extractBalance(message: String): BigDecimal? {
-        // Pattern 4: Avl Bal INR 1000.00
-        val pattern4 =
-            Regex("""Avl\s+Bal\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
-        pattern4.find(message)?.let { match ->
-            val balanceStr = match.groupValues[1].replace(",", "")
-            return try {
-                BigDecimal(balanceStr)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
         // Pattern for updated balance: "Your updated available balance is Rs.999999999"
         val updatedBalancePattern = Regex(
-            """Your\s+updated\s+available\s+balance\s+is\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            """Your\s+updated\s+available\s+balance\s+is\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
         )
         updatedBalancePattern.find(message)?.let { match ->
@@ -602,7 +477,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 1: Avl Bal Rs 1000.00
         val pattern1 =
-            Regex("""Avl\s+Bal\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""Avl\s+Bal\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         pattern1.find(message)?.let { match ->
             val balanceStr = match.groupValues[1].replace(",", "")
             return try {
@@ -614,7 +489,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 2: Available Balance: Rs 1000
         val pattern2 = Regex(
-            """Available\s+Balance:?\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            """Available\s+Balance:?\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
         )
         pattern2.find(message)?.let { match ->
@@ -628,7 +503,7 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // Pattern 3: Bal: Rs 1000
         val pattern3 =
-            Regex("""Bal:?\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
+            Regex("""Bal:?\s+Rs\.?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
         pattern3.find(message)?.let { match ->
             val balanceStr = match.groupValues[1].replace(",", "")
             return try {
@@ -702,12 +577,6 @@ class SBIBankParser : BaseIndianBankParser() {
 
         // SBI Debit Card transactions
         if (lowerMessage.contains("by sbi debit card")) {
-            return true
-        }
-
-        // SBI specific keywords
-        if (lowerMessage.contains("debit") || lowerMessage.contains("transfer") || 
-            lowerMessage.contains("credit") || lowerMessage.contains("credited")) {
             return true
         }
 

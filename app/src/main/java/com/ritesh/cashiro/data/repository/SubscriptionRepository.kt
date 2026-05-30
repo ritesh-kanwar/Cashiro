@@ -8,7 +8,7 @@ import com.ritesh.parser.core.bank.IndianBankParser
 import com.ritesh.parser.core.bank.SBIBankParser
 import com.ritesh.parser.core.bank.FederalBankParser
 import com.ritesh.parser.core.MandateInfo
-import com.ritesh.cashiro.presentation.common.icons.CategoryMapping
+import com.ritesh.cashiro.ui.icons.CategoryMapping
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -29,8 +29,11 @@ class SubscriptionRepository @Inject constructor(
     fun getAllSubscriptions(): Flow<List<SubscriptionEntity>> = 
         subscriptionDao.getAllSubscriptions()
     
-    fun getActiveSubscriptions(): Flow<List<SubscriptionEntity>> = 
+    fun getActiveSubscriptions(): Flow<List<SubscriptionEntity>> =
         subscriptionDao.getActiveSubscriptions()
+
+    fun getEndedSubscriptions(): Flow<List<SubscriptionEntity>> =
+        subscriptionDao.getSubscriptionsByState(SubscriptionState.ENDED)
     
     fun getUpcomingSubscriptions(daysAhead: Int = 7): Flow<List<SubscriptionEntity>> {
         val futureDate = LocalDate.now().plusDays(daysAhead.toLong())
@@ -54,17 +57,30 @@ class SubscriptionRepository @Inject constructor(
         updateSubscriptionState(id, SubscriptionState.HIDDEN)
     }
     
-    suspend fun unhideSubscription(id: Long) = 
+    suspend fun unhideSubscription(id: Long) =
+        updateSubscriptionState(id, SubscriptionState.ACTIVE)
+
+    /**
+     * Marks a subscription as ENDED. Unlike HIDDEN, an ENDED subscription
+     * is treated as terminal: new mandate SMS for the same merchant/amount
+     * will not auto-reactivate it. The user can still manually reactivate
+     * via [reactivateSubscription].
+     */
+    suspend fun markAsEnded(id: Long) {
+        Log.d(TAG, "Marking subscription with ID: $id as ENDED")
+        updateSubscriptionState(id, SubscriptionState.ENDED)
+    }
+
+    /**
+     * Manual escape hatch: revert ENDED → ACTIVE. Same code path as
+     * unhideSubscription but separated for symmetry with markAsEnded so
+     * callers can express intent clearly.
+     */
+    suspend fun reactivateSubscription(id: Long) =
         updateSubscriptionState(id, SubscriptionState.ACTIVE)
     
     suspend fun deleteSubscription(id: Long) = 
         subscriptionDao.deleteSubscriptionById(id)
-
-    suspend fun deleteSampleSubscriptions() =
-        subscriptionDao.deleteSampleSubscriptions()
-
-    suspend fun deleteAllSubscriptions() =
-        subscriptionDao.deleteAllSubscriptions()
     
     /**
      * Creates or updates a subscription from HDFC E-Mandate info
@@ -176,6 +192,21 @@ class SubscriptionRepository @Inject constructor(
                   "StoredDate=${it.nextPaymentDate}" } ?: "NOT FOUND"}")
 
         val subscription = if (existing != null) {
+            // ENDED is terminal — the user explicitly cancelled and we never
+            // auto-reactivate or overwrite. Return the ID untouched so any
+            // downstream linking still resolves but the row stays cancelled.
+            //
+            // Tradeoff: if the user genuinely re-subscribes to the same
+            // service at the same price, the new mandate gets silently
+            // absorbed into the ENDED row instead of resurrecting it. That's
+            // intentional — auto-reactivation would defeat the whole point
+            // of the ENDED state — and recovery is one tap: open the
+            // Cancelled section on the subscriptions screen → Reactivate.
+            if (existing.state == SubscriptionState.ENDED) {
+                Log.d(TAG, "Subscription ${existing.id} is ENDED — leaving untouched.")
+                return existing.id
+            }
+
             // Check if this is a hidden subscription that should be reactivated
             // Only reactivate if the new payment date is LATER than the stored date
             val shouldReactivate = existing.state == SubscriptionState.HIDDEN &&
@@ -227,9 +258,6 @@ class SubscriptionRepository @Inject constructor(
 
         return subscriptionDao.insertSubscription(subscription)
     }
-
-    suspend fun updatePaymentStatus(id: Long, nextPaymentDate: LocalDate, lastPaidDate: LocalDate?) =
-        subscriptionDao.updatePaymentStatus(id, nextPaymentDate, lastPaidDate)
 
     private fun determineCategory(merchantName: String): String {
         // Use unified category mapping

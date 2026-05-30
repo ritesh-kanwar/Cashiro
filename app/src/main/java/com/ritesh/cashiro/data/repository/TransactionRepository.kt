@@ -148,6 +148,11 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     suspend fun getTransactionByHash(transactionHash: String): TransactionEntity? =
             transactionDao.getTransactionByHash(transactionHash)
 
+    suspend fun findGPayDuplicateIdsForCleanup(): List<Long> {
+        val candidates = transactionDao.findPotentialDuplicatesByReference()
+        return com.ritesh.cashiro.data.manager.TransactionDeduplication.duplicateIdsToDelete(candidates)
+    }
+
     suspend fun undoDeleteTransaction(transaction: TransactionEntity) {
         transactionDao.updateTransaction(transaction.copy(isDeleted = false))
     }
@@ -395,5 +400,19 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     ): List<TransactionEntity> {
         return transactionDao.findPotentialDuplicates(startDate, endDate)
             .filter { it.amount.compareTo(amount) == 0 }
+    }
+
+    suspend fun findPotentialDuplicates(transaction: TransactionEntity): List<TransactionEntity> {
+        if (!com.ritesh.cashiro.data.manager.TransactionDeduplication.hasUpiReference(transaction)) return emptyList()
+
+        return transactionDao.findPotentialDuplicatesByReference(
+            reference = transaction.reference.orEmpty(),
+            amount = transaction.amount,
+            transactionType = transaction.transactionType,
+            currency = transaction.currency,
+            accountNumber = transaction.accountNumber,
+            startDate = transaction.dateTime.minus(com.ritesh.cashiro.data.manager.TransactionDeduplication.UPI_DUPLICATE_WINDOW),
+            endDate = transaction.dateTime.plus(com.ritesh.cashiro.data.manager.TransactionDeduplication.UPI_DUPLICATE_WINDOW)
+        )
     }
 }
