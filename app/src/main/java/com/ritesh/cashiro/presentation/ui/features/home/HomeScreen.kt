@@ -855,22 +855,15 @@ fun SharedTransitionScope.HomeScreen(
                                 )
                             },
                             supporting = { Text(stringResource(R.string.long_press_for_full_resync)) },
-                            modifier = Modifier.pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = {
-                                        showMoreBottomSheet = false
-                                        homeViewModel.scanSmsMessages()
-                                    },
-                                    onLongPress = {
-                                        view.performHapticFeedback(
-                                            HapticFeedbackConstants.LONG_PRESS
-                                        )
-                                        showMoreBottomSheet = false
-                                        onFullResyncClick()
-                                    }
-                                )
+                            onClick = {
+                                showMoreBottomSheet = false
+                                homeViewModel.scanSmsMessages()
                             },
-                            onClick = null,
+                            onLongClick = {
+                                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                                showMoreBottomSheet = false
+                                onFullResyncClick()
+                            },
                             shape = ListItemPosition.Middle.toShape()
                         )
 

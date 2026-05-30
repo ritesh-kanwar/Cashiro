@@ -413,6 +413,9 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
             accountNumber = transaction.accountNumber,
             startDate = transaction.dateTime.minus(com.ritesh.cashiro.data.manager.TransactionDeduplication.UPI_DUPLICATE_WINDOW),
             endDate = transaction.dateTime.plus(com.ritesh.cashiro.data.manager.TransactionDeduplication.UPI_DUPLICATE_WINDOW)
-        )
+        ).filter { candidate ->
+            candidate.id != transaction.id &&
+                    com.ritesh.cashiro.data.manager.TransactionDeduplication.isSameUpiTransaction(candidate, transaction)
+        }
     }
 }
