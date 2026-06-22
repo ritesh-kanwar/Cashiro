@@ -15,7 +15,6 @@ class TelebirrParser: BankParser() {
     override fun canHandle(sender: String): Boolean {
         val upperSender = sender.uppercase().trim()
         return upperSender == "127" ||
-                upperSender.contains("127") ||
                 // DLT patterns for Ethiopia: "XX-127-X" format
                 upperSender.matches(Regex("""^[A-Z]{2}-127-[A-Z]$""")) ||
                 // Alternative patterns: "127-XXX" or "XXX-127"

@@ -73,6 +73,9 @@ class IndianOverseasBankParser : BankParser() {
         val bracketedDescriptionPattern = Regex("""\[\s*([^\]]+?)\s*]""", RegexOption.IGNORE_CASE)
         bracketedDescriptionPattern.find(message)?.let { match ->
             val description = match.groupValues[1].trim()
+            if (description.matches(Regex("""IMPS/\s*\d+""", RegexOption.IGNORE_CASE))) {
+                return@let
+            }
             val normalizedDescription = when {
                 description.contains("CHRGS", ignoreCase = true) &&
                     description.contains("SMS", ignoreCase = true) -> "SMS Charges"
@@ -206,6 +209,7 @@ class IndianOverseasBankParser : BankParser() {
     override fun extractReference(message: String): String? {
         val bracketRefPattern = Regex(
             """\[(?:UPI|IMPS)/\s*(\d+)""",
+            """\[(?:UPI|IMPS)(?:/(?:UPI|IMPS))?/\s*(\d+)""",
             RegexOption.IGNORE_CASE
         )
         bracketRefPattern.find(message)?.let { match ->

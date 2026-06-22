@@ -38,7 +38,7 @@ class PNBBankParser : BankParser() {
         // Use Java's built-in normalizer to decompose Unicode
         // NFKD = Compatibility Decomposition
         return Normalizer.normalize(text, Normalizer.Form.NFKD)
-            .replace(Regex("[^\\p{ASCII}]"), "") // Keep only ASCII
+            .replace(Regex("[^\\p{ASCII}₹$€£¥]"), "") // Keep only ASCII and common currency symbols
     }
 
     override fun extractAmount(message: String): BigDecimal? {

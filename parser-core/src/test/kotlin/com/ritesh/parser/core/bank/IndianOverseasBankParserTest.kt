@@ -96,6 +96,39 @@ class IndianOverseasBankParserTest {
                 )
             ),
             ParserTestCase(
+                name = "Pure IMPS bracket is reference not merchant",
+                message = """
+                    Rs.500.00 Debited to SB-xxx1234 AcBal:1000.00 CLRBal: 1000.00
+                    [IMPS/ 123456] SAMPLE-BRANCH on 01-01-2026 16:11:16.IOB.
+                """.trimIndent(),
+                sender = "VM-IOBCHN-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("500.00"),
+                    currency = "INR",
+                    type = TransactionType.EXPENSE,
+                    accountLast4 = "1234",
+                    balance = BigDecimal("1000.00"),
+                    reference = "123456"
+                )
+            ),
+            ParserTestCase(
+                name = "Combined UPI IMPS bracket extracts reference",
+                message = """
+                    Rs.250.00 Debited to SB-xxx1234 AcBal:750.00 CLRBal: 750.00
+                    [UPI/IMPS/ 654321] SAMPLE-BRANCH on 01-01-2026 16:11:16.IOB.
+                """.trimIndent(),
+                sender = "VM-IOBCHN-S",
+                expected = ExpectedTransaction(
+                    amount = BigDecimal("250.00"),
+                    currency = "INR",
+                    type = TransactionType.EXPENSE,
+                    merchant = "UPI",
+                    accountLast4 = "1234",
+                    balance = BigDecimal("750.00"),
+                    reference = "654321"
+                )
+            ),
+            ParserTestCase(
                 name = "UPI credit detail with short masked account",
                 message = """
                     Your a/c no. XXXXX99 is credited by Rs.10000.00 on 2026-05-04 19:35:21.874,

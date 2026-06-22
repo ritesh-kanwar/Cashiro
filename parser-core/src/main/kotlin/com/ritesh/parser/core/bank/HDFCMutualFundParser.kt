@@ -23,7 +23,9 @@ class HDFCMutualFundParser : BaseIndianBankParser() {
             "nav",
             "redemption"
         )
-        return keywords.any { lowerMessage.contains(it) }
+        if (keywords.any { lowerMessage.contains(it) }) return true
+
+        return super.isTransactionMessage(message)
     }
 
     override fun extractAmount(message: String): BigDecimal? {

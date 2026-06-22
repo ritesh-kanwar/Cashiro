@@ -17,7 +17,9 @@ class KotakBankParser : BankParser() {
         val normalizedSender = sender.uppercase()
 
         // DLT patterns for Kotak Bank
-        return normalizedSender.matches(Regex("^[A-Z]{2}-KOTAKB-[ST]$"))
+        return normalizedSender.matches(Regex("^[A-Z]{2}-KOTAKB-[ST]$")) ||
+                normalizedSender == "KOTAKB" ||
+                normalizedSender == "KOTAK"
     }
 
     override fun extractMerchant(message: String, sender: String): String? {

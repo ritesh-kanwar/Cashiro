@@ -69,9 +69,11 @@ class CredParser : BankParser() {
     override fun isTransactionMessage(message: String): Boolean {
         val lowerMessage = message.lowercase()
         // Must contain "payment of" and "credited towards your" to be a CRED transaction
-        return lowerMessage.contains("payment of") && 
-               lowerMessage.contains("credited towards your")
-    }
+        if (lowerMessage.contains("payment of") && lowerMessage.contains("credited towards your")) {
+            return true
+        }
 
+        return super.isTransactionMessage(message)
+    }
 
 }

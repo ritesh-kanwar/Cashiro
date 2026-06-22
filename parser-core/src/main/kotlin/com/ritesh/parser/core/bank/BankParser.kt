@@ -29,11 +29,18 @@ abstract class BankParser {
      */
     open fun getCurrency(): String = "INR"
 
+    companion object {
+        private const val MAX_SMS_LENGTH = 5000
+    }
+
     /**
      * Parses an SMS message and extracts transaction information.
      * Returns null if the message cannot be parsed.
      */
     open fun parse(smsBody: String, sender: String, timestamp: Long): ParsedTransaction? {
+        // Reject excessively long messages to prevent ReDoS
+        if (smsBody.length > MAX_SMS_LENGTH) return null
+
         // Skip non-transaction messages
         if (!isTransactionMessage(smsBody)) {
             return null

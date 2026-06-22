@@ -362,11 +362,11 @@ class SBIBankParser : BankParser() {
             lowerMessage.contains("atm withdrawal") -> TransactionType.EXPENSE
             lowerMessage.contains("by sbi debit card") -> TransactionType.EXPENSE
 
-            // Credit patterns
+            // Credit patterns (must be checked before generic debit/expense keywords)
+            lowerMessage.contains("received transfer") -> TransactionType.INCOME
             lowerMessage.contains("credited") -> TransactionType.INCOME
             lowerMessage.contains("has credit for") -> TransactionType.INCOME
             lowerMessage.contains("has a credit by") -> TransactionType.INCOME
-            lowerMessage.contains("received transfer") -> TransactionType.INCOME
 
             // Fall back to base class for common patterns
             else -> super.extractTransactionType(message)

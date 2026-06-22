@@ -219,19 +219,19 @@ class MPESAParser : BankParser() {
         val lowerMessage = message.lowercase()
 
         // Skip promotional messages that don't have "Confirmed"
-        if (!lowerMessage.contains("confirmed")) {
-            return false
+        if (lowerMessage.contains("confirmed")) {
+            // Must contain transaction keywords
+            val transactionKeywords = listOf(
+                "paid to",
+                "sent to",
+                "received",
+                "new m-pesa balance"
+            )
+
+            if (transactionKeywords.any { lowerMessage.contains(it) }) return true
         }
 
-        // Must contain transaction keywords
-        val transactionKeywords = listOf(
-            "paid to",
-            "sent to",
-            "received",
-            "new m-pesa balance"
-        )
-
-        return transactionKeywords.any { lowerMessage.contains(it) }
+        return super.isTransactionMessage(message)
     }
 
     override fun cleanMerchantName(merchant: String): String {

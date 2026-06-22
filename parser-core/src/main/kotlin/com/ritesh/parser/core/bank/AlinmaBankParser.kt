@@ -69,7 +69,7 @@ class AlinmaBankParser : BankParser() {
             }
         }
 
-        return null
+        return super.extractAmount(message)
     }
 
     override fun extractTransactionType(message: String): TransactionType? {

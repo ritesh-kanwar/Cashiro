@@ -12,11 +12,11 @@ class BankOfBarodaParser : BankParser() {
 
     override fun canHandle(sender: String): Boolean {
         val normalizedSender = sender.uppercase()
-        return normalizedSender.contains("BOB") ||
-                normalizedSender.contains("BARODA") ||
+        return normalizedSender.contains("BARODA") ||
                 normalizedSender.contains("BOBSMS") ||
                 normalizedSender.contains("BOBTXN") ||
                 normalizedSender.contains("BOBCRD") ||  // Credit card messages
+                normalizedSender.matches(Regex("""(^|[-_])BOB([-_]|$)""")) ||
                 // DLT patterns
                 normalizedSender.matches(Regex("^[A-Z]{2}-BOBSMS-[A-Z]$")) ||
                 normalizedSender.matches(Regex("^[A-Z]{2}-BOBTXN-[A-Z]$")) ||

@@ -27,12 +27,13 @@ class BancolombiaParser : BankParser() {
     override fun getCurrency() = "COP"
 
     override fun isTransactionMessage(message: String): Boolean {
-        // Override base class to handle Spanish transaction keywords
         val lowerMessage = message.lowercase()
         val spanishKeywords = listOf(
             "transferiste", "compraste", "pagaste", "recibiste"
         )
-        return spanishKeywords.any { lowerMessage.contains(it) }
+        if (spanishKeywords.any { lowerMessage.contains(it) }) return true
+
+        return super.isTransactionMessage(message)
     }
 
     override fun extractAmount(message: String): BigDecimal? {

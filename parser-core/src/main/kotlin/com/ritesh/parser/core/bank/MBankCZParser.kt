@@ -115,6 +115,8 @@ class MBankCZParser : BankParser() {
             "odchozí platba",  // outgoing payment
             "výběr"            // withdrawal
         )
-        return keywords.any { lower.contains(it) }
+        if (keywords.any { lower.contains(it) }) return true
+
+        return super.isTransactionMessage(message)
     }
 }

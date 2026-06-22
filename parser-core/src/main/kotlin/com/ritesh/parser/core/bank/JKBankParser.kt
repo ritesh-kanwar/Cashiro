@@ -107,7 +107,7 @@ class JKBankParser : BankParser() {
             }
         }
 
-        return MessageDigest.getInstance("MD5")
+        return MessageDigest.getInstance("SHA-256")
             .digest(hashData.toByteArray())
             .joinToString("") { "%02x".format(it) }
     }

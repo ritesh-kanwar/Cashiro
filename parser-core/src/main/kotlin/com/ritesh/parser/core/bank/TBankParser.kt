@@ -161,6 +161,8 @@ class TBankParser : BankParser() {
             "снятие", "оплата", "платёж", "платеж",
             "возврат", "зачисление", "кэшбэк"
         )
-        return keywords.any { lower.contains(it) }
+        if (keywords.any { lower.contains(it) }) return true
+
+        return super.isTransactionMessage(message)
     }
 }

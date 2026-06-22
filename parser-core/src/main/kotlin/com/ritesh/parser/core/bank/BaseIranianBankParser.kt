@@ -62,7 +62,8 @@ abstract class BaseIranianBankParser : BankParser() {
     override fun extractMerchant(message: String, sender: String): String? {
         val cardPattern = Regex("""(\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4})""")
         cardPattern.find(message)?.let { match ->
-            return "Card ${match.groupValues[1]}"
+            val fullPan = match.groupValues[1].filter { it.isDigit() }
+            return if (fullPan.length >= 4) "Card ...${fullPan.takeLast(4)}" else "Card"
         }
 
         return null
@@ -135,7 +136,9 @@ abstract class BaseIranianBankParser : BankParser() {
             "debit", "credit", "spent", "received", "transferred", "paid"
         )
 
-        return transactionKeywords.any { lowerMessage.contains(it) }
+        if (transactionKeywords.any { lowerMessage.contains(it) }) return true
+
+        return super.isTransactionMessage(message)
     }
 
     override fun cleanMerchantName(merchant: String): String {
