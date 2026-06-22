@@ -208,7 +208,6 @@ class IndianOverseasBankParser : BankParser() {
 
     override fun extractReference(message: String): String? {
         val bracketRefPattern = Regex(
-            """\[(?:UPI|IMPS)/\s*(\d+)""",
             """\[(?:UPI|IMPS)(?:/(?:UPI|IMPS))?/\s*(\d+)""",
             RegexOption.IGNORE_CASE
         )
