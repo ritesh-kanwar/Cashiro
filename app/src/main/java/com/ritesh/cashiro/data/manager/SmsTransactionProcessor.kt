@@ -254,44 +254,6 @@ class SmsTransactionProcessor @Inject constructor(
                         cardRepository.getCard(parsedTransaction.bankName, it)?.cardType
                     } == CardType.CREDIT
 
-            val existingAccount = accountBalanceRepository.getLatestBalance(
-                parsedTransaction.bankName,
-                targetAccountLast4
-            )
-
-            val newBalance = when {
-                existingAccount != null &&
-                    existingAccount.isCreditCard &&
-                    parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                    val currentBalance = existingAccount.balance
-                    (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
-                }
-                isCreditCard -> {
-                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
-                    currentBalance + parsedTransaction.amount
-                }
-                parsedTransaction.balance != null -> parsedTransaction.balance!!
-                else -> {
-                    // SMS doesn't have explicit balance - calculate based on transaction type
-                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
-                    when (parsedTransaction.type.toEntityType()) {
-                        TransactionType.INCOME -> {
-                            // Money coming in - add to balance
-                            currentBalance + parsedTransaction.amount
-                        }
-                        TransactionType.EXPENSE, TransactionType.INVESTMENT -> {
-                            // Money going out - subtract from balance
-                            (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
-                        }
-                        TransactionType.CREDIT, TransactionType.TRANSFER -> {
-                            // Keep existing balance for transfers (complex logic needed)
-                            // Credit should be handled above, this is fallback
-                            currentBalance
-                        }
-                    }
-                }
-            }
-
             accountBalanceRepository.insertTransactionBalance(
                 bankName = parsedTransaction.bankName,
                 accountLast4 = targetAccountLast4,
@@ -300,12 +262,8 @@ class SmsTransactionProcessor @Inject constructor(
                 explicitBalance = parsedTransaction.balance,
                 timestamp = entity.dateTime,
                 transactionId = if (rowId != -1L) rowId else null,
-                creditLimit = if (isCreditCard) {
-                    parsedTransaction.creditLimit?.add(newBalance) ?: existingAccount?.creditLimit
-                } else {
-                    existingAccount?.creditLimit
-                },
-                isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
+                creditLimit = parsedTransaction.creditLimit,
+                isCreditCard = isCreditCard,
                 smsSource = sanitizeSmsSource(parsedTransaction),
                 currency = parsedTransaction.currency
             )
@@ -317,6 +275,7 @@ class SmsTransactionProcessor @Inject constructor(
     }
 
     private fun sanitizeSmsSource(parsedTransaction: ParsedTransaction): String {
-        return "SMS_TRANSACTION:${parsedTransaction.type}:${parsedTransaction.currency}"
+        // synthesised: sanitize account numbers, reference IDs, and digits from SMS body to prevent PII leaks
+        return parsedTransaction.smsBody.replace(Regex("\\d{4,18}"), "****").take(500)
     }
 }

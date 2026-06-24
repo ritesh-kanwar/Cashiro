@@ -130,6 +130,22 @@ class AccountBalanceRepository @Inject constructor(
         }
     }
 
+    /**
+     * Inserts a balance entry linked to a transaction, and sequentially recalculates succeeding balances.
+     *
+     * @param bankName The name of the bank.
+     * @param accountLast4 The last 4 digits of the account number.
+     * @param amount The transaction amount.
+     * @param transactionType The transaction type.
+     * @param explicitBalance The bank-reported explicit balance (if any).
+     * @param timestamp The transaction timestamp.
+     * @param transactionId The associated transaction ID.
+     * @param creditLimit Optionally, a custom credit limit parsed from SMS.
+     * @param isCreditCard Whether this account is a credit card.
+     * @param smsSource Sanitized SMS snippet source.
+     * @param currency The transaction currency.
+     * @return The ID of the inserted balance record.
+     */
     suspend fun insertTransactionBalance(
         bankName: String,
         accountLast4: String,
@@ -157,6 +173,7 @@ class AccountBalanceRepository @Inject constructor(
             currency = currency
         )
     }
+
 
     suspend fun insertBalanceUpdate(
         bankName: String,

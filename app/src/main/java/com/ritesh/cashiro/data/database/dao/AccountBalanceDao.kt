@@ -70,6 +70,21 @@ interface AccountBalanceDao {
         timestamp: LocalDateTime
     ): List<AccountBalanceTransactionInfo>
 
+    /**
+     * Inserts a balance entry linked to a transaction, and sequentially recalculates succeeding balances.
+     *
+     * @param bankName The name of the bank.
+     * @param accountLast4 The last 4 digits of the account number.
+     * @param amount The transaction amount.
+     * @param transactionType The transaction type.
+     * @param explicitBalance The bank-reported explicit balance (if any).
+     * @param timestamp The transaction timestamp.
+     * @param transactionId The associated transaction ID.
+     * @param creditLimit Optionally, a custom credit limit parsed from SMS.
+     * @param isCreditCard Whether this account is a credit card.
+     * @param smsSource Sanitized SMS snippet source.
+     * @param currency The transaction currency.
+     */
     @Transaction
     suspend fun insertTransactionBalance(
         bankName: String,
@@ -101,7 +116,11 @@ interface AccountBalanceDao {
                 balance = newBalance,
                 timestamp = timestamp,
                 transactionId = transactionId,
-                creditLimit = creditLimit ?: previous?.creditLimit ?: latest?.creditLimit,
+                creditLimit = if (accountIsCreditCard) {
+                    creditLimit?.add(newBalance) ?: previous?.creditLimit ?: latest?.creditLimit
+                } else {
+                    previous?.creditLimit ?: latest?.creditLimit
+                },
                 isCreditCard = accountIsCreditCard,
                 smsSource = smsSource?.take(500),
                 sourceType = if (explicitBalance != null) {
@@ -128,7 +147,8 @@ interface AccountBalanceDao {
         startingBalance: BigDecimal
     ) {
         var runningBalance = startingBalance
-        getBalancesAfterWithTransactions(bankName, accountLast4, timestamp).forEach { row ->
+        // synthesised: use regular for loop to support breaking when boundaries are hit
+        for (row in getBalancesAfterWithTransactions(bankName, accountLast4, timestamp)) {
             val sourceType = row.sourceType
             val hasExplicitBalance = row.transactionBalanceAfter != null ||
                     sourceType == SOURCE_TRANSACTION_SMS_BALANCE ||
@@ -136,16 +156,15 @@ interface AccountBalanceDao {
                     sourceType == SOURCE_MANUAL ||
                     sourceType == SOURCE_MANUAL_EDIT
 
+            // synthesised: stop recalculation when encountering explicit balance or manual boundaries
             if (hasExplicitBalance || row.transactionId == null) {
-                runningBalance = row.balance
-                return@forEach
+                break
             }
 
             val amount = row.transactionAmount
             val transactionType = row.transactionType?.let { runCatching { TransactionType.valueOf(it) }.getOrNull() }
             if (amount == null || transactionType == null) {
-                runningBalance = row.balance
-                return@forEach
+                break
             }
 
             val recalculated = calculateTransactionBalance(

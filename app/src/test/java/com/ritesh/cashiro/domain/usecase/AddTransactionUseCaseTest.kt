@@ -542,7 +542,15 @@ class AddTransactionUseCaseTest {
         override suspend fun deleteBalance(balance: AccountBalanceEntity) = Unit
         override suspend fun getBalanceHistoryForAccount(bankName: String, accountLast4: String): List<AccountBalanceEntity> = emptyList()
         override suspend fun deleteBalanceById(id: Long) = Unit
-        override suspend fun updateBalanceById(id: Long, newBalance: BigDecimal) = Unit
+        override suspend fun updateBalanceById(id: Long, newBalance: BigDecimal) {
+            for (list in balances.values) {
+                val index = list.indexOfFirst { it.id == id }
+                if (index != -1) {
+                    list[index] = list[index].copy(balance = newBalance)
+                    break
+                }
+            }
+        }
         override suspend fun getBalanceCountForAccount(bankName: String, accountLast4: String): Int = balances[Pair(bankName, accountLast4)]?.size ?: 0
         override suspend fun deleteAccount(bankName: String, accountLast4: String): Int {
             val key = Pair(bankName, accountLast4)
