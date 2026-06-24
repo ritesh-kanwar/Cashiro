@@ -837,4 +837,42 @@
     <string name="sms_subtitle">Manage SMS settings</string>
     <string name="webhooks_subtitle">BYOAPI finance sync</string>
     <string name="about_subtitle">App version, source code and more</string>
+    <!-- Currency Settings -->
+    <string name="currency">Währung</string>
+    <string name="currency_subtitle">Exchange rates and currency preferences</string>
+    <string name="currency_settings_title">Währung</string>
+    <string name="unified_currency">Unified Currency</string>
+    <string name="unified_currency_subtitle">Display all amounts in a single currency</string>
+    <string name="default_currency">Default Currency</string>
+    <string name="default_currency_subtitle">Pre-select currency for new entries</string>
+    <string name="display_currency">Display Currency</string>
+    <string name="default_label">Default</string>
+    <string name="none">Keine</string>
+    <string name="rates_info_subtitle">View exchange rates for your base currency</string>
+    <!-- Custom Currency Settings -->
+    <string name="search_currencies">Währungen suchen...</string>
+    <string name="rates_relative_to">Raten relativ zu %1$s</string>
+    <string name="last_updated">Zuletzt aktualisiert: %1$s</string>
+    <string name="custom_rate">Custom rate</string>
+    <string name="custom_rate_set">Custom rate set. Tap Reset to revert to API rate.</string>
+    <string name="add_custom_currency">Add Custom Currency</string>
+    <string name="custom_currency">Custom Currency</string>
+    <string name="currency_country_name">Currency name</string>
+    <string name="eg_test_country">e.g. Test Country</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="eg_tst">e.g. TST</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="eg_tsymbol">e.g. T$</string>
+    <string name="exchange_rate">Exchange Rate</string>
+    <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
+    <string name="please_fill_all_fields">Please fill all fields with valid data.</string>
+    <string name="base_currency_hint">Base = default currency or main account\'s currency</string>
+    <string name="save_currency">Save Currency</string>
+    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
+    <string name="currency_code_hint">USD, INR, EUR ...</string>
+    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
+    <string name="exchange_rate_hint">1 Base = X Custom currency</string>
+    <string name="exchange_rates_notice_title">Wechselkursbenachrichtigung</string>
+    <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
+    <string name="custom_label">CUSTOM</string>
 </resources>
