@@ -32,6 +32,7 @@ import com.ritesh.cashiro.data.repository.UnrecognizedSmsRepository
 import com.ritesh.cashiro.domain.repository.RuleRepository
 import com.ritesh.cashiro.domain.service.RuleEngine
 import com.ritesh.cashiro.utils.CurrencyFormatter
+import com.ritesh.cashiro.utils.PiiRedactor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -335,8 +336,8 @@ class OptimizedSmsReaderWorker @AssistedInject constructor(
                                 Amount: ${parsedTransaction.amount}
                                 Type: ${parsedTransaction.type}
                                 Merchant: ${parsedTransaction.merchant}
-                                Reference: ${parsedTransaction.reference}
-                                Account: ${parsedTransaction.accountLast4}
+                                Reference: ${PiiRedactor.redactSuffix(parsedTransaction.reference)}
+                                Account: ${PiiRedactor.redactSuffix(parsedTransaction.accountLast4)}
                                 Balance: ${parsedTransaction.balance}
                                 Credit Limit: ${parsedTransaction.creditLimit}
                                 ID: ${parsedTransaction.generateTransactionId()}
@@ -581,8 +582,8 @@ private suspend fun processMessageChunk(
                             Amount: ${parsedTransaction.amount}
                             Type: ${parsedTransaction.type}
                             Merchant: ${parsedTransaction.merchant}
-                            Reference: ${parsedTransaction.reference}
-                            Account: ${parsedTransaction.accountLast4}
+                            Reference: ${PiiRedactor.redactSuffix(parsedTransaction.reference)}
+                            Account: ${PiiRedactor.redactSuffix(parsedTransaction.accountLast4)}
                             Balance: ${parsedTransaction.balance}
                             Credit Limit: ${parsedTransaction.creditLimit}
                             ID: ${parsedTransaction.generateTransactionId()}
@@ -685,8 +686,8 @@ private suspend fun processBatchCoroutinesDirect(
                                 Amount: ${parsedTransaction.amount}
                                 Type: ${parsedTransaction.type}
                                 Merchant: ${parsedTransaction.merchant}
-                                Reference: ${parsedTransaction.reference}
-                                Account: ${parsedTransaction.accountLast4}
+                                Reference: ${PiiRedactor.redactSuffix(parsedTransaction.reference)}
+                                Account: ${PiiRedactor.redactSuffix(parsedTransaction.accountLast4)}
                                 Balance: ${parsedTransaction.balance}
                                 Credit Limit: ${parsedTransaction.creditLimit}
                                 ID: ${parsedTransaction.generateTransactionId()}
@@ -1146,7 +1147,7 @@ private suspend fun processBalanceUpdate(
     if (fallbackAccount != null) {
         // Determine if this transaction is from a card based on the message pattern
         val isFromCard = parsedTransaction.isFromCard
-        val sanitizedSmsSource = parsedTransaction.smsBody.replace(Regex("\\d{4,18}"), "****").take(500)
+        val sanitizedSmsSource = PiiRedactor.redact(parsedTransaction.smsBody).take(500)
 
         if (BuildConfig.DEBUG) {
             Log.d(
@@ -1162,9 +1163,7 @@ private suspend fun processBalanceUpdate(
             // This is a card transaction
             Log.d(TAG, "Transaction identified as CARD transaction")
 
-            var card = parsedAccountLast4Clean?.let {
-                cardRepository.getCard(parsedTransaction.bankName, it)
-            }
+            var card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccount)
 
             if (card == null) {
                 // First time seeing this card - create it
@@ -1172,18 +1171,14 @@ private suspend fun processBalanceUpdate(
                 val isCredit = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT)
                 Log.d(TAG, "Creating new card for ${parsedTransaction.bankName}")
 
-                card = parsedAccountLast4Clean?.let { accountLast4 ->
-                    cardRepository.findOrCreateCard(
-                        cardLast4 = accountLast4,
-                        bankName = parsedTransaction.bankName,
-                        isCredit = isCredit
-                    )
-                }
+                cardRepository.findOrCreateCard(
+                    cardLast4 = fallbackAccount,
+                    bankName = parsedTransaction.bankName,
+                    isCredit = isCredit
+                )
 
                 // CRITICAL: Refetch the card to get the actual state (might have been created before)
-                card = parsedAccountLast4Clean?.let {
-                    cardRepository.getCard(parsedTransaction.bankName, it)
-                }!!
+                card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccount)!!
                 Log.d(TAG, "Card created/found successfully")
             } else {
                 Log.d(TAG, "Found existing card")
@@ -1206,14 +1201,14 @@ private suspend fun processBalanceUpdate(
                 card.cardType == com.ritesh.cashiro.data.database.entity.CardType.CREDIT -> {
                     // Credit cards get balance entries
                     Log.d(TAG, "CREDIT card - will create balance entry")
-                    parsedAccountLast4Clean
+                    fallbackAccount
                 }
 
                 card.cardType == com.ritesh.cashiro.data.database.entity.CardType.DEBIT && card.accountLast4 != null -> {
                     // Linked debit card - use the linked account for balance
                     Log.d(
                         TAG,
-                        "DEBIT card linked to account **${card.accountLast4} - will update linked account balance"
+                        "DEBIT card linked to account **${PiiRedactor.redactSuffix(card.accountLast4)} - will update linked account balance"
                     )
                     card.accountLast4
                 }
@@ -1234,7 +1229,7 @@ private suspend fun processBalanceUpdate(
         // Create balance entry if we have a target account
         if (targetAccountLast4 != null) {
             val isCreditCard = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT) ||
-                    parsedAccountLast4Clean?.let {
+                    fallbackAccount.let {
                         cardRepository.getCard(parsedTransaction.bankName, it)?.cardType
                     } == com.ritesh.cashiro.data.database.entity.CardType.CREDIT
 
@@ -1259,7 +1254,7 @@ private suspend fun processBalanceUpdate(
             if (BuildConfig.DEBUG) {
                 Log.d(
                     TAG,
-                    "No balance entry created for unlinked debit card: ${parsedTransaction.bankName} **${parsedTransaction.accountLast4}"
+                    "No balance entry created for unlinked debit card: ${parsedTransaction.bankName} **${PiiRedactor.redactSuffix(parsedTransaction.accountLast4)}"
                 )
             }
         }

@@ -29,6 +29,7 @@ import com.ritesh.cashiro.data.database.entity.TransactionType
 import com.ritesh.cashiro.data.database.entity.UnrecognizedSmsEntity
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import com.ritesh.cashiro.utils.CurrencyFormatter
+import com.ritesh.cashiro.utils.PiiRedactor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -266,8 +267,8 @@ class SmsReaderWorker @AssistedInject constructor(
                             Amount: ${parsedTransaction.amount}
                             Type: ${parsedTransaction.type}
                             Merchant: ${parsedTransaction.merchant}
-                            Reference: ${parsedTransaction.reference}
-                            Account: ${parsedTransaction.accountLast4}
+                            Reference: ${PiiRedactor.redactSuffix(parsedTransaction.reference)}
+                            Account: ${PiiRedactor.redactSuffix(parsedTransaction.accountLast4)}
                             Balance: ${parsedTransaction.balance}
                             Credit Limit: ${parsedTransaction.creditLimit}
                             ID: ${parsedTransaction.generateTransactionId()}
@@ -368,7 +369,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                  if (fallbackAccount != null) {
                                      // Determine if this transaction is from a card based on the message pattern
                                      val isFromCard = parsedTransaction.isFromCard
-                                     val sanitizedSmsSource = parsedTransaction.smsBody.replace(Regex("\\d{4,18}"), "****").take(500)
+                                     val sanitizedSmsSource = PiiRedactor.redact(parsedTransaction.smsBody).take(500)
                                      
                                      if (BuildConfig.DEBUG) {
                                          Log.d(TAG, """
@@ -383,9 +384,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                          // This is a card transaction
                                          Log.d(TAG, "Transaction identified as CARD transaction")
                                          
-                                         var card = parsedAccountLast4Clean?.let {
-                                             cardRepository.getCard(parsedTransaction.bankName, it)
-                                         }
+                                         var card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccount)
                                          
                                          if (card == null) {
                                              // First time seeing this card - create it
@@ -393,18 +392,14 @@ class SmsReaderWorker @AssistedInject constructor(
                                              val isCredit = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT)
                                              Log.d(TAG, "Creating new card for ${parsedTransaction.bankName}")
                                              
-                                             card = parsedAccountLast4Clean?.let { accountLast4 ->
-                                                 cardRepository.findOrCreateCard(
-                                                     cardLast4 = accountLast4,
-                                                     bankName = parsedTransaction.bankName,
-                                                     isCredit = isCredit
-                                                 )
-                                             }
+                                             cardRepository.findOrCreateCard(
+                                                 cardLast4 = fallbackAccount,
+                                                 bankName = parsedTransaction.bankName,
+                                                 isCredit = isCredit
+                                             )
                                              
                                              // CRITICAL: Refetch the card to get the actual state (might have been created before)
-                                             card = parsedAccountLast4Clean?.let {
-                                                 cardRepository.getCard(parsedTransaction.bankName, it)
-                                             }!!
+                                             card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccount)!!
                                              Log.d(TAG, "Card created/found successfully")
                                          } else {
                                              Log.d(TAG, "Found existing card")
@@ -427,11 +422,11 @@ class SmsReaderWorker @AssistedInject constructor(
                                              card.cardType == com.ritesh.cashiro.data.database.entity.CardType.CREDIT -> {
                                                  // Credit cards get balance entries
                                                  Log.d(TAG, "CREDIT card - will create balance entry")
-                                                 parsedAccountLast4Clean
+                                                 fallbackAccount
                                              }
                                              card.cardType == com.ritesh.cashiro.data.database.entity.CardType.DEBIT && card.accountLast4 != null -> {
                                                  // Linked debit card - use the linked account for balance
-                                                 Log.d(TAG, "DEBIT card linked to account **${card.accountLast4} - will update linked account balance")
+                                                 Log.d(TAG, "DEBIT card linked to account **${PiiRedactor.redactSuffix(card.accountLast4)} - will update linked account balance")
                                                  card.accountLast4
                                              }
                                              else -> {
@@ -451,7 +446,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                      if (targetAccountLast4 != null) {
                                          // Determine if this is a credit card based on transaction type or card info
                                          val isCreditCard = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT) ||
-                                             parsedAccountLast4Clean?.let {
+                                             fallbackAccount.let {
                                                  cardRepository.getCard(parsedTransaction.bankName, it)?.cardType
                                              } == 
                                                  com.ritesh.cashiro.data.database.entity.CardType.CREDIT
@@ -475,7 +470,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                          }
                                      } else {
                                          if (BuildConfig.DEBUG) {
-                                             Log.d(TAG, "No balance entry created for unlinked debit card: ${parsedTransaction.bankName} **${parsedTransaction.accountLast4}")
+                                             Log.d(TAG, "No balance entry created for unlinked debit card: ${parsedTransaction.bankName} **${PiiRedactor.redactSuffix(parsedTransaction.accountLast4)}")
                                          }
                                      }
                                  }

@@ -101,7 +101,7 @@ interface AccountBalanceDao {
     ): Long {
         val latest = getLatestBalance(bankName, accountLast4)
         val previous = getLatestBalanceOnOrBefore(bankName, accountLast4, timestamp)
-        val accountIsCreditCard = isCreditCard || (previous?.isCreditCard ?: latest?.isCreditCard ?: false)
+        val accountIsCreditCard = isCreditCard || (previous?.isCreditCard ?: false)
         val newBalance = explicitBalance ?: calculateTransactionBalance(
             currentBalance = previous?.balance ?: BigDecimal.ZERO,
             amount = amount,
@@ -355,12 +355,16 @@ private fun calculateTransactionBalance(
     transactionType: TransactionType,
     isCreditCard: Boolean
 ): BigDecimal {
+    val type = when (transactionType) {
+        TransactionType.CREDIT -> TransactionType.INCOME
+        else -> transactionType
+    }
     return when {
-        isCreditCard && transactionType == TransactionType.INCOME ->
+        isCreditCard && type == TransactionType.INCOME ->
             (currentBalance - amount).max(BigDecimal.ZERO)
         isCreditCard -> currentBalance + amount
-        transactionType == TransactionType.INCOME -> currentBalance + amount
-        transactionType == TransactionType.EXPENSE || transactionType == TransactionType.INVESTMENT ->
+        type == TransactionType.INCOME -> currentBalance + amount
+        type == TransactionType.EXPENSE || type == TransactionType.INVESTMENT ->
             (currentBalance - amount).max(BigDecimal.ZERO)
         else -> currentBalance
     }

@@ -20,6 +20,7 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import com.ritesh.cashiro.utils.PiiRedactor
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -200,27 +201,22 @@ class SmsTransactionProcessor @Inject constructor(
     ) {
         val parsedAccountLast4 = parsedTransaction.accountLast4?.takeIf { it.isNotBlank() }
         val resolvedAccountLast4 = entity.accountNumber?.takeIf { it.isNotBlank() }
-        if (parsedAccountLast4 == null && resolvedAccountLast4 == null) return
+        val fallbackAccountLast4 = parsedAccountLast4 ?: resolvedAccountLast4
+        if (fallbackAccountLast4 == null) return
 
         val isFromCard = parsedTransaction.isFromCard
 
         val targetAccountLast4: String? = if (isFromCard) {
-            var card = parsedAccountLast4?.let {
-                cardRepository.getCard(parsedTransaction.bankName, it)
-            }
+            var card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccountLast4)
 
             if (card == null) {
                 val isCredit = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT)
-                parsedAccountLast4?.let { accountLast4 ->
-                    cardRepository.findOrCreateCard(
-                        cardLast4 = accountLast4,
-                        bankName = parsedTransaction.bankName,
-                        isCredit = isCredit
-                    )
-                }
-                card = parsedAccountLast4?.let {
-                    cardRepository.getCard(parsedTransaction.bankName, it)
-                }
+                cardRepository.findOrCreateCard(
+                    cardLast4 = fallbackAccountLast4,
+                    bankName = parsedTransaction.bankName,
+                    isCredit = isCredit
+                )
+                card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccountLast4)
             }
 
             if (card == null) {
@@ -239,18 +235,18 @@ class SmsTransactionProcessor @Inject constructor(
                 )
 
                 when {
-                    card.cardType == CardType.CREDIT -> parsedAccountLast4
+                    card.cardType == CardType.CREDIT -> fallbackAccountLast4
                     card.cardType == CardType.DEBIT && card.accountLast4 != null -> card.accountLast4
                     else -> null
                 }
             }
         } else {
-            resolvedAccountLast4 ?: parsedAccountLast4
+            fallbackAccountLast4
         }
 
         if (targetAccountLast4 != null) {
             val isCreditCard = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT) ||
-                    parsedTransaction.accountLast4?.let {
+                    fallbackAccountLast4.let {
                         cardRepository.getCard(parsedTransaction.bankName, it)?.cardType
                     } == CardType.CREDIT
 
@@ -275,7 +271,6 @@ class SmsTransactionProcessor @Inject constructor(
     }
 
     private fun sanitizeSmsSource(parsedTransaction: ParsedTransaction): String {
-        // synthesised: sanitize account numbers, reference IDs, and digits from SMS body to prevent PII leaks
-        return parsedTransaction.smsBody.replace(Regex("\\d{4,18}"), "****").take(500)
+        return PiiRedactor.redact(parsedTransaction.smsBody).take(500)
     }
 }
