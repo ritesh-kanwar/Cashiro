@@ -2,9 +2,16 @@ package com.ritesh.cashiro.data.database.dao
 
 import androidx.room.*
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
+import com.ritesh.cashiro.data.database.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.time.LocalDateTime
+
+private const val SOURCE_TRANSACTION_CALCULATED = "TRANSACTION_CALCULATED"
+private const val SOURCE_TRANSACTION_SMS_BALANCE = "TRANSACTION_SMS_BALANCE"
+private const val SOURCE_MANUAL = "MANUAL"
+private const val SOURCE_MANUAL_EDIT = "MANUAL_EDIT"
+private const val SOURCE_SMS_BALANCE = "SMS_BALANCE"
 
 @Dao
 interface AccountBalanceDao {
@@ -62,6 +69,98 @@ interface AccountBalanceDao {
         accountLast4: String,
         timestamp: LocalDateTime
     ): List<AccountBalanceTransactionInfo>
+
+    @Transaction
+    suspend fun insertTransactionBalance(
+        bankName: String,
+        accountLast4: String,
+        amount: BigDecimal,
+        transactionType: TransactionType,
+        explicitBalance: BigDecimal?,
+        timestamp: LocalDateTime,
+        transactionId: Long?,
+        creditLimit: BigDecimal?,
+        isCreditCard: Boolean,
+        smsSource: String?,
+        currency: String
+    ): Long {
+        val latest = getLatestBalance(bankName, accountLast4)
+        val previous = getLatestBalanceOnOrBefore(bankName, accountLast4, timestamp)
+        val accountIsCreditCard = isCreditCard || (previous?.isCreditCard ?: latest?.isCreditCard ?: false)
+        val newBalance = explicitBalance ?: calculateTransactionBalance(
+            currentBalance = previous?.balance ?: BigDecimal.ZERO,
+            amount = amount,
+            transactionType = transactionType,
+            isCreditCard = accountIsCreditCard
+        )
+
+        val balanceId = insertBalance(
+            AccountBalanceEntity(
+                bankName = bankName,
+                accountLast4 = accountLast4,
+                balance = newBalance,
+                timestamp = timestamp,
+                transactionId = transactionId,
+                creditLimit = creditLimit ?: previous?.creditLimit ?: latest?.creditLimit,
+                isCreditCard = accountIsCreditCard,
+                smsSource = smsSource?.take(500),
+                sourceType = if (explicitBalance != null) {
+                    SOURCE_TRANSACTION_SMS_BALANCE
+                } else {
+                    SOURCE_TRANSACTION_CALCULATED
+                },
+                currency = currency,
+                iconResId = previous?.iconResId ?: latest?.iconResId ?: 0,
+                iconName = previous?.iconName ?: latest?.iconName ?: "",
+                isWallet = previous?.isWallet ?: latest?.isWallet ?: false,
+                color = previous?.color ?: latest?.color ?: "#33B5E5"
+            )
+        )
+
+        recalculateBalancesAfter(bankName, accountLast4, timestamp, newBalance)
+        return balanceId
+    }
+
+    private suspend fun recalculateBalancesAfter(
+        bankName: String,
+        accountLast4: String,
+        timestamp: LocalDateTime,
+        startingBalance: BigDecimal
+    ) {
+        var runningBalance = startingBalance
+        getBalancesAfterWithTransactions(bankName, accountLast4, timestamp).forEach { row ->
+            val sourceType = row.sourceType
+            val hasExplicitBalance = row.transactionBalanceAfter != null ||
+                    sourceType == SOURCE_TRANSACTION_SMS_BALANCE ||
+                    sourceType == SOURCE_SMS_BALANCE ||
+                    sourceType == SOURCE_MANUAL ||
+                    sourceType == SOURCE_MANUAL_EDIT
+
+            if (hasExplicitBalance || row.transactionId == null) {
+                runningBalance = row.balance
+                return@forEach
+            }
+
+            val amount = row.transactionAmount
+            val transactionType = row.transactionType?.let { runCatching { TransactionType.valueOf(it) }.getOrNull() }
+            if (amount == null || transactionType == null) {
+                runningBalance = row.balance
+                return@forEach
+            }
+
+            val recalculated = calculateTransactionBalance(
+                currentBalance = runningBalance,
+                amount = amount,
+                transactionType = transactionType,
+                isCreditCard = row.isCreditCard
+            )
+
+            if (recalculated != row.balance) {
+                updateBalanceById(row.id, recalculated)
+            }
+            runningBalance = recalculated
+        }
+    }
     
     @Query("""
         SELECT * FROM account_balances 
@@ -230,3 +329,20 @@ data class AccountBalanceTransactionInfo(
     val transactionType: String?,
     val transactionBalanceAfter: BigDecimal?
 )
+
+private fun calculateTransactionBalance(
+    currentBalance: BigDecimal,
+    amount: BigDecimal,
+    transactionType: TransactionType,
+    isCreditCard: Boolean
+): BigDecimal {
+    return when {
+        isCreditCard && transactionType == TransactionType.INCOME ->
+            (currentBalance - amount).max(BigDecimal.ZERO)
+        isCreditCard -> currentBalance + amount
+        transactionType == TransactionType.INCOME -> currentBalance + amount
+        transactionType == TransactionType.EXPENSE || transactionType == TransactionType.INVESTMENT ->
+            (currentBalance - amount).max(BigDecimal.ZERO)
+        else -> currentBalance
+    }
+}

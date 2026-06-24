@@ -388,8 +388,9 @@ class AddTransactionUseCaseTest {
         private var nextId = 1L
 
         override suspend fun insertTransaction(transaction: TransactionEntity): Long {
-            insertedTransactions.add(transaction)
-            return nextId++
+            val id = nextId++
+            insertedTransactions.add(transaction.copy(id = id))
+            return id
         }
 
         override suspend fun getTransactionByHash(transactionHash: String): TransactionEntity? = null

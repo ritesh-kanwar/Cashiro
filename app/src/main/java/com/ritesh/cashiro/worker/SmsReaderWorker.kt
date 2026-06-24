@@ -368,15 +368,13 @@ class SmsReaderWorker @AssistedInject constructor(
                                 
                                 // Determine if this transaction is from a card based on the message pattern
                                 val isFromCard = parsedTransaction.isFromCard
+                                val sanitizedSmsSource = "SMS_TRANSACTION:${parsedTransaction.type}:${parsedTransaction.currency}"
                                 
                                 if (BuildConfig.DEBUG) {
                                     Log.d(TAG, """
                                         Processing transaction:
-                                        - Bank: ${parsedTransaction.bankName}
-                                        - Number: **${parsedTransaction.accountLast4}
                                         - Is From Card: $isFromCard
                                         - Transaction Type: ${parsedTransaction.type}
-                                        - SMS Body (first 200 chars): ${parsedTransaction.smsBody.take(200)}
                                     """.trimIndent())
                                 }
                                 
@@ -417,7 +415,7 @@ class SmsReaderWorker @AssistedInject constructor(
                                     cardRepository.updateCardBalance(
                                         cardId = card.id,
                                         balance = parsedTransaction.balance,  // Can be null
-                                        source = parsedTransaction.smsBody.take(200),  // Always save source
+                                        source = sanitizedSmsSource.take(200),
                                         date = LocalDateTime.ofInstant(
                                             Instant.ofEpochMilli(parsedTransaction.timestamp),
                                             ZoneId.systemDefault()
@@ -466,12 +464,6 @@ class SmsReaderWorker @AssistedInject constructor(
                                     
                                     // Calculate new balance based on transaction
                                     val newBalance = when {
-                                        // For credit cards: spending increases balance (debt), payments decrease it
-                                        isCreditCard -> {
-                                            val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
-                                            // Credit card transaction (CREDIT type) = spending, add to outstanding
-                                            currentBalance + parsedTransaction.amount
-                                        }
                                         // Check if this is a payment TO a credit card (reducing debt)
                                         existingAccount != null &&
                                             existingAccount.isCreditCard &&
@@ -479,6 +471,12 @@ class SmsReaderWorker @AssistedInject constructor(
                                             val currentBalance = existingAccount.balance
                                             // Payment to credit card, reduce outstanding
                                             (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
+                                        }
+                                        // For credit cards: spending increases balance (debt), payments decrease it
+                                        isCreditCard -> {
+                                            val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
+                                            // Credit card transaction (CREDIT type) = spending, add to outstanding
+                                            currentBalance + parsedTransaction.amount
                                         }
                                         // For regular accounts, use balance from SMS if available
                                         parsedTransaction.balance != null -> {
@@ -493,9 +491,6 @@ class SmsReaderWorker @AssistedInject constructor(
                                     if (BuildConfig.DEBUG) {
                                         Log.d(TAG, """
                                             Saving account balance:
-                                            - Bank: ${parsedTransaction.bankName}
-                                            - Original: **${parsedTransaction.accountLast4}
-                                            - Target Account: **$targetAccountLast4
                                             - Is Card Transaction: ${parsedTransaction.isFromCard}
                                             - Is Credit Card: $isCreditCard
                                             - Transaction Amount: ${parsedTransaction.amount}
@@ -529,21 +524,21 @@ class SmsReaderWorker @AssistedInject constructor(
                                                 existingAccount?.creditLimit
                                             },
                                             isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
-                                            smsSource = parsedTransaction.smsBody,
+                                            smsSource = sanitizedSmsSource,
                                             currency = parsedTransaction.currency
                                         )
                                         
                                         if (BuildConfig.DEBUG) {
                                             val logMsg = if (parsedTransaction.creditLimit != null) {
-                                                "Saved balance/credit limit (${CurrencyFormatter.formatCurrency(parsedTransaction.creditLimit!!)}) for ${parsedTransaction.bankName} **$targetAccountLast4"
+                                                "Saved balance/credit limit (${CurrencyFormatter.formatCurrency(parsedTransaction.creditLimit!!)}) from SMS transaction"
                                             } else {
-                                                "Saved balance update for ${parsedTransaction.bankName} **$targetAccountLast4"
+                                                "Saved balance update from SMS transaction"
                                             }
                                             Log.d(TAG, logMsg)
                                         }
                                     } else {
                                         if (BuildConfig.DEBUG) {
-                                            Log.d(TAG, "Skipped saving balance: ${parsedTransaction.bankName} **$targetAccountLast4")
+                                            Log.d(TAG, "Skipped saving balance for SMS transaction")
                                         }
                                     }
                                 } else {

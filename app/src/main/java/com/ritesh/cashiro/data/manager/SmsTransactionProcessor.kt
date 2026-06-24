@@ -198,25 +198,27 @@ class SmsTransactionProcessor @Inject constructor(
         entity: TransactionEntity,
         rowId: Long
     ) {
-        val parsedAccountLast4 = parsedTransaction.accountLast4 ?: return
+        val parsedAccountLast4 = parsedTransaction.accountLast4?.takeIf { it.isNotBlank() }
+        val resolvedAccountLast4 = entity.accountNumber?.takeIf { it.isNotBlank() }
+        if (parsedAccountLast4 == null && resolvedAccountLast4 == null) return
 
         val isFromCard = parsedTransaction.isFromCard
 
         val targetAccountLast4: String? = if (isFromCard) {
-            var card = parsedTransaction.accountLast4?.let {
+            var card = parsedAccountLast4?.let {
                 cardRepository.getCard(parsedTransaction.bankName, it)
             }
 
             if (card == null) {
                 val isCredit = (parsedTransaction.type.toEntityType() == TransactionType.CREDIT)
-                parsedTransaction.accountLast4?.let { accountLast4 ->
+                parsedAccountLast4?.let { accountLast4 ->
                     cardRepository.findOrCreateCard(
                         cardLast4 = accountLast4,
                         bankName = parsedTransaction.bankName,
                         isCredit = isCredit
                     )
                 }
-                card = parsedTransaction.accountLast4?.let {
+                card = parsedAccountLast4?.let {
                     cardRepository.getCard(parsedTransaction.bankName, it)
                 }
             }
@@ -229,7 +231,7 @@ class SmsTransactionProcessor @Inject constructor(
                 cardRepository.updateCardBalance(
                     cardId = card.id,
                     balance = parsedTransaction.balance,
-                    source = parsedTransaction.smsBody.take(200),
+                    source = sanitizeSmsSource(parsedTransaction).take(200),
                     date = LocalDateTime.ofInstant(
                         Instant.ofEpochMilli(parsedTransaction.timestamp),
                         ZoneId.systemDefault()
@@ -237,13 +239,13 @@ class SmsTransactionProcessor @Inject constructor(
                 )
 
                 when {
-                    card.cardType == CardType.CREDIT -> parsedTransaction.accountLast4
+                    card.cardType == CardType.CREDIT -> parsedAccountLast4
                     card.cardType == CardType.DEBIT && card.accountLast4 != null -> card.accountLast4
                     else -> null
                 }
             }
         } else {
-            entity.accountNumber?.takeIf { it.isNotBlank() } ?: parsedAccountLast4
+            resolvedAccountLast4 ?: parsedAccountLast4
         }
 
         if (targetAccountLast4 != null) {
@@ -258,13 +260,15 @@ class SmsTransactionProcessor @Inject constructor(
             )
 
             val newBalance = when {
+                existingAccount != null &&
+                    existingAccount.isCreditCard &&
+                    parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
+                    val currentBalance = existingAccount.balance
+                    (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
+                }
                 isCreditCard -> {
                     val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
                     currentBalance + parsedTransaction.amount
-                }
-                existingAccount?.isCreditCard == true && parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
-                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
-                    (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
                 }
                 parsedTransaction.balance != null -> parsedTransaction.balance!!
                 else -> {
@@ -302,13 +306,17 @@ class SmsTransactionProcessor @Inject constructor(
                     existingAccount?.creditLimit
                 },
                 isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
-                smsSource = parsedTransaction.smsBody,
+                smsSource = sanitizeSmsSource(parsedTransaction),
                 currency = parsedTransaction.currency
             )
 
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "Saved balance update for ${parsedTransaction.bankName} **$targetAccountLast4")
+                Log.d(TAG, "Saved balance update from SMS transaction")
             }
         }
+    }
+
+    private fun sanitizeSmsSource(parsedTransaction: ParsedTransaction): String {
+        return "SMS_TRANSACTION:${parsedTransaction.type}:${parsedTransaction.currency}"
     }
 }

@@ -1145,16 +1145,14 @@ private suspend fun processBalanceUpdate(
     if (parsedAccountLast4 != null) {
         // Determine if this transaction is from a card based on the message pattern
         val isFromCard = parsedTransaction.isFromCard
+        val sanitizedSmsSource = "SMS_TRANSACTION:${parsedTransaction.type}:${parsedTransaction.currency}"
 
         if (BuildConfig.DEBUG) {
             Log.d(
                 TAG, """
                     Processing transaction:
-                    - Bank: ${parsedTransaction.bankName}
-                    - Number: **${parsedTransaction.accountLast4}
                     - Is From Card: $isFromCard
                     - Transaction Type: ${parsedTransaction.type}
-                    - SMS Body (first 200 chars): ${parsedTransaction.smsBody.take(200)}
                 """.trimIndent()
             )
         }
@@ -1195,7 +1193,7 @@ private suspend fun processBalanceUpdate(
             cardRepository.updateCardBalance(
                 cardId = card.id,
                 balance = parsedTransaction.balance,  // Can be null
-                source = parsedTransaction.smsBody.take(200),  // Always save source
+                source = sanitizedSmsSource.take(200),
                 date = LocalDateTime.ofInstant(
                     Instant.ofEpochMilli(parsedTransaction.timestamp),
                     ZoneId.systemDefault()
@@ -1245,16 +1243,16 @@ private suspend fun processBalanceUpdate(
             )
 
             val newBalance = when {
-                isCreditCard -> {
-                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
-                    currentBalance + parsedTransaction.amount
-                }
-
                 existingAccount != null &&
                     existingAccount.isCreditCard &&
                     parsedTransaction.type.toEntityType() == TransactionType.INCOME -> {
                     val currentBalance = existingAccount.balance
                     (currentBalance - parsedTransaction.amount).max(BigDecimal.ZERO)
+                }
+
+                isCreditCard -> {
+                    val currentBalance = existingAccount?.balance ?: BigDecimal.ZERO
+                    currentBalance + parsedTransaction.amount
                 }
 
                 parsedTransaction.balance != null -> {
@@ -1294,9 +1292,6 @@ private suspend fun processBalanceUpdate(
                     TAG, """
                         Saving account balance:
                         - SMS Timestamp: ${parsedTransaction.timestamp} (${java.time.Instant.ofEpochMilli(parsedTransaction.timestamp)})
-                        - Bank: ${parsedTransaction.bankName}
-                        - Original: **${parsedTransaction.accountLast4}
-                        - Target Account: **$targetAccountLast4
                         - Is Card Transaction: ${parsedTransaction.isFromCard}
                         - Is Credit Card: $isCreditCard
                         - Transaction Type: ${parsedTransaction.type.toEntityType()}
@@ -1333,7 +1328,7 @@ private suspend fun processBalanceUpdate(
                         existingAccount?.creditLimit
                     },
                     isCreditCard = isCreditCard || (existingAccount?.isCreditCard ?: false),
-                    smsSource = parsedTransaction.smsBody,
+                    smsSource = sanitizedSmsSource,
                     currency = parsedTransaction.currency
                 )
 
@@ -1343,15 +1338,15 @@ private suspend fun processBalanceUpdate(
                             CurrencyFormatter.formatCurrency(
                                 parsedTransaction.creditLimit!!
                             )
-                        }) for ${parsedTransaction.bankName} **$targetAccountLast4"
+                        }) from SMS transaction"
                     } else {
-                        "Saved balance update for ${parsedTransaction.bankName} **$targetAccountLast4"
+                        "Saved balance update from SMS transaction"
                     }
                     Log.d(TAG, logMsg)
                 }
             } else {
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "Skipped saving balance: ${parsedTransaction.bankName} **$targetAccountLast4")
+                    Log.d(TAG, "Skipped saving balance for SMS transaction")
                 }
             }
         } else {
