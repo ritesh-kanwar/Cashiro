@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cashiro</string>
+    <!-- App shortcuts -->
     <string name="add_transaction">Přidat transakci</string>
     <string name="add_subscription">Přidat odběr</string>
     <string name="add_transfer">Přidat převod</string>
+    <!-- Add Screen -->
     <string name="add_new">Přidat nový</string>
     <string name="transaction">Transakce</string>
     <string name="subscription">Předplatné</string>
+    <!-- Data Privacy Screen -->
     <string name="data_privacy_title">Soukromí dat</string>
     <string name="security_section">Zabezpečení</string>
     <string name="app_lock">Zámek aplikací</string>
@@ -34,9 +37,11 @@
     <string name="profile_data">Data profilu</string>
     <string name="budgets">Rozpočty</string>
     <string name="app_preferences">Nastavení aplikací</string>
+    <!-- NumberPad -->
     <string name="enter_amount">Zadejte částku</string>
     <string name="done">Hotovo</string>
     <string name="backspace">Pozadí</string>
+    <!-- Merge Accounts Dialogs -->
     <string name="merge_accounts_title">Sloučit účty</string>
     <string name="merge_accounts_desc">Vyberte účty pro sloučení do %1$s (...%2$s). Vybrané účty budou po sloučení odstraněny.</string>
     <string name="next">Další</string>
@@ -50,6 +55,7 @@
     <string name="merge_confirm_title">Konečné potvrzení</string>
     <string name="merge_confirm_message">Slučující účty: Všechny současné i minulé transakce z fúzujících bankovních účtů se nyní zobrazí na sloučeném bankovním účtu. Původní účty budou odstraněny.</string>
     <string name="merge">Sloučit</string>
+    <!-- HistorySheet -->
     <string name="balance_history_title">Historie zůstatku</string>
     <string name="records_count_latest_balance_note">%1$d záznamů • Poslední zůstatek je zobrazen na účtech</string>
     <string name="no_balance_history_available">Žádná historie zůstatku není k dispozici</string>
@@ -66,6 +72,7 @@
     <string name="source_system">Systém</string>
     <string name="sms_source">Zdroj SMS</string>
     <string name="copy">Kopírovat</string>
+    <!-- AccountDetailScreen -->
     <string name="account_details">Detaily účtu</string>
     <string name="transactions_count">Transakce (%1$d)</string>
     <string name="balance_trend">Vývoj zůstatku</string>
@@ -79,6 +86,14 @@
     <string name="range_last_6_months">Posledních 6 měsíců</string>
     <string name="range_last_year">Minulý rok</string>
     <string name="range_all_time">Celý čas</string>
+    <string name="time_period_this_month">This Month</string>
+    <string name="time_period_last_month">Last Month</string>
+    <string name="time_period_current_fy">Current FY</string>
+    <string name="time_period_all_time">Celý čas</string>
+    <string name="time_period_custom_range">Custom Range</string>
+    <string name="type_all">Vše</string>
+    <string name="type_credit">Úvěry</string>
+    <!-- Add/Edit Account Screens -->
     <string name="add_account_info">Přidejte účty, které nejsou sledovány přes SMS jako hotovost, peněženky nebo investiční účty.</string>
     <string name="account_type_label">Typ účtu</string>
     <string name="account_icon_label">Ikona účtu</string>
@@ -86,11 +101,11 @@
     <string name="placeholder_bank_name">např. HDFC Bank</string>
     <string name="placeholder_credit_name">Např. HDFC kreditní karta</string>
     <string name="placeholder_wallet_name">Např. hotovost</string>
-    <string name="last_4_digits_required_label">Poslední 4 číslice *</string>
+    <string name="last_4_digits_required_label">Last 4 Digits *</string>
     <string name="placeholder_last_4_digits">např. 1234</string>
     <string name="enter_last_4_digits_hint">Zadejte poslední 4 číslice účtu/karty</string>
     <string name="current_balance_required_label">Aktuální zůstatek*</string>
-    <string name="placeholder_decimal">0,00</string>
+    <string name="placeholder_decimal">0.00</string>
     <string name="currency_label">Měna</string>
     <string name="select_currency">Vybrat měnu</string>
     <string name="credit_limit_label">Úvěrový limit</string>
@@ -108,13 +123,14 @@
     <string name="outstanding_label">Nevyřízené</string>
     <string name="balance_label">Zůstatek</string>
     <string name="available_credit_label">Dostupný kredit: %1$s</string>
-    <string name="utilization_label">Využití: %1$d%%</string>
+    <string name="utilization_label">Utilization: %1$d%%</string>
     <string name="wallet_name_label">Název peněženky</string>
     <string name="bank_name_label">Název banky</string>
     <string name="account_number_last_4_label">Číslo účtu (poslední 4)</string>
     <string name="delete_account_desc">Odstranit účet</string>
     <string name="save_changes">Uložit změny</string>
     <string name="type_wallet_lowercase">peněženka</string>
+    <!-- ManageAccountsScreen -->
     <string name="title_accounts">Účty</string>
     <string name="no_accounts_yet">Zatím žádné účty</string>
     <string name="add_account_fab_desc">Přidat účet</string>
@@ -147,6 +163,7 @@
     <string name="select_account_link_prompt">Vyberte účet pro propojení této karty s:</string>
     <string name="action_cancel">Zrušit</string>
     <string name="action_link">Odkaz</string>
+    <!-- SubscriptionTabContent & TransactionTabContent -->
     <string name="subscription_info">Sledujte opakující se výdaje. Budete muset přidávat transakce ručně každý měsíc.</string>
     <string name="billing_cycle_label">Cyklus fakturace</string>
     <string name="cycle_monthly">Měsíčně</string>
@@ -177,11 +194,13 @@
     <string name="merchant_description">Obchodník / Popis</string>
     <string name="where_did_you_spend">Kde jste to utratili?</string>
     <string name="merchant_placeholder">např. cíl, Walmart</string>
+    <!-- Budgets Screen -->
     <string name="new_budget">Nový rozpočet</string>
     <string name="no_budgets_yet">Zatím žádné rozpočty</string>
     <string name="create_first_budget_desc">Vytvořte svůj první rozpočet, abyste začali sledovat své výdajové cíle</string>
     <string name="create_budget">Vytvořit rozpočet</string>
     <string name="edit_budget">Upravit rozpočet</string>
+    <!-- Edit Budget Sheet -->
     <string name="budget_period">Rozpočtové období</string>
     <string name="starts">Začíná</string>
     <string name="ends">Končí</string>
@@ -210,7 +229,7 @@
     <string name="daily_goal_remaining">DENNÍ VEDLEJŠÍ ZÍSKÁNÍ</string>
     <string name="daily_budget_left">DENNÍ ROZPOČTOVÝ ROK</string>
     <string name="saved_goal">ULOŽENO / GOAL</string>
-    <string name="spend_limit">Utratit / Limit</string>
+    <string name="spend_limit">SPEND / LIMIT</string>
     <string name="days_remaining_format">Zbývá %1$d dní</string>
     <string name="link_accounts">Propojit účty</string>
     <string name="ending_in_format">Končím v %1$s</string>
@@ -234,11 +253,13 @@
     <string name="all_transactions">Všechny transakce</string>
     <string name="all_transactions_desc">Všechny transakce v rámci vybraných kategorií a filtrů\npoužitelné pro dlouhodobé rozpočty na více období</string>
     <string name="all_transactions_example">Příklad: Měsíční rozpočet</string>
+    <!-- Categories Screen -->
     <string name="categories">Kategorie</string>
     <string name="add_category">Přidat kategorii</string>
     <string name="clear_search">Vymazat hledání</string>
     <string name="expense_categories">Kategorie výdajů</string>
     <string name="income_categories">Příchozí kategorie</string>
+    <!-- Edit Category Sheet -->
     <string name="category_name">Název kategorie</string>
     <string name="category_description_placeholder">popis kategorie</string>
     <string name="add_subcategory">Přidat podkategorii</string>
@@ -251,16 +272,18 @@
     <string name="update_category">Aktualizovat kategorii</string>
     <string name="create_category">Vytvořit kategorii</string>
     <string name="reset_to_default">Obnovit výchozí</string>
+    <!-- Edit Subcategory Sheet -->
     <string name="subcategory">Podkategorie</string>
     <string name="delete_subcategory">Odstranit podkategorii</string>
     <string name="create_subcategory">Vytvořit podkategorii</string>
     <string name="update_subcategory">Aktualizovat podkategorii</string>
+    <!-- Analytics -->
     <string name="total">Celkem</string>
     <string name="suffix_million">MM</string>
     <string name="suffix_thousand">K</string>
     <string name="percentage_format">(%1$d%%)</string>
     <string name="total_uppercase">CELKEM</string>
-    <string name="transactions_format">%1$d transakcí</string>
+    <string name="transactions_format">%1$d TXNS</string>
     <string name="average">PRŮMĚRNÁ</string>
     <string name="per_day"> /den</string>
     <string name="percentage_of_total">%1$d%% z CELKEM</string>
@@ -273,6 +296,7 @@
     <string name="chart_type_heatmap">Teplotní mapa</string>
     <string name="chart_format">%1$s graf</string>
     <string name="toggle_view">Přepnout zobrazení</string>
+    <!-- Chat Screen -->
     <string name="cashiro_ai">Cashiro AI</string>
     <string name="more_options">Další možnosti</string>
     <string name="clear_chat">Vyčistit chat</string>
@@ -299,6 +323,7 @@
     <string name="percentage_format_no_brackets">%1$d%%</string>
     <string name="tokens_usage_format">%1$s / %2$s tokeny</string>
     <string name="system_tokens_format">Systém: %1$s</string>
+    <!-- Home Screen & Widgets -->
     <string name="edit_widgets">Upravit widgety</string>
     <string name="edit_widgets_desc">Změnit pořadí nebo skrýt sekce na domovské obrazovce.</string>
     <string name="reorder">Změnit pořadí</string>
@@ -325,6 +350,7 @@
     <string name="subscriptions_count_format">%1$d Odběry</string>
     <string name="per_month">/ Měsíc</string>
     <string name="last_days_format">Poslední %1$d dní</string>
+    <!-- Edit Profile & Profile -->
     <string name="edit_profile">Upravit profil</string>
     <string name="gallery">Galerie</string>
     <string name="change_banner">Změnit banner</string>
@@ -333,7 +359,8 @@
     <string name="net_worth">Čisté jmění</string>
     <string name="upcoming">Nadcházející</string>
     <string name="active_subscriptions_singular">1 podb</string>
-    <string name="active_subscriptions_plural">%1$d odběratelů</string>
+    <string name="active_subscriptions_plural">%1$d Subs</string>
+    <!-- Onboarding -->
     <string name="app_logo">Logo aplikace</string>
     <string name="onboarding_subtitle">Zažijte bezproblémový způsob, jak sledovat Vaše peníze, rozdělte své výdaje a rychleji zasáhněte své úsporné cíle.</string>
     <string name="set_up_your_profile">Nastavte si profil</string>
@@ -363,6 +390,7 @@
     <string name="scanning_ellipsis">Skenování...</string>
     <string name="continue_action">Pokračovat</string>
     <string name="finish_setup">Dokončit nastavení</string>
+    <!-- Mock Messages -->
     <string name="mock_msg_electric_bill">Elektrický účet splatný: &lt;unk&gt; 2,450</string>
     <string name="mock_msg_starbucks">Podle společnosti Starbucks je společnost Starbucks podnikem ve smyslu čl. 107 odst. 1 Smlouvy.</string>
     <string name="mock_msg_cc_due">Připomenutí: Kreditní karta s termínem zítra</string>
@@ -373,6 +401,7 @@
     <string name="mock_msg_axis">Oza: &lt;unk&gt; 200 utraceno v Zomato</string>
     <string name="notification">Oznamování</string>
     <string name="mock_msg_salary_credited">Váš plat byl připsán!</string>
+    <!-- SubscriptionsScreen -->
     <string name="subscriptions">Předplatné</string>
     <string name="total_subscriptions">Celkový počet odběrů</string>
     <string name="active_count_format">%1$d aktivní</string>
@@ -388,7 +417,7 @@
     <string name="original_sms">Původní SMS</string>
     <string name="track_payment">Sledovat platbu</string>
     <string name="edit_subscription">Upravit předplatné</string>
-    <string name="subscription_hidden_format">%1$s skryto</string>
+    <string name="subscription_hidden_format">%1$s hidden</string>
     <string name="payment_for_format">Platba za %1$s</string>
     <string name="overdue_since_format">Po termínu od %1$s</string>
     <string name="due_on_format">Termín na %1$s</string>
@@ -399,23 +428,28 @@
     <string name="show_original_message">Zobrazit původní zprávu</string>
     <string name="no_subscriptions_detected_yet">Zatím nebyly nalezeny žádné odběry</string>
     <string name="sync_sms_to_detect_subscriptions">Synchronizujte SMS pro detekci předplatného</string>
+    <!-- ExportTransactionsDialog -->
     <string name="export_transactions">Exportovat transakce</string>
     <string name="exporting">Exportování...</string>
     <string name="export_complete">Export dokončen!</string>
     <string name="export_failed">Export selhal</string>
-    <string name="export_transactions_desc">Exportovat %1$d transakcí do formátu CSV</string>
+    <string name="export_transactions_desc">Export %1$d transactions to CSV format</string>
     <string name="total_transactions_export">Celkové transakce:</string>
-    <string name="date_range">Rozsah dat:</string>
+    <string name="date_range">Date range:</string>
     <string name="export_success_msg_format">%1$d transakcí úspěšně exportováno</string>
     <string name="size_format">Velikost: %1$s</string>
     <string name="share">Sdílet</string>
     <string name="retry">Opakovat</string>
     <string name="share_csv">Sdílet CSV</string>
     <string name="csv_export_subject">Export transakcí do Cashiro</string>
+    <!-- TransactionDetailScreen -->
     <string name="edit_transaction">Upravit transakci</string>
     <string name="transaction_details">Podrobnosti transakce</string>
     <string name="report_issue">Nahlásit problém</string>
     <string name="delete_transaction">Odstranit transakci</string>
+    <string name="duplicate_transaction">Duplicate Transaction</string>
+    <string name="transaction_duplicated">Transaction duplicated</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="transaction_updated_successfully">Transakce byla úspěšně aktualizována</string>
     <string name="merchant_label">Obchodník</string>
     <string name="description_optional_label">Popis (nepovinné)</string>
@@ -455,8 +489,9 @@
     <string name="semi_annual_recurring">pololetní</string>
     <string name="annual_recurring">Ročně</string>
     <string name="custom_recurring">Vlastní</string>
+    <!-- TransactionsFilterBottomSheet -->
     <string name="filters">Filtry</string>
-    <string name="reset">Resetovat</string>
+    <string name="reset">Reset</string>
     <string name="apply">Použít</string>
     <string name="subcategories">Podkategorie</string>
     <string name="amount_range">Rozsah částky</string>
@@ -465,6 +500,7 @@
     <string name="set_minimum_amount">Nastavit minimální množství</string>
     <string name="set_maximum_amount">Nastavit maximální množství</string>
     <string name="confirm">Potvrdit</string>
+    <!-- TransactionsScreen -->
     <string name="transactions_deleted_format">%1$d odstraněny transakce</string>
     <string name="items_selected_format">%1$d vybráno</string>
     <string name="deselect_all">Zrušit výběr všech</string>
@@ -475,6 +511,7 @@
     <string name="no_transactions_matching_format">Žádné transakce odpovídající \"%1$s\"</string>
     <string name="no_transactions_for_format">Žádné transakce pro %1$s</string>
     <string name="sync_sms_to_see_transactions">Synchronizujte SMS pro zobrazení transakcí</string>
+    <!-- About Screen -->
     <string name="about">O aplikaci</string>
     <string name="cashiro_logo_cd">Logo Cashiro</string>
     <string name="version_format">Verze %1$s, db-v%2$d</string>
@@ -497,6 +534,10 @@
     <string name="licenses">Licence</string>
     <string name="licenses_desc">Open source knihovny</string>
     <string name="developer_options">Možnosti pro vývojáře</string>
+    <string name="webhook_mode">Webhooky</string>
+    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
+    <string name="token_info">Chat Token Info</string>
+    <string name="token_info_desc">Show technical information in chat</string>
     <string name="developer_options_desc">Zkoušky a experimentální funkce</string>
     <string name="delete_all_data">Odstranit všechna data</string>
     <string name="delete_all_data_desc">Trvale vymazat všechny záznamy</string>
@@ -504,10 +545,18 @@
     <string name="delete_all_data_confirm_title">Smazat všechna data?</string>
     <string name="delete_all_data_confirm_desc">Tato akce trvale odstraní všechny transakce, rozpočty, předplatné a nastavení. Tuto akci nelze vrátit zpět.</string>
     <string name="delete_all">Smazat vše</string>
+    <!-- Licenses Screen -->
     <string name="license_version_format">v%1$s, db-v%2$d</string>
     <string name="license_disclaimer_software">SOFTWARE JE POSKYTNUTÝ \"AS IS\", BEZ ZÁRUKY JAKÉHO, EXPRESS NEBO IMPLIED, VČETNĚ BUDOUCÍ, KTERÉ NEOMEZENY ZÁRUKÁM MERCHANTABILITY, VÝPOČET PRO ÚČELY A JINÉ JEDNOTKY. V ŽÁDOSTI ŽÁDOSTI NEJSOU POVINNÉ ORGÁNY NEBO KOPYRIGTYŘSKÉ PODNIKY ODPOVĚDNÉ PRO JAKÉKOLI KLASIMAT, DRAŽKY NEBO JINÉ ODPOVĚDNÉ, KTERÉ NEJSOU ZAJIŠŤUJE AKCI SMLOUVY, PRACOVNÍ NEBO JINÉ ODCHYLKY VYPLÝVAJÍCÍ ZE SPOLEČNOSTI SOFTWARE NEBO JINÝCH ZAŘÍZENÍ V SOFTWARU NEBO V SOUVISLOSTI S POUŽITÍM NEBO JINÝMI ZAŘÍZENÍ.</string>
     <string name="license_disclaimer_rates">Směnné kurzy zobrazené v této aplikaci jsou pouze pro informační účely a neměly by být používány pro investiční rozhodnutí. Tyto sazby jsou odhady a nemusí odrážet skutečné sazby. Používáním této aplikace uznáváte, že rozumíte a přijímáte tato omezení a že přebíráte plnou odpovědnost za veškerá rozhodnutí učiněná na základě informací poskytnutých v aplikaci.</string>
     <string name="powered_by">Poháněn Kotlin Compose</string>
+    <plurals name="licenses_count">
+        <item quantity="one">%1$d licence</item>
+        <item quantity="few">%1$d licencí</item>
+        <item quantity="many">%1$d licencí</item>
+        <item quantity="other">%1$d licencí</item>
+    </plurals>
+    <!-- Rules Screen -->
     <string name="smart_rules">Chytrá pravidla</string>
     <string name="reset_to_defaults">Obnovit výchozí hodnoty</string>
     <string name="automatic_categorization">Automatická kategorizace</string>
@@ -532,6 +581,7 @@
     <string name="rule_summary_transfer">Samopřevody, kontra</string>
     <string name="priority_format">Priorita: %1$d</string>
     <string name="edit_rule">Upravit pravidlo</string>
+    <!-- SMS Screen -->
     <string name="sms_title">SMS</string>
     <string name="sms_scan_period">Perioda skenování SMS</string>
     <string name="scan_all_sms">Skenovat všechny SMS zprávy</string>
@@ -539,9 +589,16 @@
     <string name="months_count_format">%1$d měsíců</string>
     <string name="unrecognized_bank_messages">Nerozpoznané bankovní zprávy</string>
     <string name="no_unrecognized_messages">Žádné nerozpoznané zprávy</string>
+    <plurals name="unrecognized_messages_count">
+        <item quantity="one">Zpráva %1$d od potenciálních bank</item>
+        <item quantity="few">%1$d zprávy od potenciálních bank</item>
+        <item quantity="many">%1$d zprávy od potenciálních bank</item>
+        <item quantity="other">%1$d zprávy od potenciálních bank</item>
+    </plurals>
     <string name="sms_scan_period_desc">Vyberte počet měsíců SMS historie ke skenování transakcí</string>
     <string name="one_month">1 měsíc</string>
     <string name="two_years">2 roky</string>
+    <!-- Unrecognized SMS Screen -->
     <string name="unrecognized_messages_title">Nerozpoznané zprávy</string>
     <string name="unrecognized_bank_messages_desc">Tyto zprávy od potenciálních bank nelze automaticky analyzovat. Pomozte zlepšit Cashiro jejich oznámením, abychom mohli přidat podporu pro více bank.</string>
     <string name="show_reported">Zobrazit nahlášené</string>
@@ -551,20 +608,21 @@
     <string name="delete_message_confirm_desc">Opravdu chcete odstranit tuto nerozpoznanou zprávu? Tuto akci nelze vrátit zpět.</string>
     <string name="reported">Nahlášeno</string>
     <string name="report">Nahlásit</string>
+    <!-- Webhooks Settings & Screen -->
     <string name="new_webhook">Nový webový háček</string>
     <string name="edit_webhook">Upravit webový háček</string>
     <string name="webhooks">Webhooky</string>
     <string name="add_webhook">Přidat webový háček</string>
     <string name="pick_a_date">Vyberte datum</string>
     <string name="add">Přidat</string>
-    <string name="webhook_endpoint_section">Výstupní bod</string>
+    <string name="webhook_endpoint_section">Endpoint</string>
     <string name="webhook_name_label">Název webhooku</string>
     <string name="webhook_url_label">URL webového háčku</string>
     <string name="webhook_data_types_section">Druhy údajů</string>
     <string name="webhook_data_types_desc">Vyberte, která data jsou doručena do vašeho koncového bodu.</string>
     <string name="webhook_time_range_section">Časový rozsah</string>
     <string name="webhook_optional_headers">Volitelné záhlaví</string>
-    <string name="datatype_summary">shrnutí</string>
+    <string name="datatype_summary">summary</string>
     <string name="datatype_transactions">transakce</string>
     <string name="datatype_budgets">rozpočty</string>
     <string name="datatype_accounts">účty</string>
@@ -590,7 +648,7 @@
     <string name="sync_now">Synchronizovat nyní</string>
     <string name="sync_now_desc">Spuštění doručení pro všechny povolené profily</string>
     <string name="sync_schedule_title">Harmonogram synchronizace</string>
-    <string name="webhook_profiles_title">Profily</string>
+    <string name="webhook_profiles_title">Profiles</string>
     <string name="no_webhook_profiles">Zatím žádné profily webhooku</string>
     <string name="no_webhook_profiles_desc">Vytvořte si jeden pro zahájení synchronizace souhrnů, transakcí, rozpočtů, účtů nebo předplatných.</string>
     <string name="create_webhook_desc">Vytvořit nový profil webhooku</string>
@@ -614,6 +672,7 @@
     <string name="pick_a_time">Vyberte si čas</string>
     <string name="ok">OK</string>
     <string name="create_rule">Vytvořit pravidlo</string>
+    <!-- Account UI & Details -->
     <string name="edit_details">Upravit podrobnosti</string>
     <string name="merge_account">Sloučit účet</string>
     <string name="history">Historie</string>
@@ -625,19 +684,38 @@
     <string name="view_details">Zobrazit podrobnosti</string>
     <string name="none_manual_entry">Žádný (ruční vstup)</string>
     <string name="no_accounts_found">Nebyly nalezeny žádné účty</string>
+    <!-- Attachments Section -->
     <string name="attachments">Přílohy</string>
     <string name="add_attachment">Přidat přílohu</string>
     <string name="file_missing">Chybí soubor</string>
     <string name="missing">Chybějící</string>
     <string name="selected">Vybrané</string>
+    <plurals name="attachments_count">
+        <item quantity="one">%1$d soubor</item>
+        <item quantity="few">%1$d soubory</item>
+        <item quantity="many">%1$d soubory</item>
+        <item quantity="other">%1$d soubory</item>
+    </plurals>
+    <!-- Categories Sheet -->
+    <plurals name="subcategory_count_plural">
+        <item quantity="one">%1$d podkategorie</item>
+        <item quantity="few">%1$d podkategorie</item>
+        <item quantity="many">%1$d podkategorie</item>
+        <item quantity="other">%1$d podkategorie</item>
+    </plurals>
     <string name="search_placeholder_fruits">Hledat ovoce</string>
     <string name="search_placeholder_shopping">Hledat nakupování</string>
     <string name="search_placeholder_fitness">Vyhledat fitness</string>
     <string name="search_placeholder_sports">Hledat sporty</string>
+    <!-- Collapsible & Filter Rows -->
     <string name="more_filters">Další filtry</string>
     <string name="more_filters_active_format">Další filtry (%1$d aktivní)</string>
+    <string name="collapse_cd">Sbalit</string>
+    <string name="expand_cd">Rozbalit</string>
+    <!-- Color Picker -->
     <string name="colors">Barvy</string>
     <string name="color_picker_button_desc">Výběr vlastní barvy</string>
+    <!-- Currencies & Bottom Sheets -->
     <string name="search_currencies_placeholder">Hledat měny...</string>
     <string name="currency_not_available">Měna není k dispozici</string>
     <string name="view_all_currencies">Zobrazit všechny měny</string>
@@ -649,11 +727,13 @@
     <string name="last_updated_format">Naposledy aktualizováno: %1$s</string>
     <string name="currency_code_symbol_format">%1$s (%2$s)</string>
     <string name="exchange_rate_formula_format">1 %1$s = %2$s %3$s</string>
+    <!-- Selected Currency Localized Names -->
     <string name="currency_inr_name">Indická rupie (&lt;unk&gt; )</string>
     <string name="currency_usd_name">Americký dolar ($)</string>
     <string name="currency_aed_name">SAE Dirham (AED)</string>
     <string name="currency_npr_name">Nepalese Rupee (Rs)</string>
-    <string name="currency_etb_name">Etiopský birr (ብር)</string>
+    <string name="currency_etb_name">Ethiopian Birr (ብር)</string>
+    <!-- Custom Billing Cycles -->
     <string name="repeat_desc">Opakovat</string>
     <string name="set_to_forever">Nastavit na navždy</string>
     <string name="billing_unit_day">Den</string>
@@ -662,9 +742,17 @@
     <string name="billing_unit_year">Rok</string>
     <string name="forever">Navždy</string>
     <string name="until_date_format">Do %1$s</string>
+    <!-- Date Selection -->
     <string name="select_date_range">Vybrat rozsah data</string>
+    <!-- Delete Dialogs & Warnings -->
     <string name="delete_transaction_title">Odstranit transakci</string>
     <string name="delete_transaction_confirm">Opravdu chcete odstranit tuto transakci? Tuto akci nelze vrátit zpět.</string>
+    <plurals name="delete_transactions_title">
+        <item quantity="one">Delete %1$d transaction?</item>
+        <item quantity="few">Delete %1$d transactions?</item>
+        <item quantity="many">Delete %1$d transactions?</item>
+        <item quantity="other">Delete %1$d transactions?</item>
+    </plurals>
     <string name="delete_multiple_transactions_confirm">Tato akce je nevratná. Vybrané transakce budou trvale odstraněny a nemohou být obnoveny.</string>
     <string name="delete_account_title">Smazat účet?</string>
     <string name="delete_account_confirm">Jste si jisti, že chcete odstranit tento účet?</string>
@@ -683,12 +771,20 @@
     <string name="delete_subscription_confirm">Jste si jisti, že chcete odstranit \u2018%1$s\u2019? Tato akce ji trvale odstraní z vašeho seznamu předplatitelů.</string>
     <string name="delete_subcategory_title">Odstranit podkategorii?</string>
     <string name="delete_subcategory_confirm">Jste si jisti, že chcete odstranit \u2018%1$s\u2019? Tuto akci nelze vrátit zpět.</string>
+    <!-- User & Profile Greeting Card -->
     <string name="profile_desc">Profil obrázek</string>
     <string name="greeting_morning">Dobré ráno</string>
     <string name="greeting_afternoon">Dobré odpoledne</string>
     <string name="greeting_evening">Dobrý večer</string>
     <string name="greeting_night">Dobrá noc</string>
     <string name="month_status_last_day">Poslední den %1$s</string>
+    <plurals name="month_status_days_left_format">
+        <item quantity="one">%1$d den zbývá %2$s</item>
+        <item quantity="few">%1$d dní zbývá %2$s</item>
+        <item quantity="many">%1$d dní zbývá %2$s</item>
+        <item quantity="other">%1$d dní zbývá %2$s</item>
+    </plurals>
+    <!-- Rules Dialogs -->
     <string name="reset_rules_title">Resetovat pravidla</string>
     <string name="reset_rules_confirm">Obnovit všechna pravidla na výchozí nastavení? Vaše vlastní nastavení bude ztraceno.</string>
     <string name="delete_rule_title">Odstranit pravidlo</string>
@@ -705,291 +801,11 @@
     <string name="transactions_updated_format">Aktualizace transakcí: %1$d</string>
     <string name="transactions_blocked_format">Transakce blokovány (soft deleted): %1$d</string>
     <string name="errors_count_format">Chyby: %1$d</string>
+    <!-- SMS Scanning & Workers -->
     <string name="scanning_sms_messages_title">Skenování SMS zpráv</string>
     <string name="cancel_scan">Zrušit skenování</string>
     <string name="all_messages_processed">Všechny zprávy zpracovány!</string>
     <string name="processed_messages_format">Zpracované %1$d zpráv v %2$d</string>
-    <string name="duration_hours_minutes">%1$dh %2$dm</string>
-    <string name="duration_minutes_seconds">%1$dm %2$2s</string>
-    <string name="duration_seconds">%1$2s</string>
-    <string name="time_left_format">~%1$s zbývá</string>
-    <string name="batch_progress_format">Dávka %1$d z %2$d</string>
-    <string name="scan_completed_success">Skenování bylo úspěšně dokončeno!</string>
-    <string name="scan_failed_error">Skenování se nezdařilo. Zkuste to prosím znovu.</string>
-    <string name="scan_cancelled">Skenování zrušeno</string>
-    <string name="starting_scan">Spouštění skenování...</string>
-    <string name="scanning_sms_format">Skenování SMS: %1$d/%2$d</string>
-    <string name="select_time">Vyberte čas</string>
-    <string name="recurring">Opakování</string>
-    <string name="balance_after_format">Bil: %1$s</string>
-    <string name="description_indicator_desc">Obsahuje popis</string>
-    <string name="attachments_indicator_desc">Má přílohy</string>
-    <string name="type_transfer">Převod</string>
-    <string name="type_investment">Investice</string>
-    <string name="type_income">Výnosy</string>
-    <string name="type_expense">Výdaje</string>
-    <string name="estimated_amount_format">přibližně %1$s</string>
-    <string name="uncategorized">Nezařazené</string>
-    <string name="net">Čistá hodnota</string>
-    <string name="processing">Zpracovávání…</string>
-    <string name="language">Jazyk</string>
-    <string name="language_subtitle">Změnit jazyk aplikace</string>
-    <string name="select_language">Vybrat jazyk</string>
-    <string name="transactions_count_short">%1$d transakcí</string>
-    <string name="appearances">Vzhledy</string>
-    <string name="appearances_subtitle">Nastavení personalizace aplikace</string>
-    <string name="accounts_subtitle">Přidat účty a aktualizovat zůstatky</string>
-    <string name="budgets_subtitle">Nastavte a spravujte měsíční limity výdajů</string>
-    <string name="categories_subtitle">Spravujte kategorie výdajů a příjmů</string>
-    <string name="smart_rules_subtitle">Automatické kategorizování transakcí</string>
-    <string name="data_privacy_subtitle">Spravujte svá data a nastavení soukromí</string>
-    <string name="ai_chat_assistant">AI Chat Asistent</string>
-    <string name="ai_chat_subtitle_not_downloaded">Stáhnout model Qwen 2.5 (%1$d MB)</string>
-    <string name="ai_chat_subtitle_downloading">Stahování… %1$d%%</string>
-    <string name="ai_chat_subtitle_paused">Stahování pozastaveno. Klepněte pro pokračování.</string>
-    <string name="ai_chat_subtitle_completed">Qwen připraven k chatu</string>
-    <string name="ai_chat_subtitle_failed">Stažení selhalo. Klepněte pro opakování.</string>
-    <string name="ai_chat_subtitle_insufficient_space">Nedostatek volného místa</string>
-    <string name="notifications">Oznámení</string>
-    <string name="notifications_subtitle">Spravovat nastavení připomenutí</string>
-    <string name="sms_subtitle">Spravovat nastavení SMS</string>
-    <string name="webhooks_subtitle">BYOAPI synchronizace financí</string>
-    <string name="about_subtitle">Verze aplikace, zdrojový kód a další</string>
-    <string name="currency">Měna</string>
-    <string name="currency_subtitle">Kurzy měn a preference měn</string>
-    <string name="currency_settings_title">Měna</string>
-    <string name="unified_currency">Jednotná měna</string>
-    <string name="unified_currency_subtitle">Zobrazit všechny částky v jedné měně</string>
-    <string name="default_currency">Výchozí měna</string>
-    <string name="default_currency_subtitle">Přednastavit měnu pro nové položky</string>
-    <string name="display_currency">Zobrazovací měna</string>
-    <string name="default_label">Výchozí</string>
-    <string name="none">Nic</string>
-    <string name="rates_info_subtitle">Zobrazit kurzy směny pro vaši základní měnu</string>
-    <string name="search_currencies">Hledat měny...</string>
-    <string name="rates_relative_to">Sazby vztažené k %1$s</string>
-    <string name="last_updated">Naposledy aktualizováno: %1$s</string>
-    <string name="custom_rate">Vlastní kurz</string>
-    <string name="custom_rate_set">Vlastní kurz nastaven. Klepněte na Obnovit pro návrat k API kurzu.</string>
-    <string name="add_custom_currency">Přidat vlastní měnu</string>
-    <string name="custom_currency">Vlastní měna</string>
-    <string name="currency_country_name">Název měny</string>
-    <string name="eg_test_country">npr. Testovací země</string>
-    <string name="currency_code">Kód měny</string>
-    <string name="eg_tst">npr. TST</string>
-    <string name="currency_symbol">Symbol měny</string>
-    <string name="eg_tsymbol">npr. T$</string>
-    <string name="exchange_rate">Směnný kurz</string>
-    <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
-    <string name="please_fill_all_fields">Vyplňte prosím všechna pole platnými údaji.</string>
-    <string name="base_currency_hint">Základ = výchozí měna nebo měna hlavního účtu</string>
-    <string name="save_currency">Uložit měnu</string>
-    <string name="currency_name_hint">Americký dolar, Indická rupie...</string>
-    <string name="currency_code_hint">USD, INR, EUR ...</string>
-    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
-    <string name="exchange_rate_hint">1 základní = X vlastní měny</string>
-    <string name="exchange_rates_notice_title">Oznámení o směnných kurzech</string>
-    <string name="exchange_rates_notice_text">Směnné kurzy zobrazené v této aplikaci jsou pouze pro informační účely a neměly by být používány pro investiční rozhodnutí. Tyto kurzy jsou odhady a nemusí odrážet skutečné kurzy. Používáním této aplikace potvrzujete, že rozumíte těmto omezením a přijímáte je.</string>
-    <string name="custom_label">VLASTNÍ</string>
-    <string name="time_period_this_month">Tento měsíc</string>
-    <string name="time_period_last_month">Minulý měsíc</string>
-    <string name="time_period_current_fy">Aktuální fiskální rok</string>
-    <string name="time_period_all_time">Celkově</string>
-    <string name="time_period_custom_range">Vlastní rozsah</string>
-    <string name="type_all">Vše</string>
-    <string name="type_credit">Kredit</string>
-    <string name="duplicate_transaction">Duplikovat transakci</string>
-    <string name="transaction_duplicated">Transakce byla duplikována</string>
-    <string name="share_receipt">Sdílet potvrzení</string>
-    <string name="webhook_mode">Webhooks</string>
-    <string name="webhook_mode_desc">Povolit synchronizaci webhooku BYOAPI</string>
-    <string name="token_info">Informace o tokenu chatu</string>
-    <string name="token_info_desc">Zobrazit technické informace v chatu</string>
-    <string name="type_balance_update">Aktualizace zůstatku</string>
-    <string name="new_chat">Nový chat</string>
-    <string name="chat_history">Historie chatu</string>
-    <string name="appearance_title">Vzhled</string>
-    <string name="theme_system">Systém</string>
-    <string name="theme_light">Světlo</string>
-    <string name="theme_dark">Tmavé</string>
-    <string name="style_dynamic">Dynamické</string>
-    <string name="style_dynamic_sub">Barvy tapety</string>
-    <string name="style_default">Výchozí</string>
-    <string name="style_default_sub">Výchozí barvy</string>
-    <string name="amoled_black">Amoled černá</string>
-    <string name="amoled_black_desc">Použijte čistě černé pozadí pro hlubší kontrast</string>
-    <string name="blur_effects">Efekty rozostření</string>
-    <string name="blur_effects_desc">Povolte efekty skleněného rozostření v UI prvcích</string>
-    <string name="logo_original">Originál</string>
-    <string name="logo_anarchy">Anarchie</string>
-    <string name="logo_comic">Komiks</string>
-    <string name="logo_zenith">Zenit</string>
-    <string name="logo_monochrome">Monochrom</string>
-    <string name="navigation_style">Navigace</string>
-    <string name="nav_floating">Plovoucí</string>
-    <string name="nav_floating_sub">Moderní a elegantní</string>
-    <string name="nav_normal">Normální</string>
-    <string name="nav_normal_sub">Standardní M3</string>
-    <string name="hide_nav_labels">Skrýt popisky navigace</string>
-    <string name="hide_nav_labels_desc">Skrýt popisky v navigační liště</string>
-    <string name="hide_pill_indicator">Skrýt indikátor pilulky</string>
-    <string name="hide_pill_indicator_desc">Skrýt indikátor výběru v navigační liště</string>
-    <string name="fonts_title">Písma</string>
-    <string name="font_default_sub">Systém</string>
-    <string name="font_snpro">SN Pro</string>
-    <string name="font_snpro_sub">Modern Mono</string>
-    <string name="quick_templates">Rychlé šablony</string>
-    <string name="rule_name_label">Název pravidla</string>
-    <string name="rule_name_placeholder">např. Výdaje za jídlo do ₹200</string>
-    <string name="description_placeholder">Co toto pravidlo dělá?</string>
-    <string name="conditions_title">Podmínky</string>
-    <string name="add_condition">Přidat</string>
-    <string name="condition_n_format">Podmínka %1$d</string>
-    <string name="remove_condition_cd">Odstranit podmínku</string>
-    <string name="field_label">Pole</string>
-    <string name="value_label">Hodnota</string>
-    <string name="field_amount">Částka</string>
-    <string name="field_merchant">Obchodník</string>
-    <string name="field_category">Kategorie</string>
-    <string name="field_sms_text">SMS text</string>
-    <string name="field_transaction_type">Typ transakce</string>
-    <string name="field_subcategory">Podkategorie</string>
-    <string name="field_bank_name">Název banky</string>
-    <string name="field_default">Pole</string>
-    <string name="then_title">Poté</string>
-    <string name="action_type_label">Typ akce</string>
-    <string name="action_block_transaction">Zablokovat transakci</string>
-    <string name="action_set_field">Nastavit pole</string>
-    <string name="action_clear_field">Vymazat pole</string>
-    <string name="action_set_category">Nastavit kategorii</string>
-    <string name="action_set_subcategory">Nastavit podkategorii</string>
-    <string name="action_set_merchant">Nastavit název obchodníka</string>
-    <string name="action_set_type">Nastavit typ transakce</string>
-    <string name="action_label">Akce</string>
-    <string name="block_message">Transakce odpovídající tomuto pravidlu budou zablokovány a neuloženy</string>
-    <string name="choose_category">Vybrat kategorii</string>
-    <string name="preset_block_otps">Blokovat OTP</string>
-    <string name="preset_block_small">Blokovat malé částky</string>
-    <string name="preset_small_food">Malé částky → Jídlo</string>
-    <string name="preset_standardize">Standardizovat obchodníka</string>
-    <string name="preset_mark_income">Označit jako příjem</string>
-    <string name="notification_access">Přístup k oznámením</string>
-    <string name="bank_push_notifications">Push oznámení banky</string>
-    <string name="notification_access_active">Přístup k oznámením je aktivní</string>
-    <string name="notification_access_desc">Povolit detekci bankovních transakcí z push oznámení</string>
-    <string name="notification_access_required">Vyžadován přístup k oznámením</string>
-    <string name="notification_access_required_desc">Pro automatickou detekci bankovních transakcí v reálném čase vyžaduje Cashiro přístup k oznámením. Toto je systémové oprávnění.</string>
-    <string name="how_to_enable">Jak povolit:</string>
-    <string name="step_1">Klepněte na tlačítko \'Otevřít nastavení\' níže.</string>
-    <string name="step_2">Najděte \'Cashiro\' v seznamu aplikací.</string>
-    <string name="step_3">Přepněte \'Povolit přístup k oznámením\' na povoleno.</string>
-    <string name="open_settings">Otevřít nastavení</string>
-    <string name="scan_settings">Nastavení skenování</string>
-    <string name="remind_transactions">Připomenutí transakcí</string>
-    <string name="remind_transactions_desc">Získejte připomenutí pro nové zprávy</string>
-    <string name="alert_time">Čas upozornění</string>
-    <string name="upcoming_transactions_section">Nadcházející transakce</string>
-    <string name="upcoming_transactions_desc">Získejte připomenutí pro nadcházející platby</string>
-    <string name="test_notification_alerts">Otestovat upozornění</string>
-    <string name="test_notification_alerts_desc">Periodicky posílat testovací oznámení</string>
-    <string name="sample_data">Vzorková data</string>
-    <string name="sample_data_desc">Vytvořit zkušební účty a transakce</string>
-    <string name="home_title">Domů</string>
-    <string name="full_resync">Plná resynchronizace</string>
-    <string name="full_resync_desc">Tímto se znovu zpracují všechny SMS zprávy od začátku. Použijte toto k opravě problémů způsobených aktualizovanými parsery bank. 
-
-To může trvat několik sekund v závislosti na historii vašich zpráv.</string>
-    <string name="resync_all">Resynchronizovat vše</string>
-    <string name="sync_sms_cd">Synchronizovat SMS transakce</string>
-    <string name="add_transaction_subscription_cd">Přidat transakci nebo předplatné</string>
-    <string name="selected_cd">Vybrané</string>
-    <string name="net_worth_label">Čisté jmění</string>
-    <string name="this_month_lbl">TENTO MĚSÍC</string>
-    <string name="this_year_lbl">TENTO ROK</string>
-    <string name="percent_this_month_format">%1$s%2$s%% tento měsíc</string>
-    <string name="app_locked_title">Cashiro je uzamčen</string>
-    <string name="authenticate_desc">Ověřte se pro přístup k datům o výdajích</string>
-    <string name="unlock">Odemknout</string>
-    <string name="biometric_unavailable_title">Biometrické ověřování není dostupné</string>
-    <string name="biometric_setup_desc">Prosím, deaktivujte zámek aplikace v nastavení zařízení nebo nastavte biometrické ověřování.</string>
-    <string name="immediate_locking">okamžité zamknutí</string>
-    <string name="minute_timeout_format">%1$d minutový časový limit</string>
-    <string name="data_protected_format">Vaše data jsou chráněna %1$s</string>
-    <string name="today_lbl">Dnes</string>
-    <string name="yesterday_lbl">Včera</string>
-    <string name="this_week_lbl">Tento týden</string>
-    <string name="earlier_lbl">Dříve</string>
-    <string name="sort_date_newest">Nejnovější první</string>
-    <string name="sort_date_oldest">Nejstarší první</string>
-    <string name="sort_amount_highest">Nejvyšší částka</string>
-    <string name="sort_amount_lowest">Nejnižší částka</string>
-    <string name="sort_merchant_az">Obchodník (A-Z)</string>
-    <string name="sort_merchant_za">Obchodník (Z-A)</string>
-    <string name="collapse_cd">Sbalit</string>
-    <string name="expand_cd">Rozbalit</string>
-    <string name="add_attachment_cd">Přidat přílohu</string>
-    <string name="remove_cd">Odstranit</string>
-    <string name="receipt">Účtenka</string>
-    <string name="transaction_info">Informace o transakci</string>
-    <string name="split_transaction">Rozdělit</string>
-    <string name="manage_transaction">Spravovat transakci</string>
-    <string name="view_transaction">Zobrazit transakci</string>
-    <string name="mark_as">Označit jako</string>
-    <string name="no_description">Žádný popis</string>
-    <string name="no_attachments">Žádné přílohy</string>
-    <string name="this_transaction">Tato transakce</string>
-    <string name="err_amount_required">Částka je povinná</string>
-    <string name="err_invalid_amount">Neplatná částka</string>
-    <string name="err_amount_positive">Částka musí být větší než 0</string>
-    <string name="err_merchant_required">Obchodník/Popis je povinný</string>
-    <string name="err_too_short">Příliš krátké</string>
-    <string name="err_category_required">Kategorie je povinná</string>
-    <string name="err_service_required">Název služby je povinný</string>
-    <string name="err_source_target_required">Pro převody jsou vyžadovány jak zdrojový, tak cílový účet</string>
-    <string name="err_accounts_different">Zdrojový a cílový účet musí být odlišné</string>
-    <string name="err_save_transaction">Nepodařilo se uložit transakci</string>
-    <string name="err_save_subscription">Nepodařilo se uložit předplatné</string>
-    <string name="err_subscription_not_found">Předplatné nenalezeno</string>
-    <string name="am_lbl">Dopoledne (AM)</string>
-    <string name="pm_lbl">Odpoledne (PM)</string>
-    <string name="merchant_lbl">Obchodník</string>
-    <string name="options_desc">Možnosti</string>
-    <plurals name="licenses_count">
-        <item quantity="one">%1$d licence</item>
-        <item quantity="few">%1$d licencí</item>
-        <item quantity="many">%1$d licencí</item>
-        <item quantity="other">%1$d licencí</item>
-    </plurals>
-    <plurals name="unrecognized_messages_count">
-        <item quantity="one">Zpráva %1$d od potenciálních bank</item>
-        <item quantity="few">%1$d zprávy od potenciálních bank</item>
-        <item quantity="many">%1$d zprávy od potenciálních bank</item>
-        <item quantity="other">%1$d zprávy od potenciálních bank</item>
-    </plurals>
-    <plurals name="attachments_count">
-        <item quantity="one">%1$d soubor</item>
-        <item quantity="few">%1$d soubory</item>
-        <item quantity="many">%1$d soubory</item>
-        <item quantity="other">%1$d soubory</item>
-    </plurals>
-    <plurals name="subcategory_count_plural">
-        <item quantity="one">%1$d podkategorie</item>
-        <item quantity="few">%1$d podkategorie</item>
-        <item quantity="many">%1$d podkategorie</item>
-        <item quantity="other">%1$d podkategorie</item>
-    </plurals>
-    <plurals name="delete_transactions_title">
-        <item quantity="one">Smazat %1$d transakci?</item>
-        <item quantity="few">Delete %1$d transactions?</item>
-        <item quantity="many">Delete %1$d transactions?</item>
-        <item quantity="other">Smazat %1$d transakce?</item>
-    </plurals>
-    <plurals name="month_status_days_left_format">
-        <item quantity="one">%1$d den zbývá %2$s</item>
-        <item quantity="few">%1$d dní zbývá %2$s</item>
-        <item quantity="many">%1$d dní zbývá %2$s</item>
-        <item quantity="other">%1$d dní zbývá %2$s</item>
-    </plurals>
     <plurals name="transactions_parsed_format">
         <item quantity="one">%1$d transakce analyzována</item>
         <item quantity="few">%1$d analyzovaných transakcí</item>
@@ -1002,4 +818,251 @@ To může trvat několik sekund v závislosti na historii vašich zpráv.</strin
         <item quantity="many">%1$d uloženo</item>
         <item quantity="other">%1$d uloženo</item>
     </plurals>
+    <string name="duration_hours_minutes">%1$dh %2$dm</string>
+    <string name="duration_minutes_seconds">%1$dm %2$ds</string>
+    <string name="duration_seconds">%1$ds</string>
+    <string name="time_left_format">~%1$s zbývá</string>
+    <string name="batch_progress_format">Dávka %1$d z %2$d</string>
+    <string name="scan_completed_success">Skenování bylo úspěšně dokončeno!</string>
+    <string name="scan_failed_error">Skenování se nezdařilo. Zkuste to prosím znovu.</string>
+    <string name="scan_cancelled">Skenování zrušeno</string>
+    <string name="starting_scan">Spouštění skenování...</string>
+    <string name="scanning_sms_format">Skenování SMS: %1$d/%2$d</string>
+    <!-- Time Selection -->
+    <string name="select_time">Vyberte čas</string>
+    <!-- Transactions, Indicators & Categories -->
+    <string name="recurring">Opakování</string>
+    <string name="balance_after_format">Bil: %1$s</string>
+    <string name="description_indicator_desc">Obsahuje popis</string>
+    <string name="attachments_indicator_desc">Má přílohy</string>
+    <string name="type_transfer">Převod</string>
+    <string name="type_investment">Investice</string>
+    <string name="type_income">Výnosy</string>
+    <string name="type_expense">Výdaje</string>
+    <string name="type_balance_update">Balance Update</string>
+    <!-- Estimated amounts -->
+    <string name="estimated_amount_format">est. %1$s</string>
+    <string name="uncategorized">Nezařazené</string>
+    <string name="net">Čistá hodnota</string>
+    <string name="processing">Zpracovávání…</string>
+    <!-- Language Selection -->
+    <string name="language">Language</string>
+    <string name="language_subtitle">Change application language</string>
+    <string name="select_language">Select Language</string>
+    <!-- Settings Screen -->
+    <string name="transactions_count_short">%1$d Transactions</string>
+    <string name="appearances">Appearances</string>
+    <string name="appearances_subtitle">App\'s personalization settings</string>
+    <string name="accounts_subtitle">Add accounts and update balances</string>
+    <string name="budgets_subtitle">Set and manage monthly spending limits</string>
+    <string name="categories_subtitle">Manage expense and income categories</string>
+    <string name="smart_rules_subtitle">Automatic transaction categorization</string>
+    <string name="data_privacy_subtitle">Manage your data and privacy settings</string>
+    <string name="ai_chat_assistant">AI Chat Assistant</string>
+    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5 model (%1$d MB)</string>
+    <string name="ai_chat_subtitle_downloading">Downloading… %1$d%%</string>
+    <string name="ai_chat_subtitle_paused">Download paused. Tap to resume.</string>
+    <string name="ai_chat_subtitle_completed">Qwen ready for chat</string>
+    <string name="ai_chat_subtitle_failed">Download failed. Tap to retry.</string>
+    <string name="ai_chat_subtitle_insufficient_space">Not enough storage space</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_subtitle">Manage reminder notification settings</string>
+    <string name="sms_subtitle">Manage SMS settings</string>
+    <string name="webhooks_subtitle">BYOAPI finance sync</string>
+    <string name="about_subtitle">App version, source code and more</string>
+    <!-- Currency Settings -->
+    <string name="currency">Měna</string>
+    <string name="currency_subtitle">Exchange rates and currency preferences</string>
+    <string name="currency_settings_title">Měna</string>
+    <string name="unified_currency">Unified Currency</string>
+    <string name="unified_currency_subtitle">Display all amounts in a single currency</string>
+    <string name="default_currency">Default Currency</string>
+    <string name="default_currency_subtitle">Pre-select currency for new entries</string>
+    <string name="display_currency">Display Currency</string>
+    <string name="default_label">Default</string>
+    <string name="none">Nic</string>
+    <string name="rates_info_subtitle">View exchange rates for your base currency</string>
+    <!-- Custom Currency Settings -->
+    <string name="search_currencies">Hledat měny...</string>
+    <string name="rates_relative_to">Sazby vztažené k %1$s</string>
+    <string name="last_updated">Naposledy aktualizováno: %1$s</string>
+    <string name="custom_rate">Custom rate</string>
+    <string name="custom_rate_set">Custom rate set. Tap Reset to revert to API rate.</string>
+    <string name="add_custom_currency">Add Custom Currency</string>
+    <string name="custom_currency">Custom Currency</string>
+    <string name="currency_country_name">Currency name</string>
+    <string name="eg_test_country">e.g. Test Country</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="eg_tst">e.g. TST</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="eg_tsymbol">e.g. T$</string>
+    <string name="exchange_rate">Exchange Rate</string>
+    <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
+    <string name="please_fill_all_fields">Please fill all fields with valid data.</string>
+    <string name="base_currency_hint">Base = default currency or main account\'s currency</string>
+    <string name="save_currency">Save Currency</string>
+    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
+    <string name="currency_code_hint">USD, INR, EUR ...</string>
+    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
+    <string name="exchange_rate_hint">1 Base = X Custom currency</string>
+    <string name="exchange_rates_notice_title">Oznámení o směnných kurzech</string>
+    <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
+    <string name="custom_label">CUSTOM</string>
+    <string name="new_chat">New Chat</string>
+    <string name="chat_history">Chat History</string>
+    <!-- AppearanceScreen -->
+    <string name="appearance_title">Appearance</string>
+    <string name="theme_system">Systém</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="style_dynamic">Dynamic</string>
+    <string name="style_dynamic_sub">Wallpaper Colors</string>
+    <string name="style_default">Default</string>
+    <string name="style_default_sub">Default Colors</string>
+    <string name="amoled_black">Amoled Black</string>
+    <string name="amoled_black_desc">Use pure black background for deeper contrast</string>
+    <string name="blur_effects">Blur Effects</string>
+    <string name="blur_effects_desc">Enable glassmorphism blur effects in UI components</string>
+    <string name="logo_original">Original</string>
+    <string name="logo_anarchy">Anarchy</string>
+    <string name="logo_comic">Comic</string>
+    <string name="logo_zenith">Zenith</string>
+    <string name="logo_monochrome">Monochrome</string>
+    <string name="navigation_style">Navigation</string>
+    <string name="nav_floating">Floating</string>
+    <string name="nav_floating_sub">Modern &amp; Sleek</string>
+    <string name="nav_normal">Normal</string>
+    <string name="nav_normal_sub">Standard M3</string>
+    <string name="hide_nav_labels">Hide Navigation Labels</string>
+    <string name="hide_nav_labels_desc">Hide labels in the navigation bar</string>
+    <string name="hide_pill_indicator">Hide Pill Indicator</string>
+    <string name="hide_pill_indicator_desc">Hide the selection indicator in the navigation bar</string>
+    <string name="fonts_title">Fonts</string>
+    <string name="font_default_sub">Systém</string>
+    <string name="font_snpro">SN Pro</string>
+    <string name="font_snpro_sub">Modern Mono</string>
+    <!-- CreateRuleScreen -->
+    <string name="quick_templates">Quick Templates</string>
+    <string name="rule_name_label">Rule Name</string>
+    <string name="rule_name_placeholder">e.g., Food expenses under ₹200</string>
+    <string name="description_placeholder">What does this rule do?</string>
+    <string name="conditions_title">Conditions</string>
+    <string name="add_condition">Přidat</string>
+    <string name="condition_n_format">Condition %1$d</string>
+    <string name="remove_condition_cd">Remove Condition</string>
+    <string name="field_label">Field</string>
+    <string name="value_label">Value</string>
+    <string name="field_amount">Částka, která má být získána</string>
+    <string name="field_merchant">Obchodník</string>
+    <string name="field_category">Kategorie</string>
+    <string name="field_sms_text">SMS Text</string>
+    <string name="field_transaction_type">Transaction Type</string>
+    <string name="field_subcategory">Podkategorie</string>
+    <string name="field_bank_name">Název banky</string>
+    <string name="field_default">Field</string>
+    <string name="then_title">Then</string>
+    <string name="action_type_label">Action Type</string>
+    <string name="action_block_transaction">Block Transaction</string>
+    <string name="action_set_field">Set Field</string>
+    <string name="action_clear_field">Clear Field</string>
+    <string name="action_set_category">Set Category</string>
+    <string name="action_set_subcategory">Set Subcategory</string>
+    <string name="action_set_merchant">Set Merchant Name</string>
+    <string name="action_set_type">Set Transaction Type</string>
+    <string name="action_label">Action</string>
+    <string name="block_message">Transactions matching this rule will be blocked and not saved</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="preset_block_otps">Block OTPs</string>
+    <string name="preset_block_small">Block Small Amounts</string>
+    <string name="preset_small_food">Small amounts → Food</string>
+    <string name="preset_standardize">Standardize Merchant</string>
+    <string name="preset_mark_income">Mark as Income</string>
+    <!-- NotificationScreen -->
+    <string name="notification_access">Notification Access</string>
+    <string name="bank_push_notifications">Bank Push Notifications</string>
+    <string name="notification_access_active">Notification access is active</string>
+    <string name="notification_access_desc">Enable to detect bank transactions from push notifications</string>
+    <string name="notification_access_required">Notification Access Required</string>
+    <string name="notification_access_required_desc">To automatically detect bank transactions in real-time, Cashiro requires notification access. This is a system-level permission.</string>
+    <string name="how_to_enable">How to enable:</string>
+    <string name="step_1">Tap the \'Open Settings\' button below.</string>
+    <string name="step_2">Find \'Cashiro\' in the list of applications.</string>
+    <string name="step_3">Toggle \'Allow notification access\' to enabled.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="scan_settings">Scan Settings</string>
+    <string name="remind_transactions">Remind Transactions</string>
+    <string name="remind_transactions_desc">Get reminders to scan new messages</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="upcoming_transactions_section">Upcoming Transactions</string>
+    <string name="upcoming_transactions_desc">Get reminders for upcoming payments</string>
+    <!-- DeveloperScreen -->
+    <string name="test_notification_alerts">Test Notification Alerts</string>
+    <string name="test_notification_alerts_desc">Send test notifications periodically</string>
+    <string name="sample_data">Sample Data</string>
+    <string name="sample_data_desc">Create dummy accounts and transactions</string>
+    <!-- BottomNavItem -->
+    <string name="home_title">Home</string>
+    <!-- CashiroNavHost -->
+    <string name="full_resync">Full Resync</string>
+    <string name="full_resync_desc">This will reprocess all SMS messages from scratch. Use this to fix issues caused by updated bank parsers.\n\nThis may take a few seconds depending on your message history.</string>
+    <string name="resync_all">Resync All</string>
+    <string name="sync_sms_cd">Sync SMS transactions</string>
+    <string name="options_desc">Options</string>
+    <string name="add_transaction_subscription_cd">Add Transaction or Subscription</string>
+    <!-- ColorPickerContent -->
+    <string name="selected_cd">Vybrané</string>
+    <!-- BalanceCard -->
+    <string name="net_worth_label">Net worth</string>
+    <string name="this_month_lbl">THIS MONTH</string>
+    <string name="this_year_lbl">THIS YEAR</string>
+    <string name="percent_this_month_format">%1$s%2$s%% this month</string>
+    <!-- AppLockScreen -->
+    <string name="app_locked_title">Cashiro is Locked</string>
+    <string name="authenticate_desc">Authenticate to access your expense data</string>
+    <string name="unlock">Unlock</string>
+    <string name="biometric_unavailable_title">Biometric authentication unavailable</string>
+    <string name="biometric_setup_desc">Please disable app lock in device settings or set up biometric authentication.</string>
+    <string name="immediate_locking">immediate locking</string>
+    <string name="minute_timeout_format">%1$d minute timeout</string>
+    <string name="data_protected_format">Your data is protected with %1$s</string>
+    <!-- TransactionsState -->
+    <string name="today_lbl">Today</string>
+    <string name="yesterday_lbl">Yesterday</string>
+    <string name="this_week_lbl">This Week</string>
+    <string name="earlier_lbl">Earlier</string>
+    <string name="sort_date_newest">Newest First</string>
+    <string name="sort_date_oldest">Oldest First</string>
+    <string name="sort_amount_highest">Highest Amount</string>
+    <string name="sort_amount_lowest">Lowest Amount</string>
+    <string name="sort_merchant_az">Merchant (A-Z)</string>
+    <string name="sort_merchant_za">Merchant (Z-A)</string>
+    <!-- AttachmentSection -->
+    <string name="add_attachment_cd">Přidat přílohu</string>
+    <string name="remove_cd">Remove</string>
+    <!-- TransactionDetailScreen -->
+    <string name="receipt">Receipt</string>
+    <string name="transaction_info">Transaction Info</string>
+    <string name="split_transaction">Split</string>
+    <string name="manage_transaction">Manage Transaction</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="mark_as">Mark as</string>
+    <string name="no_description">No description</string>
+    <string name="no_attachments">No attachments</string>
+    <string name="this_transaction">This transaction</string>
+    <!-- AddViewModel validation -->
+    <string name="err_amount_required">Amount is required</string>
+    <string name="err_invalid_amount">Invalid amount</string>
+    <string name="err_amount_positive">Amount must be greater than 0</string>
+    <string name="err_merchant_required">Merchant/Description is required</string>
+    <string name="err_too_short">Too short</string>
+    <string name="err_category_required">Category is required</string>
+    <string name="err_service_required">Service name is required</string>
+    <string name="err_source_target_required">Both source and target accounts are required for transfers</string>
+    <string name="err_accounts_different">Source and target accounts must be different</string>
+    <string name="err_save_transaction">Failed to save transaction</string>
+    <string name="err_save_subscription">Failed to save subscription</string>
+    <string name="err_subscription_not_found">Subscription not found</string>
+    <string name="am_lbl">AM</string>
+    <string name="pm_lbl">PM</string>
+    <string name="merchant_lbl">Obchodník</string>
 </resources>
