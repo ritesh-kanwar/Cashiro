@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cashiro</string>
+    <!-- App shortcuts -->
     <string name="add_transaction">取引を追加</string>
     <string name="add_subscription">サブスクリプションを追加</string>
     <string name="add_transfer">送金を追加</string>
+    <!-- Add Screen -->
     <string name="add_new">新規追加</string>
     <string name="transaction">取引</string>
     <string name="subscription">サブスクリプション</string>
+    <!-- Data Privacy Screen -->
     <string name="data_privacy_title">データプライバシー</string>
     <string name="security_section">セキュリティ</string>
     <string name="app_lock">アプリロック</string>
@@ -34,9 +37,11 @@
     <string name="profile_data">プロファイルデータ</string>
     <string name="budgets">予算</string>
     <string name="app_preferences">アプリの設定</string>
+    <!-- NumberPad -->
     <string name="enter_amount">金額を入力</string>
     <string name="done">完了</string>
     <string name="backspace">バックスペース</string>
+    <!-- Merge Accounts Dialogs -->
     <string name="merge_accounts_title">アカウントの結合</string>
     <string name="merge_accounts_desc">%1$s (...%2$s) にマージするアカウントを選択してください。選択したアカウントはマージ後に削除されます。</string>
     <string name="next">次へ</string>
@@ -50,6 +55,7 @@
     <string name="merge_confirm_title">最終確認</string>
     <string name="merge_confirm_message">口座のマージ: 現在および過去の口座からのすべての取引がマージされた銀行口座に表示されるようになりました。 元のアカウントが削除されます。</string>
     <string name="merge">結合</string>
+    <!-- HistorySheet -->
     <string name="balance_history_title">残高履歴</string>
     <string name="records_count_latest_balance_note">%1$d records • 最新の残高がアカウントに表示されます</string>
     <string name="no_balance_history_available">利用可能な残高履歴がありません</string>
@@ -66,6 +72,7 @@
     <string name="source_system">システム</string>
     <string name="sms_source">SMS ソース</string>
     <string name="copy">コピー</string>
+    <!-- AccountDetailScreen -->
     <string name="account_details">アカウント詳細</string>
     <string name="transactions_count">トランザクション (%1$d)</string>
     <string name="balance_trend">残高</string>
@@ -79,6 +86,14 @@
     <string name="range_last_6_months">過去 6 ヶ月</string>
     <string name="range_last_year">昨年の</string>
     <string name="range_all_time">すべて</string>
+    <string name="time_period_this_month">This Month</string>
+    <string name="time_period_last_month">Last Month</string>
+    <string name="time_period_current_fy">Current FY</string>
+    <string name="time_period_all_time">すべて</string>
+    <string name="time_period_custom_range">Custom Range</string>
+    <string name="type_all">すべて</string>
+    <string name="type_credit">クレジット</string>
+    <!-- Add/Edit Account Screens -->
     <string name="add_account_info">現金、財布、投資口座など、SMS 経由で追跡されていない口座を追加します。</string>
     <string name="account_type_label">アカウントの種類</string>
     <string name="account_icon_label">アカウントアイコン</string>
@@ -86,7 +101,7 @@
     <string name="placeholder_bank_name">例：HDFC バンク</string>
     <string name="placeholder_credit_name">例：HDFC クレジットカード</string>
     <string name="placeholder_wallet_name">例：現金</string>
-    <string name="last_4_digits_required_label">下4桁 *</string>
+    <string name="last_4_digits_required_label">Last 4 Digits *</string>
     <string name="placeholder_last_4_digits">例：1234</string>
     <string name="enter_last_4_digits_hint">アカウント/カードの下4桁を入力してください</string>
     <string name="current_balance_required_label">現在の残高 *</string>
@@ -105,16 +120,17 @@
     <string name="type_wallet">ウォレット</string>
     <string name="preview_bank_name">銀行名</string>
     <string name="preview_label">プレビュー</string>
-    <string name="outstanding_label">未払い</string>
+    <string name="outstanding_label">Outstanding</string>
     <string name="balance_label">残高</string>
     <string name="available_credit_label">利用可能なクレジット: %1$s</string>
-    <string name="utilization_label">利用率: %1$d%%</string>
+    <string name="utilization_label">Utilization: %1$d%%</string>
     <string name="wallet_name_label">ウォレット名</string>
     <string name="bank_name_label">銀行名</string>
     <string name="account_number_last_4_label">口座番号 (直近4)</string>
     <string name="delete_account_desc">アカウントを削除</string>
     <string name="save_changes">変更を保存</string>
     <string name="type_wallet_lowercase">ウォレット</string>
+    <!-- ManageAccountsScreen -->
     <string name="title_accounts">アカウント</string>
     <string name="no_accounts_yet">まだアカウントがありません</string>
     <string name="add_account_fab_desc">アカウントを追加</string>
@@ -147,13 +163,14 @@
     <string name="select_account_link_prompt">このカードをリンクするアカウントを選択してください：</string>
     <string name="action_cancel">キャンセル</string>
     <string name="action_link">リンク</string>
+    <!-- SubscriptionTabContent & TransactionTabContent -->
     <string name="subscription_info">定期的な費用を追跡します。毎月手動で取引を追加する必要があります。</string>
     <string name="billing_cycle_label">請求サイクル</string>
     <string name="cycle_monthly">月ごと</string>
     <string name="cycle_quarterly">四半期ごと</string>
     <string name="cycle_semi_annual">半年ごと</string>
     <string name="cycle_annual">年間</string>
-    <string name="cycle_weekly">週間</string>
+    <string name="cycle_weekly">Weekly</string>
     <string name="cycle_custom">カスタム</string>
     <string name="date_picker_desc">日付の選択</string>
     <string name="select_account">アカウントを選択</string>
@@ -177,11 +194,13 @@
     <string name="merchant_description">マーチャント/説明</string>
     <string name="where_did_you_spend">これをどこで過ごしたのですか。</string>
     <string name="merchant_placeholder">例: Target, Walmart</string>
+    <!-- Budgets Screen -->
     <string name="new_budget">新しい予算</string>
     <string name="no_budgets_yet">予算はまだありません</string>
     <string name="create_first_budget_desc">最初の予算を作成して、支出の目標を追跡しましょう</string>
     <string name="create_budget">予算を作成</string>
     <string name="edit_budget">予算を編集</string>
+    <!-- Edit Budget Sheet -->
     <string name="budget_period">予算期間</string>
     <string name="starts">開始</string>
     <string name="ends">終了</string>
@@ -229,17 +248,18 @@
     <string name="expense_budget_desc">経費と予算を追跡する</string>
     <string name="select_tracking_mode">トラッキングモードの選択</string>
     <string name="added_only">追加のみ</string>
-    <string name="added_only_desc">追加した取引のみ
-カスタム期間の一度限りの予算に便利</string>
+    <string name="added_only_desc">Only the transactions you add\nUseful for one-time budgets with custom time periods</string>
     <string name="added_only_example">例: \'休暇\' 予算</string>
     <string name="all_transactions">すべての取引</string>
     <string name="all_transactions_desc">選択されたカテゴリ内のすべてのトランザクションとフィルター\n複数の期間にわたる長期予算に便利です</string>
     <string name="all_transactions_example">例: \'月間支出\' 予算</string>
+    <!-- Categories Screen -->
     <string name="categories">カテゴリ</string>
     <string name="add_category">カテゴリを追加</string>
     <string name="clear_search">検索をクリア</string>
     <string name="expense_categories">費やしたカテゴリ</string>
     <string name="income_categories">収入カテゴリー</string>
+    <!-- Edit Category Sheet -->
     <string name="category_name">カテゴリ名</string>
     <string name="category_description_placeholder">カテゴリの説明</string>
     <string name="add_subcategory">サブカテゴリを追加</string>
@@ -252,16 +272,18 @@
     <string name="update_category">カテゴリを更新</string>
     <string name="create_category">カテゴリを作成</string>
     <string name="reset_to_default">既定にリセット</string>
+    <!-- Edit Subcategory Sheet -->
     <string name="subcategory">サブカテゴリ</string>
     <string name="delete_subcategory">サブカテゴリを削除</string>
     <string name="create_subcategory">サブカテゴリを作成</string>
     <string name="update_subcategory">サブカテゴリを更新</string>
+    <!-- Analytics -->
     <string name="total">合計</string>
     <string name="suffix_million">M</string>
     <string name="suffix_thousand">k</string>
     <string name="percentage_format">(%1$d%%)</string>
     <string name="total_uppercase">合計</string>
-    <string name="transactions_format">%1$d 件の取引</string>
+    <string name="transactions_format">%1$d TXNS</string>
     <string name="average">平均</string>
     <string name="per_day"> /日</string>
     <string name="percentage_of_total">%1$d%% of total</string>
@@ -274,6 +296,7 @@
     <string name="chart_type_heatmap">ヒートマップ</string>
     <string name="chart_format">%1$s チャート</string>
     <string name="toggle_view">表示切り替え</string>
+    <!-- Chat Screen -->
     <string name="cashiro_ai">Cashiro AI</string>
     <string name="more_options">その他のオプション</string>
     <string name="clear_chat">チャットをクリア</string>
@@ -291,15 +314,16 @@
     <string name="ask_about_expenses_placeholder">経費について聞いてください...</string>
     <string name="send">送信</string>
     <string name="chat_memory_full_warning">チャットのメモリがほぼいっぱいです！続行するにはチャットをクリアしてください。</string>
-    <string name="chat_memory_almost_full_warning_format">チャットメモリは%1$d%%使用中。近いうちにクリアを検討してください。</string>
+    <string name="chat_memory_almost_full_warning_format">Chat memory is %1$d%% full. Consider clearing soon.</string>
     <string name="chat_memory_usage_format">チャットメモリは %1$d%%がいっぱいです。</string>
     <string name="clear">クリア</string>
-    <string name="qwen_model_messages_format">Qwen 2.5 • %1$d メッセージ</string>
+    <string name="qwen_model_messages_format">Qwen 2.5 • %1$d messages</string>
     <string name="tokens_format">%1$s トークン</string>
     <string name="context_usage">コンテキストの使用法</string>
     <string name="percentage_format_no_brackets">%1$d%%</string>
     <string name="tokens_usage_format">%1$s / %2$s トークン</string>
     <string name="system_tokens_format">システム: %1$s</string>
+    <!-- Home Screen & Widgets -->
     <string name="edit_widgets">ウィジェットの編集</string>
     <string name="edit_widgets_desc">ホーム画面でセクションの順序を変更または非表示にします。</string>
     <string name="reorder">並び替え</string>
@@ -326,6 +350,7 @@
     <string name="subscriptions_count_format">%1$d サブスクリプション</string>
     <string name="per_month">/ 月</string>
     <string name="last_days_format">最後の %1$d 日</string>
+    <!-- Edit Profile & Profile -->
     <string name="edit_profile">プロファイルを編集</string>
     <string name="gallery">ギャラリー</string>
     <string name="change_banner">バナーを変更</string>
@@ -333,8 +358,9 @@
     <string name="financial_overview">財務概要</string>
     <string name="net_worth">純価値</string>
     <string name="upcoming">近日公開</string>
-    <string name="active_subscriptions_singular">1 件のサブスクリプション</string>
-    <string name="active_subscriptions_plural">%1$d 件のサブスクリプション</string>
+    <string name="active_subscriptions_singular">1 Sub</string>
+    <string name="active_subscriptions_plural">%1$d Subs</string>
+    <!-- Onboarding -->
     <string name="app_logo">アプリのロゴ</string>
     <string name="onboarding_subtitle">あなたのお金を追跡し、あなたの支出を分類し、貯蓄目標をより速く達成するためのシームレスな方法を体験してください。</string>
     <string name="set_up_your_profile">プロフィールを設定</string>
@@ -364,6 +390,7 @@
     <string name="scanning_ellipsis">スキャン中...</string>
     <string name="continue_action">続ける</string>
     <string name="finish_setup">セットアップを終了する</string>
+    <!-- Mock Messages -->
     <string name="mock_msg_electric_bill">電気代の支払期限：&lt;unk&gt; 2,450</string>
     <string name="mock_msg_starbucks">Starbucks で &lt;unk&gt; 500 の取引</string>
     <string name="mock_msg_cc_due">リマインダー: 明日のクレジットカード</string>
@@ -372,8 +399,9 @@
     <string name="mock_msg_sbi">SBI：&lt;unk&gt; 10,000給与クレジット済み</string>
     <string name="mock_msg_icici">ICICI：低残高アラート：&lt;unk&gt; 450</string>
     <string name="mock_msg_axis">軸: &lt;unk&gt; 200 をZomatoで過ごしました</string>
-    <string name="notification">通知</string>
+    <string name="notification">Notification</string>
     <string name="mock_msg_salary_credited">あなたの給与は認証されました！</string>
+    <!-- SubscriptionsScreen -->
     <string name="subscriptions">サブスクリプション</string>
     <string name="total_subscriptions">サブスクリプションの合計</string>
     <string name="active_count_format">%1$d がアクティブです</string>
@@ -389,7 +417,7 @@
     <string name="original_sms">元のSMS</string>
     <string name="track_payment">支払いを追跡する</string>
     <string name="edit_subscription">サブスクリプションを編集</string>
-    <string name="subscription_hidden_format">%1$s 非表示</string>
+    <string name="subscription_hidden_format">%1$s hidden</string>
     <string name="payment_for_format">%1$sへの支払い</string>
     <string name="overdue_since_format">%1$sから期限切れ</string>
     <string name="due_on_format">期限: %1$s</string>
@@ -400,25 +428,30 @@
     <string name="show_original_message">元のメッセージを表示</string>
     <string name="no_subscriptions_detected_yet">購読はまだ検出されていません</string>
     <string name="sync_sms_to_detect_subscriptions">サブスクリプションを検出するためにSMSを同期する</string>
+    <!-- ExportTransactionsDialog -->
     <string name="export_transactions">トランザクションをエクスポート</string>
     <string name="exporting">エクスポート中...</string>
     <string name="export_complete">エクスポート完了！</string>
     <string name="export_failed">エクスポートに失敗しました</string>
     <string name="export_transactions_desc">%1$d トランザクションを CSV フォーマットにエクスポート</string>
     <string name="total_transactions_export">合計取引数:</string>
-    <string name="date_range">日付範囲:</string>
+    <string name="date_range">Date range:</string>
     <string name="export_success_msg_format">%1$d トランザクションのエクスポートに成功しました</string>
     <string name="size_format">サイズ: %1$s</string>
     <string name="share">共有</string>
     <string name="retry">再試行する</string>
     <string name="share_csv">CSVを共有</string>
     <string name="csv_export_subject">キャッシュロートランザクションのエクスポート</string>
+    <!-- TransactionDetailScreen -->
     <string name="edit_transaction">取引を編集</string>
     <string name="transaction_details">トランザクションの詳細</string>
     <string name="report_issue">問題を報告</string>
     <string name="delete_transaction">取引を削除</string>
+    <string name="duplicate_transaction">Duplicate Transaction</string>
+    <string name="transaction_duplicated">Transaction duplicated</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="transaction_updated_successfully">取引が正常に更新されました</string>
-    <string name="merchant_label">店舗</string>
+    <string name="merchant_label">Merchant</string>
     <string name="description_optional_label">説明（任意）</string>
     <string name="transfer_action">送金</string>
     <string name="apply_category_to_all_future_transactions_format">\"%1$s\"からの今後の取引にこのカテゴリを適用する</string>
@@ -450,14 +483,15 @@
     <string name="date">日付</string>
     <string name="source">ソース</string>
     <string name="account">アカウント</string>
-    <string name="weekly_recurring">週間</string>
+    <string name="weekly_recurring">Weekly</string>
     <string name="monthly_recurring">月ごと</string>
     <string name="quarterly_recurring">四半期ごと</string>
     <string name="semi_annual_recurring">半年ごと</string>
     <string name="annual_recurring">年間</string>
     <string name="custom_recurring">カスタム</string>
+    <!-- TransactionsFilterBottomSheet -->
     <string name="filters">フィルタ</string>
-    <string name="reset">リセット</string>
+    <string name="reset">Reset</string>
     <string name="apply">適用</string>
     <string name="subcategories">サブカテゴリ</string>
     <string name="amount_range">金額の範囲</string>
@@ -466,6 +500,7 @@
     <string name="set_minimum_amount">最小金額を設定</string>
     <string name="set_maximum_amount">最大金額を設定</string>
     <string name="confirm">確認する</string>
+    <!-- TransactionsScreen -->
     <string name="transactions_deleted_format">%1$d トランザクションが削除されました</string>
     <string name="items_selected_format">%1$d を選択しました</string>
     <string name="deselect_all">すべての選択を解除</string>
@@ -476,13 +511,14 @@
     <string name="no_transactions_matching_format">\"%1$s\" に一致する取引はありません</string>
     <string name="no_transactions_for_format">%1$s の取引はありません</string>
     <string name="sync_sms_to_see_transactions">SMSを同期してトランザクションを表示</string>
-    <string name="about">情報</string>
+    <!-- About Screen -->
+    <string name="about">About</string>
     <string name="cashiro_logo_cd">Cashiro ロゴ</string>
     <string name="version_format">バージョン %1$s, db-v%2$d</string>
     <string name="developed_by">Riteshによる開発</string>
     <string name="lead_developer_cd">リード開発者</string>
     <string name="website">ウェブサイト</string>
-    <string name="github">GitHub</string>
+    <string name="github">Github</string>
     <string name="discord">Discord</string>
     <string name="join_community">私たちのコミュニティに参加</string>
     <string name="faq">FAQ</string>
@@ -498,6 +534,10 @@
     <string name="licenses">ライセンス</string>
     <string name="licenses_desc">オープンソースライブラリ</string>
     <string name="developer_options">開発者向けオプション</string>
+    <string name="webhook_mode">Webhooks</string>
+    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
+    <string name="token_info">Chat Token Info</string>
+    <string name="token_info_desc">Show technical information in chat</string>
     <string name="developer_options_desc">テストと実験的な機能</string>
     <string name="delete_all_data">すべてのデータを削除</string>
     <string name="delete_all_data_desc">すべてのレコードを完全に消去</string>
@@ -505,10 +545,15 @@
     <string name="delete_all_data_confirm_title">すべてのデータを削除しますか？</string>
     <string name="delete_all_data_confirm_desc">この操作はすべての取引、予算、サブスクリプション、および設定を完全に削除します。これは元に戻すことはできません。</string>
     <string name="delete_all">すべて削除</string>
+    <!-- Licenses Screen -->
     <string name="license_version_format">v%1$s, db-v%2$d</string>
     <string name="license_disclaimer_software">本ソフトウェアは、明示または黙示を問わず、「現状のまま」提供されます。 商品性、特定の目的への適合性および非侵害性の保証を含むがこれに限定されない。 いかなる場合においても、権利者または著作権者は、契約の行為に関わらず、いかなる請求、損害またはその他の責任についても責任を負わないものとします。 ソフトウェアまたはソフトウェアの使用またはその他のディールに関連して、FROM、またはFROMを発生させます。</string>
     <string name="license_disclaimer_rates">このアプリ内に表示される為替レートは情報提供のみを目的としており、投資判断に使用するべきではありません。 これらのレートは見積もりであり、実際のレートを反映していない場合があります。 このアプリを使用することで あなたは、これらの制限を理解し、受け入れることを認め、アプリ内で提供された情報に基づいて行われたすべての決定に対して完全な責任を負うことを認めます。</string>
-    <string name="powered_by">Kotlin Compose による提供</string>
+    <string name="powered_by">Powered by Kotlin Compose</string>
+    <plurals name="licenses_count">
+        <item quantity="other">%1$d ライセンス</item>
+    </plurals>
+    <!-- Rules Screen -->
     <string name="smart_rules">スマートルール</string>
     <string name="reset_to_defaults">既定にリセット</string>
     <string name="automatic_categorization">自動分類</string>
@@ -516,7 +561,7 @@
     <string name="rules_group_daily">毎日の費用</string>
     <string name="rules_group_income">収入 &amp; キャッシュバック</string>
     <string name="rules_group_recurring">定期的な支払い</string>
-    <string name="rules_group_banking">銀行・投資</string>
+    <string name="rules_group_banking">Banking &amp; Investments</string>
     <string name="rules_group_healthcare">健康</string>
     <string name="rules_group_other">その他</string>
     <string name="rules_explanation">ルールは新しいトランザクションに自動的に適用されます。優先度の高いルールは最初に実行されます。</string>
@@ -533,6 +578,7 @@
     <string name="rule_summary_transfer">自己転送、契約書</string>
     <string name="priority_format">優先順位: %1$d</string>
     <string name="edit_rule">ルールの編集</string>
+    <!-- SMS Screen -->
     <string name="sms_title">SMS</string>
     <string name="sms_scan_period">SMSスキャン期間</string>
     <string name="scan_all_sms">すべてのSMSメッセージをスキャン</string>
@@ -540,32 +586,37 @@
     <string name="months_count_format">%1$d ヶ月</string>
     <string name="unrecognized_bank_messages">認識されていない銀行メッセージ</string>
     <string name="no_unrecognized_messages">認識できないメッセージはありません</string>
+    <plurals name="unrecognized_messages_count">
+        <item quantity="other">潜在的な銀行からの%1$d メッセージ</item>
+    </plurals>
     <string name="sms_scan_period_desc">取引をスキャンするSMSの履歴を選択してください</string>
     <string name="one_month">1 ヶ月</string>
     <string name="two_years">2年</string>
+    <!-- Unrecognized SMS Screen -->
     <string name="unrecognized_messages_title">認識できないメッセージ</string>
     <string name="unrecognized_bank_messages_desc">潜在的な銀行からのこれらのメッセージは自動的に解析できませんでした。より多くの銀行へのサポートを追加できるように、報告することでキャッシュロの改善に貢献してください。</string>
     <string name="show_reported">報告を表示</string>
-    <string name="count_new_format">%1$d 件の新着</string>
+    <string name="count_new_format">%1$d new</string>
     <string name="count_reported_format">%1$d が報告されました</string>
     <string name="delete_message">メッセージを削除</string>
     <string name="delete_message_confirm_desc">認識できないメッセージを削除してもよろしいですか？この操作は元に戻せません。</string>
     <string name="reported">報告しました</string>
     <string name="report">レポート</string>
+    <!-- Webhooks Settings & Screen -->
     <string name="new_webhook">新しい Webhook</string>
     <string name="edit_webhook">Webhookを編集</string>
-    <string name="webhooks">ウェブフック</string>
+    <string name="webhooks">Webhooks</string>
     <string name="add_webhook">Webhookを追加</string>
     <string name="pick_a_date">日付を選択</string>
     <string name="add">追加</string>
-    <string name="webhook_endpoint_section">エンドポイント</string>
+    <string name="webhook_endpoint_section">Endpoint</string>
     <string name="webhook_name_label">Webhook名</string>
-    <string name="webhook_url_label">ウェブフック URL</string>
+    <string name="webhook_url_label">Webhook URL</string>
     <string name="webhook_data_types_section">データタイプ</string>
     <string name="webhook_data_types_desc">エンドポイントに配信するデータを選択します。</string>
     <string name="webhook_time_range_section">時間範囲</string>
     <string name="webhook_optional_headers">任意のヘッダー</string>
-    <string name="datatype_summary">概要</string>
+    <string name="datatype_summary">summary</string>
     <string name="datatype_transactions">取引</string>
     <string name="datatype_budgets">予算</string>
     <string name="datatype_accounts">アカウント</string>
@@ -591,7 +642,7 @@
     <string name="sync_now">今すぐ同期</string>
     <string name="sync_now_desc">有効なすべてのプロファイルのデリバリをトリガーします。</string>
     <string name="sync_schedule_title">スケジュールを同期</string>
-    <string name="webhook_profiles_title">プロファイル</string>
+    <string name="webhook_profiles_title">Profiles</string>
     <string name="no_webhook_profiles">Webhookプロファイルはまだありません</string>
     <string name="no_webhook_profiles_desc">サマリ、取引、予算、アカウント、サブスクリプションの同期を開始するために作成します。</string>
     <string name="create_webhook_desc">新しいWebhookプロファイルを作成</string>
@@ -615,6 +666,7 @@
     <string name="pick_a_time">時間を選択</string>
     <string name="ok">OK</string>
     <string name="create_rule">ルールを作成</string>
+    <!-- Account UI & Details -->
     <string name="edit_details">詳細を編集</string>
     <string name="merge_account">アカウントを統合</string>
     <string name="history">沿革</string>
@@ -626,35 +678,50 @@
     <string name="view_details">詳細を表示</string>
     <string name="none_manual_entry">なし (手動入力)</string>
     <string name="no_accounts_found">アカウントが見つかりません</string>
+    <!-- Attachments Section -->
     <string name="attachments">添付ファイル</string>
     <string name="add_attachment">添付ファイルを追加</string>
     <string name="file_missing">ファイルがありません</string>
     <string name="missing">見つかりません</string>
     <string name="selected">選択済み</string>
+    <plurals name="attachments_count">
+        <item quantity="other">%1$d ファイル</item>
+    </plurals>
+    <!-- Categories Sheet -->
+    <plurals name="subcategory_count_plural">
+        <item quantity="other">%1$d サブカテゴリ</item>
+    </plurals>
     <string name="search_placeholder_fruits">果物を検索</string>
     <string name="search_placeholder_shopping">ショッピングを検索</string>
     <string name="search_placeholder_fitness">検索フィットネス</string>
     <string name="search_placeholder_sports">スポーツを検索</string>
+    <!-- Collapsible & Filter Rows -->
     <string name="more_filters">その他のフィルター</string>
     <string name="more_filters_active_format">その他のフィルター (%1$d アクティブ)</string>
+    <string name="collapse_cd">折りたたむ</string>
+    <string name="expand_cd">展開</string>
+    <!-- Color Picker -->
     <string name="colors">色</string>
     <string name="color_picker_button_desc">カスタムカラーピッカー</string>
+    <!-- Currencies & Bottom Sheets -->
     <string name="search_currencies_placeholder">通貨を検索...</string>
     <string name="currency_not_available">通貨は利用できません</string>
     <string name="view_all_currencies">すべての通貨を表示</string>
     <string name="exchange_rates_notice">為替レートのお知らせ</string>
     <string name="exchange_rates_disclaimer">このアプリ内に表示される為替レートは情報提供のみを目的としており、投資判断に使用するべきではありません。 これらのレートは見積もりであり、実際のレートを反映していない場合があります。 このアプリを使用することで あなたは、これらの制限を理解し、受け入れることを認め、アプリ内で提供された情報に基づいて行われたすべての決定に対して完全な責任を負うことを認めます。</string>
     <string name="exchange_rates">為替レート</string>
-    <string name="base_currency">ベース</string>
+    <string name="base_currency">Base</string>
     <string name="rates_relative_format">%1$sからのレート</string>
     <string name="last_updated_format">最終更新日: %1$s</string>
-    <string name="currency_code_symbol_format">%1$s（%2$s）</string>
+    <string name="currency_code_symbol_format">%1$s (%2$s)</string>
     <string name="exchange_rate_formula_format">1 %1$s = %2$s %3$s</string>
+    <!-- Selected Currency Localized Names -->
     <string name="currency_inr_name">インド ルピー (&lt;unk&gt; )</string>
     <string name="currency_usd_name">米ドル ($)</string>
     <string name="currency_aed_name">アラブ首長国連邦ディルハム (AED)</string>
     <string name="currency_npr_name">Nepalese Rupee (Rs)</string>
-    <string name="currency_etb_name">エチオピア・ビル（ብር）</string>
+    <string name="currency_etb_name">Ethiopian Birr (ብር)</string>
+    <!-- Custom Billing Cycles -->
     <string name="repeat_desc">繰り返し</string>
     <string name="set_to_forever">フォーエバーに設定</string>
     <string name="billing_unit_day">日</string>
@@ -663,9 +730,14 @@
     <string name="billing_unit_year">年</string>
     <string name="forever">フォーエバー</string>
     <string name="until_date_format">%1$s まで</string>
+    <!-- Date Selection -->
     <string name="select_date_range">日付範囲の選択</string>
+    <!-- Delete Dialogs & Warnings -->
     <string name="delete_transaction_title">取引を削除</string>
     <string name="delete_transaction_confirm">この取引を削除してもよろしいですか？この操作は元に戻せません。</string>
+    <plurals name="delete_transactions_title">
+        <item quantity="other">%1$d トランザクションを削除しますか？</item>
+    </plurals>
     <string name="delete_multiple_transactions_confirm">この操作は元に戻せません。選択したトランザクションは完全に削除され、復元できません。</string>
     <string name="delete_account_title">アカウントを削除しますか？</string>
     <string name="delete_account_confirm">このアカウントを削除してもよろしいですか？</string>
@@ -681,19 +753,24 @@
     <string name="delete_ai_model_title">AIモデルを削除しますか？</string>
     <string name="delete_ai_model_confirm">AIモデルを削除してもよろしいですか？オフラインチャット機能は再度ダウンロードするまで削除されます。</string>
     <string name="delete_subscription_title">サブスクリプションを削除しますか？</string>
-    <string name="delete_subscription_confirm">本当に「%1$s」を削除しますか？これにより、購読リストから完全に削除されます。</string>
+    <string name="delete_subscription_confirm">Are you sure you want to delete \u2018%1$s\u2019? This will permanently remove it from your subscriptions list.</string>
     <string name="delete_subcategory_title">サブカテゴリを削除しますか？</string>
     <string name="delete_subcategory_confirm">\u2018%1$s\u2019を削除してもよろしいですか？この操作は元に戻せません。</string>
+    <!-- User & Profile Greeting Card -->
     <string name="profile_desc">プロフィール画像</string>
     <string name="greeting_morning">おはようございます</string>
     <string name="greeting_afternoon">こんにちは</string>
     <string name="greeting_evening">おやすみなさい</string>
     <string name="greeting_night">おやすみなさい</string>
     <string name="month_status_last_day">%1$s の最終日</string>
+    <plurals name="month_status_days_left_format">
+        <item quantity="other">%1$d 日後 %2$s</item>
+    </plurals>
+    <!-- Rules Dialogs -->
     <string name="reset_rules_title">ルールをリセット</string>
     <string name="reset_rules_confirm">すべてのルールをデフォルトの設定にリセットしますか？カスタム設定は失われます。</string>
     <string name="delete_rule_title">ルールの削除</string>
-    <string name="delete_rule_confirm">「%1$s」を削除しますか？この操作は元に戻せません。</string>
+    <string name="delete_rule_confirm">Delete \u201c%1$s\u201d? This action cannot be undone.</string>
     <string name="applying_rule">ルールを適用中...</string>
     <string name="apply_rule_past_transactions_title">過去の取引にルールを適用する</string>
     <string name="apply_rule_to_existing_confirm">既存のトランザクションに \u201c%1$s\u201d を適用しますか？</string>
@@ -706,21 +783,30 @@
     <string name="transactions_updated_format">トランザクションを更新しました: %1$d</string>
     <string name="transactions_blocked_format">ブロックされたトランザクション（ソフト削除）： %1$d</string>
     <string name="errors_count_format">エラー: %1$d</string>
+    <!-- SMS Scanning & Workers -->
     <string name="scanning_sms_messages_title">SMSメッセージのスキャン</string>
     <string name="cancel_scan">スキャンをキャンセル</string>
     <string name="all_messages_processed">すべてのメッセージが処理されました！</string>
     <string name="processed_messages_format">%1$d の %2$d メッセージを処理しました</string>
+    <plurals name="transactions_parsed_format">
+        <item quantity="other">%1$d トランザクションが解析されました</item>
+    </plurals>
+    <plurals name="saved_transactions_format">
+        <item quantity="other">%1$d を保存しました</item>
+    </plurals>
     <string name="duration_hours_minutes">%1$dh %2$dm</string>
-    <string name="duration_minutes_seconds">%1$dm %2$2s</string>
-    <string name="duration_seconds">%1$2s</string>
+    <string name="duration_minutes_seconds">%1$dm %2$ds</string>
+    <string name="duration_seconds">%1$ds</string>
     <string name="time_left_format">~%1$s が残りました</string>
-    <string name="batch_progress_format">バッチ %1$d ／ %2$s</string>
+    <string name="batch_progress_format">Batch %1$d of %2$d</string>
     <string name="scan_completed_success">スキャンが完了しました！</string>
     <string name="scan_failed_error">スキャンに失敗しました。もう一度やり直してください。</string>
     <string name="scan_cancelled">スキャンがキャンセルされました</string>
     <string name="starting_scan">スキャンを開始しています...</string>
     <string name="scanning_sms_format">SMSをスキャン中: %1$d/%2$d</string>
+    <!-- Time Selection -->
     <string name="select_time">時間を選択</string>
+    <!-- Transactions, Indicators & Categories -->
     <string name="recurring">繰り返し</string>
     <string name="balance_after_format">残り： %1$s</string>
     <string name="description_indicator_desc">説明あり</string>
@@ -729,254 +815,230 @@
     <string name="type_investment">投資</string>
     <string name="type_income">収入</string>
     <string name="type_expense">費用</string>
-    <string name="estimated_amount_format">推定 %1$s</string>
+    <string name="type_balance_update">Balance Update</string>
+    <!-- Estimated amounts -->
+    <string name="estimated_amount_format">est. %1$s</string>
     <string name="uncategorized">未分類</string>
-    <string name="net">純額</string>
-    <string name="processing">処理中…</string>
-    <string name="language">言語</string>
-    <string name="language_subtitle">アプリの言語を変更</string>
-    <string name="select_language">言語を選択</string>
-    <string name="transactions_count_short">%1$d 件の取引</string>
-    <string name="appearances">表示回数</string>
-    <string name="appearances_subtitle">アプリのパーソナライズ設定</string>
-    <string name="accounts_subtitle">アカウントを追加して残高を更新</string>
-    <string name="budgets_subtitle">月ごとの支出上限を設定および管理</string>
-    <string name="categories_subtitle">支出および収入カテゴリーを管理</string>
-    <string name="smart_rules_subtitle">自動取引分類</string>
-    <string name="data_privacy_subtitle">データおよびプライバシー設定を管理</string>
-    <string name="ai_chat_assistant">AIチャットアシスタント</string>
-    <string name="ai_chat_subtitle_not_downloaded">Qwen 2.5モデルをダウンロード（%1$d MB）</string>
-    <string name="ai_chat_subtitle_downloading">ダウンロード中… %1$d%%</string>
-    <string name="ai_chat_subtitle_paused">ダウンロードが一時停止されました。タップして再開します。</string>
-    <string name="ai_chat_subtitle_completed">チャットの準備ができているQwen</string>
-    <string name="ai_chat_subtitle_failed">ダウンロードに失敗しました。タップして再試行します。</string>
-    <string name="ai_chat_subtitle_insufficient_space">ストレージ容量が不足しています</string>
-    <string name="notifications">通知</string>
-    <string name="notifications_subtitle">リマインダー通知設定を管理</string>
-    <string name="sms_subtitle">SMS設定を管理</string>
-    <string name="webhooks_subtitle">BYOAPIのファイナンス同期</string>
-    <string name="about_subtitle">アプリのバージョン、ソースコードなど</string>
+    <string name="net">Net</string>
+    <string name="processing">Processing…</string>
+    <!-- Language Selection -->
+    <string name="language">Language</string>
+    <string name="language_subtitle">Change application language</string>
+    <string name="select_language">Select Language</string>
+    <!-- Settings Screen -->
+    <string name="transactions_count_short">%1$d Transactions</string>
+    <string name="appearances">Appearances</string>
+    <string name="appearances_subtitle">App\'s personalization settings</string>
+    <string name="accounts_subtitle">Add accounts and update balances</string>
+    <string name="budgets_subtitle">Set and manage monthly spending limits</string>
+    <string name="categories_subtitle">Manage expense and income categories</string>
+    <string name="smart_rules_subtitle">Automatic transaction categorization</string>
+    <string name="data_privacy_subtitle">Manage your data and privacy settings</string>
+    <string name="ai_chat_assistant">AI Chat Assistant</string>
+    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5 model (%1$d MB)</string>
+    <string name="ai_chat_subtitle_downloading">Downloading… %1$d%%</string>
+    <string name="ai_chat_subtitle_paused">Download paused. Tap to resume.</string>
+    <string name="ai_chat_subtitle_completed">Qwen ready for chat</string>
+    <string name="ai_chat_subtitle_failed">Download failed. Tap to retry.</string>
+    <string name="ai_chat_subtitle_insufficient_space">Not enough storage space</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_subtitle">Manage reminder notification settings</string>
+    <string name="sms_subtitle">Manage SMS settings</string>
+    <string name="webhooks_subtitle">BYOAPI finance sync</string>
+    <string name="about_subtitle">App version, source code and more</string>
+    <!-- Currency Settings -->
     <string name="currency">通貨</string>
-    <string name="currency_subtitle">為替レートと通貨の設定</string>
+    <string name="currency_subtitle">Exchange rates and currency preferences</string>
     <string name="currency_settings_title">通貨</string>
-    <string name="unified_currency">統一通貨</string>
-    <string name="unified_currency_subtitle">すべての金額を単一の通貨で表示</string>
-    <string name="default_currency">デフォルト通貨</string>
-    <string name="default_currency_subtitle">新しいエントリ用の通貨を事前選択</string>
-    <string name="display_currency">表示通貨</string>
-    <string name="default_label">デフォルト</string>
+    <string name="unified_currency">Unified Currency</string>
+    <string name="unified_currency_subtitle">Display all amounts in a single currency</string>
+    <string name="default_currency">Default Currency</string>
+    <string name="default_currency_subtitle">Pre-select currency for new entries</string>
+    <string name="display_currency">Display Currency</string>
+    <string name="default_label">Default</string>
     <string name="none">なし</string>
-    <string name="rates_info_subtitle">基準通貨の為替レートを確認</string>
+    <string name="rates_info_subtitle">View exchange rates for your base currency</string>
+    <!-- Custom Currency Settings -->
     <string name="search_currencies">通貨を検索...</string>
     <string name="rates_relative_to">%1$sからのレート</string>
     <string name="last_updated">最終更新日: %1$s</string>
-    <string name="custom_rate">カスタムレート</string>
-    <string name="custom_rate_set">カスタムレートが設定されました。APIレートに戻すにはリセットをタップしてください。</string>
-    <string name="add_custom_currency">カスタム通貨を追加</string>
-    <string name="custom_currency">カスタム通貨</string>
-    <string name="currency_country_name">通貨名</string>
-    <string name="eg_test_country">例：テスト国</string>
-    <string name="currency_code">通貨コード</string>
-    <string name="eg_tst">例：TST</string>
-    <string name="currency_symbol">通貨記号</string>
-    <string name="eg_tsymbol">例：T$</string>
-    <string name="exchange_rate">為替レート</string>
+    <string name="custom_rate">Custom rate</string>
+    <string name="custom_rate_set">Custom rate set. Tap Reset to revert to API rate.</string>
+    <string name="add_custom_currency">Add Custom Currency</string>
+    <string name="custom_currency">Custom Currency</string>
+    <string name="currency_country_name">Currency name</string>
+    <string name="eg_test_country">e.g. Test Country</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="eg_tst">e.g. TST</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="eg_tsymbol">e.g. T$</string>
+    <string name="exchange_rate">Exchange Rate</string>
     <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
-    <string name="please_fill_all_fields">すべてのフィールドに有効なデータを入力してください。</string>
-    <string name="base_currency_hint">ベース = デフォルト通貨またはメインアカウントの通貨</string>
-    <string name="save_currency">通貨を保存</string>
-    <string name="currency_name_hint">米ドル、インドルピー..</string>
-    <string name="currency_code_hint">USD、INR、EUR ...</string>
+    <string name="please_fill_all_fields">Please fill all fields with valid data.</string>
+    <string name="base_currency_hint">Base = default currency or main account\'s currency</string>
+    <string name="save_currency">Save Currency</string>
+    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
+    <string name="currency_code_hint">USD, INR, EUR ...</string>
     <string name="currency_symbols_hint">$,₹,€,£,₽</string>
-    <string name="exchange_rate_hint">1 ベース = X カスタム通貨</string>
+    <string name="exchange_rate_hint">1 Base = X Custom currency</string>
     <string name="exchange_rates_notice_title">為替レートのお知らせ</string>
-    <string name="exchange_rates_notice_text">このアプリに表示される為替レートは情報提供のみを目的としており、投資判断には使用すべきではありません。これらのレートは推定値であり、実際のレートを反映していない場合があります。このアプリを使用することにより、これらの制限を理解し、受け入れることに同意したものとみなされます。</string>
-    <string name="custom_label">カスタム</string>
-    <string name="time_period_this_month">今月</string>
-    <string name="time_period_last_month">先月</string>
-    <string name="time_period_current_fy">現在の会計年度</string>
-    <string name="time_period_all_time">全期間</string>
-    <string name="time_period_custom_range">カスタム範囲</string>
-    <string name="type_all">すべて</string>
-    <string name="type_credit">クレジット</string>
-    <string name="duplicate_transaction">重複取引</string>
-    <string name="transaction_duplicated">取引が重複しました</string>
-    <string name="share_receipt">領収書を共有</string>
-    <string name="webhook_mode">ウェブフック</string>
-    <string name="webhook_mode_desc">BYOAPI webhook同期を有効にする</string>
-    <string name="token_info">チャットトークン情報</string>
-    <string name="token_info_desc">チャットで技術情報を表示</string>
-    <string name="type_balance_update">残高更新</string>
-    <string name="new_chat">新しいチャット</string>
-    <string name="chat_history">チャット履歴</string>
-    <string name="appearance_title">外観</string>
+    <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
+    <string name="custom_label">CUSTOM</string>
+    <string name="new_chat">New Chat</string>
+    <string name="chat_history">Chat History</string>
+    <!-- AppearanceScreen -->
+    <string name="appearance_title">Appearance</string>
     <string name="theme_system">システム</string>
-    <string name="theme_light">ライト</string>
-    <string name="theme_dark">ダーク</string>
-    <string name="style_dynamic">ダイナミック</string>
-    <string name="style_dynamic_sub">壁紙の色</string>
-    <string name="style_default">デフォルト</string>
-    <string name="style_default_sub">デフォルトカラー</string>
-    <string name="amoled_black">AMOLEDブラック</string>
-    <string name="amoled_black_desc">より深いコントラストのために純粋な黒背景を使用</string>
-    <string name="blur_effects">ぼかし効果</string>
-    <string name="blur_effects_desc">UIコンポーネントでガラスモーフィズムのぼかし効果を有効化</string>
-    <string name="logo_original">オリジナル</string>
-    <string name="logo_anarchy">アナーキー</string>
-    <string name="logo_comic">コミック</string>
-    <string name="logo_zenith">ゼニス</string>
-    <string name="logo_monochrome">モノクローム</string>
-    <string name="navigation_style">ナビゲーション</string>
-    <string name="nav_floating">フローティング</string>
-    <string name="nav_floating_sub">モダン＆スリーク</string>
-    <string name="nav_normal">標準</string>
-    <string name="nav_normal_sub">スタンダード M3</string>
-    <string name="hide_nav_labels">ナビゲーションラベルを非表示</string>
-    <string name="hide_nav_labels_desc">ナビゲーションバーのラベルを非表示</string>
-    <string name="hide_pill_indicator">ピルインジケーターを非表示</string>
-    <string name="hide_pill_indicator_desc">ナビゲーションバーの選択インジケーターを非表示</string>
-    <string name="fonts_title">フォント</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="style_dynamic">Dynamic</string>
+    <string name="style_dynamic_sub">Wallpaper Colors</string>
+    <string name="style_default">Default</string>
+    <string name="style_default_sub">Default Colors</string>
+    <string name="amoled_black">Amoled Black</string>
+    <string name="amoled_black_desc">Use pure black background for deeper contrast</string>
+    <string name="blur_effects">Blur Effects</string>
+    <string name="blur_effects_desc">Enable glassmorphism blur effects in UI components</string>
+    <string name="logo_original">Original</string>
+    <string name="logo_anarchy">Anarchy</string>
+    <string name="logo_comic">Comic</string>
+    <string name="logo_zenith">Zenith</string>
+    <string name="logo_monochrome">Monochrome</string>
+    <string name="navigation_style">Navigation</string>
+    <string name="nav_floating">Floating</string>
+    <string name="nav_floating_sub">Modern &amp; Sleek</string>
+    <string name="nav_normal">Normal</string>
+    <string name="nav_normal_sub">Standard M3</string>
+    <string name="hide_nav_labels">Hide Navigation Labels</string>
+    <string name="hide_nav_labels_desc">Hide labels in the navigation bar</string>
+    <string name="hide_pill_indicator">Hide Pill Indicator</string>
+    <string name="hide_pill_indicator_desc">Hide the selection indicator in the navigation bar</string>
+    <string name="fonts_title">Fonts</string>
     <string name="font_default_sub">システム</string>
-    <string name="font_snpro">SNプロ</string>
-    <string name="font_snpro_sub">モダンモノ</string>
-    <string name="quick_templates">クイックテンプレート</string>
-    <string name="rule_name_label">ルール名</string>
-    <string name="rule_name_placeholder">例: 200ルピー以下の食費</string>
-    <string name="description_placeholder">このルールは何をしますか？</string>
-    <string name="conditions_title">条件</string>
+    <string name="font_snpro">SN Pro</string>
+    <string name="font_snpro_sub">Modern Mono</string>
+    <!-- CreateRuleScreen -->
+    <string name="quick_templates">Quick Templates</string>
+    <string name="rule_name_label">Rule Name</string>
+    <string name="rule_name_placeholder">e.g., Food expenses under ₹200</string>
+    <string name="description_placeholder">What does this rule do?</string>
+    <string name="conditions_title">Conditions</string>
     <string name="add_condition">追加</string>
-    <string name="condition_n_format">条件 %1$d</string>
-    <string name="remove_condition_cd">条件を削除</string>
-    <string name="field_label">フィールド</string>
-    <string name="value_label">値</string>
+    <string name="condition_n_format">Condition %1$d</string>
+    <string name="remove_condition_cd">Remove Condition</string>
+    <string name="field_label">Field</string>
+    <string name="value_label">Value</string>
     <string name="field_amount">金額</string>
-    <string name="field_merchant">店舗</string>
+    <string name="field_merchant">Merchant</string>
     <string name="field_category">カテゴリ</string>
-    <string name="field_sms_text">SMSテキスト</string>
-    <string name="field_transaction_type">取引タイプ</string>
+    <string name="field_sms_text">SMS Text</string>
+    <string name="field_transaction_type">Transaction Type</string>
     <string name="field_subcategory">サブカテゴリ</string>
     <string name="field_bank_name">銀行名</string>
-    <string name="field_default">フィールド</string>
-    <string name="then_title">次に</string>
-    <string name="action_type_label">アクションタイプ</string>
-    <string name="action_block_transaction">取引をブロック</string>
-    <string name="action_set_field">フィールドを設定</string>
-    <string name="action_clear_field">フィールドをクリア</string>
-    <string name="action_set_category">カテゴリを設定</string>
-    <string name="action_set_subcategory">サブカテゴリを設定</string>
-    <string name="action_set_merchant">加盟店名を設定</string>
-    <string name="action_set_type">取引タイプを設定</string>
-    <string name="action_label">アクション</string>
-    <string name="block_message">このルールに一致する取引はブロックされ、保存されません</string>
-    <string name="choose_category">カテゴリを選択</string>
-    <string name="preset_block_otps">OTPをブロック</string>
-    <string name="preset_block_small">少額をブロック</string>
-    <string name="preset_small_food">少額 → 食品</string>
-    <string name="preset_standardize">加盟店を標準化</string>
-    <string name="preset_mark_income">収入としてマーク</string>
-    <string name="notification_access">通知アクセス</string>
-    <string name="bank_push_notifications">銀行プッシュ通知</string>
-    <string name="notification_access_active">通知アクセスが有効です</string>
-    <string name="notification_access_desc">プッシュ通知から銀行取引を検出するために有効化してください</string>
-    <string name="notification_access_required">通知アクセスが必要</string>
-    <string name="notification_access_required_desc">リアルタイムで銀行取引を自動検出するには、Cashiroは通知アクセスが必要です。これはシステムレベルの権限です。</string>
-    <string name="how_to_enable">有効にする方法:</string>
-    <string name="step_1">下の「設定を開く」ボタンをタップします。</string>
-    <string name="step_2">アプリ一覧で「Cashiro」を探します。</string>
-    <string name="step_3">「通知アクセスを許可」をオンに切り替えます。</string>
-    <string name="open_settings">設定を開く</string>
-    <string name="scan_settings">設定をスキャン</string>
-    <string name="remind_transactions">取引のリマインダー</string>
-    <string name="remind_transactions_desc">新しいメッセージのスキャンをリマインド</string>
-    <string name="alert_time">通知時間</string>
-    <string name="upcoming_transactions_section">今後の取引</string>
-    <string name="upcoming_transactions_desc">今後の支払いのリマインダーを受け取る</string>
-    <string name="test_notification_alerts">通知アラートのテスト</string>
-    <string name="test_notification_alerts_desc">定期的にテスト通知を送信</string>
-    <string name="sample_data">サンプルデータ</string>
-    <string name="sample_data_desc">ダミーのアカウントと取引を作成</string>
-    <string name="home_title">ホーム</string>
-    <string name="full_resync">完全再同期</string>
-    <string name="full_resync_desc">これによりすべてのSMSメッセージが最初から再処理されます。更新された銀行パーサーによる問題を修正するために使用してください。
-
-メッセージ履歴によっては数秒かかる場合があります。</string>
-    <string name="resync_all">すべて再同期</string>
-    <string name="sync_sms_cd">SMS取引を同期する</string>
-    <string name="add_transaction_subscription_cd">取引またはサブスクリプションを追加</string>
+    <string name="field_default">Field</string>
+    <string name="then_title">Then</string>
+    <string name="action_type_label">Action Type</string>
+    <string name="action_block_transaction">Block Transaction</string>
+    <string name="action_set_field">Set Field</string>
+    <string name="action_clear_field">Clear Field</string>
+    <string name="action_set_category">Set Category</string>
+    <string name="action_set_subcategory">Set Subcategory</string>
+    <string name="action_set_merchant">Set Merchant Name</string>
+    <string name="action_set_type">Set Transaction Type</string>
+    <string name="action_label">Action</string>
+    <string name="block_message">Transactions matching this rule will be blocked and not saved</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="preset_block_otps">Block OTPs</string>
+    <string name="preset_block_small">Block Small Amounts</string>
+    <string name="preset_small_food">Small amounts → Food</string>
+    <string name="preset_standardize">Standardize Merchant</string>
+    <string name="preset_mark_income">Mark as Income</string>
+    <!-- NotificationScreen -->
+    <string name="notification_access">Notification Access</string>
+    <string name="bank_push_notifications">Bank Push Notifications</string>
+    <string name="notification_access_active">Notification access is active</string>
+    <string name="notification_access_desc">Enable to detect bank transactions from push notifications</string>
+    <string name="notification_access_required">Notification Access Required</string>
+    <string name="notification_access_required_desc">To automatically detect bank transactions in real-time, Cashiro requires notification access. This is a system-level permission.</string>
+    <string name="how_to_enable">How to enable:</string>
+    <string name="step_1">Tap the \'Open Settings\' button below.</string>
+    <string name="step_2">Find \'Cashiro\' in the list of applications.</string>
+    <string name="step_3">Toggle \'Allow notification access\' to enabled.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="scan_settings">Scan Settings</string>
+    <string name="remind_transactions">Remind Transactions</string>
+    <string name="remind_transactions_desc">Get reminders to scan new messages</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="upcoming_transactions_section">Upcoming Transactions</string>
+    <string name="upcoming_transactions_desc">Get reminders for upcoming payments</string>
+    <!-- DeveloperScreen -->
+    <string name="test_notification_alerts">Test Notification Alerts</string>
+    <string name="test_notification_alerts_desc">Send test notifications periodically</string>
+    <string name="sample_data">Sample Data</string>
+    <string name="sample_data_desc">Create dummy accounts and transactions</string>
+    <!-- BottomNavItem -->
+    <string name="home_title">Home</string>
+    <!-- CashiroNavHost -->
+    <string name="full_resync">Full Resync</string>
+    <string name="full_resync_desc">This will reprocess all SMS messages from scratch. Use this to fix issues caused by updated bank parsers.\n\nThis may take a few seconds depending on your message history.</string>
+    <string name="resync_all">Resync All</string>
+    <string name="sync_sms_cd">Sync SMS transactions</string>
+    <string name="options_desc">Options</string>
+    <string name="add_transaction_subscription_cd">Add Transaction or Subscription</string>
+    <!-- ColorPickerContent -->
     <string name="selected_cd">選択済み</string>
-    <string name="net_worth_label">総資産</string>
-    <string name="this_month_lbl">今月</string>
-    <string name="this_year_lbl">今年</string>
-    <string name="percent_this_month_format">今月は %1$s%2$s%%</string>
-    <string name="app_locked_title">Cashiro はロックされています</string>
-    <string name="authenticate_desc">支出データにアクセスするには認証してください</string>
-    <string name="unlock">ロック解除</string>
-    <string name="biometric_unavailable_title">生体認証は使用できません</string>
-    <string name="biometric_setup_desc">デバイスの設定でアプリロックを無効にするか、生体認証を設定してください。</string>
-    <string name="immediate_locking">即時ロック</string>
-    <string name="minute_timeout_format">%1$d 分のタイムアウト</string>
-    <string name="data_protected_format">あなたのデータは %1$s で保護されています</string>
-    <string name="today_lbl">今日</string>
-    <string name="yesterday_lbl">昨日</string>
-    <string name="this_week_lbl">今週</string>
-    <string name="earlier_lbl">以前</string>
-    <string name="sort_date_newest">新しい順</string>
-    <string name="sort_date_oldest">古い順</string>
-    <string name="sort_amount_highest">最高金額</string>
-    <string name="sort_amount_lowest">最低金額</string>
-    <string name="sort_merchant_az">マーチャント (A-Z)</string>
-    <string name="sort_merchant_za">マーチャント (Z-A)</string>
-    <string name="collapse_cd">折りたたむ</string>
-    <string name="expand_cd">展開</string>
+    <!-- BalanceCard -->
+    <string name="net_worth_label">Net worth</string>
+    <string name="this_month_lbl">THIS MONTH</string>
+    <string name="this_year_lbl">THIS YEAR</string>
+    <string name="percent_this_month_format">%1$s%2$s%% this month</string>
+    <!-- AppLockScreen -->
+    <string name="app_locked_title">Cashiro is Locked</string>
+    <string name="authenticate_desc">Authenticate to access your expense data</string>
+    <string name="unlock">Unlock</string>
+    <string name="biometric_unavailable_title">Biometric authentication unavailable</string>
+    <string name="biometric_setup_desc">Please disable app lock in device settings or set up biometric authentication.</string>
+    <string name="immediate_locking">immediate locking</string>
+    <string name="minute_timeout_format">%1$d minute timeout</string>
+    <string name="data_protected_format">Your data is protected with %1$s</string>
+    <!-- TransactionsState -->
+    <string name="today_lbl">Today</string>
+    <string name="yesterday_lbl">Yesterday</string>
+    <string name="this_week_lbl">This Week</string>
+    <string name="earlier_lbl">Earlier</string>
+    <string name="sort_date_newest">Newest First</string>
+    <string name="sort_date_oldest">Oldest First</string>
+    <string name="sort_amount_highest">Highest Amount</string>
+    <string name="sort_amount_lowest">Lowest Amount</string>
+    <string name="sort_merchant_az">Merchant (A-Z)</string>
+    <string name="sort_merchant_za">Merchant (Z-A)</string>
+    <!-- AttachmentSection -->
     <string name="add_attachment_cd">添付ファイルを追加</string>
-    <string name="remove_cd">削除</string>
-    <string name="receipt">領収書</string>
-    <string name="transaction_info">取引情報</string>
-    <string name="split_transaction">分割</string>
-    <string name="manage_transaction">取引を管理</string>
-    <string name="view_transaction">取引を見る</string>
-    <string name="mark_as">としてマーク</string>
-    <string name="no_description">説明なし</string>
-    <string name="no_attachments">添付ファイルなし</string>
-    <string name="this_transaction">この取引</string>
-    <string name="err_amount_required">金額は必須です</string>
-    <string name="err_invalid_amount">無効な金額</string>
-    <string name="err_amount_positive">金額は0より大きくなければなりません</string>
-    <string name="err_merchant_required">マーチャント/説明は必須です</string>
-    <string name="err_too_short">短すぎます</string>
-    <string name="err_category_required">カテゴリは必須です</string>
-    <string name="err_service_required">サービス名は必須です</string>
-    <string name="err_source_target_required">送金には送金元と送金先の両方のアカウントが必要です</string>
-    <string name="err_accounts_different">送金元と送金先のアカウントは異なる必要があります</string>
-    <string name="err_save_transaction">取引の保存に失敗しました</string>
-    <string name="err_save_subscription">サブスクリプションの保存に失敗しました</string>
-    <string name="err_subscription_not_found">サブスクリプションが見つかりません</string>
-    <string name="am_lbl">午前</string>
-    <string name="pm_lbl">午後</string>
-    <string name="merchant_lbl">マーチャント</string>
-    <string name="options_desc">オプション</string>
-    <plurals name="licenses_count">
-        <item quantity="other">%1$d ライセンス</item>
-    </plurals>
-    <plurals name="unrecognized_messages_count">
-        <item quantity="other">潜在的な銀行からの%1$d メッセージ</item>
-    </plurals>
-    <plurals name="attachments_count">
-        <item quantity="other">%1$d ファイル</item>
-    </plurals>
-    <plurals name="subcategory_count_plural">
-        <item quantity="other">%1$d サブカテゴリ</item>
-    </plurals>
-    <plurals name="delete_transactions_title">
-        <item quantity="other">%1$d トランザクションを削除しますか？</item>
-    </plurals>
-    <plurals name="month_status_days_left_format">
-        <item quantity="other">%1$d 日後 %2$s</item>
-    </plurals>
-    <plurals name="transactions_parsed_format">
-        <item quantity="other">%1$d トランザクションが解析されました</item>
-    </plurals>
-    <plurals name="saved_transactions_format">
-        <item quantity="other">%1$d を保存しました</item>
-    </plurals>
+    <string name="remove_cd">Remove</string>
+    <!-- TransactionDetailScreen -->
+    <string name="receipt">Receipt</string>
+    <string name="transaction_info">Transaction Info</string>
+    <string name="split_transaction">Split</string>
+    <string name="manage_transaction">Manage Transaction</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="mark_as">Mark as</string>
+    <string name="no_description">No description</string>
+    <string name="no_attachments">No attachments</string>
+    <string name="this_transaction">This transaction</string>
+    <!-- AddViewModel validation -->
+    <string name="err_amount_required">Amount is required</string>
+    <string name="err_invalid_amount">Invalid amount</string>
+    <string name="err_amount_positive">Amount must be greater than 0</string>
+    <string name="err_merchant_required">Merchant/Description is required</string>
+    <string name="err_too_short">Too short</string>
+    <string name="err_category_required">Category is required</string>
+    <string name="err_service_required">Service name is required</string>
+    <string name="err_source_target_required">Both source and target accounts are required for transfers</string>
+    <string name="err_accounts_different">Source and target accounts must be different</string>
+    <string name="err_save_transaction">Failed to save transaction</string>
+    <string name="err_save_subscription">Failed to save subscription</string>
+    <string name="err_subscription_not_found">Subscription not found</string>
+    <string name="am_lbl">AM</string>
+    <string name="pm_lbl">PM</string>
+    <string name="merchant_lbl">Merchant</string>
 </resources>
