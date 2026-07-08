@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cashiro</string>
+    <!-- App shortcuts -->
     <string name="add_transaction">Transactie toevoegen</string>
     <string name="add_subscription">Abonnement toevoegen</string>
     <string name="add_transfer">Overdracht toevoegen</string>
+    <!-- Add Screen -->
     <string name="add_new">Nieuwe toevoegen</string>
     <string name="transaction">Transactie</string>
     <string name="subscription">Abonnement</string>
+    <!-- Data Privacy Screen -->
     <string name="data_privacy_title">Privacy gegevens</string>
     <string name="security_section">Beveiliging</string>
     <string name="app_lock">App vergrendeling</string>
     <string name="app_lock_biometric_sub">Bescherm uw gegevens met biometrische verificatie</string>
-    <string name="lock_timeout">Vergrendel Time-out</string>
+    <string name="lock_timeout">Lock Timeout</string>
     <string name="lock_timeout_immediate">Onmiddellijk vergrendelen wanneer de app naar de achtergrond gaat</string>
     <string name="lock_timeout_1min">Vergrendel na 1 minuut op de achtergrond</string>
     <string name="lock_timeout_minutes">Vergrendel na %1$d minuten op de achtergrond</string>
@@ -34,9 +37,11 @@
     <string name="profile_data">Profiel gegevens</string>
     <string name="budgets">Budgetten</string>
     <string name="app_preferences">App voorkeuren</string>
+    <!-- NumberPad -->
     <string name="enter_amount">Bedrag invoeren</string>
     <string name="done">Voltooid</string>
     <string name="backspace">Achtergrond</string>
+    <!-- Merge Accounts Dialogs -->
     <string name="merge_accounts_title">Accounts samenvoegen</string>
     <string name="merge_accounts_desc">Selecteer accounts om samen te voegen met %1$s (...%2$s). Geselecteerde accounts worden verwijderd na het samenvoegen.</string>
     <string name="next">Volgende</string>
@@ -50,6 +55,7 @@
     <string name="merge_confirm_title">Laatste bevestiging</string>
     <string name="merge_confirm_message">Rekeningen samenvoegen: Alle lopende en verleden transacties van samenvoegende bankrekeningen worden nu weergegeven op de samengevoegde bankrekening. De originele accounts zullen worden verwijderd.</string>
     <string name="merge">Samenvoegen</string>
+    <!-- HistorySheet -->
     <string name="balance_history_title">Saldo geschiedenis</string>
     <string name="records_count_latest_balance_note">%1$d records • Laatste saldo wordt weergegeven in rekeningen</string>
     <string name="no_balance_history_available">Geen saldogeschiedenis beschikbaar</string>
@@ -66,6 +72,7 @@
     <string name="source_system">Systeem</string>
     <string name="sms_source">SMS Bron</string>
     <string name="copy">Kopiëren</string>
+    <!-- AccountDetailScreen -->
     <string name="account_details">Account details</string>
     <string name="transactions_count">Transacties (%1$d)</string>
     <string name="balance_trend">Saldo trend</string>
@@ -79,6 +86,14 @@
     <string name="range_last_6_months">Laatste 6 maanden</string>
     <string name="range_last_year">Vorig jaar</string>
     <string name="range_all_time">Gehele tijd</string>
+    <string name="time_period_this_month">This Month</string>
+    <string name="time_period_last_month">Last Month</string>
+    <string name="time_period_current_fy">Current FY</string>
+    <string name="time_period_all_time">Gehele tijd</string>
+    <string name="time_period_custom_range">Custom Range</string>
+    <string name="type_all">Allemaal</string>
+    <string name="type_credit">Krediet</string>
+    <!-- Add/Edit Account Screens -->
     <string name="add_account_info">Voeg accounts toe die niet worden bijgehouden via SMS zoals contant geld, portemonnees of beleggingsrekeningen.</string>
     <string name="account_type_label">Klant type</string>
     <string name="account_icon_label">Account icoon</string>
@@ -86,11 +101,11 @@
     <string name="placeholder_bank_name">b.v. HDFC Bank</string>
     <string name="placeholder_credit_name">b.v. HDFC Credit Card</string>
     <string name="placeholder_wallet_name">b.v. Cash</string>
-    <string name="last_4_digits_required_label">Laatste 4 cijfers *</string>
+    <string name="last_4_digits_required_label">Last 4 Digits *</string>
     <string name="placeholder_last_4_digits">bijv. 1234</string>
     <string name="enter_last_4_digits_hint">Voer de laatste 4 rekening/kaart in</string>
     <string name="current_balance_required_label">Huidig saldo *</string>
-    <string name="placeholder_decimal">0,00</string>
+    <string name="placeholder_decimal">0.00</string>
     <string name="currency_label">valuta</string>
     <string name="select_currency">Valuta selecteren</string>
     <string name="credit_limit_label">Krediet Limiet</string>
@@ -108,13 +123,14 @@
     <string name="outstanding_label">Openstaand</string>
     <string name="balance_label">Saldo</string>
     <string name="available_credit_label">Beschikbaar krediet: %1$s</string>
-    <string name="utilization_label">Benutting: %1$d%%</string>
+    <string name="utilization_label">Utilization: %1$d%%</string>
     <string name="wallet_name_label">Naam Portemonnee</string>
     <string name="bank_name_label">Naam bank</string>
     <string name="account_number_last_4_label">Rekeningnummer (laatste 4)</string>
     <string name="delete_account_desc">Verwijder account</string>
     <string name="save_changes">Wijzigingen opslaan</string>
     <string name="type_wallet_lowercase">portemonnee</string>
+    <!-- ManageAccountsScreen -->
     <string name="title_accounts">Rekeningen</string>
     <string name="no_accounts_yet">Nog geen accounts</string>
     <string name="add_account_fab_desc">Account toevoegen</string>
@@ -140,13 +156,14 @@
     <string name="credit_card">Krediet</string>
     <string name="debit_card">Incasso</string>
     <string name="last_balance">Laatste saldo: %1$s</string>
-    <string name="sms_source_formatted">SMS: 1 dollar</string>
+    <string name="sms_source_formatted">SMS: %1$s</string>
     <string name="sms_source_expand">SMS: %1$s... (tik om uit te breiden)</string>
     <string name="link_card_title">Link kaart</string>
     <string name="no_accounts_found_link">Geen %1$s rekeningen gevonden. Voeg eerst een overeenkomstige bankrekening toe.</string>
     <string name="select_account_link_prompt">Selecteer een account om deze kaart aan te koppelen:</string>
     <string name="action_cancel">annuleren</string>
     <string name="action_link">Koppeling</string>
+    <!-- SubscriptionTabContent & TransactionTabContent -->
     <string name="subscription_info">Periodieke uitgaven bijhouden. Je moet periodieke transacties handmatig toevoegen elke maand.</string>
     <string name="billing_cycle_label">Facturering cyclus</string>
     <string name="cycle_monthly">maandelijks</string>
@@ -177,11 +194,13 @@
     <string name="merchant_description">Handelaar / Beschrijving</string>
     <string name="where_did_you_spend">Waar heb je dit uitgegeven?</string>
     <string name="merchant_placeholder">b.v. Targetgets, Wandelen</string>
+    <!-- Budgets Screen -->
     <string name="new_budget">Nieuw budget</string>
     <string name="no_budgets_yet">Nog geen budgetten</string>
     <string name="create_first_budget_desc">Maak uw eerste budget om uw bestedingsdoelen te kunnen volgen</string>
     <string name="create_budget">Budget maken</string>
     <string name="edit_budget">Budget bewerken</string>
+    <!-- Edit Budget Sheet -->
     <string name="budget_period">Budget Periode</string>
     <string name="starts">Begint</string>
     <string name="ends">Eindigt</string>
@@ -210,7 +229,7 @@
     <string name="daily_goal_remaining">DAGELIJKSE HERINNEN</string>
     <string name="daily_budget_left">DAGELIJK BUDGETTELEFT</string>
     <string name="saved_goal">OPGESLAGEN / DOEL</string>
-    <string name="spend_limit">UITGAVE / LIMIET</string>
+    <string name="spend_limit">SPEND / LIMIT</string>
     <string name="days_remaining_format">%1$d dagen resterend</string>
     <string name="link_accounts">Accounts koppelen</string>
     <string name="ending_in_format">Eindigend in %1$s</string>
@@ -229,17 +248,18 @@
     <string name="expense_budget_desc">Volg uw uitgaven en budgetteer uw uitgaven</string>
     <string name="select_tracking_mode">Selecteer trackingmodus</string>
     <string name="added_only">Alleen toegevoegd</string>
-    <string name="added_only_desc">Alleen de transacties die je toevoegt
-Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
+    <string name="added_only_desc">Only the transactions you add\nUseful for one-time budgets with custom time periods</string>
     <string name="added_only_example">Voorbeeld: \'Vakantie\' budget</string>
     <string name="all_transactions">Alle transacties</string>
     <string name="all_transactions_desc">Alle transacties binnen geselecteerde categorieën en filters\nHandig voor langetermijnbudgetten over meerdere periodes</string>
     <string name="all_transactions_example">Voorbeeld: \'Maandelijkse uitgaven\' budget</string>
+    <!-- Categories Screen -->
     <string name="categories">Categoriechar@@0n</string>
     <string name="add_category">Categorie toevoegen</string>
     <string name="clear_search">Zoekopdracht wissen</string>
     <string name="expense_categories">Kosten categorieën</string>
     <string name="income_categories">Inkomsten categorieën</string>
+    <!-- Edit Category Sheet -->
     <string name="category_name">Categorie Naam</string>
     <string name="category_description_placeholder">beschrijving van de categorie</string>
     <string name="add_subcategory">Subcategorie toevoegen</string>
@@ -252,16 +272,18 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="update_category">Categorie bijwerken</string>
     <string name="create_category">Categorie aanmaken</string>
     <string name="reset_to_default">Standaardinstellingen herstellen</string>
+    <!-- Edit Subcategory Sheet -->
     <string name="subcategory">Subcategorie</string>
     <string name="delete_subcategory">Verwijder subcategorie</string>
     <string name="create_subcategory">Subcategorie aanmaken</string>
     <string name="update_subcategory">Subcategorie bijwerken</string>
+    <!-- Analytics -->
     <string name="total">Totaal</string>
     <string name="suffix_million">M</string>
     <string name="suffix_thousand">K</string>
     <string name="percentage_format">(%1$d%%)</string>
     <string name="total_uppercase">TOTAAL</string>
-    <string name="transactions_format">%1$d TRANSACTIES</string>
+    <string name="transactions_format">%1$d TXNS</string>
     <string name="average">GEMIDDELDE</string>
     <string name="per_day"> /dag</string>
     <string name="percentage_of_total">%1$d%% KORTING</string>
@@ -274,6 +296,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="chart_type_heatmap">Warmtekaart</string>
     <string name="chart_format">%1$s Grafiek</string>
     <string name="toggle_view">Wissel weergave</string>
+    <!-- Chat Screen -->
     <string name="cashiro_ai">Cashiro AI</string>
     <string name="more_options">Meer opties</string>
     <string name="clear_chat">Chat wissen</string>
@@ -300,6 +323,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="percentage_format_no_brackets">%1$d%%</string>
     <string name="tokens_usage_format">%1$s / %2$s tokens</string>
     <string name="system_tokens_format">Systeem: %1$s</string>
+    <!-- Home Screen & Widgets -->
     <string name="edit_widgets">Widgets bewerken</string>
     <string name="edit_widgets_desc">Secties opnieuw ordenen of verbergen op uw beginscherm.</string>
     <string name="reorder">Herordenen</string>
@@ -326,6 +350,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="subscriptions_count_format">%1$d abonnementen</string>
     <string name="per_month">/ Maand</string>
     <string name="last_days_format">Laatste %1$d dagen</string>
+    <!-- Edit Profile & Profile -->
     <string name="edit_profile">Profiel bewerken</string>
     <string name="gallery">Galerij</string>
     <string name="change_banner">Wijzig de banner</string>
@@ -334,7 +359,8 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="net_worth">Netto waarde</string>
     <string name="upcoming">Aankomende</string>
     <string name="active_subscriptions_singular">1 subcategorie</string>
-    <string name="active_subscriptions_plural">%1$d Abonnementen</string>
+    <string name="active_subscriptions_plural">%1$d Subs</string>
+    <!-- Onboarding -->
     <string name="app_logo">App logo</string>
     <string name="onboarding_subtitle">Ervaar een naadloze manier om je geld te volgen, je uitgaven te categoriseren en je spaardoelen sneller te raken.</string>
     <string name="set_up_your_profile">Stel je profiel in</string>
@@ -364,6 +390,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="scanning_ellipsis">Scannen...</string>
     <string name="continue_action">Doorgaan</string>
     <string name="finish_setup">Setup voltooien</string>
+    <!-- Mock Messages -->
     <string name="mock_msg_electric_bill">Elektrische rekening verschuldigd: ½ 2.450</string>
     <string name="mock_msg_starbucks">Transactie van ± 500 bij Starbucks</string>
     <string name="mock_msg_cc_due">Herinnering: creditcard te doen morgen</string>
@@ -374,6 +401,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="mock_msg_axis">Bijlage: ½ 200 uitgegeven in Zomato</string>
     <string name="notification">Notificatie</string>
     <string name="mock_msg_salary_credited">Uw salaris is gecrediteerd!</string>
+    <!-- SubscriptionsScreen -->
     <string name="subscriptions">Abonnementen</string>
     <string name="total_subscriptions">Totaal aantal abonnementen</string>
     <string name="active_count_format">%1$d actief</string>
@@ -389,7 +417,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="original_sms">Oorspronkelijke sms</string>
     <string name="track_payment">Bijhouden van betaling</string>
     <string name="edit_subscription">Bewerk abonnement</string>
-    <string name="subscription_hidden_format">%1$s verborgen</string>
+    <string name="subscription_hidden_format">%1$s hidden</string>
     <string name="payment_for_format">Betaling voor %1$s</string>
     <string name="overdue_since_format">Achterstallig sinds %1$s</string>
     <string name="due_on_format">Vervalt op %1$s</string>
@@ -400,23 +428,28 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="show_original_message">Originele bericht tonen</string>
     <string name="no_subscriptions_detected_yet">Nog geen abonnementen gevonden</string>
     <string name="sync_sms_to_detect_subscriptions">Synchroniseer uw SMS om abonnementen te detecteren</string>
+    <!-- ExportTransactionsDialog -->
     <string name="export_transactions">Exporteer transacties</string>
     <string name="exporting">Exporteren...</string>
     <string name="export_complete">Exporteren voltooid!</string>
     <string name="export_failed">Exporteren mislukt</string>
     <string name="export_transactions_desc">%1$d transacties exporteren naar CSV-formaat</string>
     <string name="total_transactions_export">Totaal transacties:</string>
-    <string name="date_range">Datumbereik:</string>
+    <string name="date_range">Date range:</string>
     <string name="export_success_msg_format">Succesvol geëxporteerd %1$d transacties</string>
     <string name="size_format">Grootte: %1$s</string>
     <string name="share">Delen</string>
     <string name="retry">Opnieuw</string>
     <string name="share_csv">Deel CSV</string>
     <string name="csv_export_subject">Cashiro transacties exporteren</string>
+    <!-- TransactionDetailScreen -->
     <string name="edit_transaction">Transactie bewerken</string>
     <string name="transaction_details">Transactie Details</string>
     <string name="report_issue">Probleem melden</string>
     <string name="delete_transaction">Verwijder transactie</string>
+    <string name="duplicate_transaction">Duplicate Transaction</string>
+    <string name="transaction_duplicated">Transaction duplicated</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="transaction_updated_successfully">Transactie succesvol bijgewerkt</string>
     <string name="merchant_label">Handelaar</string>
     <string name="description_optional_label">Beschrijving (optioneel)</string>
@@ -456,6 +489,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="semi_annual_recurring">Semi-jaarlijks</string>
     <string name="annual_recurring">Jaarlijks</string>
     <string name="custom_recurring">Aangepaste</string>
+    <!-- TransactionsFilterBottomSheet -->
     <string name="filters">Filters</string>
     <string name="reset">Reset</string>
     <string name="apply">Toepassen</string>
@@ -466,6 +500,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="set_minimum_amount">Stel minimumbedrag in</string>
     <string name="set_maximum_amount">Stel maximumbedrag in</string>
     <string name="confirm">Bevestigen</string>
+    <!-- TransactionsScreen -->
     <string name="transactions_deleted_format">%1$d transacties verwijderd</string>
     <string name="items_selected_format">%1$d geselecteerd</string>
     <string name="deselect_all">Deselecteer alles</string>
@@ -476,8 +511,9 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="no_transactions_matching_format">Geen transacties die overeenkomen met \"%1$s\"</string>
     <string name="no_transactions_for_format">Geen transacties voor %1$s</string>
     <string name="sync_sms_to_see_transactions">Synchroniseer uw SMS om transacties te zien</string>
+    <!-- About Screen -->
     <string name="about">Informatie</string>
-    <string name="cashiro_logo_cd">Cashiro-logo</string>
+    <string name="cashiro_logo_cd">Cashiro Logo</string>
     <string name="version_format">Versie %1$s, db-v%2$d</string>
     <string name="developed_by">Ontwikkeld door Ritesh</string>
     <string name="lead_developer_cd">lead ontwikkelaar</string>
@@ -485,7 +521,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="github">Github</string>
     <string name="discord">Onenigheid</string>
     <string name="join_community">Word lid van onze community</string>
-    <string name="faq">Veelgestelde vragen</string>
+    <string name="faq">FAQ</string>
     <string name="faq_desc">Veel gestelde vragen</string>
     <string name="guides">Handleidingen</string>
     <string name="guides_desc">Hoe je Cashiro gebruikt</string>
@@ -498,6 +534,10 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="licenses">Licenties</string>
     <string name="licenses_desc">Open source bibliotheken</string>
     <string name="developer_options">Opties voor ontwikkelaars</string>
+    <string name="webhook_mode">Webhooks</string>
+    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
+    <string name="token_info">Chat Token Info</string>
+    <string name="token_info_desc">Show technical information in chat</string>
     <string name="developer_options_desc">Testen en experimentele functies</string>
     <string name="delete_all_data">Alle gegevens verwijderen</string>
     <string name="delete_all_data_desc">Alle records permanent wissen</string>
@@ -505,10 +545,16 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="delete_all_data_confirm_title">Alle gegevens verwijderen?</string>
     <string name="delete_all_data_confirm_desc">Deze actie zal al uw transacties, budgetten, abonnementen en instellingen permanent verwijderen. Dit kan niet ongedaan worden gemaakt.</string>
     <string name="delete_all">Alles verwijderen</string>
+    <!-- Licenses Screen -->
     <string name="license_version_format">v%1$s, db-v%2$d</string>
     <string name="license_disclaimer_software">DE SOFTWARE IS PROVIDED \"ALS IS\", WITHOUT GARANTIE VAN EN KIND, EXPRESS OF IMPLIED, KLANDING BUT NIET GELIMITEERD OM DE GARANTIES VAN MERKANTABILITY, FITNESS VOOR EEN DEELNEMENTER VOOR EEN NONINFRINGEMENT. IN GEEN EVENEMENT SHALLE DE AUTHORS OF COPYRIGHIGHT HOLDERS WORDT WORDT VOOR EEN KLAIM, SCHADELIJKE OVERSCHRIJVEN, WETHER IN EEN ACTIE OF CONTRACHT, TORT OF ANDERIJK, ARIST FOUT, UW VAN OF IN VERBONDEN MET DE SOFTWARE OF HET GEBRUIK OF DE GEBRUIK OF ANDERE DEELINGEN IN DE SOFTWARE.</string>
     <string name="license_disclaimer_rates">De wisselkoersen die worden weergegeven binnen deze app zijn voor informatieve doeleinden en moeten niet worden gebruikt voor investeringsbeslissingen. Deze tarieven zijn schattingen en zijn mogelijk niet een afspiegeling van de werkelijke rentetarieven. Door deze app te gebruiken u erkent dat u deze beperkingen begrijpt en accepteert en dat u de volledige verantwoordelijkheid op zich neemt voor alle beslissingen die worden genomen op basis van de informatie die u binnen de app verstrekt.</string>
     <string name="powered_by">Mogelijk gemaakt door Kotlin Compose</string>
+    <plurals name="licenses_count">
+        <item quantity="one">%1$d licentie</item>
+        <item quantity="other">%1$d licenties</item>
+    </plurals>
+    <!-- Rules Screen -->
     <string name="smart_rules">Slimme regels</string>
     <string name="reset_to_defaults">Standaardinstellingen herstellen</string>
     <string name="automatic_categorization">Automatische categorisering</string>
@@ -527,12 +573,13 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="rule_summary_rent">Betalingen met verhuur sleutelwoorden</string>
     <string name="rule_summary_emi">EMI/lening trefwoorden</string>
     <string name="rule_summary_investment">Wederzijdse fondsen, aandelen sleutelwoorden</string>
-    <string name="rule_summary_subscription">Netflix, Spotify, enz.</string>
+    <string name="rule_summary_subscription">Netflix, Spotify, etc.</string>
     <string name="rule_summary_fuel">Benzinepomp transacties</string>
     <string name="rule_summary_healthcare">Ziekenhuis, apotheek sleutelwoorden</string>
     <string name="rule_summary_transfer">Zelf overdragen, contra</string>
     <string name="priority_format">Prioriteit: %1$d</string>
     <string name="edit_rule">Regel bewerken</string>
+    <!-- SMS Screen -->
     <string name="sms_title">sms</string>
     <string name="sms_scan_period">SMS Scan Periode</string>
     <string name="scan_all_sms">Scan alle SMS-berichten</string>
@@ -540,9 +587,14 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="months_count_format">%1$d maanden</string>
     <string name="unrecognized_bank_messages">Niet-herkende bankberichten</string>
     <string name="no_unrecognized_messages">Geen niet-herkende berichten</string>
+    <plurals name="unrecognized_messages_count">
+        <item quantity="one">%1$d bericht van potentiële banken</item>
+        <item quantity="other">%1$d berichten van potentiële banken</item>
+    </plurals>
     <string name="sms_scan_period_desc">Kies hoeveel maanden SMS-geschiedenis om te scannen naar transacties</string>
     <string name="one_month">1 maand</string>
     <string name="two_years">2 jaar</string>
+    <!-- Unrecognized SMS Screen -->
     <string name="unrecognized_messages_title">Niet-herkende berichten</string>
     <string name="unrecognized_bank_messages_desc">Deze berichten van potentiële banken konden niet automatisch worden afgeluisterd. Help Cashiro te verbeteren door ze te rapporteren, zodat we steun voor meer banken kunnen toevoegen.</string>
     <string name="show_reported">Toon gerapporteerd</string>
@@ -552,20 +604,21 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="delete_message_confirm_desc">Weet u zeker dat u dit niet-herkende bericht wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</string>
     <string name="reported">Gerapporteerd</string>
     <string name="report">Rapporteren</string>
+    <!-- Webhooks Settings & Screen -->
     <string name="new_webhook">Nieuwe Webhook</string>
     <string name="edit_webhook">Webhook bewerken</string>
     <string name="webhooks">Webhooks</string>
     <string name="add_webhook">Webhook toevoegen</string>
     <string name="pick_a_date">Kies een datum</string>
     <string name="add">Toevoegen</string>
-    <string name="webhook_endpoint_section">Eindpunt</string>
+    <string name="webhook_endpoint_section">Endpoint</string>
     <string name="webhook_name_label">Webhook naam</string>
-    <string name="webhook_url_label">Webhook-URL</string>
-    <string name="webhook_data_types_section">Datatypes</string>
+    <string name="webhook_url_label">Webhook URL</string>
+    <string name="webhook_data_types_section">Data types</string>
     <string name="webhook_data_types_desc">Selecteer welke gegevens aan uw eindpunt worden geleverd.</string>
     <string name="webhook_time_range_section">Tijdsbereik</string>
     <string name="webhook_optional_headers">Optionele headers</string>
-    <string name="datatype_summary">Samenvatting</string>
+    <string name="datatype_summary">summary</string>
     <string name="datatype_transactions">transacties</string>
     <string name="datatype_budgets">budgetten</string>
     <string name="datatype_accounts">rekeningen</string>
@@ -591,7 +644,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="sync_now">Nu synchroniseren</string>
     <string name="sync_now_desc">Trigger levering voor alle ingeschakelde profielen</string>
     <string name="sync_schedule_title">Synchroniseer schema</string>
-    <string name="webhook_profiles_title">Profielen</string>
+    <string name="webhook_profiles_title">Profiles</string>
     <string name="no_webhook_profiles">Nog geen webhook profielen</string>
     <string name="no_webhook_profiles_desc">Maak er een aan om te beginnen met het synchroniseren van samenvattingen, transacties, budgetten, accounts of abonnementen.</string>
     <string name="create_webhook_desc">Maak een nieuw webhook profiel aan</string>
@@ -615,6 +668,7 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="pick_a_time">Kies een tijd</string>
     <string name="ok">Ok</string>
     <string name="create_rule">Regel aanmaken</string>
+    <!-- Account UI & Details -->
     <string name="edit_details">Details bewerken</string>
     <string name="merge_account">Account samenvoegen</string>
     <string name="history">Geschiedenis</string>
@@ -626,19 +680,34 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="view_details">Details bekijken</string>
     <string name="none_manual_entry">Geen (Handmatig Invoer)</string>
     <string name="no_accounts_found">Geen accounts gevonden</string>
+    <!-- Attachments Section -->
     <string name="attachments">Bijlagen</string>
     <string name="add_attachment">Bijlage toevoegen</string>
     <string name="file_missing">Bestand ontbreekt</string>
     <string name="missing">Ontbrekende</string>
     <string name="selected">Geselecteerd</string>
+    <plurals name="attachments_count">
+        <item quantity="one">%1$d bestand</item>
+        <item quantity="other">%1$d bestanden</item>
+    </plurals>
+    <!-- Categories Sheet -->
+    <plurals name="subcategory_count_plural">
+        <item quantity="one">%1$d subcategorie</item>
+        <item quantity="other">%1$d subcategorieën</item>
+    </plurals>
     <string name="search_placeholder_fruits">Fruit zoeken</string>
     <string name="search_placeholder_shopping">Winkel zoeken</string>
     <string name="search_placeholder_fitness">Fitness zoeken</string>
     <string name="search_placeholder_sports">Sport zoeken</string>
+    <!-- Collapsible & Filter Rows -->
     <string name="more_filters">Meer filters</string>
     <string name="more_filters_active_format">Meer filters (%1$d actief)</string>
+    <string name="collapse_cd">Samenvouwen</string>
+    <string name="expand_cd">Uitklappen</string>
+    <!-- Color Picker -->
     <string name="colors">Kleuren</string>
     <string name="color_picker_button_desc">Aangepaste kleurkiezer</string>
+    <!-- Currencies & Bottom Sheets -->
     <string name="search_currencies_placeholder">Zoek valuta\'s...</string>
     <string name="currency_not_available">Valuta niet beschikbaar</string>
     <string name="view_all_currencies">Bekijk alle valuta</string>
@@ -650,11 +719,13 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="last_updated_format">Laatst bijgewerkt: %1$s</string>
     <string name="currency_code_symbol_format">%1$s (%2$s)</string>
     <string name="exchange_rate_formula_format">1 %1$s = %2$s %3$s</string>
+    <!-- Selected Currency Localized Names -->
     <string name="currency_inr_name">Indiase Rupee (½ )</string>
     <string name="currency_usd_name">Amerikaanse Dollar ($)</string>
-    <string name="currency_aed_name">VAE Dirham (AED)</string>
+    <string name="currency_aed_name">UAE Dirham (AED)</string>
     <string name="currency_npr_name">Nepalese Rupee (Rs)</string>
-    <string name="currency_etb_name">Ethiopische Birr (ብር)</string>
+    <string name="currency_etb_name">Ethiopian Birr (ብር)</string>
+    <!-- Custom Billing Cycles -->
     <string name="repeat_desc">Herhalen</string>
     <string name="set_to_forever">Instellen op voorgoed</string>
     <string name="billing_unit_day">dag</string>
@@ -663,9 +734,15 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="billing_unit_year">jaar</string>
     <string name="forever">Voor altijd</string>
     <string name="until_date_format">Tot %1$s</string>
+    <!-- Date Selection -->
     <string name="select_date_range">Selecteer datumbereik</string>
+    <!-- Delete Dialogs & Warnings -->
     <string name="delete_transaction_title">Verwijder transactie</string>
     <string name="delete_transaction_confirm">Weet u zeker dat u deze transactie wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
+    <plurals name="delete_transactions_title">
+        <item quantity="one">Verwijder %1$d transactie?</item>
+        <item quantity="other">%1$d transacties verwijderen?</item>
+    </plurals>
     <string name="delete_multiple_transactions_confirm">Deze actie is onomkeerbaar. De geselecteerde transacties zullen permanent worden verwijderd en kunnen niet worden hersteld.</string>
     <string name="delete_account_title">Account verwijderen?</string>
     <string name="delete_account_confirm">Weet je zeker dat je dit account wilt verwijderen?</string>
@@ -684,12 +761,18 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="delete_subscription_confirm">Weet je zeker dat je wilt verwijderen \u2018%1$s\u2019? Dit zal het permanent verwijderen uit je abonnementenlijst.</string>
     <string name="delete_subcategory_title">Subcategorie verwijderen?</string>
     <string name="delete_subcategory_confirm">Weet u zeker dat u wilt verwijderen \u2018%1$s\u2019? Deze actie kan niet ongedaan worden gemaakt.</string>
+    <!-- User & Profile Greeting Card -->
     <string name="profile_desc">Profiel afbeelding</string>
     <string name="greeting_morning">Goedemorgen</string>
     <string name="greeting_afternoon">Goede middag</string>
     <string name="greeting_evening">Goede avond</string>
     <string name="greeting_night">Goede nacht</string>
     <string name="month_status_last_day">Laatste dag van %1$s</string>
+    <plurals name="month_status_days_left_format">
+        <item quantity="one">%1$d dag resterend in %2$s</item>
+        <item quantity="other">%1$d dagen resterend in %2$s</item>
+    </plurals>
+    <!-- Rules Dialogs -->
     <string name="reset_rules_title">Reset regels</string>
     <string name="reset_rules_confirm">Alle regels resetten naar standaardinstellingen? Uw aangepaste instellingen zullen verloren gaan.</string>
     <string name="delete_rule_title">Regel verwijderen</string>
@@ -706,10 +789,19 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="transactions_updated_format">Bijgewerkte transacties: %1$d</string>
     <string name="transactions_blocked_format">Transacties geblokkeerd (zacht verwijderd): %1$d</string>
     <string name="errors_count_format">Fouten: %1$d</string>
+    <!-- SMS Scanning & Workers -->
     <string name="scanning_sms_messages_title">SMS-berichten scannen</string>
     <string name="cancel_scan">Annuleer Scan</string>
     <string name="all_messages_processed">Alle berichten verwerkt!</string>
     <string name="processed_messages_format">Verwerkt %1$d van %2$d berichten</string>
+    <plurals name="transactions_parsed_format">
+        <item quantity="one">%1$d transactie verwerkt</item>
+        <item quantity="other">%1$d transacties verwerkt</item>
+    </plurals>
+    <plurals name="saved_transactions_format">
+        <item quantity="one">%1$d opgeslagen</item>
+        <item quantity="other">%1$d opgeslagen</item>
+    </plurals>
     <string name="duration_hours_minutes">%1$du %2$dm</string>
     <string name="duration_minutes_seconds">%1$dm %2$ds</string>
     <string name="duration_seconds">%1$dsec</string>
@@ -720,7 +812,9 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="scan_cancelled">Scan geannuleerd</string>
     <string name="starting_scan">Start scan...</string>
     <string name="scanning_sms_format">Scannen van SMS: %1$d/%2$d</string>
+    <!-- Time Selection -->
     <string name="select_time">Selecteer tijd</string>
+    <!-- Transactions, Indicators & Categories -->
     <string name="recurring">Terugkerend</string>
     <string name="balance_after_format">Saldo: %1$s</string>
     <string name="description_indicator_desc">Heeft beschrijving</string>
@@ -729,262 +823,230 @@ Handig voor eenmalige budgetten met aangepaste tijdsperiodes</string>
     <string name="type_investment">Belegging</string>
     <string name="type_income">Inkomsten</string>
     <string name="type_expense">Kosten</string>
-    <string name="estimated_amount_format">Geschat %1$s</string>
+    <string name="type_balance_update">Balance Update</string>
+    <!-- Estimated amounts -->
+    <string name="estimated_amount_format">est. %1$s</string>
     <string name="uncategorized">Ongecategoriseerd</string>
     <string name="net">Netto</string>
-    <string name="processing">Verwerken…</string>
-    <string name="language">Taal</string>
-    <string name="language_subtitle">Wijzig de taal van de app</string>
-    <string name="select_language">Selecteer taal</string>
-    <string name="transactions_count_short">%1$d transacties</string>
-    <string name="appearances">Uiterlijk</string>
-    <string name="appearances_subtitle">Personalisatie-instellingen van de app</string>
-    <string name="accounts_subtitle">Accounts toevoegen en saldo bijwerken</string>
-    <string name="budgets_subtitle">Stel maandelijkse uitgavengrenzen in en beheers deze</string>
-    <string name="categories_subtitle">Beheer uitgaven- en inkomstencategorieën</string>
-    <string name="smart_rules_subtitle">Automatische transactiecategorieën</string>
-    <string name="data_privacy_subtitle">Beheer uw gegevens- en privacy-instellingen</string>
-    <string name="ai_chat_assistant">AI Chat-assistent</string>
-    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5-model (%1$d MB)</string>
-    <string name="ai_chat_subtitle_downloading">Downloaden… %1$d%%</string>
-    <string name="ai_chat_subtitle_paused">Download gepauzeerd. Tik om te hervatten.</string>
-    <string name="ai_chat_subtitle_completed">Qwen klaar voor chat</string>
-    <string name="ai_chat_subtitle_failed">Download mislukt. Tik om opnieuw te proberen.</string>
-    <string name="ai_chat_subtitle_insufficient_space">Niet genoeg opslagruimte</string>
-    <string name="notifications">Meldingen</string>
-    <string name="notifications_subtitle">Beheer herinneringsmeldingsinstellingen</string>
-    <string name="sms_subtitle">Beheer SMS-instellingen</string>
-    <string name="webhooks_subtitle">BYOAPI-financiële synchronisatie</string>
-    <string name="about_subtitle">App-versie, broncode en meer</string>
+    <string name="processing">Processing…</string>
+    <!-- Language Selection -->
+    <string name="language">Language</string>
+    <string name="language_subtitle">Change application language</string>
+    <string name="select_language">Select Language</string>
+    <!-- Settings Screen -->
+    <string name="transactions_count_short">%1$d Transactions</string>
+    <string name="appearances">Appearances</string>
+    <string name="appearances_subtitle">App\'s personalization settings</string>
+    <string name="accounts_subtitle">Add accounts and update balances</string>
+    <string name="budgets_subtitle">Set and manage monthly spending limits</string>
+    <string name="categories_subtitle">Manage expense and income categories</string>
+    <string name="smart_rules_subtitle">Automatic transaction categorization</string>
+    <string name="data_privacy_subtitle">Manage your data and privacy settings</string>
+    <string name="ai_chat_assistant">AI Chat Assistant</string>
+    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5 model (%1$d MB)</string>
+    <string name="ai_chat_subtitle_downloading">Downloading… %1$d%%</string>
+    <string name="ai_chat_subtitle_paused">Download paused. Tap to resume.</string>
+    <string name="ai_chat_subtitle_completed">Qwen ready for chat</string>
+    <string name="ai_chat_subtitle_failed">Download failed. Tap to retry.</string>
+    <string name="ai_chat_subtitle_insufficient_space">Not enough storage space</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_subtitle">Manage reminder notification settings</string>
+    <string name="sms_subtitle">Manage SMS settings</string>
+    <string name="webhooks_subtitle">BYOAPI finance sync</string>
+    <string name="about_subtitle">App version, source code and more</string>
+    <!-- Currency Settings -->
     <string name="currency">valuta</string>
-    <string name="currency_subtitle">Wisselkoersen en valuta voorkeuren</string>
+    <string name="currency_subtitle">Exchange rates and currency preferences</string>
     <string name="currency_settings_title">valuta</string>
-    <string name="unified_currency">Eengemaakte Valuta</string>
-    <string name="unified_currency_subtitle">Toon alle bedragen in één valuta</string>
-    <string name="default_currency">Standaardvaluta</string>
-    <string name="default_currency_subtitle">Vooraf geselecteerde valuta voor nieuwe vermeldingen</string>
-    <string name="display_currency">Weergavevaluta</string>
-    <string name="default_label">Standaard</string>
+    <string name="unified_currency">Unified Currency</string>
+    <string name="unified_currency_subtitle">Display all amounts in a single currency</string>
+    <string name="default_currency">Default Currency</string>
+    <string name="default_currency_subtitle">Pre-select currency for new entries</string>
+    <string name="display_currency">Display Currency</string>
+    <string name="default_label">Default</string>
     <string name="none">geen</string>
-    <string name="rates_info_subtitle">Bekijk wisselkoersen voor uw basisvaluta</string>
+    <string name="rates_info_subtitle">View exchange rates for your base currency</string>
+    <!-- Custom Currency Settings -->
     <string name="search_currencies">Zoek valuta\'s...</string>
     <string name="rates_relative_to">Tarieven ten opzichte van %1$s</string>
     <string name="last_updated">Laatst bijgewerkt: %1$s</string>
-    <string name="custom_rate">Aangepaste koers</string>
-    <string name="custom_rate_set">Aangepaste koers ingesteld. Tik op Reset om terug te keren naar API-koers.</string>
-    <string name="add_custom_currency">Aangepaste valuta toevoegen</string>
-    <string name="custom_currency">Aangepaste valuta</string>
-    <string name="currency_country_name">Valutanaam</string>
-    <string name="eg_test_country">bijv. Testland</string>
-    <string name="currency_code">Valutacode</string>
-    <string name="eg_tst">bijv. TST</string>
-    <string name="currency_symbol">Valutasymbool</string>
-    <string name="eg_tsymbol">bijv. T$</string>
-    <string name="exchange_rate">Wisselkoers</string>
+    <string name="custom_rate">Custom rate</string>
+    <string name="custom_rate_set">Custom rate set. Tap Reset to revert to API rate.</string>
+    <string name="add_custom_currency">Add Custom Currency</string>
+    <string name="custom_currency">Custom Currency</string>
+    <string name="currency_country_name">Currency name</string>
+    <string name="eg_test_country">e.g. Test Country</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="eg_tst">e.g. TST</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="eg_tsymbol">e.g. T$</string>
+    <string name="exchange_rate">Exchange Rate</string>
     <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
-    <string name="please_fill_all_fields">Vul alle velden in met geldige gegevens.</string>
-    <string name="base_currency_hint">Basis = standaardvaluta of valuta van de hoofdrekening</string>
-    <string name="save_currency">Valuta opslaan</string>
-    <string name="currency_name_hint">Amerikaanse dollar, Indiase roepie..</string>
+    <string name="please_fill_all_fields">Please fill all fields with valid data.</string>
+    <string name="base_currency_hint">Base = default currency or main account\'s currency</string>
+    <string name="save_currency">Save Currency</string>
+    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
     <string name="currency_code_hint">USD, INR, EUR ...</string>
-    <string name="currency_symbols_hint">$, ₹, €, £, ₽</string>
-    <string name="exchange_rate_hint">1 Basis = X Aangepaste valuta</string>
+    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
+    <string name="exchange_rate_hint">1 Base = X Custom currency</string>
     <string name="exchange_rates_notice_title">Wisselkoersen kennisgeving</string>
-    <string name="exchange_rates_notice_text">De wisselkoersen die in deze app worden weergegeven, zijn alleen bedoeld voor informatieve doeleinden en mogen niet worden gebruikt voor investeringsbeslissingen. Deze koersen zijn schattingen en komen mogelijk niet overeen met de werkelijke koersen. Door deze app te gebruiken, erkent u dat u deze beperkingen begrijpt en accepteert.</string>
-    <string name="custom_label">AANGEPAST</string>
-    <string name="time_period_this_month">Deze maand</string>
-    <string name="time_period_last_month">Vorige maand</string>
-    <string name="time_period_current_fy">Huidige boekjaar</string>
-    <string name="time_period_all_time">Alle tijden</string>
-    <string name="time_period_custom_range">Aangepast bereik</string>
-    <string name="type_all">Allemaal</string>
-    <string name="type_credit">Krediet</string>
-    <string name="duplicate_transaction">Dubbele transactie</string>
-    <string name="transaction_duplicated">Transactie gedupliceerd</string>
-    <string name="share_receipt">Aandelenontvangst</string>
-    <string name="webhook_mode">Webhooks</string>
-    <string name="webhook_mode_desc">Schakel BYOAPI webhook-synchronisatie in</string>
-    <string name="token_info">Chattoken-informatie</string>
-    <string name="token_info_desc">Toon technische informatie in de chat</string>
-    <string name="type_balance_update">Balans Update</string>
-    <string name="new_chat">Nieuwe chat</string>
-    <string name="chat_history">Chatgeschiedenis</string>
-    <string name="appearance_title">Uiterlijk</string>
+    <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
+    <string name="custom_label">CUSTOM</string>
+    <string name="new_chat">New Chat</string>
+    <string name="chat_history">Chat History</string>
+    <!-- AppearanceScreen -->
+    <string name="appearance_title">Appearance</string>
     <string name="theme_system">Systeem</string>
-    <string name="theme_light">Licht</string>
-    <string name="theme_dark">Donker</string>
-    <string name="style_dynamic">Dynamisch</string>
-    <string name="style_dynamic_sub">Achtergrondkleuren</string>
-    <string name="style_default">Standaard</string>
-    <string name="style_default_sub">Standaardkleuren</string>
-    <string name="amoled_black">Amoled Zwart</string>
-    <string name="amoled_black_desc">Gebruik volledig zwarte achtergrond voor diepere contrast</string>
-    <string name="blur_effects">Vervagingseffecten</string>
-    <string name="blur_effects_desc">Schakel glassmorphism vervagingseffecten in UI-componenten in</string>
-    <string name="logo_original">Origineel</string>
-    <string name="logo_anarchy">Anarchie</string>
-    <string name="logo_comic">Strip</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="style_dynamic">Dynamic</string>
+    <string name="style_dynamic_sub">Wallpaper Colors</string>
+    <string name="style_default">Default</string>
+    <string name="style_default_sub">Default Colors</string>
+    <string name="amoled_black">Amoled Black</string>
+    <string name="amoled_black_desc">Use pure black background for deeper contrast</string>
+    <string name="blur_effects">Blur Effects</string>
+    <string name="blur_effects_desc">Enable glassmorphism blur effects in UI components</string>
+    <string name="logo_original">Original</string>
+    <string name="logo_anarchy">Anarchy</string>
+    <string name="logo_comic">Comic</string>
     <string name="logo_zenith">Zenith</string>
-    <string name="logo_monochrome">Monochroom</string>
-    <string name="navigation_style">Navigatie</string>
-    <string name="nav_floating">Drijvend</string>
-    <string name="nav_floating_sub">Modern &amp;amp; Gestroomlijnd</string>
-    <string name="nav_normal">Normaal</string>
-    <string name="nav_normal_sub">Standaard M3</string>
-    <string name="hide_nav_labels">Verberg navigatielabels</string>
-    <string name="hide_nav_labels_desc">Verberg labels in de navigatiebalk</string>
-    <string name="hide_pill_indicator">Verberg pilindicator</string>
-    <string name="hide_pill_indicator_desc">Verberg de selectie-indicator in de navigatiebalk</string>
-    <string name="fonts_title">Lettertypen</string>
+    <string name="logo_monochrome">Monochrome</string>
+    <string name="navigation_style">Navigation</string>
+    <string name="nav_floating">Floating</string>
+    <string name="nav_floating_sub">Modern &amp; Sleek</string>
+    <string name="nav_normal">Normal</string>
+    <string name="nav_normal_sub">Standard M3</string>
+    <string name="hide_nav_labels">Hide Navigation Labels</string>
+    <string name="hide_nav_labels_desc">Hide labels in the navigation bar</string>
+    <string name="hide_pill_indicator">Hide Pill Indicator</string>
+    <string name="hide_pill_indicator_desc">Hide the selection indicator in the navigation bar</string>
+    <string name="fonts_title">Fonts</string>
     <string name="font_default_sub">Systeem</string>
     <string name="font_snpro">SN Pro</string>
     <string name="font_snpro_sub">Modern Mono</string>
-    <string name="quick_templates">Snelle sjablonen</string>
-    <string name="rule_name_label">Regelnaam</string>
-    <string name="rule_name_placeholder">bijv. Voedseluitgaven onder ₹200</string>
-    <string name="description_placeholder">Wat doet deze regel?</string>
-    <string name="conditions_title">Voorwaarden</string>
+    <!-- CreateRuleScreen -->
+    <string name="quick_templates">Quick Templates</string>
+    <string name="rule_name_label">Rule Name</string>
+    <string name="rule_name_placeholder">e.g., Food expenses under ₹200</string>
+    <string name="description_placeholder">What does this rule do?</string>
+    <string name="conditions_title">Conditions</string>
     <string name="add_condition">Toevoegen</string>
-    <string name="condition_n_format">Voorwaarde %1$d</string>
-    <string name="remove_condition_cd">Voorwaarde verwijderen</string>
-    <string name="field_label">Veld</string>
-    <string name="value_label">Waarde</string>
-    <string name="field_amount">Bedrag</string>
+    <string name="condition_n_format">Condition %1$d</string>
+    <string name="remove_condition_cd">Remove Condition</string>
+    <string name="field_label">Field</string>
+    <string name="value_label">Value</string>
+    <string name="field_amount">Hoeveelheid</string>
     <string name="field_merchant">Handelaar</string>
-    <string name="field_category">Categorie</string>
-    <string name="field_sms_text">SMS-tekst</string>
-    <string name="field_transaction_type">Transactietype</string>
+    <string name="field_category">categorie</string>
+    <string name="field_sms_text">SMS Text</string>
+    <string name="field_transaction_type">Transaction Type</string>
     <string name="field_subcategory">Subcategorie</string>
-    <string name="field_bank_name">Banknaam</string>
-    <string name="field_default">Veld</string>
-    <string name="then_title">Dan</string>
-    <string name="action_type_label">Actietype</string>
-    <string name="action_block_transaction">Transactie blokkeren</string>
-    <string name="action_set_field">Veld instellen</string>
-    <string name="action_clear_field">Veld wissen</string>
-    <string name="action_set_category">Categorie instellen</string>
-    <string name="action_set_subcategory">Subcategorie instellen</string>
-    <string name="action_set_merchant">Handelsnaam instellen</string>
-    <string name="action_set_type">Transactietype instellen</string>
-    <string name="action_label">Actie</string>
-    <string name="block_message">Transacties die aan deze regel voldoen, worden geblokkeerd en niet opgeslagen</string>
-    <string name="choose_category">Kies Categorie</string>
-    <string name="preset_block_otps">OTP\'s blokkeren</string>
-    <string name="preset_block_small">Kleine bedragen blokkeren</string>
-    <string name="preset_small_food">Kleine bedragen → Voedsel</string>
-    <string name="preset_standardize">Handelaar standaardiseren</string>
-    <string name="preset_mark_income">Markeren als inkomen</string>
-    <string name="notification_access">Toegang tot meldingen</string>
-    <string name="bank_push_notifications">Bank pushmeldingen</string>
-    <string name="notification_access_active">Toegang tot meldingen is actief</string>
-    <string name="notification_access_desc">Inschakelen om banktransacties uit pushmeldingen te detecteren</string>
-    <string name="notification_access_required">Toegang tot meldingen vereist</string>
-    <string name="notification_access_required_desc">Om banktransacties automatisch in realtime te detecteren, heeft Cashiro toegang tot meldingen nodig. Dit is een systeemniveau-toestemming.</string>
-    <string name="how_to_enable">Hoe te activeren:</string>
-    <string name="step_1">Tik op de knop \'Open instellingen\' hieronder.</string>
-    <string name="step_2">Zoek \'Cashiro\' in de lijst met apps.</string>
-    <string name="step_3">Schakel \'Toegang tot meldingen toestaan\' in.</string>
-    <string name="open_settings">Open instellingen</string>
-    <string name="scan_settings">Scan instellingen</string>
-    <string name="remind_transactions">Herinner transacties</string>
-    <string name="remind_transactions_desc">Krijg herinneringen om nieuwe berichten te scannen</string>
-    <string name="alert_time">Meldingtijd</string>
-    <string name="upcoming_transactions_section">Aankomende transacties</string>
-    <string name="upcoming_transactions_desc">Krijg herinneringen voor aankomende betalingen</string>
-    <string name="test_notification_alerts">Test meldingen</string>
-    <string name="test_notification_alerts_desc">Verzend periodiek testmeldingen</string>
-    <string name="sample_data">Voorbeeldgegevens</string>
-    <string name="sample_data_desc">Maak nepaccounts en transacties aan</string>
-    <string name="home_title">Startpagina</string>
-    <string name="full_resync">Volledige opnieuw synchroniseren</string>
-    <string name="full_resync_desc">Dit zal alle SMS-berichten vanaf het begin opnieuw verwerken. Gebruik dit om problemen veroorzaakt door bijgewerkte bankparsers op te lossen.
-
-Dit kan enkele seconden duren, afhankelijk van je berichtenhistorie.</string>
-    <string name="resync_all">Alles opnieuw synchroniseren</string>
-    <string name="sync_sms_cd">SMS-transacties synchroniseren</string>
-    <string name="add_transaction_subscription_cd">Transactie of abonnement toevoegen</string>
+    <string name="field_bank_name">Naam bank</string>
+    <string name="field_default">Field</string>
+    <string name="then_title">Then</string>
+    <string name="action_type_label">Action Type</string>
+    <string name="action_block_transaction">Block Transaction</string>
+    <string name="action_set_field">Set Field</string>
+    <string name="action_clear_field">Clear Field</string>
+    <string name="action_set_category">Set Category</string>
+    <string name="action_set_subcategory">Set Subcategory</string>
+    <string name="action_set_merchant">Set Merchant Name</string>
+    <string name="action_set_type">Set Transaction Type</string>
+    <string name="action_label">Action</string>
+    <string name="block_message">Transactions matching this rule will be blocked and not saved</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="preset_block_otps">Block OTPs</string>
+    <string name="preset_block_small">Block Small Amounts</string>
+    <string name="preset_small_food">Small amounts → Food</string>
+    <string name="preset_standardize">Standardize Merchant</string>
+    <string name="preset_mark_income">Mark as Income</string>
+    <!-- NotificationScreen -->
+    <string name="notification_access">Notification Access</string>
+    <string name="bank_push_notifications">Bank Push Notifications</string>
+    <string name="notification_access_active">Notification access is active</string>
+    <string name="notification_access_desc">Enable to detect bank transactions from push notifications</string>
+    <string name="notification_access_required">Notification Access Required</string>
+    <string name="notification_access_required_desc">To automatically detect bank transactions in real-time, Cashiro requires notification access. This is a system-level permission.</string>
+    <string name="how_to_enable">How to enable:</string>
+    <string name="step_1">Tap the \'Open Settings\' button below.</string>
+    <string name="step_2">Find \'Cashiro\' in the list of applications.</string>
+    <string name="step_3">Toggle \'Allow notification access\' to enabled.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="scan_settings">Scan Settings</string>
+    <string name="remind_transactions">Remind Transactions</string>
+    <string name="remind_transactions_desc">Get reminders to scan new messages</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="upcoming_transactions_section">Upcoming Transactions</string>
+    <string name="upcoming_transactions_desc">Get reminders for upcoming payments</string>
+    <!-- DeveloperScreen -->
+    <string name="test_notification_alerts">Test Notification Alerts</string>
+    <string name="test_notification_alerts_desc">Send test notifications periodically</string>
+    <string name="sample_data">Sample Data</string>
+    <string name="sample_data_desc">Create dummy accounts and transactions</string>
+    <!-- BottomNavItem -->
+    <string name="home_title">Home</string>
+    <!-- CashiroNavHost -->
+    <string name="full_resync">Full Resync</string>
+    <string name="full_resync_desc">This will reprocess all SMS messages from scratch. Use this to fix issues caused by updated bank parsers.\n\nThis may take a few seconds depending on your message history.</string>
+    <string name="resync_all">Resync All</string>
+    <string name="sync_sms_cd">Sync SMS transactions</string>
+    <string name="options_desc">Options</string>
+    <string name="add_transaction_subscription_cd">Add Transaction or Subscription</string>
+    <!-- ColorPickerContent -->
     <string name="selected_cd">Geselecteerd</string>
-    <string name="net_worth_label">Netto waarde</string>
-    <string name="this_month_lbl">DEZE MAAND</string>
-    <string name="this_year_lbl">DIT JAAR</string>
-    <string name="percent_this_month_format">%1$s%2$s%%deze maand</string>
-    <string name="app_locked_title">Cashiro is vergrendeld</string>
-    <string name="authenticate_desc">Authenticateer om toegang te krijgen tot uw uitgavengegevens</string>
-    <string name="unlock">Ontgrendel</string>
-    <string name="biometric_unavailable_title">Biometrische authenticatie niet beschikbaar</string>
-    <string name="biometric_setup_desc">Schakel alstublieft app-vergrendeling uit in de apparaatinstellingen of stel biometrische authenticatie in.</string>
-    <string name="immediate_locking">onmiddellijke vergrendeling</string>
-    <string name="minute_timeout_format">%1$d minuten time-out</string>
-    <string name="data_protected_format">Uw gegevens zijn beschermd met %1$s</string>
-    <string name="today_lbl">Vandaag</string>
-    <string name="yesterday_lbl">Gisteren</string>
-    <string name="this_week_lbl">Deze week</string>
-    <string name="earlier_lbl">Eerder</string>
-    <string name="sort_date_newest">Nieuwste eerst</string>
-    <string name="sort_date_oldest">Oudste eerst</string>
-    <string name="sort_amount_highest">Hoogste bedrag</string>
-    <string name="sort_amount_lowest">Laagste bedrag</string>
-    <string name="sort_merchant_az">Handelaar (A-Z)</string>
-    <string name="sort_merchant_za">Handelaar (Z-A)</string>
-    <string name="collapse_cd">Samenvouwen</string>
-    <string name="expand_cd">Uitvouwen</string>
+    <!-- BalanceCard -->
+    <string name="net_worth_label">Net worth</string>
+    <string name="this_month_lbl">THIS MONTH</string>
+    <string name="this_year_lbl">THIS YEAR</string>
+    <string name="percent_this_month_format">%1$s%2$s%% this month</string>
+    <!-- AppLockScreen -->
+    <string name="app_locked_title">Cashiro is Locked</string>
+    <string name="authenticate_desc">Authenticate to access your expense data</string>
+    <string name="unlock">Unlock</string>
+    <string name="biometric_unavailable_title">Biometric authentication unavailable</string>
+    <string name="biometric_setup_desc">Please disable app lock in device settings or set up biometric authentication.</string>
+    <string name="immediate_locking">immediate locking</string>
+    <string name="minute_timeout_format">%1$d minute timeout</string>
+    <string name="data_protected_format">Your data is protected with %1$s</string>
+    <!-- TransactionsState -->
+    <string name="today_lbl">Today</string>
+    <string name="yesterday_lbl">Yesterday</string>
+    <string name="this_week_lbl">This Week</string>
+    <string name="earlier_lbl">Earlier</string>
+    <string name="sort_date_newest">Newest First</string>
+    <string name="sort_date_oldest">Oldest First</string>
+    <string name="sort_amount_highest">Highest Amount</string>
+    <string name="sort_amount_lowest">Lowest Amount</string>
+    <string name="sort_merchant_az">Merchant (A-Z)</string>
+    <string name="sort_merchant_za">Merchant (Z-A)</string>
+    <!-- AttachmentSection -->
     <string name="add_attachment_cd">Bijlage toevoegen</string>
-    <string name="remove_cd">Verwijderen</string>
-    <string name="receipt">Bon</string>
-    <string name="transaction_info">Transactie-informatie</string>
-    <string name="split_transaction">Splitsen</string>
-    <string name="manage_transaction">Transactie beheren</string>
-    <string name="view_transaction">Transactie bekijken</string>
-    <string name="mark_as">Markeren als</string>
-    <string name="no_description">Geen beschrijving</string>
-    <string name="no_attachments">Geen bijlagen</string>
-    <string name="this_transaction">Deze transactie</string>
-    <string name="err_amount_required">Bedrag is vereist</string>
-    <string name="err_invalid_amount">Ongeldig bedrag</string>
-    <string name="err_amount_positive">Bedrag moet groter zijn dan 0</string>
-    <string name="err_merchant_required">Handelaar/Beschrijving is vereist</string>
-    <string name="err_too_short">Te kort</string>
-    <string name="err_category_required">Categorie is vereist</string>
-    <string name="err_service_required">Servicenaam is vereist</string>
-    <string name="err_source_target_required">Zowel bron- als doelrekeningen zijn vereist voor overboekingen</string>
-    <string name="err_accounts_different">Bron- en doelrekeningen moeten verschillend zijn</string>
-    <string name="err_save_transaction">Transactie kon niet worden opgeslagen</string>
-    <string name="err_save_subscription">Abonnement kon niet worden opgeslagen</string>
-    <string name="err_subscription_not_found">Abonnement niet gevonden</string>
+    <string name="remove_cd">Remove</string>
+    <!-- TransactionDetailScreen -->
+    <string name="receipt">Receipt</string>
+    <string name="transaction_info">Transaction Info</string>
+    <string name="split_transaction">Split</string>
+    <string name="manage_transaction">Manage Transaction</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="mark_as">Mark as</string>
+    <string name="no_description">No description</string>
+    <string name="no_attachments">No attachments</string>
+    <string name="this_transaction">This transaction</string>
+    <!-- AddViewModel validation -->
+    <string name="err_amount_required">Amount is required</string>
+    <string name="err_invalid_amount">Invalid amount</string>
+    <string name="err_amount_positive">Amount must be greater than 0</string>
+    <string name="err_merchant_required">Merchant/Description is required</string>
+    <string name="err_too_short">Too short</string>
+    <string name="err_category_required">Category is required</string>
+    <string name="err_service_required">Service name is required</string>
+    <string name="err_source_target_required">Both source and target accounts are required for transfers</string>
+    <string name="err_accounts_different">Source and target accounts must be different</string>
+    <string name="err_save_transaction">Failed to save transaction</string>
+    <string name="err_save_subscription">Failed to save subscription</string>
+    <string name="err_subscription_not_found">Subscription not found</string>
     <string name="am_lbl">AM</string>
     <string name="pm_lbl">PM</string>
     <string name="merchant_lbl">Handelaar</string>
-    <string name="options_desc">Opties</string>
-    <plurals name="licenses_count">
-        <item quantity="one">%1$d licentie</item>
-        <item quantity="other">%1$d licenties</item>
-    </plurals>
-    <plurals name="unrecognized_messages_count">
-        <item quantity="one">%1$d bericht van potentiële banken</item>
-        <item quantity="other">%1$d berichten van potentiële banken</item>
-    </plurals>
-    <plurals name="attachments_count">
-        <item quantity="one">%1$d bestand</item>
-        <item quantity="other">%1$d bestanden</item>
-    </plurals>
-    <plurals name="subcategory_count_plural">
-        <item quantity="one">%1$d subcategorie</item>
-        <item quantity="other">%1$d subcategorieën</item>
-    </plurals>
-    <plurals name="delete_transactions_title">
-        <item quantity="one">Verwijder %1$d transactie?</item>
-        <item quantity="other">%1$d transacties verwijderen?</item>
-    </plurals>
-    <plurals name="month_status_days_left_format">
-        <item quantity="one">%1$d dag resterend in %2$s</item>
-        <item quantity="other">%1$d dagen resterend in %2$s</item>
-    </plurals>
-    <plurals name="transactions_parsed_format">
-        <item quantity="one">%1$d transactie verwerkt</item>
-        <item quantity="other">%1$d transacties verwerkt</item>
-    </plurals>
-    <plurals name="saved_transactions_format">
-        <item quantity="one">%1$d opgeslagen</item>
-        <item quantity="other">%1$d opgeslagen</item>
-    </plurals>
 </resources>
