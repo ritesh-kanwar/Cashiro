@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cashiro</string>
+    <!-- App shortcuts -->
     <string name="add_transaction">Tilføj Transaktion</string>
     <string name="add_subscription">Tilføj Abonnement</string>
     <string name="add_transfer">Tilføj Overførsel</string>
+    <!-- Add Screen -->
     <string name="add_new">Tilføj Ny</string>
     <string name="transaction">Transaktion</string>
     <string name="subscription">Abonnement</string>
+    <!-- Data Privacy Screen -->
     <string name="data_privacy_title">Data Privatliv</string>
     <string name="security_section">Sikkerhed</string>
     <string name="app_lock">App Lås</string>
@@ -34,9 +37,11 @@
     <string name="profile_data">Profil Data</string>
     <string name="budgets">Budgetter</string>
     <string name="app_preferences">Indstillinger For Appen</string>
+    <!-- NumberPad -->
     <string name="enter_amount">Angiv Beløb</string>
     <string name="done">Udført</string>
     <string name="backspace">Backspace</string>
+    <!-- Merge Accounts Dialogs -->
     <string name="merge_accounts_title">Flet Konti</string>
     <string name="merge_accounts_desc">Vælg konti, der skal flettes til %1$s (...%2$s). Valgte konti vil blive slettet efter fletning.</string>
     <string name="next">Næste</string>
@@ -50,6 +55,7 @@
     <string name="merge_confirm_title">Afsluttende Bekræftelse</string>
     <string name="merge_confirm_message">Sammenlægningskonti: Alle aktuelle og tidligere transaktioner fra de fusionerende bankkonti vises nu på den fusionerede bankkonto. De oprindelige konti vil blive slettet.</string>
     <string name="merge">Flet</string>
+    <!-- HistorySheet -->
     <string name="balance_history_title">Saldo Historie</string>
     <string name="records_count_latest_balance_note">%1$d optegnelser • Seneste saldo vises på konti</string>
     <string name="no_balance_history_available">Ingen saldo historik tilgængelig</string>
@@ -66,6 +72,7 @@
     <string name="source_system">System</string>
     <string name="sms_source">SMS Kilde</string>
     <string name="copy">Kopiér</string>
+    <!-- AccountDetailScreen -->
     <string name="account_details">Konto Detaljer</string>
     <string name="transactions_count">Transaktioner (%1$d)</string>
     <string name="balance_trend">Saldo Tendens</string>
@@ -79,6 +86,14 @@
     <string name="range_last_6_months">Sidste 6 Måneder</string>
     <string name="range_last_year">Sidste År</string>
     <string name="range_all_time">Al Tid</string>
+    <string name="time_period_this_month">This Month</string>
+    <string name="time_period_last_month">Last Month</string>
+    <string name="time_period_current_fy">Current FY</string>
+    <string name="time_period_all_time">Al Tid</string>
+    <string name="time_period_custom_range">Custom Range</string>
+    <string name="type_all">Alle</string>
+    <string name="type_credit">Kredit</string>
+    <!-- Add/Edit Account Screens -->
     <string name="add_account_info">Tilføj konti ikke sporet via SMS som kontanter, tegnebøger eller investeringskonti.</string>
     <string name="account_type_label">Konto Type</string>
     <string name="account_icon_label">Konto Ikon</string>
@@ -86,11 +101,11 @@
     <string name="placeholder_bank_name">f.eks. HDFC Bank</string>
     <string name="placeholder_credit_name">f.eks. HDFC-kreditkort</string>
     <string name="placeholder_wallet_name">f.eks. Kontant</string>
-    <string name="last_4_digits_required_label">De sidste 4 cifre *</string>
+    <string name="last_4_digits_required_label">Last 4 Digits *</string>
     <string name="placeholder_last_4_digits">f.eks. 1234</string>
     <string name="enter_last_4_digits_hint">Indtast de sidste 4 cifre på konti/kort</string>
     <string name="current_balance_required_label">Aktuel Saldo *</string>
-    <string name="placeholder_decimal">0,00</string>
+    <string name="placeholder_decimal">0.00</string>
     <string name="currency_label">Valuta</string>
     <string name="select_currency">Vælg Valuta</string>
     <string name="credit_limit_label">Kreditgrænse</string>
@@ -108,13 +123,14 @@
     <string name="outstanding_label">Udestående</string>
     <string name="balance_label">Saldo</string>
     <string name="available_credit_label">Tilgængelig Kredit: %1$s</string>
-    <string name="utilization_label">Udnyttelse: %1$d%%</string>
+    <string name="utilization_label">Utilization: %1$d%%</string>
     <string name="wallet_name_label">Tegnebog Navn</string>
     <string name="bank_name_label">Bank Navn</string>
     <string name="account_number_last_4_label">Kontonummer (Seneste 4)</string>
     <string name="delete_account_desc">Slet konto</string>
     <string name="save_changes">Gem Ændringer</string>
     <string name="type_wallet_lowercase">tegnebog</string>
+    <!-- ManageAccountsScreen -->
     <string name="title_accounts">Konti</string>
     <string name="no_accounts_yet">Endnu ingen konti</string>
     <string name="add_account_fab_desc">Tilføj Konto</string>
@@ -147,6 +163,7 @@
     <string name="select_account_link_prompt">Vælg en konto, der skal tilknyttes dette kort til:</string>
     <string name="action_cancel">Annuller</string>
     <string name="action_link">Link</string>
+    <!-- SubscriptionTabContent & TransactionTabContent -->
     <string name="subscription_info">Spor tilbagevendende udgifter. Du skal tilføje transaktioner manuelt hver måned.</string>
     <string name="billing_cycle_label">Faktureringscyklus</string>
     <string name="cycle_monthly">Månedligt</string>
@@ -177,11 +194,13 @@
     <string name="merchant_description">Købmand / Beskrivelse</string>
     <string name="where_did_you_spend">Hvor brugte du dette?</string>
     <string name="merchant_placeholder">f.eks. Target, Walmart</string>
+    <!-- Budgets Screen -->
     <string name="new_budget">Nyt Budget</string>
     <string name="no_budgets_yet">Ingen Budgetter Endnu</string>
     <string name="create_first_budget_desc">Opret dit første budget for at begynde at spore dine udgiftsmål</string>
     <string name="create_budget">Opret Budget</string>
     <string name="edit_budget">Rediger Budget</string>
+    <!-- Edit Budget Sheet -->
     <string name="budget_period">Budgetperiode</string>
     <string name="starts">Starter</string>
     <string name="ends">Slutter</string>
@@ -190,7 +209,7 @@
     <string name="added">Tilføjet</string>
     <string name="all">Alle</string>
     <string name="type">Type</string>
-    <string name="type_info">Typeinfo</string>
+    <string name="type_info">Type Info</string>
     <string name="expense">Udgifter</string>
     <string name="savings">Opsparing</string>
     <string name="accounts">Konti</string>
@@ -210,7 +229,7 @@
     <string name="daily_goal_remaining">DAGLIGE GOALE ANSØGNING</string>
     <string name="daily_budget_left">DAGLIG BUDGET VENSTRE</string>
     <string name="saved_goal">Gemt / GOAL</string>
-    <string name="spend_limit">FORBRUG / GRÆNSE</string>
+    <string name="spend_limit">SPEND / LIMIT</string>
     <string name="days_remaining_format">%1$d dage tilbage</string>
     <string name="link_accounts">Link Konti</string>
     <string name="ending_in_format">Afslutter i %1$s</string>
@@ -234,11 +253,13 @@
     <string name="all_transactions">Alle transaktioner</string>
     <string name="all_transactions_desc">Alle transaktioner inden for udvalgte kategorier og filtrerer\nNyttigt for langsigtede budgetter over flere perioder</string>
     <string name="all_transactions_example">Eksempel: \'Månedligt forbrug\' budget</string>
+    <!-- Categories Screen -->
     <string name="categories">Kategorier</string>
     <string name="add_category">Tilføj Kategori</string>
     <string name="clear_search">Ryd søgning</string>
     <string name="expense_categories">Udgift Kategorier</string>
     <string name="income_categories">Indkomstkategorier</string>
+    <!-- Edit Category Sheet -->
     <string name="category_name">Kategori Navn</string>
     <string name="category_description_placeholder">beskrivelse af kategorien</string>
     <string name="add_subcategory">Tilføj Underkategori</string>
@@ -251,17 +272,19 @@
     <string name="update_category">Opdater Kategori</string>
     <string name="create_category">Opret Kategori</string>
     <string name="reset_to_default">Nulstil til standard</string>
+    <!-- Edit Subcategory Sheet -->
     <string name="subcategory">Underkategori</string>
     <string name="delete_subcategory">Slet underkategori</string>
     <string name="create_subcategory">Opret Underkategori</string>
     <string name="update_subcategory">Opdater Underkategori</string>
+    <!-- Analytics -->
     <string name="total">I Alt</string>
     <string name="suffix_million">Læ</string>
     <string name="suffix_thousand">k</string>
     <string name="percentage_format">(%1$d%%)</string>
     <string name="total_uppercase">I ALT</string>
-    <string name="transactions_format">%1$d TRANSAKTIONER</string>
-    <string name="average">GNSNIT</string>
+    <string name="transactions_format">%1$d TXNS</string>
+    <string name="average">AVERAGE</string>
     <string name="per_day"> /dag</string>
     <string name="percentage_of_total">%1$d%% AF I ALT</string>
     <string name="analytics">Analyser</string>
@@ -269,10 +292,11 @@
     <string name="top_categories">Top Kategorier</string>
     <string name="top_merchants">Top Købmænd</string>
     <string name="chart_type_line">Linje</string>
-    <string name="chart_type_bar">Søjle</string>
-    <string name="chart_type_heatmap">Varme kort</string>
+    <string name="chart_type_bar">Bar</string>
+    <string name="chart_type_heatmap">Heatmap</string>
     <string name="chart_format">%1$s Diagram</string>
     <string name="toggle_view">Skift Visning</string>
+    <!-- Chat Screen -->
     <string name="cashiro_ai">Cashiro AI</string>
     <string name="more_options">Flere valgmuligheder</string>
     <string name="clear_chat">Ryd Chat</string>
@@ -299,6 +323,7 @@
     <string name="percentage_format_no_brackets">%1$d%%</string>
     <string name="tokens_usage_format">%1$s / %2$s tokens</string>
     <string name="system_tokens_format">System: %1$s</string>
+    <!-- Home Screen & Widgets -->
     <string name="edit_widgets">Rediger Widgets</string>
     <string name="edit_widgets_desc">Genbestil eller skjul afsnit på din startskærm.</string>
     <string name="reorder">Genbestil</string>
@@ -325,6 +350,7 @@
     <string name="subscriptions_count_format">%1$d Abonnementer</string>
     <string name="per_month">/ Måned</string>
     <string name="last_days_format">Seneste %1$d dage</string>
+    <!-- Edit Profile & Profile -->
     <string name="edit_profile">Rediger Profil</string>
     <string name="gallery">Galleri</string>
     <string name="change_banner">Skift Banner</string>
@@ -332,9 +358,10 @@
     <string name="financial_overview">Finansiel Oversigt</string>
     <string name="net_worth">Netto Værd</string>
     <string name="upcoming">Kommende</string>
-    <string name="active_subscriptions_singular">1 Abonnent</string>
+    <string name="active_subscriptions_singular">1 Sub</string>
     <string name="active_subscriptions_plural">%1$d Unders</string>
-    <string name="app_logo">App-ikon</string>
+    <!-- Onboarding -->
+    <string name="app_logo">App Logo</string>
     <string name="onboarding_subtitle">Oplev en problemfri måde at spore dine penge, kategorisere dine udgifter, og ramte dine opsparing mål hurtigere.</string>
     <string name="set_up_your_profile">Opsæt Din Profil</string>
     <string name="what_should_we_call_you">Hvad skal vi kalde dig?</string>
@@ -363,6 +390,7 @@
     <string name="scanning_ellipsis">Søger...</string>
     <string name="continue_action">Fortsæt</string>
     <string name="finish_setup">Afslut Opsætning</string>
+    <!-- Mock Messages -->
     <string name="mock_msg_electric_bill">Elektrisk regningspligt (efterfølgende) 2.450</string>
     <string name="mock_msg_starbucks">Transaktionen af - 500 på Starbucks</string>
     <string name="mock_msg_cc_due">Påmindelse: Kreditkort forfalder i morgen</string>
@@ -373,6 +401,7 @@
     <string name="mock_msg_axis">Axis: - 200 brugt på Zomato</string>
     <string name="notification">Underretning</string>
     <string name="mock_msg_salary_credited">Din løn er blevet krediteret!</string>
+    <!-- SubscriptionsScreen -->
     <string name="subscriptions">Abonnementer</string>
     <string name="total_subscriptions">Abonnementer I Alt</string>
     <string name="active_count_format">%1$d aktiv</string>
@@ -388,7 +417,7 @@
     <string name="original_sms">Oprindelig SMS</string>
     <string name="track_payment">Spor Betaling</string>
     <string name="edit_subscription">Rediger Abonnement</string>
-    <string name="subscription_hidden_format">%1$s skjult</string>
+    <string name="subscription_hidden_format">%1$s hidden</string>
     <string name="payment_for_format">Betaling for %1$s</string>
     <string name="overdue_since_format">Forfaldne siden %1$s</string>
     <string name="due_on_format">Forfalder på %1$s</string>
@@ -399,23 +428,28 @@
     <string name="show_original_message">Vis Oprindelig Besked</string>
     <string name="no_subscriptions_detected_yet">Ingen abonnementer fundet endnu</string>
     <string name="sync_sms_to_detect_subscriptions">Synkroniser din SMS for at registrere abonnementer</string>
+    <!-- ExportTransactionsDialog -->
     <string name="export_transactions">Eksporter Transaktioner</string>
     <string name="exporting">Eksporterer...</string>
     <string name="export_complete">Eksport Færdig!</string>
     <string name="export_failed">Eksport Mislykkedes</string>
     <string name="export_transactions_desc">Eksporter %1$d transaktioner til CSV-format</string>
     <string name="total_transactions_export">Samlede transaktioner:</string>
-    <string name="date_range">Datointerval:</string>
+    <string name="date_range">Date range:</string>
     <string name="export_success_msg_format">Eksporter %1$d transaktioner med succes</string>
     <string name="size_format">Størrelse: %1$s</string>
     <string name="share">Del</string>
     <string name="retry">Forsøg igen</string>
     <string name="share_csv">Del CSV</string>
     <string name="csv_export_subject">Eksport Af Cashiro Transaktioner</string>
+    <!-- TransactionDetailScreen -->
     <string name="edit_transaction">Rediger Transaktion</string>
     <string name="transaction_details">Transaktion Detaljer</string>
     <string name="report_issue">Rapportér Problem</string>
     <string name="delete_transaction">Slet Transaktion</string>
+    <string name="duplicate_transaction">Duplicate Transaction</string>
+    <string name="transaction_duplicated">Transaction duplicated</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="transaction_updated_successfully">Transaktionen blev opdateret</string>
     <string name="merchant_label">Købmand</string>
     <string name="description_optional_label">Beskrivelse (valgfrit)</string>
@@ -455,8 +489,9 @@
     <string name="semi_annual_recurring">Halvårlig</string>
     <string name="annual_recurring">Årlig</string>
     <string name="custom_recurring">Tilpasset</string>
+    <!-- TransactionsFilterBottomSheet -->
     <string name="filters">Filtre</string>
-    <string name="reset">Nulstil</string>
+    <string name="reset">Reset</string>
     <string name="apply">Anvend</string>
     <string name="subcategories">Underkategorier</string>
     <string name="amount_range">Beløb Område</string>
@@ -465,6 +500,7 @@
     <string name="set_minimum_amount">Angiv Minimum Beløb</string>
     <string name="set_maximum_amount">Angiv Maksimum Beløb</string>
     <string name="confirm">Bekræft</string>
+    <!-- TransactionsScreen -->
     <string name="transactions_deleted_format">%1$d transaktioner slettet</string>
     <string name="items_selected_format">%1$d valgt</string>
     <string name="deselect_all">Fravælg Alle</string>
@@ -475,8 +511,9 @@
     <string name="no_transactions_matching_format">Ingen transaktioner matcher \"%1$s\"</string>
     <string name="no_transactions_for_format">Ingen transaktioner for %1$s</string>
     <string name="sync_sms_to_see_transactions">Synkroniser din SMS for at se transaktioner</string>
+    <!-- About Screen -->
     <string name="about">Om</string>
-    <string name="cashiro_logo_cd">Cashiro-logo</string>
+    <string name="cashiro_logo_cd">Cashiro Logo</string>
     <string name="version_format">Version %1$s, db-v%2$d</string>
     <string name="developed_by">Udviklet Af Ritesh</string>
     <string name="lead_developer_cd">bly udvikler</string>
@@ -497,6 +534,10 @@
     <string name="licenses">Licenser</string>
     <string name="licenses_desc">Open source-biblioteker</string>
     <string name="developer_options">Udvikler Indstillinger</string>
+    <string name="webhook_mode">Webhooks</string>
+    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
+    <string name="token_info">Chat Token Info</string>
+    <string name="token_info_desc">Show technical information in chat</string>
     <string name="developer_options_desc">Test og eksperimentelle funktioner</string>
     <string name="delete_all_data">Slet Alle Data</string>
     <string name="delete_all_data_desc">Ryd alle poster permanent</string>
@@ -504,10 +545,16 @@
     <string name="delete_all_data_confirm_title">Slet Alle Data?</string>
     <string name="delete_all_data_confirm_desc">Denne handling vil permanent slette alle dine transaktioner, budgetter, abonnementer og indstillinger. Dette kan ikke fortrydes.</string>
     <string name="delete_all">Slet Alle</string>
+    <!-- Licenses Screen -->
     <string name="license_version_format">v%1$s, db-v%2$d</string>
     <string name="license_disclaimer_software">SOFTWARENEN ER ANGÅENDE \"SOM DET\", UDEN EN VIGTIGHED, UDTRYK ELLER IMPLIERET, HERUNDER MEN IKKE BEGRÆNSET TIL MIDLERKANTABILITET, FITNESKER FOR EN SÆRLIG FORMÅL OG IKKE-FRERING. I INGEN EVENTUELLE SKAL TILSYNSMYNDIGHEDERNE ELLER COPYRIGHEDERNE ANSVARLIGES FOR ENHVER ANSVARLIG ANSVARLIG FOR EN KONTRAKT KONTRAKT, TORT ELLER ANDREGIVELSE, DER ER KNYTTET AF ELLER I FORBINDELSE MED SOFTWAREN ELLER BRUGEN ELLER ANDRE TILBUD I SOFTWAREN.</string>
     <string name="license_disclaimer_rates">De valutakurser, der vises i denne app, er kun til orientering og bør ikke anvendes til investeringsbeslutninger. Disse satser er estimater og afspejler måske ikke de faktiske satser. Ved at bruge denne app du anerkender, at du forstår og accepterer disse begrænsninger, og at du påtager dig det fulde ansvar for alle beslutninger, der træffes på grundlag af oplysningerne i appen.</string>
     <string name="powered_by">Drevet af Kotlin Compose</string>
+    <plurals name="licenses_count">
+        <item quantity="one">%1$d licens</item>
+        <item quantity="other">%1$d licenser</item>
+    </plurals>
+    <!-- Rules Screen -->
     <string name="smart_rules">Smarte Regler</string>
     <string name="reset_to_defaults">Nulstil til standardindstillinger</string>
     <string name="automatic_categorization">Automatisk Kategorisering</string>
@@ -526,12 +573,13 @@
     <string name="rule_summary_rent">Betalinger med leje-søgeord</string>
     <string name="rule_summary_emi">EMI/lån nøgleord</string>
     <string name="rule_summary_investment">Gensidige fonde, lagernøgleord</string>
-    <string name="rule_summary_subscription">Netflix, Spotify, osv.</string>
+    <string name="rule_summary_subscription">Netflix, Spotify, etc.</string>
     <string name="rule_summary_fuel">Benzin pumpe transaktioner</string>
     <string name="rule_summary_healthcare">Hospital, apotek søgeord</string>
     <string name="rule_summary_transfer">Selvoverførsler, kontra</string>
     <string name="priority_format">Prioritet: %1$d</string>
     <string name="edit_rule">Rediger Regel</string>
+    <!-- SMS Screen -->
     <string name="sms_title">SMS</string>
     <string name="sms_scan_period">Sms Skanningsperiode</string>
     <string name="scan_all_sms">Scan alle SMS-beskeder</string>
@@ -539,9 +587,14 @@
     <string name="months_count_format">%1$d måneder</string>
     <string name="unrecognized_bank_messages">Ikke-Genkendte Bankmeddelelser</string>
     <string name="no_unrecognized_messages">Ingen ukendte beskeder</string>
+    <plurals name="unrecognized_messages_count">
+        <item quantity="one">%1$d besked fra potentielle banker</item>
+        <item quantity="other">%1$d meddelelser fra potentielle banker</item>
+    </plurals>
     <string name="sms_scan_period_desc">Vælg hvor mange måneders SMS-historik der skal scannes for transaktioner</string>
     <string name="one_month">1 måned</string>
     <string name="two_years">2 år</string>
+    <!-- Unrecognized SMS Screen -->
     <string name="unrecognized_messages_title">Ukendt Beskeder</string>
     <string name="unrecognized_bank_messages_desc">Disse meddelelser fra potentielle banker kunne ikke automatisk fortolkes. Hjælp med at forbedre Cashiro ved at rapportere dem, så vi kan tilføje støtte til flere banker.</string>
     <string name="show_reported">Vis Rapporteret</string>
@@ -551,6 +604,7 @@
     <string name="delete_message_confirm_desc">Er du sikker på, at du vil slette denne ikke-genkendte besked? Denne handling kan ikke fortrydes.</string>
     <string name="reported">Rapporteret</string>
     <string name="report">Rapport</string>
+    <!-- Webhooks Settings & Screen -->
     <string name="new_webhook">Ny Webhook</string>
     <string name="edit_webhook">Rediger Webhook</string>
     <string name="webhooks">Webhooks</string>
@@ -564,7 +618,7 @@
     <string name="webhook_data_types_desc">Vælg hvilke data der leveres til dit slutpunkt.</string>
     <string name="webhook_time_range_section">Tidsinterval</string>
     <string name="webhook_optional_headers">Valgfrie overskrifter</string>
-    <string name="datatype_summary">sammendrag</string>
+    <string name="datatype_summary">summary</string>
     <string name="datatype_transactions">transaktioner</string>
     <string name="datatype_budgets">budgetter</string>
     <string name="datatype_accounts">konti</string>
@@ -590,7 +644,7 @@
     <string name="sync_now">Synkroniser nu</string>
     <string name="sync_now_desc">Udløs levering for alle aktiverede profiler</string>
     <string name="sync_schedule_title">Synkroniser Tidsplan</string>
-    <string name="webhook_profiles_title">Profiler</string>
+    <string name="webhook_profiles_title">Profiles</string>
     <string name="no_webhook_profiles">Ingen webhook profiler endnu</string>
     <string name="no_webhook_profiles_desc">Opret en for at starte synkronisering resuméer, transaktioner, budgetter, konti eller abonnementer.</string>
     <string name="create_webhook_desc">Opret en ny webhook-profil</string>
@@ -614,6 +668,7 @@
     <string name="pick_a_time">Vælg en tid</string>
     <string name="ok">Ok</string>
     <string name="create_rule">Opret Regel</string>
+    <!-- Account UI & Details -->
     <string name="edit_details">Rediger Detaljer</string>
     <string name="merge_account">Flet Konto</string>
     <string name="history">Historik</string>
@@ -625,19 +680,34 @@
     <string name="view_details">Se detaljer</string>
     <string name="none_manual_entry">Ingen (Manuel Indgang)</string>
     <string name="no_accounts_found">Ingen konti fundet</string>
+    <!-- Attachments Section -->
     <string name="attachments">Vedhæftninger</string>
     <string name="add_attachment">Tilføj vedhæftet fil</string>
     <string name="file_missing">Fil mangler</string>
     <string name="missing">Mangler</string>
     <string name="selected">Valgt</string>
+    <plurals name="attachments_count">
+        <item quantity="one">%1$d fil</item>
+        <item quantity="other">%1$d filer</item>
+    </plurals>
+    <!-- Categories Sheet -->
+    <plurals name="subcategory_count_plural">
+        <item quantity="one">%1$d underkategori</item>
+        <item quantity="other">%1$d underkategorier</item>
+    </plurals>
     <string name="search_placeholder_fruits">Søg Frugter</string>
     <string name="search_placeholder_shopping">Søg Indkøb</string>
     <string name="search_placeholder_fitness">Søg Fitness</string>
     <string name="search_placeholder_sports">Søg I Sport</string>
+    <!-- Collapsible & Filter Rows -->
     <string name="more_filters">Flere Filtre</string>
     <string name="more_filters_active_format">Flere filtre (%1$d aktiv)</string>
+    <string name="collapse_cd">Sammenfold</string>
+    <string name="expand_cd">Udvid</string>
+    <!-- Color Picker -->
     <string name="colors">Farver</string>
     <string name="color_picker_button_desc">Brugerdefineret Farvevælger</string>
+    <!-- Currencies & Bottom Sheets -->
     <string name="search_currencies_placeholder">Søg i valutaer...</string>
     <string name="currency_not_available">Valuta ikke tilgængelig</string>
     <string name="view_all_currencies">Se Alle Valutaer</string>
@@ -649,11 +719,13 @@
     <string name="last_updated_format">Sidst opdateret: %1$s</string>
     <string name="currency_code_symbol_format">%1$s (%2$s)</string>
     <string name="exchange_rate_formula_format">1 %1$s = %2$s %3$s</string>
+    <!-- Selected Currency Localized Names -->
     <string name="currency_inr_name">Indisk Rupee (¤ )</string>
     <string name="currency_usd_name">US Dollar ($)</string>
     <string name="currency_aed_name">UAE Dirham (AED)</string>
     <string name="currency_npr_name">Nepalese Rupee (Rs)</string>
-    <string name="currency_etb_name">Etiopisk Birr (ብር)</string>
+    <string name="currency_etb_name">Ethiopian Birr (ብር)</string>
+    <!-- Custom Billing Cycles -->
     <string name="repeat_desc">Gentag</string>
     <string name="set_to_forever">Sæt til for evigt</string>
     <string name="billing_unit_day">Dag</string>
@@ -662,9 +734,15 @@
     <string name="billing_unit_year">År</string>
     <string name="forever">For evigt</string>
     <string name="until_date_format">Indtil %1$s</string>
+    <!-- Date Selection -->
     <string name="select_date_range">Vælg Datointerval</string>
+    <!-- Delete Dialogs & Warnings -->
     <string name="delete_transaction_title">Slet Transaktion</string>
     <string name="delete_transaction_confirm">Er du sikker på, at du vil slette denne transaktion? Denne handling kan ikke fortrydes.</string>
+    <plurals name="delete_transactions_title">
+        <item quantity="one">Slet %1$d transaktion?</item>
+        <item quantity="other">Slet %1$d transaktioner?</item>
+    </plurals>
     <string name="delete_multiple_transactions_confirm">Denne handling er irreversibel. De valgte transaktioner vil blive slettet permanent og kan ikke gendannes.</string>
     <string name="delete_account_title">Slet Konto?</string>
     <string name="delete_account_confirm">Er du sikker på, at du vil slette denne konto?</string>
@@ -683,12 +761,18 @@
     <string name="delete_subscription_confirm">Er du sikker på du vil slette \u2018%1$s\u2019? Dette vil permanent fjerne det fra din abonnementsliste.</string>
     <string name="delete_subcategory_title">Slet Underkategori?</string>
     <string name="delete_subcategory_confirm">Er du sikker på, at du vil slette \u2018%1$s\u2019? Denne handling kan ikke fortrydes.</string>
+    <!-- User & Profile Greeting Card -->
     <string name="profile_desc">Profil Billede</string>
     <string name="greeting_morning">God morgen</string>
     <string name="greeting_afternoon">God eftermiddag</string>
     <string name="greeting_evening">God aften</string>
     <string name="greeting_night">God nat</string>
     <string name="month_status_last_day">Sidste dag i %1$s</string>
+    <plurals name="month_status_days_left_format">
+        <item quantity="one">%1$d dag tilbage i %2$s</item>
+        <item quantity="other">%1$d dage tilbage i %2$s</item>
+    </plurals>
+    <!-- Rules Dialogs -->
     <string name="reset_rules_title">Nulstil Regler</string>
     <string name="reset_rules_confirm">Nulstil alle regler til standardindstillinger? Dine brugerdefinerede indstillinger vil gå tabt.</string>
     <string name="delete_rule_title">Slet Regel</string>
@@ -705,279 +789,11 @@
     <string name="transactions_updated_format">Transaktioner opdateret: %1$d</string>
     <string name="transactions_blocked_format">Transaktioner blokeret (blød slettet): %1$d</string>
     <string name="errors_count_format">Fejl: %1$d</string>
+    <!-- SMS Scanning & Workers -->
     <string name="scanning_sms_messages_title">Scanner SMS-beskeder</string>
     <string name="cancel_scan">Annullér Scanning</string>
     <string name="all_messages_processed">Alle beskeder behandlet!</string>
     <string name="processed_messages_format">Behandlet %1$d af %2$d beskeder</string>
-    <string name="duration_hours_minutes">%1$dh %2$dm</string>
-    <string name="duration_minutes_seconds">%1$dm %2$2s</string>
-    <string name="duration_seconds">%1$2s</string>
-    <string name="time_left_format">~%1$s tilbage</string>
-    <string name="batch_progress_format">Batch %1$d af %2$d</string>
-    <string name="scan_completed_success">Scanning fuldført!</string>
-    <string name="scan_failed_error">Scanning mislykkedes. Prøv venligst igen.</string>
-    <string name="scan_cancelled">Scanning annulleret</string>
-    <string name="starting_scan">Starter scanning...</string>
-    <string name="scanning_sms_format">Scanner SMS: %1$d/%2$d</string>
-    <string name="select_time">Vælg Tid</string>
-    <string name="recurring">Gentagelse</string>
-    <string name="balance_after_format">Saldo: %1$s</string>
-    <string name="description_indicator_desc">Har beskrivelse</string>
-    <string name="attachments_indicator_desc">Har vedhæftede filer</string>
-    <string name="type_transfer">Overfør</string>
-    <string name="type_investment">Investering</string>
-    <string name="type_income">Indkomst</string>
-    <string name="type_expense">Udgifter</string>
-    <string name="estimated_amount_format">est. %1$s</string>
-    <string name="uncategorized">Ikke Kategoriseret</string>
-    <string name="net">Netto</string>
-    <string name="processing">Behandler…</string>
-    <string name="language">Sprog</string>
-    <string name="language_subtitle">Skift appens sprog</string>
-    <string name="select_language">Vælg sprog</string>
-    <string name="transactions_count_short">%1$d Transaktioner</string>
-    <string name="appearances">Udseende</string>
-    <string name="appearances_subtitle">Appens personaliseringsindstillinger</string>
-    <string name="accounts_subtitle">Tilføj konti og opdater saldi</string>
-    <string name="budgets_subtitle">Indstil og administrer månedlige forbrugsgrænser</string>
-    <string name="categories_subtitle">Administrer udgifts- og indkomstkategorier</string>
-    <string name="smart_rules_subtitle">Automatisk kategorisering af transaktioner</string>
-    <string name="data_privacy_subtitle">Administrer dine data- og privatlivsindstillinger</string>
-    <string name="ai_chat_assistant">AI Chat Assistent</string>
-    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5 model (%1$d MB)</string>
-    <string name="ai_chat_subtitle_downloading">Downloader… %1$d%%</string>
-    <string name="ai_chat_subtitle_paused">Download sat på pause. Tryk for at genoptage.</string>
-    <string name="ai_chat_subtitle_completed">Qwen klar til chat</string>
-    <string name="ai_chat_subtitle_failed">Download fejlede. Tryk for at prøve igen.</string>
-    <string name="ai_chat_subtitle_insufficient_space">Ikke nok lagerplads</string>
-    <string name="notifications">Notifikationer</string>
-    <string name="notifications_subtitle">Administrer påmindelsesnotifikationsindstillinger</string>
-    <string name="sms_subtitle">Administrer SMS-indstillinger</string>
-    <string name="webhooks_subtitle">BYOAPI finans synk</string>
-    <string name="about_subtitle">App-version, kildekode og mere</string>
-    <string name="currency">Valuta</string>
-    <string name="currency_subtitle">Valutakurser og valutaindstillinger</string>
-    <string name="currency_settings_title">Valuta</string>
-    <string name="unified_currency">Enhedsvaluta</string>
-    <string name="unified_currency_subtitle">Vis alle beløb i en enkelt valuta</string>
-    <string name="default_currency">Standardvaluta</string>
-    <string name="default_currency_subtitle">Forudvælg valuta til nye poster</string>
-    <string name="display_currency">Visningsvaluta</string>
-    <string name="default_label">Standard</string>
-    <string name="none">Ingen</string>
-    <string name="rates_info_subtitle">Se valutakurser for din basisvaluta</string>
-    <string name="search_currencies">Søg i valutaer...</string>
-    <string name="rates_relative_to">Priser i forhold til %1$s</string>
-    <string name="last_updated">Sidst opdateret: %1$s</string>
-    <string name="custom_rate">Brugerdefineret kurs</string>
-    <string name="custom_rate_set">Brugerdefineret kurs indstillet. Tryk på Nulstil for at vende tilbage til API-kursen.</string>
-    <string name="add_custom_currency">Tilføj brugerdefineret valuta</string>
-    <string name="custom_currency">Brugerdefineret valuta</string>
-    <string name="currency_country_name">Valutanavn</string>
-    <string name="eg_test_country">f.eks. Testland</string>
-    <string name="currency_code">Valutakode</string>
-    <string name="eg_tst">f.eks. TST</string>
-    <string name="currency_symbol">Valutasymbol</string>
-    <string name="eg_tsymbol">f.eks. T$</string>
-    <string name="exchange_rate">Valutakurs</string>
-    <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
-    <string name="please_fill_all_fields">Udfyld venligst alle felter med gyldige data.</string>
-    <string name="base_currency_hint">Basis = standardvaluta eller hovedkontoens valuta</string>
-    <string name="save_currency">Gem valuta</string>
-    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
-    <string name="currency_code_hint">USD, INR, EUR ...</string>
-    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
-    <string name="exchange_rate_hint">1 Base = X Brugerdefineret valuta</string>
-    <string name="exchange_rates_notice_title">Meddelelse Om Valutakurser</string>
-    <string name="exchange_rates_notice_text">De valutakurser, der vises i denne app, er udelukkende til informationsformål og bør ikke anvendes til investeringsbeslutninger. Disse kurser er estimater og afspejler muligvis ikke de faktiske kurser. Ved at bruge denne app accepterer du, at du forstår og accepterer disse begrænsninger.</string>
-    <string name="custom_label">BRUGERDEFINERET</string>
-    <string name="time_period_this_month">Denne måned</string>
-    <string name="time_period_last_month">Sidste måned</string>
-    <string name="time_period_current_fy">Nuværende regnskabsår</string>
-    <string name="time_period_all_time">Al tid</string>
-    <string name="time_period_custom_range">Brugerdefineret periode</string>
-    <string name="type_all">Alle</string>
-    <string name="type_credit">Kredit</string>
-    <string name="duplicate_transaction">Duplikeret transaktion</string>
-    <string name="transaction_duplicated">Transaktion duplikeret</string>
-    <string name="share_receipt">Del kvittering</string>
-    <string name="webhook_mode">Webhooks</string>
-    <string name="webhook_mode_desc">Aktivér BYOAPI webhook-synkronisering</string>
-    <string name="token_info">Chat Token-info</string>
-    <string name="token_info_desc">Vis teknisk information i chat</string>
-    <string name="type_balance_update">Saldoopdatering</string>
-    <string name="new_chat">Ny chat</string>
-    <string name="chat_history">Chathistorik</string>
-    <string name="appearance_title">Udseende</string>
-    <string name="theme_system">System</string>
-    <string name="theme_light">Lys</string>
-    <string name="theme_dark">Mørk</string>
-    <string name="style_dynamic">Dynamisk</string>
-    <string name="style_dynamic_sub">Baggrundsfarver</string>
-    <string name="style_default">Standard</string>
-    <string name="style_default_sub">Standardfarver</string>
-    <string name="amoled_black">Amoled sort</string>
-    <string name="amoled_black_desc">Brug rent sort baggrund for dybere kontrast</string>
-    <string name="blur_effects">Slør-effekter</string>
-    <string name="blur_effects_desc">Aktivér glassmorphism-slør-effekter i UI-komponenter</string>
-    <string name="logo_original">Original</string>
-    <string name="logo_anarchy">Anarki</string>
-    <string name="logo_comic">Tegneserie</string>
-    <string name="logo_zenith">Zenith</string>
-    <string name="logo_monochrome">Monokrom</string>
-    <string name="navigation_style">Navigation</string>
-    <string name="nav_floating">Flydende</string>
-    <string name="nav_floating_sub">Moderne &amp;amp; elegant</string>
-    <string name="nav_normal">Normal</string>
-    <string name="nav_normal_sub">Standard M3</string>
-    <string name="hide_nav_labels">Skjul navigationsetiketter</string>
-    <string name="hide_nav_labels_desc">Skjul etiketter i navigationslinjen</string>
-    <string name="hide_pill_indicator">Skjul pilindikator</string>
-    <string name="hide_pill_indicator_desc">Skjul markørindikatoren i navigationslinjen</string>
-    <string name="fonts_title">Skrifttyper</string>
-    <string name="font_default_sub">System</string>
-    <string name="font_snpro">SN Pro</string>
-    <string name="font_snpro_sub">Modern Mono</string>
-    <string name="quick_templates">Hurtige Skabeloner</string>
-    <string name="rule_name_label">Regelnavn</string>
-    <string name="rule_name_placeholder">f.eks., Madudgifter under ₹200</string>
-    <string name="description_placeholder">Hvad gør denne regel?</string>
-    <string name="conditions_title">Betingelser</string>
-    <string name="add_condition">Tilføj</string>
-    <string name="condition_n_format">Betingelse %1$d</string>
-    <string name="remove_condition_cd">Fjern betingelse</string>
-    <string name="field_label">Felt</string>
-    <string name="value_label">Værdi</string>
-    <string name="field_amount">Beløb</string>
-    <string name="field_merchant">Forhandler</string>
-    <string name="field_category">Kategori</string>
-    <string name="field_sms_text">SMS Tekst</string>
-    <string name="field_transaction_type">Transaktionstype</string>
-    <string name="field_subcategory">Underkategori</string>
-    <string name="field_bank_name">Banknavn</string>
-    <string name="field_default">Felt</string>
-    <string name="then_title">Så</string>
-    <string name="action_type_label">Handlingstype</string>
-    <string name="action_block_transaction">Blokér transaktion</string>
-    <string name="action_set_field">Indstil felt</string>
-    <string name="action_clear_field">Ryd felt</string>
-    <string name="action_set_category">Indstil kategori</string>
-    <string name="action_set_subcategory">Indstil underkategori</string>
-    <string name="action_set_merchant">Indstil forhandlers navn</string>
-    <string name="action_set_type">Indstil transaktionstype</string>
-    <string name="action_label">Handling</string>
-    <string name="block_message">Transaktioner, der matcher denne regel, vil blive blokeret og ikke gemt</string>
-    <string name="choose_category">Vælg kategori</string>
-    <string name="preset_block_otps">Blokér OTP\'er</string>
-    <string name="preset_block_small">Blokér små beløb</string>
-    <string name="preset_small_food">Små mængder → Mad</string>
-    <string name="preset_standardize">Standardiser forhandler</string>
-    <string name="preset_mark_income">Markér som indkomst</string>
-    <string name="notification_access">Notifikationstilgang</string>
-    <string name="bank_push_notifications">Bank push-notifikationer</string>
-    <string name="notification_access_active">Notifikationstilgang er aktiv</string>
-    <string name="notification_access_desc">Aktivér for at opdage banktransaktioner fra push-notifikationer</string>
-    <string name="notification_access_required">Notifikationstilgang krævet</string>
-    <string name="notification_access_required_desc">For automatisk at opdage banktransaktioner i realtid kræver Cashiro notifikationstilgang. Dette er en systemniveau-tilladelse.</string>
-    <string name="how_to_enable">Sådan aktiveres:</string>
-    <string name="step_1">Tryk på \'Åbn Indstillinger\'-knappen nedenfor.</string>
-    <string name="step_2">Find \'Cashiro\' i listen over applikationer.</string>
-    <string name="step_3">Slå \'Tillad notifikationstilgang\' til.</string>
-    <string name="open_settings">Åbn indstillinger</string>
-    <string name="scan_settings">Scan-indstillinger</string>
-    <string name="remind_transactions">Påmind transaktioner</string>
-    <string name="remind_transactions_desc">Få påmindelser om at scanne nye beskeder</string>
-    <string name="alert_time">Alarmtid</string>
-    <string name="upcoming_transactions_section">Kommende transaktioner</string>
-    <string name="upcoming_transactions_desc">Få påmindelser om kommende betalinger</string>
-    <string name="test_notification_alerts">Test notifikationsalarmer</string>
-    <string name="test_notification_alerts_desc">Send testnotifikationer periodisk</string>
-    <string name="sample_data">Eksempeldata</string>
-    <string name="sample_data_desc">Opret dummy-konti og transaktioner</string>
-    <string name="home_title">Hjem</string>
-    <string name="full_resync">Fuld omlæsning</string>
-    <string name="full_resync_desc">Dette vil genbehandle alle SMS-beskeder fra starten. Brug dette til at rette problemer forårsaget af opdaterede bankparser.
-
-Dette kan tage nogle sekunder afhængigt af din beskedhistorik.</string>
-    <string name="resync_all">Omlæs alle</string>
-    <string name="sync_sms_cd">Synkroniser SMS-transaktioner</string>
-    <string name="add_transaction_subscription_cd">Tilføj transaktion eller abonnement</string>
-    <string name="selected_cd">Valgt</string>
-    <string name="net_worth_label">Nettoformue</string>
-    <string name="this_month_lbl">DENNE MÅNED</string>
-    <string name="this_year_lbl">DETTE ÅR</string>
-    <string name="percent_this_month_format">%1$s%2$s%%denne måned</string>
-    <string name="app_locked_title">Cashiro er låst</string>
-    <string name="authenticate_desc">Godkend for at få adgang til dine udgiftsdata</string>
-    <string name="unlock">Lås op</string>
-    <string name="biometric_unavailable_title">Biometrisk godkendelse ikke tilgængelig</string>
-    <string name="biometric_setup_desc">Deaktiver venligst applås i enhedsindstillingerne eller opsæt biometrisk godkendelse.</string>
-    <string name="immediate_locking">Øjeblikkelig låsning</string>
-    <string name="minute_timeout_format">%1$d minutters timeout</string>
-    <string name="data_protected_format">Dine data er beskyttet med %1$s</string>
-    <string name="today_lbl">I dag</string>
-    <string name="yesterday_lbl">I går</string>
-    <string name="this_week_lbl">Denne uge</string>
-    <string name="earlier_lbl">Tidligere</string>
-    <string name="sort_date_newest">Nyeste først</string>
-    <string name="sort_date_oldest">Ældste først</string>
-    <string name="sort_amount_highest">Højeste beløb</string>
-    <string name="sort_amount_lowest">Laveste beløb</string>
-    <string name="sort_merchant_az">Handelsnavn (A-Z)</string>
-    <string name="sort_merchant_za">Handelsnavn (Z-A)</string>
-    <string name="collapse_cd">Luk</string>
-    <string name="expand_cd">Udvid</string>
-    <string name="add_attachment_cd">Tilføj vedhæftning</string>
-    <string name="remove_cd">Fjern</string>
-    <string name="receipt">Kvittering</string>
-    <string name="transaction_info">Transaktionsinfo</string>
-    <string name="split_transaction">Opdel</string>
-    <string name="manage_transaction">Administrer transaktion</string>
-    <string name="view_transaction">Se transaktion</string>
-    <string name="mark_as">Marker som</string>
-    <string name="no_description">Ingen beskrivelse</string>
-    <string name="no_attachments">Ingen vedhæftninger</string>
-    <string name="this_transaction">Denne transaktion</string>
-    <string name="err_amount_required">Beløb er påkrævet</string>
-    <string name="err_invalid_amount">Ugyldigt beløb</string>
-    <string name="err_amount_positive">Beløbet skal være større end 0</string>
-    <string name="err_merchant_required">Forhandler/Beskrivelse er påkrævet</string>
-    <string name="err_too_short">For kort</string>
-    <string name="err_category_required">Kategori er påkrævet</string>
-    <string name="err_service_required">Servicenavn er påkrævet</string>
-    <string name="err_source_target_required">Både kilde- og målkonti er påkrævet for overførsler</string>
-    <string name="err_accounts_different">Kilde- og målkonti skal være forskellige</string>
-    <string name="err_save_transaction">Kunne ikke gemme transaktionen</string>
-    <string name="err_save_subscription">Kunne ikke gemme abonnementet</string>
-    <string name="err_subscription_not_found">Abonnement ikke fundet</string>
-    <string name="am_lbl">FM</string>
-    <string name="pm_lbl">EM</string>
-    <string name="merchant_lbl">Forhandler</string>
-    <string name="options_desc">Indstillinger</string>
-    <plurals name="licenses_count">
-        <item quantity="one">%1$d licens</item>
-        <item quantity="other">%1$d licenser</item>
-    </plurals>
-    <plurals name="unrecognized_messages_count">
-        <item quantity="one">%1$d besked fra potentielle banker</item>
-        <item quantity="other">%1$d meddelelser fra potentielle banker</item>
-    </plurals>
-    <plurals name="attachments_count">
-        <item quantity="one">%1$d fil</item>
-        <item quantity="other">%1$d filer</item>
-    </plurals>
-    <plurals name="subcategory_count_plural">
-        <item quantity="one">%1$d underkategori</item>
-        <item quantity="other">%1$d underkategorier</item>
-    </plurals>
-    <plurals name="delete_transactions_title">
-        <item quantity="one">Slet %1$d transaktion?</item>
-        <item quantity="other">Slet %1$d transaktioner?</item>
-    </plurals>
-    <plurals name="month_status_days_left_format">
-        <item quantity="one">%1$d dag tilbage i %2$s</item>
-        <item quantity="other">%1$d dage tilbage i %2$s</item>
-    </plurals>
     <plurals name="transactions_parsed_format">
         <item quantity="one">%1$d transaktion analyseret</item>
         <item quantity="other">%1$d transaktioner fortolket</item>
@@ -986,4 +802,251 @@ Dette kan tage nogle sekunder afhængigt af din beskedhistorik.</string>
         <item quantity="one">%1$d gemt</item>
         <item quantity="other">%1$d gemt</item>
     </plurals>
+    <string name="duration_hours_minutes">%1$dh %2$dm</string>
+    <string name="duration_minutes_seconds">%1$dm %2$ds</string>
+    <string name="duration_seconds">%1$ds</string>
+    <string name="time_left_format">~%1$s tilbage</string>
+    <string name="batch_progress_format">Batch %1$d af %2$d</string>
+    <string name="scan_completed_success">Scanning fuldført!</string>
+    <string name="scan_failed_error">Scanning mislykkedes. Prøv venligst igen.</string>
+    <string name="scan_cancelled">Scanning annulleret</string>
+    <string name="starting_scan">Starter scanning...</string>
+    <string name="scanning_sms_format">Scanner SMS: %1$d/%2$d</string>
+    <!-- Time Selection -->
+    <string name="select_time">Vælg Tid</string>
+    <!-- Transactions, Indicators & Categories -->
+    <string name="recurring">Gentagelse</string>
+    <string name="balance_after_format">Bal: %1$s</string>
+    <string name="description_indicator_desc">Har beskrivelse</string>
+    <string name="attachments_indicator_desc">Har vedhæftede filer</string>
+    <string name="type_transfer">Overfør</string>
+    <string name="type_investment">Investering</string>
+    <string name="type_income">Indkomst</string>
+    <string name="type_expense">Udgifter</string>
+    <string name="type_balance_update">Balance Update</string>
+    <!-- Estimated amounts -->
+    <string name="estimated_amount_format">est. %1$s</string>
+    <string name="uncategorized">Ikke Kategoriseret</string>
+    <string name="net">Netto</string>
+    <string name="processing">Behandler…</string>
+    <!-- Language Selection -->
+    <string name="language">Language</string>
+    <string name="language_subtitle">Change application language</string>
+    <string name="select_language">Select Language</string>
+    <!-- Settings Screen -->
+    <string name="transactions_count_short">%1$d Transactions</string>
+    <string name="appearances">Appearances</string>
+    <string name="appearances_subtitle">App\'s personalization settings</string>
+    <string name="accounts_subtitle">Add accounts and update balances</string>
+    <string name="budgets_subtitle">Set and manage monthly spending limits</string>
+    <string name="categories_subtitle">Manage expense and income categories</string>
+    <string name="smart_rules_subtitle">Automatic transaction categorization</string>
+    <string name="data_privacy_subtitle">Manage your data and privacy settings</string>
+    <string name="ai_chat_assistant">AI Chat Assistant</string>
+    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5 model (%1$d MB)</string>
+    <string name="ai_chat_subtitle_downloading">Downloading… %1$d%%</string>
+    <string name="ai_chat_subtitle_paused">Download paused. Tap to resume.</string>
+    <string name="ai_chat_subtitle_completed">Qwen ready for chat</string>
+    <string name="ai_chat_subtitle_failed">Download failed. Tap to retry.</string>
+    <string name="ai_chat_subtitle_insufficient_space">Not enough storage space</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_subtitle">Manage reminder notification settings</string>
+    <string name="sms_subtitle">Manage SMS settings</string>
+    <string name="webhooks_subtitle">BYOAPI finance sync</string>
+    <string name="about_subtitle">App version, source code and more</string>
+    <!-- Currency Settings -->
+    <string name="currency">Valuta</string>
+    <string name="currency_subtitle">Exchange rates and currency preferences</string>
+    <string name="currency_settings_title">Valuta</string>
+    <string name="unified_currency">Unified Currency</string>
+    <string name="unified_currency_subtitle">Display all amounts in a single currency</string>
+    <string name="default_currency">Default Currency</string>
+    <string name="default_currency_subtitle">Pre-select currency for new entries</string>
+    <string name="display_currency">Display Currency</string>
+    <string name="default_label">Default</string>
+    <string name="none">Ingen</string>
+    <string name="rates_info_subtitle">View exchange rates for your base currency</string>
+    <!-- Custom Currency Settings -->
+    <string name="search_currencies">Søg i valutaer...</string>
+    <string name="rates_relative_to">Priser i forhold til %1$s</string>
+    <string name="last_updated">Sidst opdateret: %1$s</string>
+    <string name="custom_rate">Custom rate</string>
+    <string name="custom_rate_set">Custom rate set. Tap Reset to revert to API rate.</string>
+    <string name="add_custom_currency">Add Custom Currency</string>
+    <string name="custom_currency">Custom Currency</string>
+    <string name="currency_country_name">Currency name</string>
+    <string name="eg_test_country">e.g. Test Country</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="eg_tst">e.g. TST</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="eg_tsymbol">e.g. T$</string>
+    <string name="exchange_rate">Exchange Rate</string>
+    <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
+    <string name="please_fill_all_fields">Please fill all fields with valid data.</string>
+    <string name="base_currency_hint">Base = default currency or main account\'s currency</string>
+    <string name="save_currency">Save Currency</string>
+    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
+    <string name="currency_code_hint">USD, INR, EUR ...</string>
+    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
+    <string name="exchange_rate_hint">1 Base = X Custom currency</string>
+    <string name="exchange_rates_notice_title">Meddelelse Om Valutakurser</string>
+    <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
+    <string name="custom_label">CUSTOM</string>
+    <string name="new_chat">New Chat</string>
+    <string name="chat_history">Chat History</string>
+    <!-- AppearanceScreen -->
+    <string name="appearance_title">Appearance</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="style_dynamic">Dynamic</string>
+    <string name="style_dynamic_sub">Wallpaper Colors</string>
+    <string name="style_default">Default</string>
+    <string name="style_default_sub">Default Colors</string>
+    <string name="amoled_black">Amoled Black</string>
+    <string name="amoled_black_desc">Use pure black background for deeper contrast</string>
+    <string name="blur_effects">Blur Effects</string>
+    <string name="blur_effects_desc">Enable glassmorphism blur effects in UI components</string>
+    <string name="logo_original">Original</string>
+    <string name="logo_anarchy">Anarchy</string>
+    <string name="logo_comic">Comic</string>
+    <string name="logo_zenith">Zenith</string>
+    <string name="logo_monochrome">Monochrome</string>
+    <string name="navigation_style">Navigation</string>
+    <string name="nav_floating">Floating</string>
+    <string name="nav_floating_sub">Modern &amp; Sleek</string>
+    <string name="nav_normal">Normal</string>
+    <string name="nav_normal_sub">Standard M3</string>
+    <string name="hide_nav_labels">Hide Navigation Labels</string>
+    <string name="hide_nav_labels_desc">Hide labels in the navigation bar</string>
+    <string name="hide_pill_indicator">Hide Pill Indicator</string>
+    <string name="hide_pill_indicator_desc">Hide the selection indicator in the navigation bar</string>
+    <string name="fonts_title">Fonts</string>
+    <string name="font_default_sub">System</string>
+    <string name="font_snpro">SN Pro</string>
+    <string name="font_snpro_sub">Modern Mono</string>
+    <!-- CreateRuleScreen -->
+    <string name="quick_templates">Quick Templates</string>
+    <string name="rule_name_label">Rule Name</string>
+    <string name="rule_name_placeholder">e.g., Food expenses under ₹200</string>
+    <string name="description_placeholder">What does this rule do?</string>
+    <string name="conditions_title">Conditions</string>
+    <string name="add_condition">Tilføj</string>
+    <string name="condition_n_format">Condition %1$d</string>
+    <string name="remove_condition_cd">Remove Condition</string>
+    <string name="field_label">Field</string>
+    <string name="value_label">Value</string>
+    <string name="field_amount">Beløb</string>
+    <string name="field_merchant">Købmand</string>
+    <string name="field_category">Kategori</string>
+    <string name="field_sms_text">SMS Text</string>
+    <string name="field_transaction_type">Transaction Type</string>
+    <string name="field_subcategory">Underkategori</string>
+    <string name="field_bank_name">Bank Navn</string>
+    <string name="field_default">Field</string>
+    <string name="then_title">Then</string>
+    <string name="action_type_label">Action Type</string>
+    <string name="action_block_transaction">Block Transaction</string>
+    <string name="action_set_field">Set Field</string>
+    <string name="action_clear_field">Clear Field</string>
+    <string name="action_set_category">Set Category</string>
+    <string name="action_set_subcategory">Set Subcategory</string>
+    <string name="action_set_merchant">Set Merchant Name</string>
+    <string name="action_set_type">Set Transaction Type</string>
+    <string name="action_label">Action</string>
+    <string name="block_message">Transactions matching this rule will be blocked and not saved</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="preset_block_otps">Block OTPs</string>
+    <string name="preset_block_small">Block Small Amounts</string>
+    <string name="preset_small_food">Small amounts → Food</string>
+    <string name="preset_standardize">Standardize Merchant</string>
+    <string name="preset_mark_income">Mark as Income</string>
+    <!-- NotificationScreen -->
+    <string name="notification_access">Notification Access</string>
+    <string name="bank_push_notifications">Bank Push Notifications</string>
+    <string name="notification_access_active">Notification access is active</string>
+    <string name="notification_access_desc">Enable to detect bank transactions from push notifications</string>
+    <string name="notification_access_required">Notification Access Required</string>
+    <string name="notification_access_required_desc">To automatically detect bank transactions in real-time, Cashiro requires notification access. This is a system-level permission.</string>
+    <string name="how_to_enable">How to enable:</string>
+    <string name="step_1">Tap the \'Open Settings\' button below.</string>
+    <string name="step_2">Find \'Cashiro\' in the list of applications.</string>
+    <string name="step_3">Toggle \'Allow notification access\' to enabled.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="scan_settings">Scan Settings</string>
+    <string name="remind_transactions">Remind Transactions</string>
+    <string name="remind_transactions_desc">Get reminders to scan new messages</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="upcoming_transactions_section">Upcoming Transactions</string>
+    <string name="upcoming_transactions_desc">Get reminders for upcoming payments</string>
+    <!-- DeveloperScreen -->
+    <string name="test_notification_alerts">Test Notification Alerts</string>
+    <string name="test_notification_alerts_desc">Send test notifications periodically</string>
+    <string name="sample_data">Sample Data</string>
+    <string name="sample_data_desc">Create dummy accounts and transactions</string>
+    <!-- BottomNavItem -->
+    <string name="home_title">Home</string>
+    <!-- CashiroNavHost -->
+    <string name="full_resync">Full Resync</string>
+    <string name="full_resync_desc">This will reprocess all SMS messages from scratch. Use this to fix issues caused by updated bank parsers.\n\nThis may take a few seconds depending on your message history.</string>
+    <string name="resync_all">Resync All</string>
+    <string name="sync_sms_cd">Sync SMS transactions</string>
+    <string name="options_desc">Options</string>
+    <string name="add_transaction_subscription_cd">Add Transaction or Subscription</string>
+    <!-- ColorPickerContent -->
+    <string name="selected_cd">Valgt</string>
+    <!-- BalanceCard -->
+    <string name="net_worth_label">Net worth</string>
+    <string name="this_month_lbl">THIS MONTH</string>
+    <string name="this_year_lbl">THIS YEAR</string>
+    <string name="percent_this_month_format">%1$s%2$s%% this month</string>
+    <!-- AppLockScreen -->
+    <string name="app_locked_title">Cashiro is Locked</string>
+    <string name="authenticate_desc">Authenticate to access your expense data</string>
+    <string name="unlock">Unlock</string>
+    <string name="biometric_unavailable_title">Biometric authentication unavailable</string>
+    <string name="biometric_setup_desc">Please disable app lock in device settings or set up biometric authentication.</string>
+    <string name="immediate_locking">immediate locking</string>
+    <string name="minute_timeout_format">%1$d minute timeout</string>
+    <string name="data_protected_format">Your data is protected with %1$s</string>
+    <!-- TransactionsState -->
+    <string name="today_lbl">Today</string>
+    <string name="yesterday_lbl">Yesterday</string>
+    <string name="this_week_lbl">This Week</string>
+    <string name="earlier_lbl">Earlier</string>
+    <string name="sort_date_newest">Newest First</string>
+    <string name="sort_date_oldest">Oldest First</string>
+    <string name="sort_amount_highest">Highest Amount</string>
+    <string name="sort_amount_lowest">Lowest Amount</string>
+    <string name="sort_merchant_az">Merchant (A-Z)</string>
+    <string name="sort_merchant_za">Merchant (Z-A)</string>
+    <!-- AttachmentSection -->
+    <string name="add_attachment_cd">Tilføj vedhæftet fil</string>
+    <string name="remove_cd">Remove</string>
+    <!-- TransactionDetailScreen -->
+    <string name="receipt">Receipt</string>
+    <string name="transaction_info">Transaction Info</string>
+    <string name="split_transaction">Split</string>
+    <string name="manage_transaction">Manage Transaction</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="mark_as">Mark as</string>
+    <string name="no_description">No description</string>
+    <string name="no_attachments">No attachments</string>
+    <string name="this_transaction">This transaction</string>
+    <!-- AddViewModel validation -->
+    <string name="err_amount_required">Amount is required</string>
+    <string name="err_invalid_amount">Invalid amount</string>
+    <string name="err_amount_positive">Amount must be greater than 0</string>
+    <string name="err_merchant_required">Merchant/Description is required</string>
+    <string name="err_too_short">Too short</string>
+    <string name="err_category_required">Category is required</string>
+    <string name="err_service_required">Service name is required</string>
+    <string name="err_source_target_required">Both source and target accounts are required for transfers</string>
+    <string name="err_accounts_different">Source and target accounts must be different</string>
+    <string name="err_save_transaction">Failed to save transaction</string>
+    <string name="err_save_subscription">Failed to save subscription</string>
+    <string name="err_subscription_not_found">Subscription not found</string>
+    <string name="am_lbl">AM</string>
+    <string name="pm_lbl">PM</string>
+    <string name="merchant_lbl">Købmand</string>
 </resources>
