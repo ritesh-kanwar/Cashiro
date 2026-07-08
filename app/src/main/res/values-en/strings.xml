@@ -86,6 +86,13 @@
     <string name="range_last_6_months">Last 6 Months</string>
     <string name="range_last_year">Last Year</string>
     <string name="range_all_time">All Time</string>
+    <string name="time_period_this_month">This Month</string>
+    <string name="time_period_last_month">Last Month</string>
+    <string name="time_period_current_fy">Current FY</string>
+    <string name="time_period_all_time">All Time</string>
+    <string name="time_period_custom_range">Custom Range</string>
+    <string name="type_all">All</string>
+    <string name="type_credit">Credit</string>
     <!-- Add/Edit Account Screens -->
     <string name="add_account_info">Add accounts not tracked via SMS like cash, wallets, or investment accounts.</string>
     <string name="account_type_label">Account Type</string>
@@ -440,6 +447,9 @@
     <string name="transaction_details">Transaction Details</string>
     <string name="report_issue">Report Issue</string>
     <string name="delete_transaction">Delete Transaction</string>
+    <string name="duplicate_transaction">Duplicate Transaction</string>
+    <string name="transaction_duplicated">Transaction duplicated</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="transaction_updated_successfully">Transaction updated successfully</string>
     <string name="merchant_label">Merchant</string>
     <string name="description_optional_label">Description (Optional)</string>
@@ -524,6 +534,10 @@
     <string name="licenses">Licenses</string>
     <string name="licenses_desc">Open source libraries</string>
     <string name="developer_options">Developer Options</string>
+    <string name="webhook_mode">Webhooks</string>
+    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
+    <string name="token_info">Chat Token Info</string>
+    <string name="token_info_desc">Show technical information in chat</string>
     <string name="developer_options_desc">Tests and Experimental features</string>
     <string name="delete_all_data">Delete All Data</string>
     <string name="delete_all_data_desc">Permanently clear all records</string>
@@ -688,6 +702,8 @@
     <!-- Collapsible & Filter Rows -->
     <string name="more_filters">More Filters</string>
     <string name="more_filters_active_format">More Filters (%1$d active)</string>
+    <string name="collapse_cd">Collapse</string>
+    <string name="expand_cd">Expand</string>
     <!-- Color Picker -->
     <string name="colors">Colors</string>
     <string name="color_picker_button_desc">Custom Color Picker</string>
@@ -807,6 +823,7 @@
     <string name="type_investment">Investment</string>
     <string name="type_income">Income</string>
     <string name="type_expense">Expense</string>
+    <string name="type_balance_update">Balance Update</string>
     <!-- Estimated amounts -->
     <string name="estimated_amount_format">est. %1$s</string>
     <string name="uncategorized">Uncategorized</string>
@@ -875,23 +892,9 @@
     <string name="exchange_rates_notice_title">Exchange Rates Notice</string>
     <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
     <string name="custom_label">CUSTOM</string>
-    <string name="time_period_this_month">This Month</string>
-    <string name="time_period_last_month">Last Month</string>
-    <string name="time_period_current_fy">Current FY</string>
-    <string name="time_period_all_time">All Time</string>
-    <string name="time_period_custom_range">Custom Range</string>
-    <string name="type_all">All</string>
-    <string name="type_credit">Credit</string>
-    <string name="duplicate_transaction">Duplicate Transaction</string>
-    <string name="transaction_duplicated">Transaction duplicated</string>
-    <string name="share_receipt">Share Receipt</string>
-    <string name="webhook_mode">Webhooks</string>
-    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
-    <string name="token_info">Chat Token Info</string>
-    <string name="token_info_desc">Show technical information in chat</string>
-    <string name="type_balance_update">Balance Update</string>
     <string name="new_chat">New Chat</string>
     <string name="chat_history">Chat History</string>
+    <!-- AppearanceScreen -->
     <string name="appearance_title">Appearance</string>
     <string name="theme_system">System</string>
     <string name="theme_light">Light</string>
@@ -911,7 +914,7 @@
     <string name="logo_monochrome">Monochrome</string>
     <string name="navigation_style">Navigation</string>
     <string name="nav_floating">Floating</string>
-    <string name="nav_floating_sub">Modern &amp;amp; Sleek</string>
+    <string name="nav_floating_sub">Modern &amp; Sleek</string>
     <string name="nav_normal">Normal</string>
     <string name="nav_normal_sub">Standard M3</string>
     <string name="hide_nav_labels">Hide Navigation Labels</string>
@@ -922,6 +925,7 @@
     <string name="font_default_sub">System</string>
     <string name="font_snpro">SN Pro</string>
     <string name="font_snpro_sub">Modern Mono</string>
+    <!-- CreateRuleScreen -->
     <string name="quick_templates">Quick Templates</string>
     <string name="rule_name_label">Rule Name</string>
     <string name="rule_name_placeholder">e.g., Food expenses under ₹200</string>
@@ -957,6 +961,7 @@
     <string name="preset_small_food">Small amounts → Food</string>
     <string name="preset_standardize">Standardize Merchant</string>
     <string name="preset_mark_income">Mark as Income</string>
+    <!-- NotificationScreen -->
     <string name="notification_access">Notification Access</string>
     <string name="bank_push_notifications">Bank Push Notifications</string>
     <string name="notification_access_active">Notification access is active</string>
@@ -974,21 +979,28 @@
     <string name="alert_time">Alert Time</string>
     <string name="upcoming_transactions_section">Upcoming Transactions</string>
     <string name="upcoming_transactions_desc">Get reminders for upcoming payments</string>
+    <!-- DeveloperScreen -->
     <string name="test_notification_alerts">Test Notification Alerts</string>
     <string name="test_notification_alerts_desc">Send test notifications periodically</string>
     <string name="sample_data">Sample Data</string>
     <string name="sample_data_desc">Create dummy accounts and transactions</string>
+    <!-- BottomNavItem -->
     <string name="home_title">Home</string>
+    <!-- CashiroNavHost -->
     <string name="full_resync">Full Resync</string>
     <string name="full_resync_desc">This will reprocess all SMS messages from scratch. Use this to fix issues caused by updated bank parsers.\n\nThis may take a few seconds depending on your message history.</string>
     <string name="resync_all">Resync All</string>
     <string name="sync_sms_cd">Sync SMS transactions</string>
+    <string name="options_desc">Options</string>
     <string name="add_transaction_subscription_cd">Add Transaction or Subscription</string>
+    <!-- ColorPickerContent -->
     <string name="selected_cd">Selected</string>
+    <!-- BalanceCard -->
     <string name="net_worth_label">Net worth</string>
     <string name="this_month_lbl">THIS MONTH</string>
     <string name="this_year_lbl">THIS YEAR</string>
     <string name="percent_this_month_format">%1$s%2$s%% this month</string>
+    <!-- AppLockScreen -->
     <string name="app_locked_title">Cashiro is Locked</string>
     <string name="authenticate_desc">Authenticate to access your expense data</string>
     <string name="unlock">Unlock</string>
@@ -997,6 +1009,7 @@
     <string name="immediate_locking">immediate locking</string>
     <string name="minute_timeout_format">%1$d minute timeout</string>
     <string name="data_protected_format">Your data is protected with %1$s</string>
+    <!-- TransactionsState -->
     <string name="today_lbl">Today</string>
     <string name="yesterday_lbl">Yesterday</string>
     <string name="this_week_lbl">This Week</string>
@@ -1007,10 +1020,10 @@
     <string name="sort_amount_lowest">Lowest Amount</string>
     <string name="sort_merchant_az">Merchant (A-Z)</string>
     <string name="sort_merchant_za">Merchant (Z-A)</string>
-    <string name="collapse_cd">Collapse</string>
-    <string name="expand_cd">Expand</string>
+    <!-- AttachmentSection -->
     <string name="add_attachment_cd">Add attachment</string>
     <string name="remove_cd">Remove</string>
+    <!-- TransactionDetailScreen -->
     <string name="receipt">Receipt</string>
     <string name="transaction_info">Transaction Info</string>
     <string name="split_transaction">Split</string>
@@ -1020,6 +1033,7 @@
     <string name="no_description">No description</string>
     <string name="no_attachments">No attachments</string>
     <string name="this_transaction">This transaction</string>
+    <!-- AddViewModel validation -->
     <string name="err_amount_required">Amount is required</string>
     <string name="err_invalid_amount">Invalid amount</string>
     <string name="err_amount_positive">Amount must be greater than 0</string>
@@ -1035,5 +1049,4 @@
     <string name="am_lbl">AM</string>
     <string name="pm_lbl">PM</string>
     <string name="merchant_lbl">Merchant</string>
-    <string name="options_desc">Options</string>
 </resources>
