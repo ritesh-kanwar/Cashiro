@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cashiro</string>
+    <!-- App shortcuts -->
     <string name="add_transaction">Ajouter une transaction</string>
     <string name="add_subscription">Ajouter un abonnement</string>
     <string name="add_transfer">Ajouter un transfert</string>
+    <!-- Add Screen -->
     <string name="add_new">Ajouter un nouveau</string>
     <string name="transaction">Opération</string>
     <string name="subscription">Abonnement</string>
+    <!-- Data Privacy Screen -->
     <string name="data_privacy_title">Confidentialité des données</string>
     <string name="security_section">Sécurité</string>
     <string name="app_lock">Verrouillage de l\'application</string>
@@ -34,9 +37,11 @@
     <string name="profile_data">Données du profil</string>
     <string name="budgets">Les budgets</string>
     <string name="app_preferences">Préférences de l\'application</string>
+    <!-- NumberPad -->
     <string name="enter_amount">Entrez le montant</string>
     <string name="done">Fait</string>
     <string name="backspace">Rétro-espace</string>
+    <!-- Merge Accounts Dialogs -->
     <string name="merge_accounts_title">Fusionner les comptes</string>
     <string name="merge_accounts_desc">Sélectionnez les comptes à fusionner avec %1$s (...%2$s). Les comptes sélectionnés seront supprimés après la fusion.</string>
     <string name="next">Suivant</string>
@@ -50,6 +55,7 @@
     <string name="merge_confirm_title">Confirmation finale</string>
     <string name="merge_confirm_message">Fusion des comptes : toutes les transactions actuelles et passées des comptes bancaires fusionnés s\'afficheront maintenant sur le compte bancaire fusionné. Les comptes originaux seront supprimés.</string>
     <string name="merge">Fusionner</string>
+    <!-- HistorySheet -->
     <string name="balance_history_title">Historique du solde</string>
     <string name="records_count_latest_balance_note">Enregistrements %1$d • Le solde le plus récent est affiché dans les comptes</string>
     <string name="no_balance_history_available">Aucun historique de solde disponible</string>
@@ -66,6 +72,7 @@
     <string name="source_system">Système</string>
     <string name="sms_source">Source SMS</string>
     <string name="copy">Copie</string>
+    <!-- AccountDetailScreen -->
     <string name="account_details">Détails du compte</string>
     <string name="transactions_count">Transactions (%1$d)</string>
     <string name="balance_trend">Tendance du solde</string>
@@ -79,6 +86,14 @@
     <string name="range_last_6_months">6 derniers mois</string>
     <string name="range_last_year">Année dernière</string>
     <string name="range_all_time">Tout le temps</string>
+    <string name="time_period_this_month">This Month</string>
+    <string name="time_period_last_month">Last Month</string>
+    <string name="time_period_current_fy">Current FY</string>
+    <string name="time_period_all_time">Tout le temps</string>
+    <string name="time_period_custom_range">Custom Range</string>
+    <string name="type_all">Tous</string>
+    <string name="type_credit">Crédit</string>
+    <!-- Add/Edit Account Screens -->
     <string name="add_account_info">Ajouter des comptes non suivis par SMS comme de l\'argent, des portefeuilles ou des comptes d\'investissement.</string>
     <string name="account_type_label">Type de compte client</string>
     <string name="account_icon_label">Icône du compte</string>
@@ -86,11 +101,11 @@
     <string name="placeholder_bank_name">ex: banque HDFC</string>
     <string name="placeholder_credit_name">par exemple, carte de crédit HDFC</string>
     <string name="placeholder_wallet_name">ex: argent comptant</string>
-    <string name="last_4_digits_required_label">Derniers 4 chiffres *</string>
+    <string name="last_4_digits_required_label">Last 4 Digits *</string>
     <string name="placeholder_last_4_digits">ex: 1234</string>
     <string name="enter_last_4_digits_hint">Entrez les 4 derniers chiffres du compte/carte</string>
     <string name="current_balance_required_label">Solde Actuel *</string>
-    <string name="placeholder_decimal">0,00</string>
+    <string name="placeholder_decimal">0.00</string>
     <string name="currency_label">Devise</string>
     <string name="select_currency">Sélectionner une devise</string>
     <string name="credit_limit_label">Limite de crédit</string>
@@ -108,13 +123,14 @@
     <string name="outstanding_label">En attente</string>
     <string name="balance_label">Solde</string>
     <string name="available_credit_label">Crédit disponible : %1$s</string>
-    <string name="utilization_label">Utilisation : %1$d%%</string>
+    <string name="utilization_label">Utilization: %1$d%%</string>
     <string name="wallet_name_label">Nom du portefeuille</string>
     <string name="bank_name_label">Nom de la banque</string>
     <string name="account_number_last_4_label">Numéro de compte (Dernier 4)</string>
     <string name="delete_account_desc">Supprimer le compte</string>
     <string name="save_changes">Enregistrer les modifications</string>
     <string name="type_wallet_lowercase">Portefeuille</string>
+    <!-- ManageAccountsScreen -->
     <string name="title_accounts">Comptes</string>
     <string name="no_accounts_yet">Pas encore de compte</string>
     <string name="add_account_fab_desc">Ajouter un compte</string>
@@ -147,6 +163,7 @@
     <string name="select_account_link_prompt">Sélectionnez un compte pour lier cette carte à :</string>
     <string name="action_cancel">Abandonner</string>
     <string name="action_link">Lier</string>
+    <!-- SubscriptionTabContent & TransactionTabContent -->
     <string name="subscription_info">Suivre les dépenses récurrentes. Vous devrez ajouter des transactions manuellement chaque mois.</string>
     <string name="billing_cycle_label">Cycle de facturation</string>
     <string name="cycle_monthly">Mensuel</string>
@@ -177,11 +194,13 @@
     <string name="merchant_description">Marchand / Description</string>
     <string name="where_did_you_spend">Où avez-vous dépensé?</string>
     <string name="merchant_placeholder">ex: Cible, Walmart</string>
+    <!-- Budgets Screen -->
     <string name="new_budget">Nouveau budget</string>
     <string name="no_budgets_yet">Pas encore de budget</string>
     <string name="create_first_budget_desc">Créez votre premier budget pour commencer à suivre vos objectifs de dépenses</string>
     <string name="create_budget">Créer un budget</string>
     <string name="edit_budget">Modifier le budget</string>
+    <!-- Edit Budget Sheet -->
     <string name="budget_period">Période budgétaire</string>
     <string name="starts">Début</string>
     <string name="ends">Finit</string>
@@ -210,8 +229,8 @@
     <string name="daily_goal_remaining">REMPLACEMENT DU JOUR</string>
     <string name="daily_budget_left">BUDGET JOUR GAUCHE</string>
     <string name="saved_goal">ENREGISTRER / OBJECTIF</string>
-    <string name="spend_limit">DÉPENSE / LIMITE</string>
-    <string name="days_remaining_format">%1$d jours restants</string>
+    <string name="spend_limit">SPEND / LIMIT</string>
+    <string name="days_remaining_format">%1$d Days remaining</string>
     <string name="link_accounts">Lier les comptes</string>
     <string name="ending_in_format">Fin dans %1$s</string>
     <string name="budget_details">Détails du budget</string>
@@ -220,7 +239,7 @@
     <string name="budget_history_format">Historique %1$s</string>
     <string name="budget_history">Historique du budget</string>
     <string name="budget_overspent_format">%1$s dépensé en trop de %2$s</string>
-    <string name="budget_left_format">Il reste %1$s sur %2$s</string>
+    <string name="budget_left_format">%1$s left of %2$s</string>
     <string name="less_than_one_percent">&lt; 1%</string>
     <string name="select_budget_type">Sélectionnez le type de budget</string>
     <string name="savings_budget">Budget des économies</string>
@@ -234,11 +253,13 @@
     <string name="all_transactions">Toutes les transactions</string>
     <string name="all_transactions_desc">Toutes les transactions dans les catégories sélectionnées et filtre\nUtile pour les budgets à long terme sur plusieurs périodes</string>
     <string name="all_transactions_example">Exemple: budget \"Dépenses mensuelles\"</string>
+    <!-- Categories Screen -->
     <string name="categories">Catégories</string>
     <string name="add_category">Ajouter une catégorie</string>
     <string name="clear_search">Effacer la recherche</string>
     <string name="expense_categories">Catégories de dépenses</string>
     <string name="income_categories">Catégories de revenus</string>
+    <!-- Edit Category Sheet -->
     <string name="category_name">Nom de catégorie</string>
     <string name="category_description_placeholder">description de la catégorie</string>
     <string name="add_subcategory">Ajouter une sous-catégorie</string>
@@ -251,16 +272,18 @@
     <string name="update_category">Mettre à jour la catégorie</string>
     <string name="create_category">Créer une catégorie</string>
     <string name="reset_to_default">Revenir à la valeur par défaut</string>
+    <!-- Edit Subcategory Sheet -->
     <string name="subcategory">Sous-catégorie</string>
     <string name="delete_subcategory">Supprimer la sous-catégorie</string>
     <string name="create_subcategory">Créer une sous-catégorie</string>
     <string name="update_subcategory">Mettre à jour la sous-catégorie</string>
+    <!-- Analytics -->
     <string name="total">Total</string>
     <string name="suffix_million">M</string>
     <string name="suffix_thousand">Ko</string>
     <string name="percentage_format">(%1$d%%)</string>
     <string name="total_uppercase">TOTAL</string>
-    <string name="transactions_format">%1$d TRANSACTIONS</string>
+    <string name="transactions_format">%1$d TXNS</string>
     <string name="average">MOYEN</string>
     <string name="per_day"> /jour</string>
     <string name="percentage_of_total">%1$d%% DE TOTAL</string>
@@ -273,6 +296,7 @@
     <string name="chart_type_heatmap">Carte de chaleur</string>
     <string name="chart_format">Graphique %1$s</string>
     <string name="toggle_view">Activer/désactiver la vue</string>
+    <!-- Chat Screen -->
     <string name="cashiro_ai">Cashiro AI</string>
     <string name="more_options">Plus d\'options</string>
     <string name="clear_chat">Vider le chat</string>
@@ -291,7 +315,7 @@
     <string name="send">Envoyer</string>
     <string name="chat_memory_full_warning">Mémoire de chat presque pleine! Nettoyez le chat pour continuer.</string>
     <string name="chat_memory_almost_full_warning_format">La mémoire du chat est à %1$d%% pleine. Pensez à la vider.</string>
-    <string name="chat_memory_usage_format">La mémoire du chat est remplie à %1$d%%.</string>
+    <string name="chat_memory_usage_format">Chat memory is %1$d%% full.</string>
     <string name="clear">Nettoyer</string>
     <string name="qwen_model_messages_format">Qwen 2.5 • Messages %1$d</string>
     <string name="tokens_format">Jetons %1$s</string>
@@ -299,6 +323,7 @@
     <string name="percentage_format_no_brackets">%1$d%%</string>
     <string name="tokens_usage_format">Jetons %1$s / %2$s</string>
     <string name="system_tokens_format">Système: %1$s</string>
+    <!-- Home Screen & Widgets -->
     <string name="edit_widgets">Modifier les Widgets</string>
     <string name="edit_widgets_desc">Réorganiser ou masquer les sections sur votre écran d\'accueil.</string>
     <string name="reorder">Réordonner</string>
@@ -325,6 +350,7 @@
     <string name="subscriptions_count_format">Abonnements %1$d</string>
     <string name="per_month">/ Mois</string>
     <string name="last_days_format">Derniers %1$d jours</string>
+    <!-- Edit Profile & Profile -->
     <string name="edit_profile">Modifier le profil</string>
     <string name="gallery">Galerie</string>
     <string name="change_banner">Changer la bannière</string>
@@ -334,6 +360,7 @@
     <string name="upcoming">À venir</string>
     <string name="active_subscriptions_singular">1 sous-catégorie</string>
     <string name="active_subscriptions_plural">Subs %1$d</string>
+    <!-- Onboarding -->
     <string name="app_logo">Logo de l\'application</string>
     <string name="onboarding_subtitle">Découvrez un moyen simple de suivre votre argent, de catégoriser vos dépenses et d\'atteindre vos objectifs d\'épargne plus rapidement.</string>
     <string name="set_up_your_profile">Configurez votre profil</string>
@@ -363,6 +390,7 @@
     <string name="scanning_ellipsis">Analyse en cours...</string>
     <string name="continue_action">Continuer</string>
     <string name="finish_setup">Terminer la configuration</string>
+    <!-- Mock Messages -->
     <string name="mock_msg_electric_bill">Facture électrique due : &lt;unk&gt; 2,450</string>
     <string name="mock_msg_starbucks">Transaction de &lt;unk&gt; 500 chez Starbucks</string>
     <string name="mock_msg_cc_due">Rappel : Carte de crédit due demain</string>
@@ -373,6 +401,7 @@
     <string name="mock_msg_axis">Axe : &lt;unk&gt; 200 dépensé à Zomato</string>
     <string name="notification">Notification</string>
     <string name="mock_msg_salary_credited">Votre salaire a été crédité !</string>
+    <!-- SubscriptionsScreen -->
     <string name="subscriptions">Abonnements</string>
     <string name="total_subscriptions">Total des abonnements</string>
     <string name="active_count_format">%1$d actif</string>
@@ -382,16 +411,16 @@
     <string name="overdue">En retard</string>
     <string name="due_today">À faire aujourd\'hui</string>
     <string name="due_tomorrow">Echéance demain</string>
-    <string name="due_in_days_format">Échéance dans %1$d jours</string>
+    <string name="due_in_days_format">Due in %1$d days</string>
     <string name="sms_available">SMS disponible</string>
     <string name="notes">Notes</string>
     <string name="original_sms">SMS original</string>
     <string name="track_payment">Suivre le paiement</string>
     <string name="edit_subscription">Modifier l\'abonnement</string>
-    <string name="subscription_hidden_format">%1$s caché</string>
+    <string name="subscription_hidden_format">%1$s hidden</string>
     <string name="payment_for_format">Paiement pour %1$s</string>
     <string name="overdue_since_format">En retard depuis %1$s</string>
-    <string name="due_on_format">Échéance le %1$s</string>
+    <string name="due_on_format">Due on %1$s</string>
     <string name="is_subscription_paid">Cette souscription est-elle payée ?</string>
     <string name="no">Non</string>
     <string name="yes_its_paid">Oui, il est payé</string>
@@ -399,23 +428,28 @@
     <string name="show_original_message">Afficher le message original</string>
     <string name="no_subscriptions_detected_yet">Aucun abonnement détecté pour le moment</string>
     <string name="sync_sms_to_detect_subscriptions">Synchronisez vos SMS pour détecter les abonnements</string>
+    <!-- ExportTransactionsDialog -->
     <string name="export_transactions">Exporter les transactions</string>
     <string name="exporting">Exportation en cours...</string>
     <string name="export_complete">Exportation terminée !</string>
     <string name="export_failed">L\'exportation a échoué</string>
     <string name="export_transactions_desc">Exporter les transactions %1$d au format CSV</string>
     <string name="total_transactions_export">Total des transactions :</string>
-    <string name="date_range">Plage de dates :</string>
+    <string name="date_range">Date range:</string>
     <string name="export_success_msg_format">Les transactions %1$d ont été exportées avec succès</string>
     <string name="size_format">Taille: %1$s</string>
     <string name="share">Partager</string>
     <string name="retry">Réessayer</string>
     <string name="share_csv">Partager CSV</string>
     <string name="csv_export_subject">Export des transactions en cashiro</string>
+    <!-- TransactionDetailScreen -->
     <string name="edit_transaction">Modifier la transaction</string>
     <string name="transaction_details">Détails de la transaction</string>
     <string name="report_issue">Signaler un problème</string>
     <string name="delete_transaction">Supprimer la transaction</string>
+    <string name="duplicate_transaction">Duplicate Transaction</string>
+    <string name="transaction_duplicated">Transaction duplicated</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="transaction_updated_successfully">Transaction mise à jour avec succès</string>
     <string name="merchant_label">Marchand</string>
     <string name="description_optional_label">Description (facultatif)</string>
@@ -455,8 +489,9 @@
     <string name="semi_annual_recurring">Semestriel</string>
     <string name="annual_recurring">Annuel</string>
     <string name="custom_recurring">Personnalisé</string>
+    <!-- TransactionsFilterBottomSheet -->
     <string name="filters">Filtres</string>
-    <string name="reset">Réinitialiser</string>
+    <string name="reset">Reset</string>
     <string name="apply">Appliquer</string>
     <string name="subcategories">Sous-catégories</string>
     <string name="amount_range">Plage de montant</string>
@@ -465,6 +500,7 @@
     <string name="set_minimum_amount">Définir le montant minimum</string>
     <string name="set_maximum_amount">Définir le montant maximum</string>
     <string name="confirm">Valider</string>
+    <!-- TransactionsScreen -->
     <string name="transactions_deleted_format">Transactions %1$d supprimées</string>
     <string name="items_selected_format">%1$d sélectionné</string>
     <string name="deselect_all">Désélectionner tout</string>
@@ -475,6 +511,7 @@
     <string name="no_transactions_matching_format">Aucune transaction correspondant à «%1$s»</string>
     <string name="no_transactions_for_format">Aucune transaction pour %1$s</string>
     <string name="sync_sms_to_see_transactions">Synchronisez vos SMS pour voir les transactions</string>
+    <!-- About Screen -->
     <string name="about">À propos de</string>
     <string name="cashiro_logo_cd">Logo Cashiro</string>
     <string name="version_format">Version %1$s, db-v%2$d</string>
@@ -497,6 +534,10 @@
     <string name="licenses">Licences</string>
     <string name="licenses_desc">Bibliothèques open source</string>
     <string name="developer_options">Options du développeur</string>
+    <string name="webhook_mode">Webhooks</string>
+    <string name="webhook_mode_desc">Enable BYOAPI webhook sync</string>
+    <string name="token_info">Chat Token Info</string>
+    <string name="token_info_desc">Show technical information in chat</string>
     <string name="developer_options_desc">Tests et fonctionnalités expérimentales</string>
     <string name="delete_all_data">Supprimer toutes les données</string>
     <string name="delete_all_data_desc">Effacer définitivement tous les enregistrements</string>
@@ -504,10 +545,16 @@
     <string name="delete_all_data_confirm_title">Supprimer toutes les données ?</string>
     <string name="delete_all_data_confirm_desc">Cette action supprimera définitivement toutes vos transactions, budgets, abonnements et paramètres. Cette action est irréversible.</string>
     <string name="delete_all">Tout supprimer</string>
+    <!-- Licenses Screen -->
     <string name="license_version_format">v%1$s, db-v%2$d</string>
     <string name="license_disclaimer_software">LE LOGICIEL EST FOURNI \"TEL QUEL\", SANS GARANTIE D\'AUCUNE SORTE, EXPRESSE OU IMPLICITE, Y COMPRIS MAIS SANS LIMITATION AUX GARANTIES DE QUALITÉ MARCHANDE, D\'ADAPTATION À UN USAGE PARTICULIER ET D\'ABSENCE DE CONTREFAÇON. EN AUCUN CAS LES AUTEURS OU LES HOLDERS DE COPYRIGHT NE PEUVENT ÊTRE TENUS RESPONSABLES DES RÉCLAMATIONS, DOMMAGES OU AUTRES RESPONSABILITÉS, QUE CE SOIT EN ACTION DE CONTRAT, DÉLIT OU AUTRE, DÉCOULANT DE OU DÉCOULANT DU LOGICIEL OU DE L\'UTILISATION OU D\'AUTRES OFFRES DANS LE LOGICIEL.</string>
     <string name="license_disclaimer_rates">Les taux de change affichés dans cette application sont à titre informatif seulement et ne doivent pas être utilisés pour des décisions d\'investissement. Ces taux sont des estimations et peuvent ne pas refléter les taux réels. En utilisant cette application, vous reconnaissez que vous comprenez et acceptez ces limitations et que vous assumez l\'entière responsabilité de toute décision prise en fonction des informations fournies dans l\'application.</string>
     <string name="powered_by">Propulsé par Kotlin Compose</string>
+    <plurals name="licenses_count">
+        <item quantity="one">Licence %1$d</item>
+        <item quantity="other">Licences %1$d</item>
+    </plurals>
+    <!-- Rules Screen -->
     <string name="smart_rules">Règles intelligentes</string>
     <string name="reset_to_defaults">Rétablir les valeurs par défaut</string>
     <string name="automatic_categorization">Catégorisation automatique</string>
@@ -532,41 +579,48 @@
     <string name="rule_summary_transfer">Auto-transferts, contra</string>
     <string name="priority_format">Priorité : %1$d</string>
     <string name="edit_rule">Modifier la règle</string>
+    <!-- SMS Screen -->
     <string name="sms_title">SMS</string>
     <string name="sms_scan_period">Période de scan SMS</string>
     <string name="scan_all_sms">Analyser tous les messages SMS</string>
     <string name="scan_months_format">Analyser les messages des derniers %1$d mois</string>
-    <string name="months_count_format">%1$d mois</string>
+    <string name="months_count_format">%1$d months</string>
     <string name="unrecognized_bank_messages">Messages bancaires non reconnus</string>
     <string name="no_unrecognized_messages">Aucun message non reconnu</string>
+    <plurals name="unrecognized_messages_count">
+        <item quantity="one">%1$d message from potential banks</item>
+        <item quantity="other">Messages %1$d provenant de banques potentielles</item>
+    </plurals>
     <string name="sms_scan_period_desc">Choisissez le nombre de mois d\'historique de SMS à scanner pour les transactions</string>
     <string name="one_month">1 mois</string>
     <string name="two_years">2 ans</string>
+    <!-- Unrecognized SMS Screen -->
     <string name="unrecognized_messages_title">Messages non reconnus</string>
     <string name="unrecognized_bank_messages_desc">Ces messages provenant de banques potentielles n\'ont pas pu être analysés automatiquement. Aidez à améliorer Cashiro en les signalant afin que nous puissions ajouter le support pour plus de banques.</string>
     <string name="show_reported">Afficher les signalés</string>
-    <string name="count_new_format">%1$d nouveau</string>
-    <string name="count_reported_format">%1$d signalé</string>
+    <string name="count_new_format">%1$d new</string>
+    <string name="count_reported_format">%1$d reported</string>
     <string name="delete_message">Supprimer le message</string>
     <string name="delete_message_confirm_desc">Êtes-vous sûr de vouloir supprimer ce message non reconnu ? Cette action ne peut pas être annulée.</string>
     <string name="reported">Signalé</string>
     <string name="report">Rapporter</string>
+    <!-- Webhooks Settings & Screen -->
     <string name="new_webhook">Nouveau Webhook</string>
     <string name="edit_webhook">Modifier le Webhook</string>
     <string name="webhooks">Webhooks</string>
     <string name="add_webhook">Ajouter un webhook</string>
     <string name="pick_a_date">Choisir une date</string>
     <string name="add">Ajouter</string>
-    <string name="webhook_endpoint_section">Point de terminaison</string>
+    <string name="webhook_endpoint_section">Endpoint</string>
     <string name="webhook_name_label">Nom du Webhook</string>
     <string name="webhook_url_label">URL du Webhook</string>
     <string name="webhook_data_types_section">Types de données</string>
     <string name="webhook_data_types_desc">Sélectionnez les données qui sont envoyées à votre terminal.</string>
     <string name="webhook_time_range_section">Intervalle de temps</string>
     <string name="webhook_optional_headers">En-têtes optionnels</string>
-    <string name="datatype_summary">Résumé</string>
+    <string name="datatype_summary">summary</string>
     <string name="datatype_transactions">opérations</string>
-    <string name="datatype_budgets">Budgets</string>
+    <string name="datatype_budgets">budgets</string>
     <string name="datatype_accounts">Comptes</string>
     <string name="datatype_subscriptions">abonnements</string>
     <string name="range_since_last_success">depuis le dernier succès</string>
@@ -590,7 +644,7 @@
     <string name="sync_now">Synchroniser maintenant</string>
     <string name="sync_now_desc">Déclencher la livraison pour tous les profils activés</string>
     <string name="sync_schedule_title">Synchroniser le calendrier</string>
-    <string name="webhook_profiles_title">Profils</string>
+    <string name="webhook_profiles_title">Profiles</string>
     <string name="no_webhook_profiles">Aucun profil de webhook pour le moment</string>
     <string name="no_webhook_profiles_desc">Créez un compte pour commencer à synchroniser les résumés, transactions, budgets, comptes ou abonnements.</string>
     <string name="create_webhook_desc">Créer un nouveau profil de webhook</string>
@@ -614,6 +668,7 @@
     <string name="pick_a_time">Choisir une heure</string>
     <string name="ok">Ok</string>
     <string name="create_rule">Créer une règle</string>
+    <!-- Account UI & Details -->
     <string name="edit_details">Modifier les détails</string>
     <string name="merge_account">Fusionner le compte</string>
     <string name="history">Historique</string>
@@ -625,19 +680,34 @@
     <string name="view_details">Voir les détails</string>
     <string name="none_manual_entry">Aucun (entrée manuelle)</string>
     <string name="no_accounts_found">Aucun compte trouvé</string>
+    <!-- Attachments Section -->
     <string name="attachments">Fichiers joints</string>
     <string name="add_attachment">Ajouter une pièce jointe</string>
     <string name="file_missing">Fichier manquant</string>
     <string name="missing">Manquant</string>
     <string name="selected">Sélectionnés</string>
+    <plurals name="attachments_count">
+        <item quantity="one">Fichier %1$d</item>
+        <item quantity="other">Fichiers %1$d</item>
+    </plurals>
+    <!-- Categories Sheet -->
+    <plurals name="subcategory_count_plural">
+        <item quantity="one">Sous-catégorie %1$d</item>
+        <item quantity="other">Sous-catégories %1$d</item>
+    </plurals>
     <string name="search_placeholder_fruits">Chercher des fruits</string>
     <string name="search_placeholder_shopping">Rechercher dans les courses</string>
     <string name="search_placeholder_fitness">Chercher une remise en forme</string>
     <string name="search_placeholder_sports">Rechercher dans le sport</string>
+    <!-- Collapsible & Filter Rows -->
     <string name="more_filters">Plus de filtres</string>
     <string name="more_filters_active_format">Plus de filtres (%1$d actif)</string>
+    <string name="collapse_cd">Réduire</string>
+    <string name="expand_cd">Agrandir</string>
+    <!-- Color Picker -->
     <string name="colors">Couleurs</string>
     <string name="color_picker_button_desc">Sélecteur de couleurs personnalisé</string>
+    <!-- Currencies & Bottom Sheets -->
     <string name="search_currencies_placeholder">Rechercher dans les devises...</string>
     <string name="currency_not_available">Devise non disponible</string>
     <string name="view_all_currencies">Voir toutes les devises</string>
@@ -649,11 +719,13 @@
     <string name="last_updated_format">Dernière mise à jour : %1$s</string>
     <string name="currency_code_symbol_format">%1$s (%2$s)</string>
     <string name="exchange_rate_formula_format">1 %1$s = %2$s %3$s</string>
+    <!-- Selected Currency Localized Names -->
     <string name="currency_inr_name">Roupie indienne (&lt;unk&gt; )</string>
     <string name="currency_usd_name">Dollar US ($)</string>
     <string name="currency_aed_name">Dirham des Émirats arabes unis (AED)</string>
     <string name="currency_npr_name">Nepalese Rupee (Rs)</string>
-    <string name="currency_etb_name">Birr éthiopien (ብር)</string>
+    <string name="currency_etb_name">Ethiopian Birr (ብር)</string>
+    <!-- Custom Billing Cycles -->
     <string name="repeat_desc">Répéter</string>
     <string name="set_to_forever">Régler sur pour toujours</string>
     <string name="billing_unit_day">Jour</string>
@@ -662,9 +734,15 @@
     <string name="billing_unit_year">Année</string>
     <string name="forever">Pour toujours</string>
     <string name="until_date_format">Jusqu\'à %1$s</string>
+    <!-- Date Selection -->
     <string name="select_date_range">Sélectionnez la plage de dates</string>
+    <!-- Delete Dialogs & Warnings -->
     <string name="delete_transaction_title">Supprimer la transaction</string>
     <string name="delete_transaction_confirm">Êtes-vous sûr de vouloir supprimer cette opération ? Cette action ne peut pas être annulée.</string>
+    <plurals name="delete_transactions_title">
+        <item quantity="one">Supprimer la transaction %1$d?</item>
+        <item quantity="other">Supprimer les transactions %1$d?</item>
+    </plurals>
     <string name="delete_multiple_transactions_confirm">Cette action est irréversible. Les transactions sélectionnées seront définitivement supprimées et ne pourront pas être récupérées.</string>
     <string name="delete_account_title">Supprimer le compte ?</string>
     <string name="delete_account_confirm">Êtes-vous sûr de vouloir supprimer ce compte ?</string>
@@ -683,12 +761,18 @@
     <string name="delete_subscription_confirm">Êtes-vous sûr de vouloir supprimer \u2018%1$s\u2019? Cela le supprimera définitivement de votre liste d\'abonnements.</string>
     <string name="delete_subcategory_title">Supprimer la sous-catégorie ?</string>
     <string name="delete_subcategory_confirm">Êtes-vous sûr de vouloir supprimer \u2018%1$s\u2019? Cette action ne peut pas être annulée.</string>
+    <!-- User & Profile Greeting Card -->
     <string name="profile_desc">Image de profil</string>
     <string name="greeting_morning">Bonjour</string>
     <string name="greeting_afternoon">Bonjour</string>
     <string name="greeting_evening">Bonsoir</string>
     <string name="greeting_night">Bonne nuit</string>
     <string name="month_status_last_day">Dernier jour de %1$s</string>
+    <plurals name="month_status_days_left_format">
+        <item quantity="one">%1$d day left in %2$s</item>
+        <item quantity="other">%1$d days left in %2$s</item>
+    </plurals>
+    <!-- Rules Dialogs -->
     <string name="reset_rules_title">Réinitialiser les règles</string>
     <string name="reset_rules_confirm">Réinitialiser toutes les règles aux paramètres par défaut ? Vos paramètres personnalisés seront perdus.</string>
     <string name="delete_rule_title">Supprimer la règle</string>
@@ -705,13 +789,22 @@
     <string name="transactions_updated_format">Transactions mises à jour : %1$d</string>
     <string name="transactions_blocked_format">Transactions bloquées (soft deleted) : %1$d</string>
     <string name="errors_count_format">Erreurs : %1$d</string>
+    <!-- SMS Scanning & Workers -->
     <string name="scanning_sms_messages_title">Analyse des messages SMS</string>
     <string name="cancel_scan">Annuler le scan</string>
     <string name="all_messages_processed">Tous les messages traités !</string>
-    <string name="processed_messages_format">Traitement de %1$d sur %2$d messages</string>
+    <string name="processed_messages_format">Processed %1$d of %2$d messages</string>
+    <plurals name="transactions_parsed_format">
+        <item quantity="one">%1$d transaction parsed</item>
+        <item quantity="other">%1$d transactions analysées</item>
+    </plurals>
+    <plurals name="saved_transactions_format">
+        <item quantity="one">%1$d sauvegardé</item>
+        <item quantity="other">%1$d sauvegardé</item>
+    </plurals>
     <string name="duration_hours_minutes">%1$dh %2$dm</string>
-    <string name="duration_minutes_seconds">%1$dm %2$2s</string>
-    <string name="duration_seconds">%1$2s</string>
+    <string name="duration_minutes_seconds">%1$dm %2$ds</string>
+    <string name="duration_seconds">%1$ds</string>
     <string name="time_left_format">~%1$s restant</string>
     <string name="batch_progress_format">Lot %1$d de %2$d</string>
     <string name="scan_completed_success">Scan terminé avec succès !</string>
@@ -719,7 +812,9 @@
     <string name="scan_cancelled">Analyse annulée</string>
     <string name="starting_scan">Démarrage de l\'analyse...</string>
     <string name="scanning_sms_format">Analyse des SMS: %1$d/%2$d</string>
+    <!-- Time Selection -->
     <string name="select_time">Sélectionner l\'heure</string>
+    <!-- Transactions, Indicators & Categories -->
     <string name="recurring">Récurrents</string>
     <string name="balance_after_format">Balon : %1$s</string>
     <string name="description_indicator_desc">A une description</string>
@@ -728,262 +823,230 @@
     <string name="type_investment">Investissement</string>
     <string name="type_income">Revenu</string>
     <string name="type_expense">Dépenses</string>
-    <string name="estimated_amount_format">estimé %1$s</string>
+    <string name="type_balance_update">Balance Update</string>
+    <!-- Estimated amounts -->
+    <string name="estimated_amount_format">est. %1$s</string>
     <string name="uncategorized">Non catégorisé</string>
     <string name="net">NT</string>
     <string name="processing">Traitement de…</string>
-    <string name="language">Langue</string>
-    <string name="language_subtitle">Changer la langue de l\'application</string>
-    <string name="select_language">Sélectionner la langue</string>
+    <!-- Language Selection -->
+    <string name="language">Language</string>
+    <string name="language_subtitle">Change application language</string>
+    <string name="select_language">Select Language</string>
+    <!-- Settings Screen -->
     <string name="transactions_count_short">%1$d Transactions</string>
-    <string name="appearances">Apparences</string>
-    <string name="appearances_subtitle">Paramètres de personnalisation de l\'application</string>
-    <string name="accounts_subtitle">Ajouter des comptes et mettre à jour les soldes</string>
-    <string name="budgets_subtitle">Définir et gérer les limites de dépenses mensuelles</string>
-    <string name="categories_subtitle">Gérer les catégories de dépenses et de revenus</string>
-    <string name="smart_rules_subtitle">Catégorisation automatique des transactions</string>
-    <string name="data_privacy_subtitle">Gérer vos paramètres de données et de confidentialité</string>
-    <string name="ai_chat_assistant">Assistant de chat IA</string>
-    <string name="ai_chat_subtitle_not_downloaded">Télécharger le modèle Qwen 2.5 (%1$d MB)</string>
-    <string name="ai_chat_subtitle_downloading">Téléchargement… %1$d%%</string>
-    <string name="ai_chat_subtitle_paused">Téléchargement en pause. Appuyez pour reprendre.</string>
-    <string name="ai_chat_subtitle_completed">Qwen prêt pour la discussion</string>
-    <string name="ai_chat_subtitle_failed">Échec du téléchargement. Appuyez pour réessayer.</string>
-    <string name="ai_chat_subtitle_insufficient_space">Espace de stockage insuffisant</string>
+    <string name="appearances">Appearances</string>
+    <string name="appearances_subtitle">App\'s personalization settings</string>
+    <string name="accounts_subtitle">Add accounts and update balances</string>
+    <string name="budgets_subtitle">Set and manage monthly spending limits</string>
+    <string name="categories_subtitle">Manage expense and income categories</string>
+    <string name="smart_rules_subtitle">Automatic transaction categorization</string>
+    <string name="data_privacy_subtitle">Manage your data and privacy settings</string>
+    <string name="ai_chat_assistant">AI Chat Assistant</string>
+    <string name="ai_chat_subtitle_not_downloaded">Download Qwen 2.5 model (%1$d MB)</string>
+    <string name="ai_chat_subtitle_downloading">Downloading… %1$d%%</string>
+    <string name="ai_chat_subtitle_paused">Download paused. Tap to resume.</string>
+    <string name="ai_chat_subtitle_completed">Qwen ready for chat</string>
+    <string name="ai_chat_subtitle_failed">Download failed. Tap to retry.</string>
+    <string name="ai_chat_subtitle_insufficient_space">Not enough storage space</string>
     <string name="notifications">Notifications</string>
-    <string name="notifications_subtitle">Gérer les paramètres de notification de rappel</string>
-    <string name="sms_subtitle">Gérer les paramètres SMS</string>
-    <string name="webhooks_subtitle">Synchronisation BYOAPI finance</string>
-    <string name="about_subtitle">Version de l\'application, code source et plus</string>
+    <string name="notifications_subtitle">Manage reminder notification settings</string>
+    <string name="sms_subtitle">Manage SMS settings</string>
+    <string name="webhooks_subtitle">BYOAPI finance sync</string>
+    <string name="about_subtitle">App version, source code and more</string>
+    <!-- Currency Settings -->
     <string name="currency">Devise</string>
-    <string name="currency_subtitle">Taux de change et préférences de devise</string>
+    <string name="currency_subtitle">Exchange rates and currency preferences</string>
     <string name="currency_settings_title">Devise</string>
-    <string name="unified_currency">Devise unifiée</string>
-    <string name="unified_currency_subtitle">Afficher tous les montants dans une seule devise</string>
-    <string name="default_currency">Devise par défaut</string>
-    <string name="default_currency_subtitle">Pré-sélectionner la devise pour les nouvelles entrées</string>
-    <string name="display_currency">Devise affichée</string>
-    <string name="default_label">Par défaut</string>
+    <string name="unified_currency">Unified Currency</string>
+    <string name="unified_currency_subtitle">Display all amounts in a single currency</string>
+    <string name="default_currency">Default Currency</string>
+    <string name="default_currency_subtitle">Pre-select currency for new entries</string>
+    <string name="display_currency">Display Currency</string>
+    <string name="default_label">Default</string>
     <string name="none">Aucun</string>
-    <string name="rates_info_subtitle">Voir les taux de change pour votre devise de base</string>
+    <string name="rates_info_subtitle">View exchange rates for your base currency</string>
+    <!-- Custom Currency Settings -->
     <string name="search_currencies">Rechercher dans les devises...</string>
     <string name="rates_relative_to">Tarifs par rapport à %1$s</string>
     <string name="last_updated">Dernière mise à jour : %1$s</string>
-    <string name="custom_rate">Taux personnalisé</string>
-    <string name="custom_rate_set">Taux personnalisé défini. Appuyez sur Réinitialiser pour revenir au taux API.</string>
-    <string name="add_custom_currency">Ajouter une devise personnalisée</string>
-    <string name="custom_currency">Devise personnalisée</string>
-    <string name="currency_country_name">Nom de la devise</string>
-    <string name="eg_test_country">ex. Pays Test</string>
-    <string name="currency_code">Code de la devise</string>
-    <string name="eg_tst">ex. TST</string>
-    <string name="currency_symbol">Symbole de la devise</string>
-    <string name="eg_tsymbol">ex. T$</string>
-    <string name="exchange_rate">Taux de change</string>
+    <string name="custom_rate">Custom rate</string>
+    <string name="custom_rate_set">Custom rate set. Tap Reset to revert to API rate.</string>
+    <string name="add_custom_currency">Add Custom Currency</string>
+    <string name="custom_currency">Custom Currency</string>
+    <string name="currency_country_name">Currency name</string>
+    <string name="eg_test_country">e.g. Test Country</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="eg_tst">e.g. TST</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="eg_tsymbol">e.g. T$</string>
+    <string name="exchange_rate">Exchange Rate</string>
     <string name="exchange_rate_format">1 %1$s = %2$s %3$s</string>
-    <string name="please_fill_all_fields">Veuillez remplir tous les champs avec des données valides.</string>
-    <string name="base_currency_hint">Base = devise par défaut ou devise du compte principal</string>
-    <string name="save_currency">Enregistrer la devise</string>
-    <string name="currency_name_hint">Dollar américain, Roupie indienne ..</string>
+    <string name="please_fill_all_fields">Please fill all fields with valid data.</string>
+    <string name="base_currency_hint">Base = default currency or main account\'s currency</string>
+    <string name="save_currency">Save Currency</string>
+    <string name="currency_name_hint">US Dollar, India Rupee ..</string>
     <string name="currency_code_hint">USD, INR, EUR ...</string>
-    <string name="currency_symbols_hint">$, ₹, €, £, ₽</string>
-    <string name="exchange_rate_hint">1 Base = X monnaie personnalisée</string>
+    <string name="currency_symbols_hint">$,₹,€,£,₽</string>
+    <string name="exchange_rate_hint">1 Base = X Custom currency</string>
     <string name="exchange_rates_notice_title">Avis de taux de change</string>
-    <string name="exchange_rates_notice_text">Les taux de change affichés dans cette application sont uniquement à titre d\'information et ne doivent pas être utilisés pour des décisions d\'investissement. Ces taux sont des estimations et peuvent ne pas refléter les taux réels. En utilisant cette application, vous reconnaissez que vous comprenez et acceptez ces limitations.</string>
-    <string name="custom_label">PERSONNALISÉ</string>
-    <string name="time_period_this_month">Ce mois-ci</string>
-    <string name="time_period_last_month">Le mois dernier</string>
-    <string name="time_period_current_fy">Exercice en cours</string>
-    <string name="time_period_all_time">Depuis le début</string>
-    <string name="time_period_custom_range">Plage personnalisée</string>
-    <string name="type_all">Tout</string>
-    <string name="type_credit">Crédit</string>
-    <string name="duplicate_transaction">Transaction en double</string>
-    <string name="transaction_duplicated">Transaction dupliquée</string>
-    <string name="share_receipt">Partager le reçu</string>
-    <string name="webhook_mode">Webhooks</string>
-    <string name="webhook_mode_desc">Activer la synchronisation du webhook BYOAPI</string>
-    <string name="token_info">Informations sur le jeton de chat</string>
-    <string name="token_info_desc">Afficher les informations techniques dans le chat</string>
-    <string name="type_balance_update">Mise à jour du solde</string>
-    <string name="new_chat">Nouveau chat</string>
-    <string name="chat_history">Historique des chats</string>
-    <string name="appearance_title">Apparence</string>
+    <string name="exchange_rates_notice_text">The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app you acknowledge that you understand and accept these limitations.</string>
+    <string name="custom_label">CUSTOM</string>
+    <string name="new_chat">New Chat</string>
+    <string name="chat_history">Chat History</string>
+    <!-- AppearanceScreen -->
+    <string name="appearance_title">Appearance</string>
     <string name="theme_system">Système</string>
-    <string name="theme_light">Clair</string>
-    <string name="theme_dark">Sombre</string>
-    <string name="style_dynamic">Dynamique</string>
-    <string name="style_dynamic_sub">Couleurs du fond d\'écran</string>
-    <string name="style_default">Par défaut</string>
-    <string name="style_default_sub">Couleurs par défaut</string>
-    <string name="amoled_black">Noir AMOLED</string>
-    <string name="amoled_black_desc">Utiliser un fond noir pur pour un contraste plus profond</string>
-    <string name="blur_effects">Effets de flou</string>
-    <string name="blur_effects_desc">Activer les effets de flou glassmorphism dans les composants de l\'interface</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="style_dynamic">Dynamic</string>
+    <string name="style_dynamic_sub">Wallpaper Colors</string>
+    <string name="style_default">Default</string>
+    <string name="style_default_sub">Default Colors</string>
+    <string name="amoled_black">Amoled Black</string>
+    <string name="amoled_black_desc">Use pure black background for deeper contrast</string>
+    <string name="blur_effects">Blur Effects</string>
+    <string name="blur_effects_desc">Enable glassmorphism blur effects in UI components</string>
     <string name="logo_original">Original</string>
-    <string name="logo_anarchy">Anarchie</string>
-    <string name="logo_comic">Bande dessinée</string>
+    <string name="logo_anarchy">Anarchy</string>
+    <string name="logo_comic">Comic</string>
     <string name="logo_zenith">Zenith</string>
     <string name="logo_monochrome">Monochrome</string>
     <string name="navigation_style">Navigation</string>
-    <string name="nav_floating">Flottante</string>
-    <string name="nav_floating_sub">Moderne et élégante</string>
-    <string name="nav_normal">Normale</string>
+    <string name="nav_floating">Floating</string>
+    <string name="nav_floating_sub">Modern &amp; Sleek</string>
+    <string name="nav_normal">Normal</string>
     <string name="nav_normal_sub">Standard M3</string>
-    <string name="hide_nav_labels">Masquer les étiquettes de navigation</string>
-    <string name="hide_nav_labels_desc">Masquer les étiquettes dans la barre de navigation</string>
-    <string name="hide_pill_indicator">Masquer l\'indicateur de sélection</string>
-    <string name="hide_pill_indicator_desc">Masquer l\'indicateur de sélection dans la barre de navigation</string>
-    <string name="fonts_title">Polices</string>
+    <string name="hide_nav_labels">Hide Navigation Labels</string>
+    <string name="hide_nav_labels_desc">Hide labels in the navigation bar</string>
+    <string name="hide_pill_indicator">Hide Pill Indicator</string>
+    <string name="hide_pill_indicator_desc">Hide the selection indicator in the navigation bar</string>
+    <string name="fonts_title">Fonts</string>
     <string name="font_default_sub">Système</string>
     <string name="font_snpro">SN Pro</string>
     <string name="font_snpro_sub">Modern Mono</string>
-    <string name="quick_templates">Modèles rapides</string>
-    <string name="rule_name_label">Nom de la règle</string>
-    <string name="rule_name_placeholder">par ex., Dépenses alimentaires inférieures à ₹200</string>
-    <string name="description_placeholder">Que fait cette règle ?</string>
+    <!-- CreateRuleScreen -->
+    <string name="quick_templates">Quick Templates</string>
+    <string name="rule_name_label">Rule Name</string>
+    <string name="rule_name_placeholder">e.g., Food expenses under ₹200</string>
+    <string name="description_placeholder">What does this rule do?</string>
     <string name="conditions_title">Conditions</string>
     <string name="add_condition">Ajouter</string>
     <string name="condition_n_format">Condition %1$d</string>
-    <string name="remove_condition_cd">Supprimer la condition</string>
-    <string name="field_label">Champ</string>
-    <string name="value_label">Valeur</string>
+    <string name="remove_condition_cd">Remove Condition</string>
+    <string name="field_label">Field</string>
+    <string name="value_label">Value</string>
     <string name="field_amount">Montant</string>
-    <string name="field_merchant">Commerçant</string>
+    <string name="field_merchant">Marchand</string>
     <string name="field_category">Catégorie</string>
-    <string name="field_sms_text">Texte SMS</string>
-    <string name="field_transaction_type">Type de transaction</string>
+    <string name="field_sms_text">SMS Text</string>
+    <string name="field_transaction_type">Transaction Type</string>
     <string name="field_subcategory">Sous-catégorie</string>
     <string name="field_bank_name">Nom de la banque</string>
-    <string name="field_default">Champ</string>
-    <string name="then_title">Alors</string>
-    <string name="action_type_label">Type d\'action</string>
-    <string name="action_block_transaction">Bloquer la transaction</string>
-    <string name="action_set_field">Définir le champ</string>
-    <string name="action_clear_field">Effacer le champ</string>
-    <string name="action_set_category">Définir la catégorie</string>
-    <string name="action_set_subcategory">Définir la sous-catégorie</string>
-    <string name="action_set_merchant">Définir le nom du commerçant</string>
-    <string name="action_set_type">Définir le type de transaction</string>
+    <string name="field_default">Field</string>
+    <string name="then_title">Then</string>
+    <string name="action_type_label">Action Type</string>
+    <string name="action_block_transaction">Block Transaction</string>
+    <string name="action_set_field">Set Field</string>
+    <string name="action_clear_field">Clear Field</string>
+    <string name="action_set_category">Set Category</string>
+    <string name="action_set_subcategory">Set Subcategory</string>
+    <string name="action_set_merchant">Set Merchant Name</string>
+    <string name="action_set_type">Set Transaction Type</string>
     <string name="action_label">Action</string>
-    <string name="block_message">Les transactions correspondant à cette règle seront bloquées et non enregistrées</string>
-    <string name="choose_category">Choisir la catégorie</string>
-    <string name="preset_block_otps">Bloquer les OTP</string>
-    <string name="preset_block_small">Bloquer les petits montants</string>
-    <string name="preset_small_food">Petits montants → Nourriture</string>
-    <string name="preset_standardize">Standardiser le commerçant</string>
-    <string name="preset_mark_income">Marquer comme revenu</string>
-    <string name="notification_access">Accès aux notifications</string>
-    <string name="bank_push_notifications">Notifications Push de la Banque</string>
-    <string name="notification_access_active">L\'accès aux notifications est actif</string>
-    <string name="notification_access_desc">Activez pour détecter les transactions bancaires à partir des notifications push</string>
-    <string name="notification_access_required">Accès aux notifications requis</string>
-    <string name="notification_access_required_desc">Pour détecter automatiquement les transactions bancaires en temps réel, Cashiro nécessite l\'accès aux notifications. Il s\'agit d\'une autorisation au niveau du système.</string>
-    <string name="how_to_enable">Comment activer :</string>
-    <string name="step_1">Appuyez sur le bouton \'Ouvrir les paramètres\' ci-dessous.</string>
-    <string name="step_2">Trouvez \'Cashiro\' dans la liste des applications.</string>
-    <string name="step_3">Activez \'Autoriser l\'accès aux notifications\'.</string>
-    <string name="open_settings">Ouvrir les paramètres</string>
-    <string name="scan_settings">Paramètres de balayage</string>
-    <string name="remind_transactions">Rappeler les transactions</string>
-    <string name="remind_transactions_desc">Recevez des rappels pour scanner de nouveaux messages</string>
-    <string name="alert_time">Heure d\'alerte</string>
-    <string name="upcoming_transactions_section">Transactions à venir</string>
-    <string name="upcoming_transactions_desc">Recevez des rappels pour les paiements à venir</string>
-    <string name="test_notification_alerts">Tester les alertes de notification</string>
-    <string name="test_notification_alerts_desc">Envoyer des notifications de test périodiquement</string>
-    <string name="sample_data">Données d\'exemple</string>
-    <string name="sample_data_desc">Créer des comptes et transactions factices</string>
-    <string name="home_title">Accueil</string>
-    <string name="full_resync">Resynchronisation complète</string>
-    <string name="full_resync_desc">Cela va retraiter tous les messages SMS depuis le début. Utilisez ceci pour corriger les problèmes causés par les parseurs bancaires mis à jour.
-
-Cela peut prendre quelques secondes selon l\'historique de vos messages.</string>
-    <string name="resync_all">Resynchroniser tout</string>
-    <string name="sync_sms_cd">Synchroniser les transactions SMS</string>
-    <string name="add_transaction_subscription_cd">Ajouter une transaction ou un abonnement</string>
-    <string name="selected_cd">Sélectionné</string>
-    <string name="net_worth_label">Valeur nette</string>
-    <string name="this_month_lbl">CE MOIS</string>
-    <string name="this_year_lbl">CETTE ANNÉE</string>
-    <string name="percent_this_month_format">%1$s%2$s%% ce mois-ci</string>
-    <string name="app_locked_title">Cashiro est verrouillé</string>
-    <string name="authenticate_desc">Authentifiez-vous pour accéder à vos données de dépenses</string>
-    <string name="unlock">Déverrouiller</string>
-    <string name="biometric_unavailable_title">Authentification biométrique non disponible</string>
-    <string name="biometric_setup_desc">Veuillez désactiver le verrouillage de l\'application dans les paramètres de l\'appareil ou configurer l\'authentification biométrique.</string>
-    <string name="immediate_locking">verrouillage immédiat</string>
-    <string name="minute_timeout_format">Délai d\'attente de %1$d minute(s)</string>
-    <string name="data_protected_format">Vos données sont protégées avec %1$s</string>
-    <string name="today_lbl">Aujourd\'hui</string>
-    <string name="yesterday_lbl">Hier</string>
-    <string name="this_week_lbl">Cette semaine</string>
-    <string name="earlier_lbl">Plus tôt</string>
-    <string name="sort_date_newest">Les plus récents d\'abord</string>
-    <string name="sort_date_oldest">Les plus anciens d\'abord</string>
-    <string name="sort_amount_highest">Montant le plus élevé</string>
-    <string name="sort_amount_lowest">Montant le plus bas</string>
-    <string name="sort_merchant_az">Commerçant (A-Z)</string>
-    <string name="sort_merchant_za">Commerçant (Z-A)</string>
-    <string name="collapse_cd">Réduire</string>
-    <string name="expand_cd">Développer</string>
+    <string name="block_message">Transactions matching this rule will be blocked and not saved</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="preset_block_otps">Block OTPs</string>
+    <string name="preset_block_small">Block Small Amounts</string>
+    <string name="preset_small_food">Small amounts → Food</string>
+    <string name="preset_standardize">Standardize Merchant</string>
+    <string name="preset_mark_income">Mark as Income</string>
+    <!-- NotificationScreen -->
+    <string name="notification_access">Notification Access</string>
+    <string name="bank_push_notifications">Bank Push Notifications</string>
+    <string name="notification_access_active">Notification access is active</string>
+    <string name="notification_access_desc">Enable to detect bank transactions from push notifications</string>
+    <string name="notification_access_required">Notification Access Required</string>
+    <string name="notification_access_required_desc">To automatically detect bank transactions in real-time, Cashiro requires notification access. This is a system-level permission.</string>
+    <string name="how_to_enable">How to enable:</string>
+    <string name="step_1">Tap the \'Open Settings\' button below.</string>
+    <string name="step_2">Find \'Cashiro\' in the list of applications.</string>
+    <string name="step_3">Toggle \'Allow notification access\' to enabled.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="scan_settings">Scan Settings</string>
+    <string name="remind_transactions">Remind Transactions</string>
+    <string name="remind_transactions_desc">Get reminders to scan new messages</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="upcoming_transactions_section">Upcoming Transactions</string>
+    <string name="upcoming_transactions_desc">Get reminders for upcoming payments</string>
+    <!-- DeveloperScreen -->
+    <string name="test_notification_alerts">Test Notification Alerts</string>
+    <string name="test_notification_alerts_desc">Send test notifications periodically</string>
+    <string name="sample_data">Sample Data</string>
+    <string name="sample_data_desc">Create dummy accounts and transactions</string>
+    <!-- BottomNavItem -->
+    <string name="home_title">Home</string>
+    <!-- CashiroNavHost -->
+    <string name="full_resync">Full Resync</string>
+    <string name="full_resync_desc">This will reprocess all SMS messages from scratch. Use this to fix issues caused by updated bank parsers.\n\nThis may take a few seconds depending on your message history.</string>
+    <string name="resync_all">Resync All</string>
+    <string name="sync_sms_cd">Sync SMS transactions</string>
+    <string name="options_desc">Options</string>
+    <string name="add_transaction_subscription_cd">Add Transaction or Subscription</string>
+    <!-- ColorPickerContent -->
+    <string name="selected_cd">Sélectionnés</string>
+    <!-- BalanceCard -->
+    <string name="net_worth_label">Net worth</string>
+    <string name="this_month_lbl">THIS MONTH</string>
+    <string name="this_year_lbl">THIS YEAR</string>
+    <string name="percent_this_month_format">%1$s%2$s%% this month</string>
+    <!-- AppLockScreen -->
+    <string name="app_locked_title">Cashiro is Locked</string>
+    <string name="authenticate_desc">Authenticate to access your expense data</string>
+    <string name="unlock">Unlock</string>
+    <string name="biometric_unavailable_title">Biometric authentication unavailable</string>
+    <string name="biometric_setup_desc">Please disable app lock in device settings or set up biometric authentication.</string>
+    <string name="immediate_locking">immediate locking</string>
+    <string name="minute_timeout_format">%1$d minute timeout</string>
+    <string name="data_protected_format">Your data is protected with %1$s</string>
+    <!-- TransactionsState -->
+    <string name="today_lbl">Today</string>
+    <string name="yesterday_lbl">Yesterday</string>
+    <string name="this_week_lbl">This Week</string>
+    <string name="earlier_lbl">Earlier</string>
+    <string name="sort_date_newest">Newest First</string>
+    <string name="sort_date_oldest">Oldest First</string>
+    <string name="sort_amount_highest">Highest Amount</string>
+    <string name="sort_amount_lowest">Lowest Amount</string>
+    <string name="sort_merchant_az">Merchant (A-Z)</string>
+    <string name="sort_merchant_za">Merchant (Z-A)</string>
+    <!-- AttachmentSection -->
     <string name="add_attachment_cd">Ajouter une pièce jointe</string>
-    <string name="remove_cd">Supprimer</string>
-    <string name="receipt">Reçu</string>
-    <string name="transaction_info">Infos sur la transaction</string>
-    <string name="split_transaction">Diviser</string>
-    <string name="manage_transaction">Gérer la transaction</string>
-    <string name="view_transaction">Voir la transaction</string>
-    <string name="mark_as">Marquer comme</string>
-    <string name="no_description">Pas de description</string>
-    <string name="no_attachments">Aucune pièce jointe</string>
-    <string name="this_transaction">Cette transaction</string>
-    <string name="err_amount_required">Le montant est requis</string>
-    <string name="err_invalid_amount">Montant invalide</string>
-    <string name="err_amount_positive">Le montant doit être supérieur à 0</string>
-    <string name="err_merchant_required">Le commerçant/la description est requis(e)</string>
-    <string name="err_too_short">Trop court</string>
-    <string name="err_category_required">La catégorie est requise</string>
-    <string name="err_service_required">Le nom du service est requis</string>
-    <string name="err_source_target_required">Les comptes source et cible sont requis pour les transferts</string>
-    <string name="err_accounts_different">Les comptes source et cible doivent être différents</string>
-    <string name="err_save_transaction">Échec de l\'enregistrement de la transaction</string>
-    <string name="err_save_subscription">Échec de l\'enregistrement de l\'abonnement</string>
-    <string name="err_subscription_not_found">Abonnement introuvable</string>
+    <string name="remove_cd">Remove</string>
+    <!-- TransactionDetailScreen -->
+    <string name="receipt">Receipt</string>
+    <string name="transaction_info">Transaction Info</string>
+    <string name="split_transaction">Split</string>
+    <string name="manage_transaction">Manage Transaction</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="mark_as">Mark as</string>
+    <string name="no_description">No description</string>
+    <string name="no_attachments">No attachments</string>
+    <string name="this_transaction">This transaction</string>
+    <!-- AddViewModel validation -->
+    <string name="err_amount_required">Amount is required</string>
+    <string name="err_invalid_amount">Invalid amount</string>
+    <string name="err_amount_positive">Amount must be greater than 0</string>
+    <string name="err_merchant_required">Merchant/Description is required</string>
+    <string name="err_too_short">Too short</string>
+    <string name="err_category_required">Category is required</string>
+    <string name="err_service_required">Service name is required</string>
+    <string name="err_source_target_required">Both source and target accounts are required for transfers</string>
+    <string name="err_accounts_different">Source and target accounts must be different</string>
+    <string name="err_save_transaction">Failed to save transaction</string>
+    <string name="err_save_subscription">Failed to save subscription</string>
+    <string name="err_subscription_not_found">Subscription not found</string>
     <string name="am_lbl">AM</string>
     <string name="pm_lbl">PM</string>
-    <string name="merchant_lbl">Commerçant</string>
-    <string name="options_desc">Options</string>
-    <plurals name="licenses_count">
-        <item quantity="one">Licence %1$d</item>
-        <item quantity="other">Licences %1$d</item>
-    </plurals>
-    <plurals name="unrecognized_messages_count">
-        <item quantity="one">%1$d message de banques potentielles</item>
-        <item quantity="other">Messages %1$d provenant de banques potentielles</item>
-    </plurals>
-    <plurals name="attachments_count">
-        <item quantity="one">Fichier %1$d</item>
-        <item quantity="other">Fichiers %1$d</item>
-    </plurals>
-    <plurals name="subcategory_count_plural">
-        <item quantity="one">Sous-catégorie %1$d</item>
-        <item quantity="other">Sous-catégories %1$d</item>
-    </plurals>
-    <plurals name="delete_transactions_title">
-        <item quantity="one">Supprimer la transaction %1$d?</item>
-        <item quantity="other">Supprimer les transactions %1$d?</item>
-    </plurals>
-    <plurals name="month_status_days_left_format">
-        <item quantity="one">%1$d jour restant dans %2$s</item>
-        <item quantity="other">%1$d jours restant dans %2$s</item>
-    </plurals>
-    <plurals name="transactions_parsed_format">
-        <item quantity="one">%1$d transaction analysée</item>
-        <item quantity="other">%1$d transactions analysées</item>
-    </plurals>
-    <plurals name="saved_transactions_format">
-        <item quantity="one">%1$d sauvegardé</item>
-        <item quantity="other">%1$d sauvegardé</item>
-    </plurals>
+    <string name="merchant_lbl">Marchand</string>
 </resources>
