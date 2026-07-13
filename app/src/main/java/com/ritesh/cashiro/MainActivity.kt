@@ -62,6 +62,12 @@ class MainActivity : AppCompatActivity() {
     var editTransactionId by mutableStateOf<Long?>(null)
         private set
 
+    var editAccountBankName by mutableStateOf<String?>(null)
+        private set
+
+    var editAccountLast4 by mutableStateOf<String?>(null)
+        private set
+
     // Initial tab to show in Add Screen (0 for Transaction, 1 for Subscription)
     var addTransactionTab by mutableStateOf<Int?>(null)
         private set
@@ -106,6 +112,12 @@ class MainActivity : AppCompatActivity() {
             CashiroApp(
                 editTransactionId = editTransactionId,
                 onEditComplete = { editTransactionId = null },
+                editAccountBankName = editAccountBankName,
+                editAccountLast4 = editAccountLast4,
+                onAccountEditComplete = {
+                    editAccountBankName = null
+                    editAccountLast4 = null
+                },
                 addTransactionTab = addTransactionTab,
                 addTransactionType = addTransactionType,
                 onAddComplete = { 
@@ -130,6 +142,20 @@ class MainActivity : AppCompatActivity() {
                 val transactionId = intent.getLongExtra(SmsBroadcastReceiver.EXTRA_TRANSACTION_ID, -1)
                 if (transactionId != -1L) {
                     editTransactionId = transactionId
+                }
+            }
+            "com.ritesh.cashiro.action.VIEW_TRANSACTION" -> {
+                val transactionId = intent.getLongExtra("transaction_id", -1)
+                if (transactionId != -1L) {
+                    editTransactionId = transactionId
+                }
+            }
+            "com.ritesh.cashiro.action.VIEW_ACCOUNT" -> {
+                val bankName = intent.getStringExtra("bank_name")
+                val accountLast4 = intent.getStringExtra("account_last4")
+                if (bankName != null && accountLast4 != null) {
+                    editAccountBankName = bankName
+                    editAccountLast4 = accountLast4
                 }
             }
             ACTION_ADD_TRANSACTION -> {

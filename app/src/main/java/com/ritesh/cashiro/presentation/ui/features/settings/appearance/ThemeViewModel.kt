@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.presentation.ui.features.settings.appearance
 
+import android.content.Context
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,16 +11,19 @@ import com.ritesh.cashiro.data.preferences.AccentColor
 import com.ritesh.cashiro.data.preferences.AppIcon
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.ritesh.cashiro.widget.updateCashiroWidgets
 
 @HiltViewModel
 class ThemeViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     val themeUiState: StateFlow<ThemeUiState> = userPreferencesRepository.userPreferences
@@ -48,21 +52,15 @@ class ThemeViewModel @Inject constructor(
         )
 
     fun updateDarkTheme(enabled: Boolean?) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateDarkThemeEnabled(enabled)
-        }
+        updateWidgetAppearance { userPreferencesRepository.updateDarkThemeEnabled(enabled) }
     }
 
     fun updateDynamicColor(enabled: Boolean) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateDynamicColorEnabled(enabled)
-        }
+        updateWidgetAppearance { userPreferencesRepository.updateDynamicColorEnabled(enabled) }
     }
 
     fun updateAmoledMode(enabled: Boolean) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateAmoledMode(enabled)
-        }
+        updateWidgetAppearance { userPreferencesRepository.updateAmoledMode(enabled) }
     }
 
     fun updateNavigationBarStyle(style: NavigationBarStyle) {
@@ -78,15 +76,11 @@ class ThemeViewModel @Inject constructor(
     }
 
     fun updateThemeStyle(style: ThemeStyle) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateThemeStyle(style)
-        }
+        updateWidgetAppearance { userPreferencesRepository.updateThemeStyle(style) }
     }
 
     fun updateAccentColor(color: AccentColor) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateAccentColor(color)
-        }
+        updateWidgetAppearance { userPreferencesRepository.updateAccentColor(color) }
     }
 
     fun updateHideNavigationLabels(hide: Boolean) {
@@ -109,6 +103,13 @@ class ThemeViewModel @Inject constructor(
 
     fun updateAppIcon(icon: AppIcon) = viewModelScope.launch {
         userPreferencesRepository.updateAppIcon(icon)
+    }
+
+    private fun updateWidgetAppearance(updatePreference: suspend () -> Unit) {
+        viewModelScope.launch {
+            updatePreference()
+            updateCashiroWidgets(context)
+        }
     }
 }
 

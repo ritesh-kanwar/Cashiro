@@ -1117,4 +1117,35 @@
     <string name="am_lbl">AM</string>
     <string name="pm_lbl">PM</string>
     <string name="merchant_lbl">Merchant</string>
+
+    <!-- Home-screen widgets -->
+    <string name="widget_overview_label">Cashiro Overview</string>
+    <string name="widget_overview_description">See how much you earned and spent over the last day, 3 days, or week</string>
+    <string name="widget_accounts_label">Cashiro Accounts</string>
+    <string name="widget_accounts_description">Your account balances and latest transactions at a glance</string>
+    <string name="widget_accounts_title">Accounts</string>
+    <string name="widget_income">Income</string>
+    <string name="widget_spent">Spent</string>
+    <string name="widget_range_1d">1D</string>
+    <string name="widget_range_3d">3D</string>
+    <string name="widget_range_1w">1W</string>
+    <string name="widget_hide_amounts">Hide amounts</string>
+    <string name="widget_show_amounts">Show amounts</string>
+    <string name="widget_refresh">Refresh</string>
+    <string name="widget_load_error">Unable to load widget data</string>
+    <string name="widget_load_error_short">Unavailable</string>
+    <string name="widget_retry">Retry</string>
+    <string name="widget_no_transactions">No transactions yet</string>
+    <string name="widget_net">Net</string>
+    <string name="widget_locked_title">Log in to view</string>
+    <string name="widget_locked_subtitle">Unlock app to see balances</string>
+    <string name="widget_config_title">Configure Widget</string>
+    <string name="widget_config_overview_subtitle">Select the time range for your overview</string>
+    <string name="widget_config_select_range">Time Range</string>
+    <string name="widget_config_apply">Apply</string>
+    <string name="widget_config_accounts_subtitle">Filter accounts and categories to display</string>
+    <string name="widget_config_filter_accounts">Accounts</string>
+    <string name="widget_config_filter_accounts_hint">Select accounts to display. Empty selection means all accounts.</string>
+    <string name="widget_config_filter_categories">Categories</string>
+    <string name="widget_config_filter_categories_hint">Select categories to display. Empty selection means all categories.</string>
 </resources>
