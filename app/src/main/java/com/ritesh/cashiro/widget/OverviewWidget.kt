@@ -182,10 +182,16 @@ private fun OverviewContent(context: Context) {
         }
         Spacer(modifier = GlanceModifier.height(8.dp))
 
-        if (accessState != WidgetAccessState.UNLOCKED) {
-            LockedView(context, modifier = GlanceModifier.fillMaxWidth().defaultWeight())
-        } else {
-            when (val state = contentState) {
+        when (accessState) {
+            WidgetAccessState.CHECKING -> Box(
+                modifier = GlanceModifier.fillMaxWidth().defaultWeight(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = GlanceTheme.colors.primary)
+            }
+            WidgetAccessState.LOCKED ->
+                LockedView(context, modifier = GlanceModifier.fillMaxWidth().defaultWeight())
+            WidgetAccessState.UNLOCKED -> when (val state = contentState) {
                 WidgetContentState.Loading -> Box(
                     modifier = GlanceModifier.fillMaxWidth().defaultWeight(),
                     contentAlignment = Alignment.Center,
@@ -266,7 +272,11 @@ private fun CompactOverviewContent(
         )
         Spacer(modifier = GlanceModifier.defaultWeight())
         when {
-            accessState != WidgetAccessState.UNLOCKED -> Text(
+            accessState == WidgetAccessState.CHECKING -> CircularProgressIndicator(
+                color = GlanceTheme.colors.primary,
+                modifier = GlanceModifier.size(18.dp),
+            )
+            accessState == WidgetAccessState.LOCKED -> Text(
                 text = context.getString(R.string.widget_locked_title),
                 style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant, fontSize = 12.sp),
             )

@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.widget
 
+import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
@@ -52,12 +53,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.lifecycle.lifecycleScope
 import com.ritesh.cashiro.R
 import com.ritesh.cashiro.presentation.ui.theme.CashiroTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 object WidgetConfigKeys {
@@ -71,19 +74,7 @@ class OverviewWidgetConfigActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Default result is CANCELED so back press cancels the widget add
-        setResult(RESULT_CANCELED)
-        enableEdgeToEdge()
-
-        val appWidgetId = intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
-
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-            return
-        }
+        val appWidgetId = initializeWidgetConfiguration() ?: return
 
         setContent {
             CashiroTheme {
@@ -98,17 +89,13 @@ class OverviewWidgetConfigActivity : ComponentActivity() {
 
     private fun confirmOverviewWidget(appWidgetId: Int, range: OverviewRange) {
         lifecycleScope.launch {
-            val glanceId = GlanceAppWidgetManager(this@OverviewWidgetConfigActivity)
-                .getGlanceIdBy(appWidgetId)
-            updateAppWidgetState(this@OverviewWidgetConfigActivity, glanceId) { prefs ->
-                prefs[WidgetStateKeys.overviewRange] = range.prefValue
-                prefs[WidgetConfigKeys.overviewRange] = range.prefValue
+            completeWidgetConfiguration(appWidgetId) { glanceId ->
+                updateAppWidgetState(this@OverviewWidgetConfigActivity, glanceId) { prefs ->
+                    prefs[WidgetStateKeys.overviewRange] = range.prefValue
+                    prefs[WidgetConfigKeys.overviewRange] = range.prefValue
+                }
+                OverviewWidget().update(this@OverviewWidgetConfigActivity, glanceId)
             }
-            OverviewWidget().update(this@OverviewWidgetConfigActivity, glanceId)
-
-            val result = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            setResult(RESULT_OK, result)
-            finish()
         }
     }
 }
@@ -118,18 +105,7 @@ class AccountsWidgetConfigActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setResult(RESULT_CANCELED)
-        enableEdgeToEdge()
-
-        val appWidgetId = intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
-
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-            return
-        }
+        val appWidgetId = initializeWidgetConfiguration() ?: return
 
         setContent {
             CashiroTheme {
@@ -148,26 +124,56 @@ class AccountsWidgetConfigActivity : ComponentActivity() {
         categories: Set<String>,
     ) {
         lifecycleScope.launch {
-            val glanceId = GlanceAppWidgetManager(this@AccountsWidgetConfigActivity)
-                .getGlanceIdBy(appWidgetId)
-            updateAppWidgetState(this@AccountsWidgetConfigActivity, glanceId) { prefs ->
-                if (accountKeys.isNotEmpty()) {
-                    prefs[WidgetConfigKeys.accountFilterKeys] = accountKeys
-                } else {
-                    prefs.remove(WidgetConfigKeys.accountFilterKeys)
+            completeWidgetConfiguration(appWidgetId) { glanceId ->
+                updateAppWidgetState(this@AccountsWidgetConfigActivity, glanceId) { prefs ->
+                    if (accountKeys.isNotEmpty()) {
+                        prefs[WidgetConfigKeys.accountFilterKeys] = accountKeys
+                    } else {
+                        prefs.remove(WidgetConfigKeys.accountFilterKeys)
+                    }
+                    if (categories.isNotEmpty()) {
+                        prefs[WidgetConfigKeys.categoryFilterKeys] = categories
+                    } else {
+                        prefs.remove(WidgetConfigKeys.categoryFilterKeys)
+                    }
                 }
-                if (categories.isNotEmpty()) {
-                    prefs[WidgetConfigKeys.categoryFilterKeys] = categories
-                } else {
-                    prefs.remove(WidgetConfigKeys.categoryFilterKeys)
-                }
+                AccountsWidget().update(this@AccountsWidgetConfigActivity, glanceId)
             }
-            AccountsWidget().update(this@AccountsWidgetConfigActivity, glanceId)
-
-            val result = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            setResult(RESULT_OK, result)
-            finish()
         }
+    }
+}
+
+private fun ComponentActivity.initializeWidgetConfiguration(): Int? {
+    setResult(Activity.RESULT_CANCELED)
+    enableEdgeToEdge()
+
+    val appWidgetId = intent?.extras?.getInt(
+        AppWidgetManager.EXTRA_APPWIDGET_ID,
+        AppWidgetManager.INVALID_APPWIDGET_ID,
+    ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+    return appWidgetId.takeUnless { it == AppWidgetManager.INVALID_APPWIDGET_ID }
+        ?: run {
+            finish()
+            null
+        }
+}
+
+private suspend fun ComponentActivity.completeWidgetConfiguration(
+    appWidgetId: Int,
+    updateWidget: suspend (GlanceId) -> Unit,
+) {
+    try {
+        val glanceId = GlanceAppWidgetManager(this).getGlanceIdBy(appWidgetId)
+        updateWidget(glanceId)
+        val result = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(Activity.RESULT_OK, result)
+    } catch (error: CancellationException) {
+        throw error
+    } catch (_: Exception) {
+        setResult(Activity.RESULT_CANCELED)
+    } finally {
+        finish()
     }
 }
 

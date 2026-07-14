@@ -68,6 +68,7 @@ class AccountsWidget : GlanceAppWidget() {
             DpSize(250.dp, 110.dp),
             DpSize(250.dp, 180.dp),
             DpSize(250.dp, 300.dp),
+            DpSize(320.dp, 300.dp),
         )
     )
 
@@ -141,7 +142,7 @@ private fun AccountsContent(context: Context) {
             .appWidgetBackground()
             .background(GlanceTheme.colors.widgetBackground)
             .cornerRadius(24.dp)
-            .padding(if (compact) 12.dp else 16.dp)
+            .padding(if (compact) 8.dp else 16.dp)
             .clickable(actionStartActivity<MainActivity>()),
     ) {
         // Header
@@ -169,16 +170,21 @@ private fun AccountsContent(context: Context) {
             Spacer(modifier = GlanceModifier.width(8.dp))
             PrivacyEyeButton(context, hidden, actionRunCallback<ToggleAccountsHiddenAction>())
         }
-        Spacer(modifier = GlanceModifier.height(12.dp))
+        Spacer(modifier = GlanceModifier.height(8.dp))
 
-        if (accessState != WidgetAccessState.UNLOCKED) {
-            LockedView(
+        when (accessState) {
+            WidgetAccessState.CHECKING -> Box(
+                modifier = GlanceModifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = GlanceTheme.colors.primary)
+            }
+            WidgetAccessState.LOCKED -> LockedView(
                 context = context,
                 modifier = GlanceModifier.fillMaxWidth().defaultWeight(),
                 compact = compact,
             )
-        } else {
-            when (val state = contentState) {
+            WidgetAccessState.UNLOCKED -> when (val state = contentState) {
                 WidgetContentState.Loading -> Box(
                     modifier = GlanceModifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -194,7 +200,7 @@ private fun AccountsContent(context: Context) {
                     val loaded = state.value
                     if (loaded.accounts.isNotEmpty()) {
                         AccountBalancesRow(context, loaded.accounts, hidden, maxAccountCards)
-                        if (!compact) Spacer(modifier = GlanceModifier.height(12.dp))
+                        if (!compact) Spacer(modifier = GlanceModifier.height(8.dp))
                     }
                     if (!compact && loaded.transactions.isEmpty()) {
                         Box(
@@ -211,7 +217,7 @@ private fun AccountsContent(context: Context) {
                         }
                     } else if (!compact) {
                         LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                            items(loaded.transactions) { transaction ->
+                            items(loaded.transactions, itemId = { it.id }) { transaction ->
                                 TransactionRow(context, transaction, hidden)
                             }
                         }
@@ -262,7 +268,7 @@ private fun AccountBalancesRow(
                     .defaultWeight()
                     .background(accountBg)
                     .cornerRadius(16.dp)
-                    .padding(horizontal = 10.dp, vertical = 8.dp)
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
                     .clickable(accountClickAction),
             ) {
                 Row(
@@ -318,7 +324,7 @@ private fun AccountBalancesRow(
                         }
                     }
                 }
-                Spacer(modifier = GlanceModifier.height(2.dp))
+                Spacer(modifier = GlanceModifier.height(8.dp))
                 Text(
                     text = if (hidden) {
                         MASKED_AMOUNT
@@ -419,7 +425,7 @@ private fun TransactionRow(context: Context, transaction: TransactionItem, hidde
                 }
             }
 
-            Spacer(modifier = GlanceModifier.width(10.dp))
+            Spacer(modifier = GlanceModifier.width(8.dp))
             Column(modifier = GlanceModifier.defaultWeight()) {
                 Text(
                     text = transaction.merchant,

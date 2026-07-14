@@ -8,6 +8,7 @@ import com.ritesh.cashiro.R
 import com.ritesh.cashiro.data.currency.CurrencyConversionService
 import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
 import com.ritesh.cashiro.data.database.dao.TransactionDao
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import com.ritesh.cashiro.data.repository.AppLockRepository
@@ -99,26 +100,24 @@ suspend fun loadOverviewData(context: Context): OverviewData {
         .getTransactionsBetweenDatesList(widestStart, end)
         .filter { !it.isSample }
 
+    val convertedTransactions = transactions.map { transaction ->
+        transaction to conversionService.convertAmount(
+            amount = transaction.amount,
+            fromCurrency = transaction.currency,
+            toCurrency = baseCurrency,
+        )
+    }
+
     val totalsByRange = OverviewRange.entries.associateWith { range ->
         val rangeStart = today.minusDays(range.days - 1).atStartOfDay()
-        var income = BigDecimal.ZERO
-        var expense = BigDecimal.ZERO
-        for (transaction in transactions) {
-            if (transaction.dateTime < rangeStart) continue
-            val amount = conversionService.convertAmount(
-                amount = transaction.amount,
-                fromCurrency = transaction.currency,
-                toCurrency = baseCurrency,
-            )
-            val updated = addToOverviewTotals(
-                totals = OverviewTotals(income = income, expense = expense),
-                type = transaction.transactionType,
-                amount = amount,
-            )
-            income = updated.income
-            expense = updated.expense
+        convertedTransactions.fold(OverviewTotals(BigDecimal.ZERO, BigDecimal.ZERO)) { totals, converted ->
+            val (transaction, amount) = converted
+            if (transaction.dateTime < rangeStart) {
+                totals
+            } else {
+                addToOverviewTotals(totals, transaction.transactionType, amount)
+            }
         }
-        OverviewTotals(income = income, expense = expense)
     }
 
     return OverviewData(currency = baseCurrency, totalsByRange = totalsByRange)
@@ -179,18 +178,7 @@ suspend fun loadAvailableAccounts(context: Context): List<AccountItem> {
     val entryPoint = widgetEntryPoint(context)
     return entryPoint.accountBalanceDao().getAllLatestBalances().first()
         .filter { !it.isSample }
-        .map { balance ->
-            AccountItem(
-                bankName = balance.bankName,
-                accountLast4 = balance.accountLast4,
-                balance = balance.balance,
-                currency = balance.currency,
-                isCreditCard = balance.isCreditCard,
-                color = balance.color,
-                iconResId = balance.iconResId,
-                iconName = balance.iconName,
-            )
-        }
+        .map(AccountBalanceEntity::toAccountItem)
 }
 
 /** Returns all distinct category names for widget config. */
@@ -219,18 +207,7 @@ suspend fun loadAccountsWidgetData(
             }
         }
         .take(maxAccounts)
-        .map { balance ->
-            AccountItem(
-                bankName = balance.bankName,
-                accountLast4 = balance.accountLast4,
-                balance = balance.balance,
-                currency = balance.currency,
-                isCreditCard = balance.isCreditCard,
-                color = balance.color,
-                iconResId = balance.iconResId,
-                iconName = balance.iconName,
-            )
-        }
+        .map(AccountBalanceEntity::toAccountItem)
 
     val transactions = entryPoint.transactionDao().getAllTransactions().first()
         .asSequence()
@@ -259,6 +236,17 @@ suspend fun loadAccountsWidgetData(
 
     return AccountsWidgetData(accounts = accounts, transactions = transactions)
 }
+
+private fun AccountBalanceEntity.toAccountItem(): AccountItem = AccountItem(
+    bankName = bankName,
+    accountLast4 = accountLast4,
+    balance = balance,
+    currency = currency,
+    isCreditCard = isCreditCard,
+    color = color,
+    iconResId = iconResId,
+    iconName = iconName,
+)
 
 private fun relativeTimeLabel(dateTime: LocalDateTime): String {
     val millis = dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
