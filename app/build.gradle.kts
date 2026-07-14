@@ -215,6 +215,10 @@ dependencies {
     
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
+
+    // Glance (home-screen widgets)
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
     
     // Hilt WorkManager integration
     implementation(libs.androidx.hilt.work)

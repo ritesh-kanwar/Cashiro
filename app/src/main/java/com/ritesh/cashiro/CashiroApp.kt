@@ -16,11 +16,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ritesh.cashiro.presentation.navigation.AppLock
 import com.ritesh.cashiro.presentation.navigation.Home
 import com.ritesh.cashiro.presentation.navigation.CashiroNavHost
 import com.ritesh.cashiro.presentation.navigation.OnBoarding
 import com.ritesh.cashiro.presentation.navigation.Settings
+import com.ritesh.cashiro.presentation.navigation.AccountDetail
 import com.ritesh.cashiro.presentation.navigation.AddTransaction
 import com.ritesh.cashiro.presentation.navigation.TransactionDetail
 import com.ritesh.cashiro.presentation.ui.theme.CashiroTheme
@@ -33,6 +35,9 @@ fun CashiroApp(
     appLockViewModel: AppLockViewModel = hiltViewModel(),
     editTransactionId: Long? = null,
     onEditComplete: () -> Unit = {},
+    editAccountBankName: String? = null,
+    editAccountLast4: String? = null,
+    onAccountEditComplete: () -> Unit = {},
     addTransactionTab: Int? = null,
     addTransactionType: String? = null,
     onAddComplete: () -> Unit = {}
@@ -44,6 +49,8 @@ fun CashiroApp(
     val darkTheme = themeUiState.isDarkTheme ?: isSystemInDarkTheme()
 
     val navController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
     val lifecycleOwner = LocalLifecycleOwner.current
 
     // Observe lifecycle events and refresh lock state when app resumes from background
@@ -70,9 +77,13 @@ fun CashiroApp(
 
     // Observe lock state changes and navigate to lock screen if needed
     // But don't navigate when user is actively in Settings configuring app lock
-    LaunchedEffect(appLockUiState.isLocked, appLockUiState.isLockEnabled) {
-        if (appLockUiState.isLocked && appLockUiState.isLockEnabled) {
-            val currentRoute = navController.currentDestination?.route
+    LaunchedEffect(
+        appLockUiState.isInitialized,
+        appLockUiState.isLocked,
+        appLockUiState.isLockEnabled,
+        currentRoute,
+    ) {
+        if (appLockUiState.isInitialized && appLockUiState.isLocked && appLockUiState.isLockEnabled) {
             // Don't navigate if already on lock screen or in Settings (user is configuring)
             if (currentRoute != AppLock::class.qualifiedName &&
                 currentRoute != Settings::class.qualifiedName) {
@@ -86,9 +97,34 @@ fun CashiroApp(
     }
     
     // Navigate to transaction detail when editTransactionId changes
-    LaunchedEffect(editTransactionId) {
-        editTransactionId?.let { transactionId ->
-            navController.navigate(TransactionDetail(transactionId))
+    LaunchedEffect(editTransactionId, appLockUiState.isInitialized, appLockUiState.isLocked, currentRoute) {
+        if (canOpenExternalDestination(
+                appLockInitialized = appLockUiState.isInitialized,
+                isLocked = appLockUiState.isLocked,
+                isOnLockScreen = currentRoute == AppLock::class.qualifiedName,
+            )) {
+            editTransactionId?.let { transactionId ->
+                navController.navigate(TransactionDetail(transactionId))
+                onEditComplete()
+            }
+        }
+    }
+
+    LaunchedEffect(
+        editAccountBankName,
+        editAccountLast4,
+        appLockUiState.isInitialized,
+        appLockUiState.isLocked,
+        currentRoute,
+    ) {
+        if (canOpenExternalDestination(
+                appLockInitialized = appLockUiState.isInitialized,
+                isLocked = appLockUiState.isLocked,
+                isOnLockScreen = currentRoute == AppLock::class.qualifiedName,
+            ) && editAccountBankName != null && editAccountLast4 != null
+        ) {
+            navController.navigate(AccountDetail(bankName = editAccountBankName, accountLast4 = editAccountLast4))
+            onAccountEditComplete()
         }
     }
 
@@ -116,3 +152,9 @@ fun CashiroApp(
         )
     }
 }
+
+internal fun canOpenExternalDestination(
+    appLockInitialized: Boolean,
+    isLocked: Boolean,
+    isOnLockScreen: Boolean,
+): Boolean = appLockInitialized && !isLocked && !isOnLockScreen

@@ -202,6 +202,49 @@
             android:name=".receiver.WebhookSyncAlarmReceiver"
             android:exported="false" />
 
+        <activity
+            android:name=".widget.OverviewWidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CashiroCompose">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".widget.AccountsWidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CashiroCompose">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Home-screen widgets (Glance) -->
+        <receiver
+            android:name=".widget.OverviewWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_overview_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_overview_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.AccountsWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_accounts_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_accounts_info" />
+        </receiver>
+
         <!-- Quick Settings Tiles -->
         <service
             android:name=".service.AddTransactionTileService"

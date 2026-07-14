@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="60dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="1"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:description="@string/widget_overview_description"
+    android:configure="com.ritesh.cashiro.widget.OverviewWidgetConfigActivity"
+    android:widgetFeatures="reconfigurable"
+    android:widgetCategory="home_screen" />
