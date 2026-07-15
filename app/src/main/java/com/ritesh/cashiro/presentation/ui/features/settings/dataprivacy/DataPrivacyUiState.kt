@@ -50,5 +50,6 @@ data class DataPrivacyUiState(
     val isPdfProcessing: Boolean = false,
     val pdfAnalysisResult: PdfAnalysisResult? = null,
     val pdfProcessingError: String? = null,
-    val hasNewAccountsCreated: Boolean = false
+    val hasNewAccountsCreated: Boolean = false,
+    val availableAccounts: List<AccountBalanceEntity> = emptyList()
 )

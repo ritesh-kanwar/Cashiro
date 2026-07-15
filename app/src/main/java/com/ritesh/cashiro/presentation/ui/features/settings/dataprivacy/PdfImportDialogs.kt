@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.presentation.ui.features.settings.dataprivacy
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.presentation.effects.overScrollVertical
 import com.ritesh.cashiro.presentation.ui.components.LoadingCircle
 import com.ritesh.cashiro.presentation.ui.icons.HierarchySquare3
@@ -132,12 +134,18 @@ fun PdfProcessingDialog(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PdfAccountDecisionCard(
     match: PdfAccountMatch,
+    availableAccounts: List<AccountBalanceEntity>,
     currentDecision: AccountImportDecision,
-    onDecisionChanged: (AccountImportDecision) -> Unit
+    selectedMapping: AccountBalanceEntity?,
+    onDecisionChanged: (AccountImportDecision) -> Unit,
+    onMappingChanged: (AccountBalanceEntity?) -> Unit
 ) {
+    var showAccountPicker by remember { mutableStateOf(false) }
+
     val cardColor = when (currentDecision) {
         AccountImportDecision.MERGE_WITH_EXISTING -> MaterialTheme.colorScheme.primaryContainer.copy(0.25f)
         AccountImportDecision.CREATE_NEW -> MaterialTheme.colorScheme.tertiaryContainer.copy(0.25f)
@@ -185,7 +193,13 @@ fun PdfAccountDecisionCard(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
-                    if (match.existingAccount != null) {
+                    if (selectedMapping != null) {
+                        Text(
+                            text = "Linked to: ${selectedMapping.bankName} (${selectedMapping.accountLast4})",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = cardTextColor,
+                        )
+                    } else if (match.existingAccount != null) {
                         Text(
                             text = "Matches: ${match.existingAccount.bankName}",
                             style = MaterialTheme.typography.labelSmall,
@@ -202,51 +216,48 @@ fun PdfAccountDecisionCard(
             }
 
             // Decision options
-            if (match.hasExistingMatch) {
-                // Show both options
-                DecisionOption(
-                    selected = currentDecision == AccountImportDecision.MERGE_WITH_EXISTING,
-                    label = "Merge with ${match.existingAccount?.bankName}",
-                    description = "Link transactions to existing account",
-                    icon = Iconax.HierarchySquare3,
-                    cardColor = subCardColor,
-                    cardTextColor =  subCardTextColor,
-                    onClick = { onDecisionChanged(AccountImportDecision.MERGE_WITH_EXISTING) }
-                )
-                DecisionOption(
-                    selected = currentDecision == AccountImportDecision.CREATE_NEW,
-                    label = "Create new bank \"${match.bankNameInPdf}\"",
-                    description = "Add as a separate account",
-                    icon = Icons.Rounded.Add,
-                    cardColor = subCardColor,
-                    cardTextColor =  subCardTextColor,
-                    onClick = { onDecisionChanged(AccountImportDecision.CREATE_NEW) }
-                )
-            } else {
-                // Only CREATE_NEW available
-                Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    color = MaterialTheme.colorScheme.tertiaryContainer.copy(0.4f)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(Spacing.sm).fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
-                    ) {
-                        Icon(
-                            Icons.Rounded.Add,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.tertiary
-                        )
-                        Text(
-                            text = "Will create new bank: \"${match.bankNameInPdf}\"",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onTertiaryContainer
-                        )
-                    }
+            DecisionOption(
+                selected = currentDecision == AccountImportDecision.MERGE_WITH_EXISTING,
+                label = if (selectedMapping != null) "Merge with ${selectedMapping.bankName}" else "Link to existing account",
+                description = if (selectedMapping != null) "Transactions will be added to this account" else "Select an account to link",
+                icon = Iconax.HierarchySquare3,
+                cardColor = subCardColor,
+                cardTextColor =  subCardTextColor,
+                onClick = { 
+                    onDecisionChanged(AccountImportDecision.MERGE_WITH_EXISTING)
+                    showAccountPicker = true
                 }
-            }
+            )
+            
+            DecisionOption(
+                selected = currentDecision == AccountImportDecision.CREATE_NEW,
+                label = "Create new bank \"${match.bankNameInPdf}\"",
+                description = "Add as a separate account",
+                icon = Icons.Rounded.Add,
+                cardColor = subCardColor,
+                cardTextColor =  subCardTextColor,
+                onClick = { 
+                    onDecisionChanged(AccountImportDecision.CREATE_NEW)
+                    onMappingChanged(null)
+                }
+            )
+        }
+    }
+
+    if (showAccountPicker) {
+        ModalBottomSheet(
+            onDismissRequest = { showAccountPicker = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ) {
+            com.ritesh.cashiro.presentation.ui.components.AccountSelectionSheet(
+                accounts = availableAccounts,
+                selectedAccount = selectedMapping,
+                onAccountSelected = {
+                    onMappingChanged(it)
+                    showAccountPicker = false
+                },
+                showNoneOption = false
+            )
         }
     }
 }

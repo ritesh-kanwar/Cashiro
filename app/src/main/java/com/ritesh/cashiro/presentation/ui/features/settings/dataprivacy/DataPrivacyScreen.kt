@@ -80,7 +80,6 @@ import dev.chrisbanes.haze.HazeEffectScope
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class,
     ExperimentalHazeApi::class
@@ -90,17 +89,64 @@ fun DataPrivacyScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAccounts: () -> Unit = {},
     appLockViewModel: AppLockViewModel = hiltViewModel(),
+    viewModel: DataPrivacyViewModel = hiltViewModel(),
     blurEffects: Boolean
 ) {
     val appLockUiState by appLockViewModel.uiState.collectAsStateWithLifecycle()
-    
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollBehaviorSmall = TopAppBarDefaults.pinnedScrollBehavior()
     val hazeState = remember { HazeState() }
-    
+
     var showTimeoutDialog by remember { mutableStateOf(false) }
+    var showExportDialog by remember { mutableStateOf(false) }
+
+    // Launcher for selecting a backup file to import
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            uri?.let { viewModel.importBackup(it) }
+        }
+    )
+
+    // Launcher for selecting a PDF statement to import
+    val pdfLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            uri?.let { viewModel.analyzePdfStatement(it) }
+        }
+    )
+
+    // Launcher for saving the exported backup file
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json"),
+        onResult = { uri ->
+            uri?.let { viewModel.saveBackupToFile(it) }
+        }
+    )
+
+    // Handle import/export messages
+    LaunchedEffect(uiState.importExportMessage) {
+        uiState.importExportMessage?.let {
+            val result = snackbarHostState.showSnackbar(
+                message = it,
+                actionLabel = if (uiState.hasNewAccountsCreated) "View Accounts" else null
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                onNavigateToAccounts()
+            }
+            viewModel.clearImportExportMessage()
+        }
+    }
+
+    // Handle export success (trigger file saver)
+    LaunchedEffect(uiState.exportedBackupFile) {
+        uiState.exportedBackupFile?.let {
+            exportLauncher.launch("cashiro_backup_${System.currentTimeMillis()}.json")
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -210,12 +256,51 @@ fun DataPrivacyScreen(
                     }
                 }
 
+                // Data Management Section
+                SectionHeader(
+                    title = stringResource(R.string.data_management_section),
+                    modifier = Modifier.padding(start = Spacing.md, top = Spacing.md)
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(1.5.dp)
+                ) {
+                    ListItem(
+                        headline = { Text(stringResource(R.string.export_data)) },
+                        supporting = { Text(stringResource(R.string.export_data_sub)) },
+                        onClick = { showExportDialog = true },
+                        shape = ListItemPosition.Top.toShape(),
+                        padding = PaddingValues(0.dp)
+                    )
+                    ListItem(
+                        headline = { Text(stringResource(R.string.import_data)) },
+                        supporting = { Text(stringResource(R.string.import_data_sub)) },
+                        onClick = { importLauncher.launch(arrayOf("application/json")) },
+                        shape = ListItemPosition.Middle.toShape(),
+                        padding = PaddingValues(0.dp)
+                    )
+                    ListItem(
+                        headline = { Text(stringResource(R.string.import_pdf_statement)) },
+                        supporting = { Text(stringResource(R.string.import_pdf_statement_sub)) },
+                        trailing = {
+                            Icon(
+                                Icons.Rounded.PictureAsPdf,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        onClick = { pdfLauncher.launch(arrayOf("application/pdf")) },
+                        shape = ListItemPosition.Bottom.toShape(),
+                        padding = PaddingValues(0.dp)
+                    )
+                }
+
                 // Add bottom spacing
                 Spacer(modifier = Modifier.size(Spacing.xl))
             }
         }
     }
-    
+
     // Timeout Dialog
     if (showTimeoutDialog) {
         val options = listOf(0, 1, 5, 15, 30)
@@ -241,7 +326,7 @@ fun DataPrivacyScreen(
                         ) {
                             RadioButton(
                                 selected = appLockUiState.timeoutMinutes == minutes,
-                                onClick = null 
+                                onClick = null
                             )
                             Text(
                                 text = when (minutes) {
@@ -293,6 +378,193 @@ fun DataPrivacyScreen(
                     ) else Modifier
                 ),
             shape = RoundedCornerShape(16.dp),
+        )
+    }
+
+    // Export Dialog
+    if (showExportDialog) {
+        ExportOptionsDialog(
+            onDismiss = { showExportDialog = false },
+            onConfirm = { config ->
+                viewModel.exportBackup(config)
+                showExportDialog = false
+            },
+            blurEffects = blurEffects,
+            hazeState = hazeState
+        )
+    }
+
+    // PDF Processing / Error dialog
+    if (uiState.isPdfProcessing || uiState.pdfProcessingError != null) {
+        PdfProcessingDialog(
+            isVisible = uiState.isPdfProcessing,
+            error = uiState.pdfProcessingError,
+            onDismissError = { viewModel.dismissPdfImport() },
+            blurEffects = blurEffects,
+            hazeState = hazeState
+        )
+    }
+
+    // PDF Import Review BottomSheet (Unified review of accounts and transactions)
+    uiState.pdfAnalysisResult?.let { result ->
+        PdfImportSheet(
+            analysisResult = result,
+            availableAccounts = uiState.availableAccounts,
+            onConfirm = { transactionDecisions, accountDecisions, accountMappings, shouldUpdateBalances ->
+                viewModel.confirmPdfImport(
+                    accountDecisions = accountDecisions,
+                    accountMappings = accountMappings,
+                    transactionDecisions = transactionDecisions,
+                    shouldUpdateBalances = shouldUpdateBalances
+                )
+            },
+            onDismiss = { viewModel.dismissPdfImport() }
+        )
+    }
+}
+
+@OptIn(ExperimentalHazeApi::class)
+@Composable
+fun ExportOptionsDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (BackupConfiguration) -> Unit,
+    blurEffects: Boolean ,
+    hazeState: HazeState = remember { HazeState() }
+) {
+    var includeTransactional by remember { mutableStateOf(true) }
+    var includeProfile by remember { mutableStateOf(true) }
+    var includeBudgets by remember { mutableStateOf(true) }
+    var includePreferences by remember { mutableStateOf(true) }
+    val containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.export_data)) },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    stringResource(R.string.select_data_to_backup),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                ExportCheckbox(stringResource(R.string.transactional_data), includeTransactional) { includeTransactional = it }
+                ExportCheckbox(stringResource(R.string.profile_data), includeProfile) { includeProfile = it }
+                ExportCheckbox(stringResource(R.string.budgets), includeBudgets) { includeBudgets = it }
+                ExportCheckbox(stringResource(R.string.app_preferences), includePreferences) { includePreferences = it }
+            }
+        },
+        confirmButton = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Row(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalArrangement = Arrangement.spacedBy(1.5.dp),
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.surface.copy(0.5f),
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        ),
+                        shape = RoundedCornerShape(
+                            topStart = Dimensions.Radius.xxl,
+                            topEnd = Dimensions.Radius.xs,
+                            bottomStart = Dimensions.Radius.xxl,
+                            bottomEnd = Dimensions.Radius.xs
+                        ),
+                        modifier = Modifier
+                            .padding(start = Spacing.xl)
+                            .weight(1f)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = stringResource(R.string.cancel),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onConfirm(
+                            BackupConfiguration(
+                                includeTransactionalData = includeTransactional,
+                                includeProfileData = includeProfile,
+                                includeBudgets = includeBudgets,
+                                includeAppPreferences = includePreferences
+                            ))},
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        shape = RoundedCornerShape(
+                            topStart = Dimensions.Radius.xs,
+                            topEnd = Dimensions.Radius.xxl,
+                            bottomStart = Dimensions.Radius.xs,
+                            bottomEnd = Dimensions.Radius.xxl
+                        ),
+                        modifier = Modifier
+                            .padding(end = Spacing.xl)
+                            .weight(1f)
+                            .fillMaxWidth()
+                    ) {
+                            Text(
+                                text = stringResource(R.string.export),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                    }
+
+                }
+            }
+        },
+        containerColor = if (blurEffects)
+            MaterialTheme.colorScheme.surfaceContainerLow.copy(0.5f)
+        else MaterialTheme.colorScheme.surfaceContainerLow,
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .then(
+                if (blurEffects) Modifier.hazeEffect(
+                    state = hazeState,
+                    block = fun HazeEffectScope.() {
+                        style = HazeDefaults.style(
+                            backgroundColor = Color.Transparent,
+                            tint = HazeDefaults.tint(containerColor),
+                            blurRadius = 20.dp,
+                            noiseFactor = -1f,
+                        )
+                        blurredEdgeTreatment = BlurredEdgeTreatment.Unbounded
+                    }
+                ) else Modifier
+            ),
+        shape = RoundedCornerShape(16.dp),
+        dismissButton = {},
+
+    )
+}
+
+@Composable
+fun ExportCheckbox(
+    text: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .toggleable(
+                value = checked,
+                onValueChange = onCheckedChange
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CashiroCheckbox(checked = checked, onCheckedChange = null)
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

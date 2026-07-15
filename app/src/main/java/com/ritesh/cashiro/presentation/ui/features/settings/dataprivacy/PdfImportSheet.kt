@@ -41,6 +41,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -59,6 +60,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.presentation.effects.BlurredAnimatedVisibility
 import com.ritesh.cashiro.presentation.effects.overScrollVertical
@@ -81,27 +83,45 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun PdfImportSheet(
     analysisResult: PdfAnalysisResult,
-    onConfirm: (transactionDecisions: Map<Int, TransactionImportDecision>, accountDecisions: Map<String, AccountImportDecision>) -> Unit,
+    availableAccounts: List<AccountBalanceEntity>,
+    onConfirm: (
+        transactionDecisions: Map<Int, TransactionImportDecision>,
+        accountDecisions: Map<String, AccountImportDecision>,
+        accountMappings: Map<String, AccountBalanceEntity?>,
+        shouldUpdateBalances: Boolean
+    ) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     
-    // Decisions for accounts (reusing logic from dialog)
+    // Decisions for accounts
     val accountDecisions = remember(analysisResult) {
-        mutableStateMapOf<String, AccountImportDecision>().apply {
-            analysisResult.accountMatches.forEach { match ->
-                put(match.last4, if (match.hasExistingMatch) AccountImportDecision.MERGE_WITH_EXISTING else AccountImportDecision.CREATE_NEW)
-            }
+        val map = mutableStateMapOf<String, AccountImportDecision>()
+        analysisResult.accountMatches.forEach { match ->
+            map[match.last4] = if (match.hasExistingMatch) AccountImportDecision.MERGE_WITH_EXISTING else AccountImportDecision.CREATE_NEW
         }
+        map
     }
+
+    // Custom mappings (extracted last4 -> selected app account)
+    val accountMappings = remember(analysisResult) {
+        val map = mutableStateMapOf<String, AccountBalanceEntity?>()
+        analysisResult.accountMatches.forEach { match ->
+            map[match.last4] = match.existingAccount
+        }
+        map
+    }
+
+    // Global decision for balance updates (deduction logic)
+    var shouldUpdateBalances by remember { mutableStateOf(true) }
 
     // Decisions for transactions
     val transactionDecisions = remember(analysisResult) {
-        mutableStateMapOf<Int, TransactionImportDecision>().apply {
-            analysisResult.transactionItems.forEachIndexed { index, item ->
-                put(index, item.initialDecision)
-            }
+        val map = mutableStateMapOf<Int, TransactionImportDecision>()
+        analysisResult.transactionItems.forEachIndexed { index, item ->
+            map[index] = item.initialDecision
         }
+        map
     }
 
     var filterIndex by remember { mutableIntStateOf(0) } // 0: All, 1: Duplicates
@@ -213,12 +233,51 @@ fun PdfImportSheet(
                         }
                     }
                     
-                    items(analysisResult.accountMatches) { match ->
+                    items(analysisResult.accountMatches) { accountMatch ->
                         PdfAccountDecisionCard(
-                            match = match,
-                            currentDecision = accountDecisions[match.last4] ?: AccountImportDecision.CREATE_NEW,
-                            onDecisionChanged = { accountDecisions[match.last4] = it }
+                            match = accountMatch,
+                            availableAccounts = availableAccounts,
+                            currentDecision = accountDecisions[accountMatch.last4] ?: AccountImportDecision.CREATE_NEW,
+                            selectedMapping = accountMappings[accountMatch.last4],
+                            onDecisionChanged = { accountDecisions[accountMatch.last4] = it },
+                            onMappingChanged = { accountMappings[accountMatch.last4] = it }
                         )
+                    }
+
+                    item {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable { shouldUpdateBalances = !shouldUpdateBalances },
+                            shape = RoundedCornerShape(16.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(Spacing.md),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "Update Account Balances",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = "Automatically adjust balances based on all imported transactions",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Switch(
+                                    checked = shouldUpdateBalances,
+                                    onCheckedChange = { shouldUpdateBalances = it },
+                                )
+                            }
+                        }
                     }
 
                     // Transactions Section
@@ -429,7 +488,12 @@ fun PdfImportSheet(
 
                     Button(
                         onClick = { 
-                            onConfirm(transactionDecisions.toMap(), accountDecisions.toMap())
+                            onConfirm(
+                                transactionDecisions.toMap(),
+                                accountDecisions.toMap(),
+                                accountMappings.toMap(),
+                                shouldUpdateBalances
+                            )
                         },
                         modifier = Modifier
                             .weight(1.5f)

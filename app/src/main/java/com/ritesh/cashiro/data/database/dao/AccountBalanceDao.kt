@@ -390,7 +390,7 @@ abstract class AccountBalanceDao {
     /** Finds the latest account record for a given last-4 digits, regardless of bank name. */
     @Query("""
         SELECT * FROM account_balances
-        WHERE account_last4 = :accountLast4
+        WHERE account_last4 = :accountLast4 OR account_last4 LIKE '%' || :accountLast4
         ORDER BY timestamp DESC
         LIMIT 1
     """)

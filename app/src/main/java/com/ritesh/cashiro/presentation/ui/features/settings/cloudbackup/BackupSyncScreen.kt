@@ -1396,8 +1396,14 @@ fun BackupSyncScreen(
     dataPrivacyUiState.pdfAnalysisResult?.let { result ->
         PdfImportSheet(
             analysisResult = result,
-            onConfirm = { transactionDecisions, accountDecisions -> 
-                dataPrivacyViewModel.confirmPdfImport(accountDecisions, transactionDecisions)
+            availableAccounts = dataPrivacyUiState.availableAccounts,
+            onConfirm = { transactionDecisions, accountDecisions, accountMappings, shouldUpdateBalances ->
+                dataPrivacyViewModel.confirmPdfImport(
+                    accountDecisions = accountDecisions,
+                    accountMappings = accountMappings,
+                    transactionDecisions = transactionDecisions,
+                    shouldUpdateBalances = shouldUpdateBalances
+                )
             },
             onDismiss = { dataPrivacyViewModel.dismissPdfImport() }
         )
