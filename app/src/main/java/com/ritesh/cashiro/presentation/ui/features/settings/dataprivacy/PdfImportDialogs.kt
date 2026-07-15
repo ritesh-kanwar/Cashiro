@@ -38,6 +38,9 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 
 // Shows while the PDF is being analyzed (processing indicator).
+/**
+ * Dialog shown while a PDF is being processed or when an error occurs.
+ */
 @OptIn(ExperimentalHazeApi::class)
 @Composable
 fun PdfProcessingDialog(
@@ -134,6 +137,9 @@ fun PdfProcessingDialog(
 }
 
 
+/**
+ * A card for reviewing and selecting a decision for a bank account found in a PDF.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PdfAccountDecisionCard(
@@ -224,7 +230,6 @@ fun PdfAccountDecisionCard(
                 cardColor = subCardColor,
                 cardTextColor =  subCardTextColor,
                 onClick = { 
-                    onDecisionChanged(AccountImportDecision.MERGE_WITH_EXISTING)
                     showAccountPicker = true
                 }
             )
@@ -254,6 +259,7 @@ fun PdfAccountDecisionCard(
                 selectedAccount = selectedMapping,
                 onAccountSelected = {
                     onMappingChanged(it)
+                    onDecisionChanged(AccountImportDecision.MERGE_WITH_EXISTING)
                     showAccountPicker = false
                 },
                 showNoneOption = false

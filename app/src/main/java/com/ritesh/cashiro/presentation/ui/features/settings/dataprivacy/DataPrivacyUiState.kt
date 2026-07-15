@@ -19,20 +19,32 @@ data class PdfAnalysisResult(
     val accountMatches: List<PdfAccountMatch>
 )
 
+/**
+ * Wrapper for a parsed transaction with enrichment for the import review process.
+ */
 data class PdfTransactionImportItem(
     val parsed: com.ritesh.parser.core.ParsedTransaction,
     val duplicateMatch: TransactionEntity? = null,
     val initialDecision: TransactionImportDecision = if (duplicateMatch != null) TransactionImportDecision.SKIP else TransactionImportDecision.IMPORT_NEW
 )
 
+/**
+ * User's decision for a specific transaction being imported.
+ */
 enum class TransactionImportDecision { IMPORT_NEW, SKIP, OVERRIDE_EXISTING }
 
+/**
+ * Decision options for how to handle an account found in a PDF.
+ */
 data class PdfAccountMatch(
     val last4: String,
     val bankNameInPdf: String,
     // Existing account in the DB that matches, or null if no match.
     val existingAccount: AccountBalanceEntity?
 ) {
+    /**
+     * Whether this account already exists in the local database.
+     */
     val hasExistingMatch: Boolean get() = existingAccount != null
 }
 
@@ -41,6 +53,9 @@ data class PdfAccountMatch(
  */
 enum class AccountImportDecision { MERGE_WITH_EXISTING, CREATE_NEW }
 
+/**
+ * UI State for the Data & Privacy settings screen.
+ */
 data class DataPrivacyUiState(
     val importExportMessage: String? = null,
     val exportedBackupFile: File? = null,

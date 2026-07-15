@@ -8,11 +8,24 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+/**
+ * Interface for PDF statement parsers that extract transactions from bank PDFs.
+ */
 interface PdfStatementParser {
+    /**
+     * Checks if this parser can handle the given PDF text.
+     */
     fun canHandle(text: String): Boolean
+
+    /**
+     * Parses the PDF text and returns a list of [ParsedTransaction]s.
+     */
     fun parse(text: String): List<ParsedTransaction>
 }
 
+/**
+ * Parser for GPay (Google Pay) transaction history PDF statements.
+ */
 class GPayPdfParser : PdfStatementParser {
     override fun canHandle(text: String): Boolean {
         val canHandle = (text.contains("GPay", ignoreCase = true) || text.contains("Google Pay", ignoreCase = true)) 
@@ -95,12 +108,12 @@ class GPayPdfParser : PdfStatementParser {
             // For Income: "Paid to [Bank] [Last4] [Amount]"
             val bankMatch = if (isIncome) {
                 Regex(
-                    """Paid to\s+(.+?)\s+(\d{2,4})(?=\s*[₹Rs])""",
+                    """Paid to\s+(.+?)\s+X*(\d{2,4})(?=\s*[₹Rs])""",
                     RegexOption.IGNORE_CASE
                 ).find(row)
             } else {
                 Regex(
-                    """Paid by\s+(.+?)\s+(\d{2,4})(?=\s*[₹Rs])""",
+                    """Paid by\s+(.+?)\s+X*(\d{2,4})(?=\s*[₹Rs])""",
                     RegexOption.IGNORE_CASE
                 ).find(row)
             }
@@ -148,6 +161,9 @@ class GPayPdfParser : PdfStatementParser {
 }
 
 
+/**
+ * Parser for PhonePe transaction history PDF statements.
+ */
 class PhonePePdfParser : PdfStatementParser {
     override fun canHandle(text: String): Boolean {
         val canHandle = text.contains("PhonePe", ignoreCase = true) || text.contains("Phone Pe", ignoreCase = true)
@@ -285,8 +301,9 @@ class PhonePePdfParser : PdfStatementParser {
             merchant = merchant.replace(Regex("""^Paid to\s+""", RegexOption.IGNORE_CASE), "").trim()
             
             // Extract account number: looks for "Credited to" or "Paid by" followed by something like "XX1234" or "XXXXXX12"
-            // Also supports shorter account suffixes (e.g., 2 digits)
-            val bankMatch = Regex("""(?:Credited to|Paid by|Account)\s*[:\s]*[0-9Xx]*X*(\d{2,4})\b""", RegexOption.IGNORE_CASE).find(row)
+            // Also supports shorter account suffixes (e.g., 2 digits). 
+            // Use non-greedy prefix to prevent capturing too few digits if 4 are available.
+            val bankMatch = Regex("""(?:Credited to|Paid by|Account)\s*[:\s]*[0-9Xx]*?X*(\d{2,4})\b""", RegexOption.IGNORE_CASE).find(row)
             val accountLast4 = bankMatch?.groupValues?.get(1)
             
             val transIdMatch = Regex("""Transact\s*ion\s+ID\s*[:\s]*([A-Z0-9]+)""", RegexOption.IGNORE_CASE).find(row)

@@ -13,6 +13,7 @@ import com.ritesh.cashiro.data.backup.BackupImporter
 import com.ritesh.cashiro.data.backup.ExportResult
 import com.ritesh.cashiro.data.backup.ImportResult
 import com.ritesh.cashiro.data.backup.ImportStrategy
+import com.ritesh.cashiro.data.database.CashiroDatabase
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
@@ -31,6 +32,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -38,8 +40,13 @@ import java.security.MessageDigest
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import androidx.room.withTransaction
 import javax.inject.Inject
 
+/**
+ * ViewModel for managing data privacy settings, import/export functionality,
+ * and PDF statement processing.
+ */
 @HiltViewModel
 class DataPrivacyViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -48,7 +55,8 @@ class DataPrivacyViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val accountBalanceRepository: AccountBalanceRepository,
     private val ruleRepository: RuleRepository,
-    private val ruleEngine: RuleEngine
+    private val ruleEngine: RuleEngine,
+    private val database: CashiroDatabase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DataPrivacyUiState())
@@ -56,12 +64,20 @@ class DataPrivacyViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            accountBalanceRepository.getAllLatestBalances().collect { accounts ->
-                _uiState.update { it.copy(availableAccounts = accounts) }
-            }
+            accountBalanceRepository.getAllLatestBalances()
+                .catch { e ->
+                    Log.e("DataPrivacyViewModel", "Error fetching accounts", e)
+                    _uiState.update { it.copy(pdfProcessingError = "Failed to load accounts: ${e.message}") }
+                }
+                .collect { accounts ->
+                    _uiState.update { it.copy(availableAccounts = accounts) }
+                }
         }
     }
 
+    /**
+     * Triggers the backup export process with the given configuration.
+     */
     fun exportBackup(config: BackupConfiguration) {
         viewModelScope.launch {
             try {
@@ -84,6 +100,9 @@ class DataPrivacyViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Saves the exported backup file to the provided URI.
+     */
     fun saveBackupToFile(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -104,6 +123,9 @@ class DataPrivacyViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Imports app data from a backup file at the provided URI.
+     */
     fun importBackup(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -122,12 +144,18 @@ class DataPrivacyViewModel @Inject constructor(
         }
     }
     
+    /**
+     * Shares the current exported backup file via an intent.
+     */
     fun shareBackup() {
         _uiState.value.exportedBackupFile?.let { file ->
             shareBackupFile(file)
         }
     }
 
+    /**
+     * Internal helper to share a file.
+     */
     private fun shareBackupFile(file: File) {
         try {
             val uri = FileProvider.getUriForFile(
@@ -152,7 +180,9 @@ class DataPrivacyViewModel @Inject constructor(
         }
     }
     
-    //Parse the PDF and emit analysis result
+    /**
+     * Parses the PDF at the given URI and emits an analysis result for user review.
+     */
     fun analyzePdfStatement(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -184,16 +214,15 @@ class DataPrivacyViewModel @Inject constructor(
                     throw Exception("No transactions found in this PDF. Please ensure you are importing a supported GPay or PhonePe statement.")
                 }
 
-                // Collect distinct account last-4 values from all transactions.
-                // If last4 is null, we use a placeholder to allow mapping.
-                val distinctLast4s = parsedTransactions.map { it.accountLast4 ?: "Unknown" }.distinct()
+                // Collect distinct account (bankName, last4) pairs from all transactions.
+                val distinctAccounts = parsedTransactions.map { it.bankName to (it.accountLast4 ?: "Unknown") }.distinct()
 
                 // For each distinct account, look up whether it exists in the app.
-                val accountMatches = distinctLast4s.map { last4 ->
+                val accountMatches = distinctAccounts.map { (bankName, last4) ->
                     val existing = if (last4 != "Unknown") accountBalanceRepository.getAccountByLast4(last4) else null
                     PdfAccountMatch(
                         last4 = last4,
-                        bankNameInPdf = parsedTransactions.firstOrNull { (it.accountLast4 ?: "Unknown") == last4 }?.bankName ?: "PhonePe",
+                        bankNameInPdf = bankName,
                         existingAccount = existing
                     )
                 }
@@ -260,6 +289,10 @@ class DataPrivacyViewModel @Inject constructor(
     }
 
 
+    /**
+     * Confirms the PDF import and commits selected transactions and account mappings
+     * to the database. Everything is wrapped in a transaction for atomicity.
+     */
     fun confirmPdfImport(
         accountDecisions: Map<String, AccountImportDecision>,
         accountMappings: Map<String, AccountBalanceEntity?>,
@@ -271,161 +304,171 @@ class DataPrivacyViewModel @Inject constructor(
             try {
                 _uiState.update { it.copy(isPdfProcessing = true) }
 
-                // Resolve/create account for each last4 based on user's decision.
-                val resolvedAccounts = mutableMapOf<String, Pair<String, String>>() // last4 → (bankName, last4)
-                val resolvedAccountEntities = mutableMapOf<String, AccountBalanceEntity>()
+                database.withTransaction {
+                    // Resolve/create account for each last4 based on user's decision.
+                    // Key is bankNameInPdf + last4 for composite identity.
+                    val resolvedAccounts = mutableMapOf<String, Pair<String, String>>() // key → (bankName, last4)
+                    val resolvedAccountEntities = mutableMapOf<String, AccountBalanceEntity>()
 
-                var newAccountsCreated = false
-                for (match in analysis.accountMatches) {
-                    val decision = accountDecisions[match.last4] ?: AccountImportDecision.MERGE_WITH_EXISTING
-                    
-                    if (decision == AccountImportDecision.MERGE_WITH_EXISTING) {
-                        val mappedAccount = accountMappings[match.last4] ?: match.existingAccount
-                        if (mappedAccount != null) {
-                            resolvedAccounts[match.last4] = mappedAccount.bankName to mappedAccount.accountLast4
-                            resolvedAccountEntities[match.last4] = mappedAccount
+                    // Find earliest transaction timestamp to use as initial balance time
+                    val firstTransactionTimestamp = analysis.transactionItems
+                        .filterIndexed { index, item -> (transactionDecisions[index] ?: item.initialDecision) != TransactionImportDecision.SKIP }
+                        .minOfOrNull { it.parsed.timestamp } ?: System.currentTimeMillis()
+                    val initialBalanceTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(firstTransactionTimestamp), ZoneId.systemDefault()).minusSeconds(1)
+
+                    var newAccountsCreated = false
+                    for (match in analysis.accountMatches) {
+                        val compositeKey = "${match.bankNameInPdf}|${match.last4}"
+                        val decision = accountDecisions[match.last4] ?: AccountImportDecision.MERGE_WITH_EXISTING
+                        
+                        if (decision == AccountImportDecision.MERGE_WITH_EXISTING) {
+                            val mappedAccount = accountMappings[match.last4] ?: match.existingAccount
+                            if (mappedAccount != null) {
+                                resolvedAccounts[compositeKey] = mappedAccount.bankName to mappedAccount.accountLast4
+                                resolvedAccountEntities[compositeKey] = mappedAccount
+                            } else {
+                                // Fallback to creating new if merge requested but no account selected/found
+                                val newAccount = AccountBalanceEntity(
+                                    bankName = match.bankNameInPdf,
+                                    accountLast4 = match.last4,
+                                    balance = java.math.BigDecimal.ZERO,
+                                    timestamp = initialBalanceTime,
+                                    sourceType = "PDF_IMPORT",
+                                    iconName = "type_finance_bank"
+                                )
+                                val existing = accountBalanceRepository.getLatestBalance(match.bankNameInPdf, match.last4)
+                                val accountToUse = if (existing == null) {
+                                    val id = accountBalanceRepository.insertBalance(newAccount)
+                                    newAccountsCreated = true
+                                    newAccount.copy(id = id)
+                                } else existing
+                                
+                                resolvedAccounts[compositeKey] = accountToUse.bankName to accountToUse.accountLast4
+                                resolvedAccountEntities[compositeKey] = accountToUse
+                            }
                         } else {
-                            // Fallback to creating new if merge requested but no account selected/found
+                            // Create a new account. If user explicitly chose CREATE_NEW, we create it.
+                            // To ensure it's separate even if suffix matches, we can append (PDF) to bank name if a collision exists.
+                            val existingCollision = accountBalanceRepository.getLatestBalance(match.bankNameInPdf, match.last4)
+                            val finalBankName = if (existingCollision != null) "${match.bankNameInPdf} (PDF)" else match.bankNameInPdf
+
                             val newAccount = AccountBalanceEntity(
-                                bankName = match.bankNameInPdf,
+                                bankName = finalBankName,
                                 accountLast4 = match.last4,
                                 balance = java.math.BigDecimal.ZERO,
-                                timestamp = LocalDateTime.now(),
+                                timestamp = initialBalanceTime,
                                 sourceType = "PDF_IMPORT",
                                 iconName = "type_finance_bank"
                             )
-                            val existing = accountBalanceRepository.getLatestBalance(match.bankNameInPdf, match.last4)
-                            val accountToUse = if (existing == null) {
-                                val id = accountBalanceRepository.insertBalance(newAccount)
-                                newAccountsCreated = true
-                                newAccount.copy(id = id)
-                            } else existing
                             
-                            resolvedAccounts[match.last4] = accountToUse.bankName to accountToUse.accountLast4
-                            resolvedAccountEntities[match.last4] = accountToUse
-                        }
-                    } else {
-                        // Create a new "PhonePe" account for this last4.
-                        val newAccount = AccountBalanceEntity(
-                            bankName = match.bankNameInPdf,
-                            accountLast4 = match.last4,
-                            balance = java.math.BigDecimal.ZERO,
-                            timestamp = LocalDateTime.now(),
-                            sourceType = "PDF_IMPORT",
-                            iconName = "type_finance_bank"
-                        )
-                        // Only insert if not already existing for that last4+bank combo.
-                        val existing = accountBalanceRepository.getLatestBalance(match.bankNameInPdf, match.last4)
-                        val accountToUse = if (existing == null) {
                             val id = accountBalanceRepository.insertBalance(newAccount)
                             newAccountsCreated = true
-                            newAccount.copy(id = id)
-                        } else existing
-                        
-                        resolvedAccounts[match.last4] = accountToUse.bankName to accountToUse.accountLast4
-                        resolvedAccountEntities[match.last4] = accountToUse
-                    }
-                }
-
-                var importedCount = 0
-                // Process transactions in chronological order (oldest first) to ensure balance recalculations are correct
-                val sortedItems = analysis.transactionItems
-                    .mapIndexed { index, item -> index to item }
-                    .sortedBy { it.second.parsed.timestamp }
-
-                sortedItems.forEach { (index, item) ->
-                    val decision = transactionDecisions[index] ?: item.initialDecision
-                    if (decision == TransactionImportDecision.SKIP) return@forEach
-
-                    val parsed = item.parsed
-
-                    // Handle Override logic: Delete existing transaction if it's a duplicate and user wants to override
-                    if (decision == TransactionImportDecision.OVERRIDE_EXISTING && item.duplicateMatch != null) {
-                        transactionRepository.deleteTransaction(item.duplicateMatch, hardDelete = true)
+                            val accountToUse = newAccount.copy(id = id)
+                            
+                            resolvedAccounts[compositeKey] = accountToUse.bankName to accountToUse.accountLast4
+                            resolvedAccountEntities[compositeKey] = accountToUse
+                        }
                     }
 
-                    val hash = generateHash(parsed.smsBody, parsed.amount.toString(), parsed.timestamp)
-                    
-                    // Check if already exists (incase another transaction in same PDF has same hash, though unlikely)
-                    if (transactionRepository.getTransactionByHash(hash) == null) {
-                        val key = parsed.accountLast4 ?: "Unknown"
-                        val resolved = resolvedAccounts[key]
-                        
-                        // Use the mapper to get a base entity with all fields (merchant normalization, category mapping, etc.)
-                        val baseTransaction = parsed.toEntity()
-                        
-                        val transaction = baseTransaction.copy(
-                            bankName = resolved?.first ?: baseTransaction.bankName,
-                            accountNumber = resolved?.second ?: baseTransaction.accountNumber,
-                            fromAccount = if (baseTransaction.transactionType != TransactionType.INCOME) (resolved?.second ?: baseTransaction.accountNumber) else null,
-                            toAccount = if (baseTransaction.transactionType == TransactionType.INCOME) (resolved?.second ?: baseTransaction.accountNumber) else null,
-                            transactionHash = hash
-                        )
+                    var importedCount = 0
+                    // Process transactions in chronological order (oldest first) to ensure balance recalculations are correct
+                    val sortedItems = analysis.transactionItems
+                        .mapIndexed { index, item -> index to item }
+                        .sortedBy { it.second.parsed.timestamp }
 
-                        // Apply rules to the transaction
-                        val activeRules = ruleRepository.getActiveRulesByType(transaction.transactionType)
+                    sortedItems.forEach { (index, item) ->
+                        val decision = transactionDecisions[index] ?: item.initialDecision
+                        if (decision == TransactionImportDecision.SKIP) return@forEach
 
-                        // Check if this transaction should be blocked
-                        val blockingRule = ruleEngine.shouldBlockTransaction(
-                            transaction,
-                            transaction.smsBody,
-                            activeRules
-                        )
+                        val parsed = item.parsed
 
-                        if (blockingRule != null) {
-                            Log.d("DataPrivacyViewModel", "Transaction blocked by rule: ${blockingRule.name}")
-                            return@forEach
+                        // Handle Override logic: Delete existing transaction if it's a duplicate and user wants to override
+                        if (decision == TransactionImportDecision.OVERRIDE_EXISTING && item.duplicateMatch != null) {
+                            transactionRepository.deleteTransaction(item.duplicateMatch, hardDelete = true)
                         }
 
-                        // Apply non-blocking rules
-                        val (entityWithRules, ruleApplications) = ruleEngine.evaluateRules(
-                            transaction,
-                            transaction.smsBody,
-                            activeRules
-                        )
+                        val hash = generateHash(parsed.smsBody, parsed.amount.toString(), parsed.timestamp)
+                        
+                        // Check if already exists (incase another transaction in same PDF has same hash, though unlikely)
+                        if (transactionRepository.getTransactionByHash(hash) == null) {
+                            val compositeKey = "${parsed.bankName}|${parsed.accountLast4 ?: "Unknown"}"
+                            val resolved = resolvedAccounts[compositeKey]
+                            
+                            // Use the mapper to get a base entity with all fields (merchant normalization, category mapping, etc.)
+                            val baseTransaction = parsed.toEntity()
+                            
+                            val transaction = baseTransaction.copy(
+                                bankName = resolved?.first ?: baseTransaction.bankName,
+                                accountNumber = resolved?.second ?: baseTransaction.accountNumber,
+                                fromAccount = if (baseTransaction.transactionType != TransactionType.INCOME) (resolved?.second ?: baseTransaction.accountNumber) else null,
+                                toAccount = if (baseTransaction.transactionType == TransactionType.INCOME) (resolved?.second ?: baseTransaction.accountNumber) else null,
+                                transactionHash = hash
+                            )
 
-                        val rowId = transactionRepository.insertTransaction(entityWithRules)
-                        if (rowId != -1L) {
-                            if (ruleApplications.isNotEmpty()) {
-                                // Update transactionId in ruleApplications before saving
-                                val applicationsWithId = ruleApplications.map { 
-                                    it.copy(transactionId = rowId.toString())
+                            // Apply rules to the transaction
+                            val activeRules = ruleRepository.getActiveRulesByType(transaction.transactionType)
+
+                            // Check if this transaction should be blocked
+                            val blockingRule = ruleEngine.shouldBlockTransaction(
+                                transaction,
+                                transaction.smsBody,
+                                activeRules
+                            )
+
+                            if (blockingRule != null) {
+                                Log.d("DataPrivacyViewModel", "Transaction blocked by rule: ${blockingRule.name}")
+                                return@forEach
+                            }
+
+                            // Apply non-blocking rules
+                            val (entityWithRules, ruleApplications) = ruleEngine.evaluateRules(
+                                transaction,
+                                transaction.smsBody,
+                                activeRules
+                            )
+
+                            val rowId = transactionRepository.insertTransaction(entityWithRules)
+                            if (rowId != -1L) {
+                                if (ruleApplications.isNotEmpty()) {
+                                    // Update transactionId in ruleApplications before saving
+                                    val applicationsWithId = ruleApplications.map { 
+                                        it.copy(transactionId = rowId.toString())
+                                    }
+                                    ruleRepository.saveRuleApplications(applicationsWithId)
                                 }
-                                ruleRepository.saveRuleApplications(applicationsWithId)
+
+                                // Handle balance update automatically for PDF imports
+                                val accountEntity = resolvedAccountEntities[compositeKey]
+
+                                if (accountEntity != null && shouldUpdateBalances) {
+                                    accountBalanceRepository.insertTransactionBalance(
+                                        bankName = accountEntity.bankName,
+                                        accountLast4 = accountEntity.accountLast4,
+                                        amount = entityWithRules.amount,
+                                        transactionType = entityWithRules.transactionType,
+                                        explicitBalance = null, // We don't have balance in PhonePe PDF usually, let it calculate
+                                        timestamp = entityWithRules.dateTime,
+                                        transactionId = rowId,
+                                        creditLimit = accountEntity.creditLimit,
+                                        isCreditCard = accountEntity.isCreditCard,
+                                        smsSource = sanitizeSmsBody("PDF Import: ${parsed.smsBody.take(200)}"),
+                                        currency = entityWithRules.currency
+                                    )
+                                }
+
+                                importedCount++
                             }
-
-                            // Handle balance update automatically for PDF imports
-                            val key = parsed.accountLast4 ?: "Unknown"
-                            val accountEntity = resolvedAccountEntities[key]
-
-                            if (accountEntity != null && shouldUpdateBalances) {
-                                accountBalanceRepository.insertTransactionBalance(
-                                    bankName = accountEntity.bankName,
-                                    accountLast4 = accountEntity.accountLast4,
-                                    amount = entityWithRules.amount,
-                                    transactionType = entityWithRules.transactionType,
-                                    explicitBalance = null, // We don't have balance in PhonePe PDF usually, let it calculate
-                                    timestamp = entityWithRules.dateTime,
-                                    transactionId = rowId,
-                                    creditLimit = accountEntity.creditLimit,
-                                    isCreditCard = accountEntity.isCreditCard,
-                                    smsSource = "PDF Import: ${parsed.smsBody.take(200)}",
-                                    currency = entityWithRules.currency
-                                )
-                            }
-
-                            importedCount++
                         }
                     }
-                }
 
-                _uiState.update {
-                    it.copy(
-                        isPdfProcessing = false,
-                        pdfAnalysisResult = null,
-                        importExportMessage = "Successfully imported $importedCount transactions from PDF!",
-                        hasNewAccountsCreated = newAccountsCreated
-                    )
+                    _uiState.update {
+                        it.copy(
+                            isPdfProcessing = false,
+                            pdfAnalysisResult = null,
+                            importExportMessage = "Successfully imported $importedCount transactions from PDF!",
+                            hasNewAccountsCreated = newAccountsCreated
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 Log.e("DataPrivacyViewModel", "Error committing PDF import", e)
@@ -434,11 +477,16 @@ class DataPrivacyViewModel @Inject constructor(
         }
     }
 
-    // Dismiss the PDF import dialog without saving.
+    /**
+     * Dismisses the PDF import review bottom sheet and clears analysis results.
+     */
     fun dismissPdfImport() {
         _uiState.update { it.copy(isPdfProcessing = false, pdfAnalysisResult = null, pdfProcessingError = null) }
     }
 
+    /**
+     * Generates a unique MD5 hash for transaction deduplication.
+     */
     private fun generateHash(message: String, amount: String, timestamp: Long): String {
         val input = "$message$amount$timestamp"
         return MessageDigest.getInstance("MD5")
@@ -446,12 +494,30 @@ class DataPrivacyViewModel @Inject constructor(
             .joinToString("") { "%02x".format(it) }
     }
 
+    /**
+     * Clears any status message after it has been displayed.
+     */
     fun clearImportExportMessage() {
         _uiState.update { it.copy(importExportMessage = null, hasNewAccountsCreated = false) }
     }
     
+    /**
+     * Clears the temporary exported file from UI state.
+     */
     fun clearExportedFile() {
         _uiState.update { it.copy(exportedBackupFile = null) }
+    }
+
+    /**
+     * Sanitizes the SMS body by masking sensitive identifiers like full account suffixes
+     * or payment references to ensure they are not persisted in plain text where not needed.
+     */
+    private fun sanitizeSmsBody(body: String): String {
+        // Mask 12-digit UTR/transaction IDs
+        var sanitized = body.replace(Regex("""\b\d{12}\b"""), "XXXXXXXXXXXX")
+        // Mask typical UPI IDs or long numeric strings
+        sanitized = sanitized.replace(Regex("""\b\d{8,11}\b"""), "XXXXXXXX")
+        return sanitized
     }
 
     private fun extractUtr(text: String?): String? {

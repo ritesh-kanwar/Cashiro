@@ -121,9 +121,13 @@ fun DataPrivacyScreen(
 
     // Launcher for saving the exported backup file
     val exportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("application/json"),
+        contract = ActivityResultContracts.CreateDocument("application/zip"),
         onResult = { uri ->
-            uri?.let { viewModel.saveBackupToFile(it) }
+            if (uri != null) {
+                viewModel.saveBackupToFile(uri)
+            } else {
+                viewModel.clearExportedFile()
+            }
         }
     )
 
@@ -144,7 +148,7 @@ fun DataPrivacyScreen(
     // Handle export success (trigger file saver)
     LaunchedEffect(uiState.exportedBackupFile) {
         uiState.exportedBackupFile?.let {
-            exportLauncher.launch("cashiro_backup_${System.currentTimeMillis()}.json")
+            exportLauncher.launch("cashiro_backup_${System.currentTimeMillis()}.zip")
         }
     }
 
@@ -193,7 +197,7 @@ fun DataPrivacyScreen(
                     modifier = Modifier.padding(start = Spacing.md, top = Spacing.md))
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(1.5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     PreferenceSwitch(
                         title = stringResource(R.string.app_lock),
@@ -263,7 +267,7 @@ fun DataPrivacyScreen(
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(1.5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     ListItem(
                         headline = { Text(stringResource(R.string.export_data)) },
@@ -461,7 +465,7 @@ fun ExportOptionsDialog(
             ) {
                 Row(
                     modifier = Modifier.align(Alignment.Center),
-                    horizontalArrangement = Arrangement.spacedBy(1.5.dp),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     Button(
                         onClick = onDismiss,
@@ -553,7 +557,7 @@ fun ExportCheckbox(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = Spacing.xs)
             .toggleable(
                 value = checked,
                 onValueChange = onCheckedChange
@@ -563,7 +567,7 @@ fun ExportCheckbox(
         CashiroCheckbox(checked = checked, onCheckedChange = null)
         Text(
             text = text,
-            modifier = Modifier.padding(start = 8.dp),
+            modifier = Modifier.padding(start = Spacing.sm),
             style = MaterialTheme.typography.bodyLarge
         )
     }

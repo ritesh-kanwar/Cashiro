@@ -79,6 +79,10 @@ import com.ritesh.parser.core.ParsedTransaction
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * A bottom sheet for reviewing and confirming transactions extracted from a PDF.
+ * Allows users to map accounts, handle duplicates, and toggle balance updates.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PdfImportSheet(
