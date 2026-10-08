@@ -11,6 +11,8 @@ import com.ritesh.cashiro.data.currency.ExchangeRateProvider
 import com.ritesh.cashiro.data.currency.model.CurrencyConversion
 import com.ritesh.cashiro.data.currency.model.CurrencySymbols
 import com.ritesh.cashiro.data.model.Currency
+import com.ritesh.cashiro.data.model.CurrencyPickerOptions
+import kotlinx.coroutines.CancellationException
 import com.ritesh.cashiro.data.repository.CurrencyRepository
 import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -90,51 +92,38 @@ class CurrencyViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             
-            val currencyMap = exchangeRateProvider.fetchAllCurrencies()
-            if (currencyMap != null) {
-                val customCurrencies = userPreferencesRepository.customCurrencies.first().map { it.toCurrency() }
-                
-                val currenciesMap = currencyMap.map { (code, name) ->
-                    Currency(
-                        code = code.uppercase(),
-                        name = name,
-                        symbol = CurrencySymbols.getSymbol(code)
-                    )
-                }.toMutableList()
-
-                customCurrencies.forEach { custom ->
-                    currenciesMap.removeAll { it.code == custom.code }
-                    currenciesMap.add(custom)
-                }
-
-                val currencies = currenciesMap.sortedBy { it.name }
-
-                val effectiveCurrencyCode = currencyRepository.effectiveBaseCurrencyCode.first()
-                val selectedCurrency = currencies.find { it.code.equals(effectiveCurrencyCode, ignoreCase = true) } 
-                    ?: currencies.find { it.code == "USD" }
-                    ?: currencies.firstOrNull()
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        currencies = currencies,
-                        selectedCurrency = selectedCurrency,
-                        isOfflineMode = !_isConnected.value
-                    )
-                }
-
-                selectedCurrency?.let { loadConversions(it.code) }
-            } else {
-                // Fallback to supported currencies if API fails
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        currencies = Currency.SUPPORTED_CURRENCIES,
-                        error = "Failed to load currencies from API, using defaults.",
-                        isOfflineMode = !_isConnected.value
-                    )
-                }
+            val customCurrencies = userPreferencesRepository.customCurrencies.first().map { it.toCurrency() }
+            val effectiveCurrencyCode = currencyRepository.effectiveBaseCurrencyCode.first()
+            // Publish local options immediately; opening a picker must not require a network response.
+            val localCurrencies = CurrencyPickerOptions.catalog(custom = customCurrencies, selectedCode = effectiveCurrencyCode)
+            _uiState.update {
+                it.copy(currencies = localCurrencies, selectedCurrency = localCurrencies.find { currency ->
+                    currency.code.equals(effectiveCurrencyCode, ignoreCase = true)
+                })
             }
+            val currencyMap = try {
+                exchangeRateProvider.fetchAllCurrencies()
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (_: Exception) {
+                null
+            }
+            val remoteCurrencies = currencyMap.orEmpty().map { (code, name) ->
+                Currency(code, name, CurrencySymbols.getSymbol(code))
+            }
+            val currentCurrencyCode = currencyRepository.effectiveBaseCurrencyCode.first()
+            val currencies = CurrencyPickerOptions.catalog(remoteCurrencies, customCurrencies, currentCurrencyCode)
+            val selectedCurrency = currencies.find { it.code.equals(currentCurrencyCode, ignoreCase = true) }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    currencies = currencies,
+                    selectedCurrency = selectedCurrency,
+                    error = null,
+                    isOfflineMode = !_isConnected.value
+                )
+            }
+            selectedCurrency?.let { loadConversions(it.code) }
         }
     }
 

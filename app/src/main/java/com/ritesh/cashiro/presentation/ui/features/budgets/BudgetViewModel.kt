@@ -79,29 +79,7 @@ class BudgetViewModel @Inject constructor(
                 ) { budgets, targetCurrency, _ ->
                     // Convert budgets to match the selected main currency for display
                     budgets.map { budgetWithSpending ->
-                        if (budgetWithSpending.budget.currency != targetCurrency) {
-                            val convertedAmount = currencyConversionService.convertAmount(
-                                budgetWithSpending.budget.amount,
-                                budgetWithSpending.budget.currency,
-                                targetCurrency
-                            ) ?: budgetWithSpending.budget.amount
-
-                            val convertedSpending = currencyConversionService.convertAmount(
-                                budgetWithSpending.currentSpending,
-                                budgetWithSpending.budget.currency,
-                                targetCurrency
-                            ) ?: budgetWithSpending.currentSpending
-
-                            budgetWithSpending.copy(
-                                budget = budgetWithSpending.budget.copy(
-                                    amount = convertedAmount,
-                                    currency = targetCurrency
-                                ),
-                                currentSpending = convertedSpending
-                            )
-                        } else {
-                            budgetWithSpending
-                        }
+                        budgetWithSpending.inCurrency(targetCurrency, currencyConversionService)
                     }
                 }.collect { convertedBudgets ->
                     _uiState.update { 
@@ -150,30 +128,7 @@ class BudgetViewModel @Inject constructor(
                         }
                     }
 
-                    // Convert budget data to effective currency
-                    if (effectiveCurrency != budgetWithSpending.budget.currency) {
-                        val convertedAmount = currencyConversionService.convertAmount(
-                            budgetWithSpending.budget.amount,
-                            budgetWithSpending.budget.currency,
-                            effectiveCurrency
-                        ) ?: budgetWithSpending.budget.amount
-                        val convertedSpending = currencyConversionService.convertAmount(
-                            budgetWithSpending.currentSpending,
-                            budgetWithSpending.budget.currency,
-                            effectiveCurrency
-                        ) ?: budgetWithSpending.currentSpending
-                        val convertedCategorySpending = budgetWithSpending.categorySpending.mapValues { (_, amount) ->
-                            currencyConversionService.convertAmount(amount, budgetWithSpending.budget.currency, effectiveCurrency) ?: amount
-                        }
-                        budgetWithSpending = budgetWithSpending.copy(
-                            budget = budgetWithSpending.budget.copy(
-                                amount = convertedAmount,
-                                currency = effectiveCurrency
-                            ),
-                            currentSpending = convertedSpending,
-                            categorySpending = convertedCategorySpending
-                        )
-                    }
+                    budgetWithSpending = budgetWithSpending.inCurrency(effectiveCurrency, currencyConversionService)
 
                     val categoryLimitsWithSpending = budgetWithSpending.categoryLimits.map { limit ->
                         CategoryLimitWithSpending(
@@ -216,9 +171,9 @@ class BudgetViewModel @Inject constructor(
                 ) { transactions, mainCurrency, _, lbTransactions, persons ->
                     val converted = transactions
                         .filter { it.currency != mainCurrency }
-                        .associate { tx ->
-                            tx.id to (currencyConversionService.convertAmount(tx.amount, tx.currency, mainCurrency) ?: tx.amount)
-                        }
+                        .mapNotNull { tx ->
+                        currencyConversionService.convertAmountOrNull(tx.amount, tx.currency, mainCurrency)?.let { tx.id to it }
+                    }.toMap()
 
                     // Create person mapping
                     val personMap = persons.associateBy { it.id }

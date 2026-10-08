@@ -82,12 +82,12 @@ class CategoryRepository @Inject constructor(
                 iconName = category.defaultIconName ?: category.iconName,
                 updatedAt = LocalDateTime.now()
             )
-            categoryDao.updateCategory(resetCategory)
+            categoryDao.updateCategoryWithReferences(resetCategory)
         }
     }
     
     suspend fun updateCategory(category: CategoryEntity) {
-        categoryDao.updateCategory(
+        categoryDao.updateCategoryWithReferences(
             category.copy(updatedAt = LocalDateTime.now())
         )
     }

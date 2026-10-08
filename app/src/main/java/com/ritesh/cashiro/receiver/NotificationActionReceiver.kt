@@ -87,7 +87,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
                 val accountLast4 = transaction.accountNumber
                 if (bankName != null && accountLast4 != null) {
                     val balanceDao = database.accountBalanceDao()
-                    val latestBalance = balanceDao.getLatestBalance(bankName, accountLast4)
+                    val latestBalance = balanceDao.getLatestBalanceForCurrency(bankName, accountLast4, transaction.currency)
                     if (latestBalance != null) {
                         val currentBalance = latestBalance.balance
                         val isCreditCard = latestBalance.isCreditCard

@@ -7,6 +7,9 @@ import java.time.LocalDateTime
 
 @Dao
 interface ExchangeRateDao {
+    @Query("SELECT * FROM exchange_rates WHERE from_currency = :fromCurrency AND to_currency = :toCurrency ORDER BY updated_at DESC LIMIT 1")
+    suspend fun getExchangeRateIgnoringExpiry(fromCurrency: String, toCurrency: String): ExchangeRateEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExchangeRate(exchangeRate: ExchangeRateEntity): Long
 
@@ -31,7 +34,7 @@ interface ExchangeRateDao {
     @Query("SELECT * FROM exchange_rates WHERE updated_at < :expiryTime")
     suspend fun getExpiredRates(expiryTime: LocalDateTime): List<ExchangeRateEntity>
 
-    @Query("DELETE FROM exchange_rates WHERE updated_at < :expiryTime")
+    @Query("DELETE FROM exchange_rates WHERE is_custom = 0 AND updated_at < :expiryTime")
     suspend fun deleteExpiredRates(expiryTime: LocalDateTime): Int
 
     @Query("SELECT COUNT(*) FROM exchange_rates WHERE from_currency = :fromCurrency AND to_currency = :toCurrency AND expires_at > :currentTime")

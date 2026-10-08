@@ -1,5 +1,6 @@
 package com.ritesh.cashiro.data.backup
 
+import com.ritesh.cashiro.data.preferences.BankAccountMergeStore
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -34,7 +35,9 @@ class BackupImporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: CashiroDatabase,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val webhookRepository: WebhookRepository
+    private val webhookRepository: WebhookRepository,
+    private val bankAccountMerges: BankAccountMergeStore,
+    private val ignoredAccounts: com.ritesh.cashiro.data.preferences.IgnoredAccountsStore
 ) {
     
     private val gson = GsonBuilder()
@@ -198,8 +201,9 @@ class BackupImporter @Inject constructor(
                     importedCategories++
                 }
                 
+                val transactionIdMap = mutableMapOf<Long, Long>()
                 backup.database.transactions.forEach { transaction ->
-                    database.transactionDao().insertTransaction(transaction.sanitize())
+                    transactionIdMap[transaction.id] = database.transactionDao().insertTransaction(transaction.sanitize())
                     importedTransactions++
                 }
                 
@@ -211,9 +215,11 @@ class BackupImporter @Inject constructor(
                     database.accountBalanceDao().insertBalance(balance.sanitize())
                 }
                 
+                val subscriptionIdMap = mutableMapOf<Long, Long>()
                 backup.database.subscriptions.forEach { subscription ->
-                    database.subscriptionDao().insertSubscription(subscription.sanitize())
+                    subscriptionIdMap[subscription.id] = database.subscriptionDao().insertSubscription(subscription.sanitize())
                 }
+                SubscriptionPaymentBackup.restore(database, backup.database.subscriptionPayments.orEmpty(), subscriptionIdMap, transactionIdMap)
                 
                 backup.database.merchantMappings.forEach { mapping ->
                     database.merchantMappingDao().insertMapping(mapping)
@@ -339,6 +345,7 @@ class BackupImporter @Inject constructor(
                 backup.database.transactions.forEach { backupTxn ->
                     val sanitizedTxn = backupTxn.sanitize()
                     val existingTxn = existingTransactionsMap[sanitizedTxn.transactionHash]
+                            ?: database.transactionDao().getTransactionByHash(sanitizedTxn.transactionHash)
                     if (existingTxn == null) {
                         // New transaction, insert it
                         val newTransaction = sanitizedTxn.copy(id = 0)
@@ -394,7 +401,8 @@ class BackupImporter @Inject constructor(
                 // Import other entities with duplicate checking
                 importCardsWithMerge(backup.database.cards)
                 importAccountBalancesWithMerge(backup.database.accountBalances)
-                importSubscriptionsWithMerge(backup.database.subscriptions)
+                val subscriptionIdMap = importSubscriptionsWithMerge(backup.database.subscriptions)
+                SubscriptionPaymentBackup.restore(database, backup.database.subscriptionPayments.orEmpty(), subscriptionIdMap, transactionIdMap)
                 importMerchantMappingsWithMerge(backup.database.merchantMappings)
                 importBudgetsWithMerge(backup.database.budgets, backup.database.budgetCategoryLimits)
                 importWebhookProfilesWithMerge(backup.database.webhookProfiles)
@@ -485,6 +493,7 @@ class BackupImporter @Inject constructor(
                     backup.database.transactions.forEach { backupTxn ->
                         val sanitizedTxn = backupTxn.sanitize()
                         val existingTxn = existingTransactionsMap[sanitizedTxn.transactionHash]
+                            ?: database.transactionDao().getTransactionByHash(sanitizedTxn.transactionHash)
                         if (existingTxn == null) {
                             val newTransaction = sanitizedTxn.copy(id = 0)
                             val newId = database.transactionDao().insertTransaction(newTransaction)
@@ -532,7 +541,10 @@ class BackupImporter @Inject constructor(
                     importAccountBalancesWithMerge(backup.database.accountBalances)
                 }
                 if (filter.includeSubscriptions) {
-                    importSubscriptionsWithMerge(backup.database.subscriptions)
+                    val subscriptionIdMap = importSubscriptionsWithMerge(backup.database.subscriptions)
+                    if (filter.includeTransactions) {
+                        SubscriptionPaymentBackup.restore(database, backup.database.subscriptionPayments.orEmpty(), subscriptionIdMap, transactionIdMap)
+                    }
                 }
                 if (filter.includeMerchantMappings) {
                     importMerchantMappingsWithMerge(backup.database.merchantMappings)
@@ -593,20 +605,25 @@ class BackupImporter @Inject constructor(
     /**
      * Import subscriptions with duplicate checking
      */
-    private suspend fun importSubscriptionsWithMerge(subscriptions: List<SubscriptionEntity>) {
-        val existingSubscriptions = database.subscriptionDao().getAllSubscriptions().first()
-        val existingKeys = existingSubscriptions.map { "${it.merchantName}_${it.amount}" }.toSet()
-        
+    private suspend fun importSubscriptionsWithMerge(subscriptions: List<SubscriptionEntity>): Map<Long, Long> {
+        val existing = database.subscriptionDao().getAllSubscriptions().first().toMutableList()
+        val ids = mutableMapOf<Long, Long>()
         subscriptions.forEach { subscription ->
-            val sanitizedSubscription = subscription.sanitize()
-            val key = "${sanitizedSubscription.merchantName}_${sanitizedSubscription.amount}"
-            if (!existingKeys.contains(key)) {
-                val newSubscription = sanitizedSubscription.copy(id = 0)
-                database.subscriptionDao().insertSubscription(newSubscription)
+            val incoming = subscription.sanitize()
+            val candidates = existing.filter { SubscriptionPaymentBackup.sameSubscription(it, incoming) }
+            val target = candidates.singleOrNull()
+            if (target != null) {
+                ids[subscription.id] = target.id
+            } else if (candidates.isEmpty()) {
+                val id = database.subscriptionDao().insertSubscription(incoming.copy(id = 0))
+                ids[subscription.id] = id
+                existing.add(incoming.copy(id = id))
             }
+            // Ambiguous duplicate subscriptions never acquire an arbitrary ledger link.
         }
+        return ids
     }
-    
+
     /**
      * Import merchant mappings with merge
      */
@@ -708,6 +725,8 @@ class BackupImporter @Inject constructor(
      * Import user preferences
      */
     private suspend fun importPreferences(preferences: PreferencesSnapshot) {
+        bankAccountMerges.restore(preferences.app.bankAccountMerges.orEmpty())
+        ignoredAccounts.restore(preferences.app.ignoredAccounts.orEmpty())
         // Theme preferences
         preferences.theme.isDarkThemeEnabled?.let {
             userPreferencesRepository.updateDarkTheme(it)

@@ -73,6 +73,9 @@ fun TransactionEntity.sanitize(): TransactionEntity {
         currency = currency ?: "INR",
         fromAccount = fromAccount,
         toAccount = toAccount,
+        fromBankName = fromBankName,
+        toBankName = toBankName,
+        reference = reference,
         billingCycle = billingCycle,
         attachments = attachments ?: "",
         isSample = isSample

@@ -24,7 +24,10 @@ data class ExpectedTransaction(
     val creditLimit: BigDecimal? = null,
     val isFromCard: Boolean? = null,
     val fromAccount: String? = null,
-    val toAccount: String? = null
+    val toAccount: String? = null,
+    val isMobileWallet: Boolean? = null,
+    val expectNoReference: Boolean = false,
+    val expectNoBalance: Boolean = false
 )
 
 data class ParserTestCase(
@@ -119,12 +122,18 @@ object ParserTestUtils {
         expected.fromAccount?.let { if (result.fromAccount != it) errors.add("From account mismatch: expected $it, got ${result.fromAccount}") }
         expected.toAccount?.let { if (result.toAccount != it) errors.add("To account mismatch: expected $it, got ${result.toAccount}") }
 
+        expected.isMobileWallet?.let { if (result.isMobileWallet != it) errors.add("isMobileWallet mismatch") }
+        if (expected.expectNoReference && result.reference != null) errors.add("Expected no reference")
+        if (expected.expectNoBalance && result.balance != null) errors.add("Expected no balance")
         return errors
     }
 
     fun validateResultDynamic(parsed: ParsedTransaction, expected: ExpectedTransaction) {
         assertAll(
             "Transaction Details",
+            { expected.isMobileWallet?.let { assertEquals(it, parsed.isMobileWallet, "isMobileWallet mismatch") } },
+            { if (expected.expectNoReference) assertNull(parsed.reference, "Expected no reference") },
+            { if (expected.expectNoBalance) assertNull(parsed.balance, "Expected no balance") },
             { assertEquals(expected.amount, parsed.amount, "Amount mismatch") },
             { assertEquals(expected.currency, parsed.currency, "Currency mismatch") },
             { assertEquals(expected.type, parsed.type, "Transaction type mismatch") },

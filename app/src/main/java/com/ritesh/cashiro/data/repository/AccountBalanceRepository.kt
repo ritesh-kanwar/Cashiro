@@ -1,6 +1,7 @@
 package com.ritesh.cashiro.data.repository
 
 import android.content.Context
+import com.ritesh.cashiro.data.preferences.BankAccountMergeStore
 import com.ritesh.cashiro.data.database.dao.AccountBalanceDao
 import com.ritesh.cashiro.data.database.entity.AccountBalanceEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
@@ -17,7 +18,8 @@ import javax.inject.Singleton
 @Singleton
 class AccountBalanceRepository @Inject constructor(
     private val accountBalanceDao: AccountBalanceDao,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val bankAccountMerges: BankAccountMergeStore
 ) {
     suspend fun insertBalance(balance: AccountBalanceEntity): Long {
         val balanceWithIconName = if (balance.iconName.isEmpty() && balance.iconResId != 0) {
@@ -32,38 +34,33 @@ class AccountBalanceRepository @Inject constructor(
         return accountBalanceDao.getLatestBalance(bankName, accountLast4)
     }
 
+    suspend fun getLatestBalance(bankName: String, accountLast4: String, currency: String): AccountBalanceEntity? {
+        return accountBalanceDao.getLatestBalanceForCurrency(bankName, accountLast4, currency)
+    }
+
     suspend fun getLatestBalanceOnOrBefore(
         bankName: String,
         accountLast4: String,
-        timestamp: LocalDateTime
+        timestamp: LocalDateTime,
+        currency: String
     ): AccountBalanceEntity? {
-        return accountBalanceDao.getLatestBalanceOnOrBefore(bankName, accountLast4, timestamp)
+        return accountBalanceDao.getLatestBalanceOnOrBefore(bankName, accountLast4, timestamp, currency)
     }
 
-    suspend fun resolveAccountLast4(bankName: String, accountLast4: String): String {
-        if (accountLast4.isBlank()) {
-            return accountLast4
-        }
-
-        if (!accountLast4.all { it.isDigit() }) {
-            return accountLast4
-        }
-
-        if (accountLast4.length >= 4) {
-            return accountLast4.takeLast(4)
-        }
-
-        val matches = accountBalanceDao.getAccountLast4sEndingWith(bankName, accountLast4)
-        return if (matches.size == 1) matches.first() else accountLast4
+    suspend fun resolveAccountLast4(bankName: String, accountLast4: String, currency: String = "INR"): String {
+        if (accountLast4.isBlank() || !accountLast4.all { it.isDigit() }) return accountLast4
+        if (accountLast4.length >= 4) return accountLast4.takeLast(4)
+        if (accountLast4.length != 3) return accountLast4
+        return bankAccountMerges.resolveSuffix(bankName, currency, accountLast4)
     }
 
     suspend fun resolveEntityAccountNumber(
         entity: TransactionEntity,
         parsedTransaction: ParsedTransaction
     ): TransactionEntity {
-        if (!parsedTransaction.isFromCard && entity.bankName != null && entity.accountNumber != null) {
+        if (!parsedTransaction.isMobileWallet && !parsedTransaction.isFromCard && parsedTransaction.type != com.ritesh.parser.core.TransactionType.CREDIT && entity.bankName != null && entity.accountNumber != null) {
             return entity.copy(
-                accountNumber = resolveAccountLast4(entity.bankName, entity.accountNumber)
+                accountNumber = resolveAccountLast4(entity.bankName, entity.accountNumber, entity.currency)
             )
         }
         return entity
@@ -117,10 +114,11 @@ class AccountBalanceRepository @Inject constructor(
         creditLimit: BigDecimal? = null,
         timestamp: LocalDateTime,
         transactionId: Long?,
-        isCreditCard: Boolean = false
+        isCreditCard: Boolean = false,
+        currency: String
     ) {
         if (bankName != null && accountLast4 != null && (balance != null || creditLimit != null)) {
-            val latest = getLatestBalance(bankName, accountLast4)
+            val latest = getLatestBalance(bankName, accountLast4, currency)
             val balanceEntity = AccountBalanceEntity(
                 bankName = bankName,
                 accountLast4 = accountLast4,
@@ -129,6 +127,7 @@ class AccountBalanceRepository @Inject constructor(
                 transactionId = transactionId,
                 creditLimit = creditLimit ?: latest?.creditLimit,
                 isCreditCard = isCreditCard || (latest?.isCreditCard ?: false),
+                currency = currency,
                 iconResId = latest?.iconResId ?: 0,
                 iconName = latest?.iconName ?: "",
                 isWallet = latest?.isWallet ?: false,
@@ -165,7 +164,8 @@ class AccountBalanceRepository @Inject constructor(
         creditLimit: BigDecimal?,
         isCreditCard: Boolean,
         smsSource: String?,
-        currency: String
+        currency: String,
+        isWallet: Boolean = false
     ): Long {
         return accountBalanceDao.insertTransactionBalance(
             bankName = bankName,
@@ -178,7 +178,8 @@ class AccountBalanceRepository @Inject constructor(
             creditLimit = creditLimit,
             isCreditCard = isCreditCard,
             smsSource = smsSource,
-            currency = currency
+            currency = currency,
+            isWallet = isWallet
         )
     }
 
@@ -192,7 +193,7 @@ class AccountBalanceRepository @Inject constructor(
         sourceType: String? = null,
         currency: String = "INR"
     ): Long {
-        val latest = getLatestBalance(bankName, accountLast4)
+        val latest = getLatestBalance(bankName, accountLast4, currency)
         val balanceEntity = AccountBalanceEntity(
             bankName = bankName,
             accountLast4 = accountLast4,
@@ -260,8 +261,9 @@ class AccountBalanceRepository @Inject constructor(
         bankName: String,
         accountLast4: String,
         timestamp: LocalDateTime,
-        startingBalance: BigDecimal
+        startingBalance: BigDecimal,
+        currency: String
     ) {
-        accountBalanceDao.recalculateBalancesAfter(bankName, accountLast4, timestamp, startingBalance)
+        accountBalanceDao.recalculateBalancesAfter(bankName, accountLast4, timestamp, startingBalance, currency)
     }
 }

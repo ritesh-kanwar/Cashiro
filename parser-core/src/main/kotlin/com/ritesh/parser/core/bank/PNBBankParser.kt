@@ -1,5 +1,6 @@
 package com.ritesh.parser.core.bank
 
+import com.ritesh.parser.core.MandateInfo
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
@@ -8,7 +9,7 @@ import java.text.Normalizer
 /**
  * Parser for Punjab National Bank (PNB) SMS messages
  */
-class PNBBankParser : BankParser() {
+class PNBBankParser : BaseIndianBankParser() {
 
     override fun getBankName() = "Punjab National Bank"
 
@@ -38,13 +39,27 @@ class PNBBankParser : BankParser() {
         // Use Java's built-in normalizer to decompose Unicode
         // NFKD = Compatibility Decomposition
         return Normalizer.normalize(text, Normalizer.Form.NFKD)
-            .replace(Regex("[^\\p{ASCII}₹$€£¥]"), "") // Keep only ASCII and common currency symbols
+            .replace(Regex("[^\\p{ASCII}₹$€£¥]"), "") // Keep ASCII and the rupee symbol
     }
 
     override fun extractAmount(message: String): BigDecimal? {
+        // Handle "a/c no XX000 is debited for Rs 100" pattern
+        val debitedForPattern = Regex(
+            """debited\s+for\s+(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{2})?)""",
+            RegexOption.IGNORE_CASE
+        )
+        debitedForPattern.find(message)?.let { match ->
+            val amount = match.groupValues[1].replace(",", "")
+            return try {
+                BigDecimal(amount)
+            } catch (e: NumberFormatException) {
+                null
+            }
+        }
+
         // Handle explicit debit of initial amount in auto-pay messages
         val initialDebitPattern = Regex(
-            """initial\s+amount\s+of\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)\s+has\s+been\s+debited""",
+            """initial\s+amount\s+of\s+(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{2})?)\s+has\s+been\s+debited""",
             RegexOption.IGNORE_CASE
         )
         initialDebitPattern.find(message)?.let { match ->
@@ -56,24 +71,10 @@ class PNBBankParser : BankParser() {
             }
         }
 
-        // Handle UPI-Mandate creation amount
-        val mandatePattern = Regex(
-            """UPI-Mandate\s+is\s+successfully\s+created.*for\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
-            RegexOption.IGNORE_CASE
-        )
-        mandatePattern.find(message)?.let { match ->
-            val amount = match.groupValues[1].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
-        }
-
-        // Handle debit patterns - both "Rs." and "INR" formats
-        // Expanded to handle optional space after currency and different spacing
+        // Handle debit patterns with currency text or the rupee symbol
+        // "with" is optional for backward compatibility ("debited Rs. X" and "debited with Rs. X")
         val debitPattern = Regex(
-            """debited\s+with\s+(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)""",
+            """debited\s+(?:(?:with|by)\s+)?(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{2})?)""",
             RegexOption.IGNORE_CASE
         )
         debitPattern.find(message)?.let { match ->
@@ -85,9 +86,9 @@ class PNBBankParser : BankParser() {
             }
         }
 
-        // Handle credit patterns - both "Rs." and "INR" formats
+        // Handle credit patterns with currency text or the rupee symbol
         val creditPattern = Regex(
-            """(?:(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?)\s+(?:has\s+been\s+)?credited|credited\s+(?:with\s+)?(?:Rs\.?|INR)\s*([0-9,]+(?:\.\d{2})?))""",
+            """(?:(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{2})?)\s+(?:has\s+been\s+)?credited|credited\s+(?:(?:with|by|for)\s+)?(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{2})?))""",
             RegexOption.IGNORE_CASE
         )
         creditPattern.find(message)?.let { match ->
@@ -111,16 +112,68 @@ class PNBBankParser : BankParser() {
     override fun extractTransactionType(message: String): TransactionType? {
         val lowerMessage = message.lowercase()
 
-        // Explicitly handle Auto-Pay and UPI-Mandate as EXPENSE if they imply a payment/debit
-        if (lowerMessage.contains("auto pay facility") || lowerMessage.contains("upi-mandate")) {
+        if (isUPIMandateNotification(message)) {
+            return null
+        }
+
+        // Auto-Pay activation can carry a real initial debit that should remain an expense.
+        if (lowerMessage.contains("auto pay facility") && lowerMessage.contains("debited")) {
             return TransactionType.EXPENSE
         }
 
         return super.extractTransactionType(message)
     }
 
+    fun isUPIMandateNotification(message: String): Boolean {
+        val lowerMessage = message.lowercase()
+        return (lowerMessage.contains("upi-mandate") || lowerMessage.contains("upi mandate")) &&
+            lowerMessage.contains("successfully created")
+    }
+
+    fun parseUPIMandateSubscription(message: String): UPIMandateInfo? {
+        if (!isUPIMandateNotification(message)) {
+            return null
+        }
+
+        val amountPattern = Regex(
+            """for\s+(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{2})?)""",
+            RegexOption.IGNORE_CASE
+        )
+        val amount = amountPattern.find(message)?.groupValues?.get(1)?.replace(",", "")?.let {
+            try {
+                BigDecimal(it)
+            } catch (_: NumberFormatException) {
+                null
+            }
+        } ?: super.parseMandateSubscription(message)?.amount ?: return null
+
+        val merchant = Regex(
+            """towards\s+(.+?)\s+for\s+(?:Rs\.?|INR|₹)""",
+            RegexOption.IGNORE_CASE
+        ).find(message)?.groupValues?.get(1)?.trim()?.let(::cleanMerchantName)
+            ?.takeIf(::isValidMerchantName)
+            ?: super.parseMandateSubscription(message)?.merchant
+            ?: return null
+
+        val umn = Regex("""UMN:?\s*([^.\s]+)""", RegexOption.IGNORE_CASE)
+            .find(message)
+            ?.groupValues
+            ?.get(1)
+
+        return UPIMandateInfo(
+            amount = amount,
+            nextDeductionDate = null,
+            merchant = merchant,
+            umn = umn,
+            accountLast4 = extractAccountLast4(message)
+        )
+    }
+
+    override fun parseMandateSubscription(message: String): MandateInfo? =
+        parseUPIMandateSubscription(message) ?: super.parseMandateSubscription(message)
+
     override fun extractMerchant(message: String, sender: String): String? {
-        // Extract merchant from Auto-Pay activation: from Google Clouds
+        // Extract merchant from Auto-Pay activation: from Example Shop
         val fromMerchantPattern = Regex(
             """auto\s+pay.*?activated.*?from\s+([^.]+?)(?:\s+An\s+initial|\.|$)""",
             RegexOption.IGNORE_CASE
@@ -129,49 +182,90 @@ class PNBBankParser : BankParser() {
             return match.groupValues[1].trim()
         }
 
-        // Extract merchant from UPI-Mandate: towards Google
+        // Extract merchant from UPI-Mandate: towards Example Shop
         val towardsPattern = Regex(
-            """UPI-Mandate.*towards\s+([^\s]+)\s+for""",
+            """UPI-Mandate.*towards\s+(.+?)\s+for""",
             RegexOption.IGNORE_CASE
         )
         towardsPattern.find(message)?.let { match ->
             return match.groupValues[1].trim()
         }
 
-        // Extract card info if available: thru card XX9239
+        // Extract card info if available: thru card XX1000
         val cardPattern = Regex("""thru\s+card\s+([X\*]+\d{4})""", RegexOption.IGNORE_CASE)
         cardPattern.find(message)?.let { match ->
             return "Card ${match.groupValues[1]}"
         }
 
-        val fromPattern = Regex(
-            """From\s+([^/]+)/""",
-            RegexOption.IGNORE_CASE
-        )
-        fromPattern.find(message)?.let { match ->
-            val merchant = cleanMerchantName(match.groupValues[1].trim())
-            if (isValidMerchantName(merchant)) {
-                return merchant
-            }
+        Regex("""\bFrom\s+([^/\r\n]+)/""", RegexOption.IGNORE_CASE).find(message)?.let {
+            val merchant = cleanMerchantName(it.groupValues[1].trim())
+            if (isValidMerchantName(merchant)) return merchant
         }
 
         if (message.contains("PNB ATM", ignoreCase = true)) {
             return "PNB ATM Withdrawal"
+        }
+        if (Regex("""\bATM\b""", RegexOption.IGNORE_CASE).containsMatchIn(message)) {
+            return "ATM Transaction"
+        }
+
+        if (Regex("""thru\s+debitcard\b""", RegexOption.IGNORE_CASE).containsMatchIn(message)) {
+            return super.extractMerchant(message, sender) ?: "Debit Card Transaction"
         }
 
         if (message.contains("NEFT", ignoreCase = true)) {
             return "NEFT Transfer"
         }
 
+        val upiPayeePattern = Regex(
+            """\bto\s+(.+?)\s+thru\s+UPI\s*:""",
+            RegexOption.IGNORE_CASE
+        )
+        upiPayeePattern.find(message)?.let { match ->
+            val payee = cleanMerchantName(match.groupValues[1].trim())
+            if (isValidMerchantName(payee)) {
+                return payee
+            }
+        }
+
         if (message.contains("UPI", ignoreCase = true)) {
+            val byPayeePattern = Regex("""\bby\s+((?:(?!\bby\b).)+?)\s+thru\s+UPI\b""", RegexOption.IGNORE_CASE)
+            byPayeePattern.find(message)?.let { match ->
+                val payee = cleanMerchantName(match.groupValues[1].trim())
+                if (isValidMerchantName(payee)) {
+                    return payee
+                }
+            }
+            val fromPayeePattern = Regex("""\bfrom\s+([^/\r\n]+)/""", RegexOption.IGNORE_CASE)
+            fromPayeePattern.find(message)?.let { match ->
+                val payee = cleanMerchantName(match.groupValues[1].trim())
+                if (isValidMerchantName(payee)) {
+                    return payee
+                }
+            }
             return "UPI Transaction"
+        }
+
+        // Use the generic transfer label only after named merchant formats have been considered.
+        if (Regex("""\bIMPS\b""", RegexOption.IGNORE_CASE).containsMatchIn(message) &&
+            Regex("""\b(?:debit|credit|debited|credited)\b""", RegexOption.IGNORE_CASE).containsMatchIn(message)) {
+            return "IMPS Transfer"
         }
 
         return super.extractMerchant(message, sender)
     }
 
     override fun extractAccountLast4(message: String): String? {
-        // Handle variations: Ac, A/c, Card followed by X/dots/spaces and then digits (4 to 16)
+        // Preserve short masks; take the trailing digits when more than four are visible.
+        val acNoPattern = Regex(
+            """(?:a/c\s+(?:no\.?\s*)?|ac\s+)[X*]+(\d{2,16})\b""",
+            RegexOption.IGNORE_CASE
+        )
+        acNoPattern.find(message)?.let { match ->
+            return match.groupValues[1].takeLast(4)
+        }
+
+        // Handle variations: Ac, Card followed by X/dots/spaces and then digits (4 to 16)
         val acPattern = Regex(
             """(?:A/c(?:\s*No\.)?|Ac|Card)\s*(?:[X\*]+)?(\d{4,16})""",
             RegexOption.IGNORE_CASE
@@ -184,6 +278,29 @@ class PNBBankParser : BankParser() {
     }
 
     override fun extractReference(message: String): String? {
+        val rrnPattern = Regex("""\bRRN\s*[-:]\s*(\d{6,})""", RegexOption.IGNORE_CASE)
+        rrnPattern.find(message)?.let { return it.groupValues[1] }
+
+        // Handle IMPS reference: "IMPS Ref no 000000000001"
+        if (message.contains("IMPS", ignoreCase = true)) {
+            // More flexible pattern: IMPS followed by any word then reference number
+            val impsRefPattern = Regex(
+                """IMPS\s+\w*\s*Ref\s*(?:no\.?\s*)?(\d{6,})""",
+                RegexOption.IGNORE_CASE
+            )
+            impsRefPattern.find(message)?.let { match ->
+                return match.groupValues[1]
+            }
+            // Fallback: find a 12-digit number after IMPS (IMPS refs are 12 digits)
+            val impsFallback = Regex(
+                """IMPS[^0-9]*(\d{12,})""",
+                RegexOption.IGNORE_CASE
+            )
+            impsFallback.find(message)?.let { match ->
+                return match.groupValues[1]
+            }
+        }
+
         val neftRefPattern = Regex(
             """ref\s+no\.\s+([A-Z0-9]+)""",
             RegexOption.IGNORE_CASE
@@ -192,6 +309,16 @@ class PNBBankParser : BankParser() {
             return match.groupValues[1]
         }
 
+        // Handle UPI Ref ID: "(UPI Ref ID:606379499474)"
+        val upiRefIdPattern = Regex(
+            """UPI\s+Ref\s+ID:?\s*(\d+)""",
+            RegexOption.IGNORE_CASE
+        )
+        upiRefIdPattern.find(message)?.let { match ->
+            return match.groupValues[1]
+        }
+
+        // Handle "UPI: <number>" format
         val upiRefPattern = Regex(
             """UPI:\s*([0-9]+)""",
             RegexOption.IGNORE_CASE
@@ -200,13 +327,15 @@ class PNBBankParser : BankParser() {
             return match.groupValues[1]
         }
 
-        return super.extractReference(message)
+        // Fall back to base class, but filter out "-PNB" suffix matches
+        val baseRef = super.extractReference(message)
+        return if (baseRef != null && baseRef.equals("PNB", ignoreCase = true)) null else baseRef
     }
 
     override fun extractBalance(message: String): BigDecimal? {
         // Handle "Aval Bal", "Avl Bal", "Bal" followed by currency and amount, usually ending with CR/DR
         val balPattern = Regex(
-            """(?:Aval\s+Bal|Avl\s+Bal|Bal)\s*(?:INR\s*|Rs\.?\s*)?([0-9,]+(?:\.\d{2})?)(?:\s+(?:CR|DR))?""",
+            """(?:Aval\s+Bal|Avl\s+Bal|Avl|Bal)\s*(?:INR\s*|Rs\.?\s*|₹\s*)?([0-9,]+(?:\.\d{2})?)(?:\s+(?:CR|DR))?""",
             RegexOption.IGNORE_CASE
         )
         balPattern.find(message)?.let { match ->
@@ -238,11 +367,11 @@ class PNBBankParser : BankParser() {
     override fun isTransactionMessage(message: String): Boolean {
         val lowerMessage = message.lowercase()
 
-        if (lowerMessage.contains("auto pay facility") && lowerMessage.contains("debited")) {
-            return true
+        if (isUPIMandateNotification(message)) {
+            return false
         }
 
-        if (lowerMessage.contains("upi-mandate") && lowerMessage.contains("successfully created")) {
+        if (lowerMessage.contains("auto pay facility") && lowerMessage.contains("debited")) {
             return true
         }
 
@@ -250,6 +379,20 @@ class PNBBankParser : BankParser() {
             return true
         }
 
+        if (lowerMessage.contains("imps") && lowerMessage.contains("debited")) {
+            return true
+        }
+
         return super.isTransactionMessage(message)
+    }
+
+    data class UPIMandateInfo(
+        override val amount: BigDecimal,
+        override val nextDeductionDate: String?,
+        override val merchant: String,
+        override val umn: String?,
+        override val accountLast4: String? = null
+    ) : MandateInfo {
+        override val dateFormat = "dd-MMM-yy"
     }
 }

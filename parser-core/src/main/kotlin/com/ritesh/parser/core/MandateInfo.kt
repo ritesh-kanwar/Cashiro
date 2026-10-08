@@ -36,4 +36,8 @@ interface MandateInfo {
      */
     val dateFormat: String
         get() = "dd/MM/yy"
+
+    /** Debiting account suffix when explicitly present in the mandate message. */
+    val accountLast4: String?
+        get() = null
 }

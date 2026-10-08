@@ -77,7 +77,9 @@ class CsvExporter @Inject constructor(
                         "Account",
                         "Balance After",
                         "Description",
-                        "SMS Body"
+                        "SMS Body",
+                        "Currency",
+                        "Subcategory"
                     ))
                     
                     // Write transactions with progress updates
@@ -104,7 +106,9 @@ class CsvExporter @Inject constructor(
                             transaction.accountNumber ?: "",
                             transaction.balanceAfter?.toString() ?: "",
                             transaction.description ?: "",
-                            transaction.smsBody ?: ""
+                            transaction.smsBody ?: "",
+                            transaction.currency,
+                            transaction.subcategory ?: ""
                         ))
                         
                         // Update progress (10% to 90% for writing)
@@ -174,7 +178,9 @@ class CsvExporter @Inject constructor(
                     "Account",
                     "Balance After",
                     "Description",
-                    "SMS Body"
+                    "SMS Body",
+                    "Currency",
+                    "Subcategory"
                 ))
                 
                 // Write transactions
@@ -199,7 +205,9 @@ class CsvExporter @Inject constructor(
                         transaction.accountNumber ?: "",
                         transaction.balanceAfter?.toString() ?: "",
                         transaction.description ?: "",
-                        transaction.smsBody ?: ""
+                        transaction.smsBody ?: "",
+                        transaction.currency,
+                        transaction.subcategory ?: ""
                     ))
                 }
             }

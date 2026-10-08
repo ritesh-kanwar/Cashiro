@@ -26,10 +26,10 @@
     <string name="import_data">Import Data</string>
     <string name="import_data_sub">Restore data from backup</string>
     <string name="import_pdf_statement">Import PDF Statement</string>
-    <string name="import_pdf_statement_sub">Scan GPay or PhonePe PDF statements</string>
+    <string name="supported_pdf_statement_sub">Scan GPay, PhonePe, Paytm or Slice PDF statements</string>
     <string name="import_cashew_backup">Import from Cashew</string>
     <string name="import_cashew_backup_sub">Import SQLite or CSV files from Cashew app</string>
-    <string name="pdf_support_warning_title">Only PDFs from GPay and PhonePe are currently supported.</string>
+    <string name="supported_pdf_providers">PDFs from GPay, PhonePe, Paytm and Slice are supported.</string>
     <string name="pdf_support_warning_sub">Balance chart won\'t add any bank balance information from PDFs as it isn\'t available in the statement data.</string>
     <string name="immediately">Immediately</string>
     <string name="one_minute">1 minute</string>
@@ -1319,4 +1319,25 @@
         <item quantity="other">Delete %1$d records?</item>
     </plurals>
 
+    <string name="duplicate_account_title">Possible duplicate account</string>
+    <string name="duplicate_account_message">%1$s reports account •%2$s and •%3$s. If these are the same account, merge their transactions and remember the longer suffix for future messages. The target account balance is kept.</string>
+    <string name="duplicate_account_merge">Merge and remember</string>
+    <string name="duplicate_account_keep">Keep separate</string>
+    <string name="import_csv_statement">Import CSV transactions</string>
+    <string name="import_csv_statement_sub">Import a PennyWise CSV export</string>
+    <string name="csv_import_progress">Reading and importing transactions…</string>
+    <string name="csv_import_result">CSV import: %1$d imported, %2$d duplicates skipped, %3$d failed.</string>
+    <string name="csv_import_error">Unable to import this CSV. Check that it is a valid PennyWise export.</string>
+    <string name="import_pdf_statement_sub">Scan GPay or PhonePe PDF statements</string>
+    <string name="pdf_support_warning_title">Only PDFs from GPay and PhonePe are currently supported.</string>
+    <string name="balance_discrepancy_title">Balance difference</string>
+    <string name="balance_discrepancy_values">Expected %1$s · Bank reported %2$s</string>
+    <string name="balance_discrepancy_explanation">Review for missing or duplicate transactions. Recording an adjustment explains the difference without changing the bank balance.</string>
+    <string name="balance_adjustment_expense">Record %1$s untracked expense</string>
+    <string name="balance_adjustment_income">Record %1$s untracked income</string>
+    <string name="balance_adjustment_added">Balance adjustment recorded</string>
+    <string name="balance_adjustment_exists">An adjustment was already recorded for this transaction</string>
+    <string name="balance_adjustment_changed">The balance difference changed. Review the updated details.</string>
+    <string name="balance_adjustment_failed">Could not record the balance adjustment</string>
+    <string name="balance_discrepancy_notification">Balance difference detected. Review this transaction.</string>
 </resources>

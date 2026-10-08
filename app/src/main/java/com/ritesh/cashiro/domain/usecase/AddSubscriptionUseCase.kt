@@ -24,7 +24,8 @@ constructor(private val subscriptionRepository: SubscriptionRepository) {
         paymentReminder: Boolean = true,
         currency: String = "INR",
         notes: String? = null,
-        lastPaidDate: LocalDate? = null
+        lastPaidDate: LocalDate? = null,
+        accountLast4: String? = null
     ): Long {
         Log.d("AddSubscriptionUseCase", "Creating subscription entity...")
 
@@ -34,6 +35,7 @@ constructor(private val subscriptionRepository: SubscriptionRepository) {
             nextPaymentDate = nextPaymentDate,
             state = SubscriptionState.ACTIVE, // Always active for manually added subscriptions
             bankName = bankName ?: "Manual Entry",
+            accountLast4 = accountLast4,
             category = category,
             subcategory = subcategory,
             smsBody = notes, // Store user notes in smsBody field

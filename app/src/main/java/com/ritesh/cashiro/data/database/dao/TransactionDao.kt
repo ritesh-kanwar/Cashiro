@@ -3,11 +3,17 @@ package com.ritesh.cashiro.data.database.dao
 import androidx.room.*
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransactionDao {
+    /** Raw sender/body identity survives retained hashes during in-place GPay replacement. */
+    @Query("""SELECT * FROM transactions WHERE is_deleted = 1 AND sms_body = :smsBody
+        AND (sms_sender = :smsSender OR (:smsSender IS NULL AND sms_sender IS NULL)) LIMIT 1""")
+    suspend fun getDeletedBySms(smsBody: String, smsSender: String?): TransactionEntity?
+
 
     @Query("SELECT * FROM transactions WHERE is_deleted = 0 ORDER BY date_time DESC")
     fun getAllTransactions(): Flow<List<TransactionEntity>>
@@ -149,10 +155,73 @@ interface TransactionDao {
     @Query("DELETE FROM transactions WHERE id = :transactionId")
     suspend fun deleteTransactionById(transactionId: Long)
 
+    /** Rescans rebuild plain SMS rows while retaining user-curated and imported records. */
+    @Query("""DELETE FROM transactions
+        WHERE is_deleted = 0 AND sms_body IS NOT NULL
+        AND sms_sender IS NOT NULL AND sms_sender != '' AND sms_sender NOT LIKE '%PDF%'
+        AND attachments = '' AND (description IS NULL OR TRIM(description) = '')
+        AND id NOT IN (SELECT transaction_id FROM lend_borrow_transactions WHERE transaction_id IS NOT NULL)
+        AND id NOT IN (SELECT transaction_id FROM subscription_payments)
+    """)
+    suspend fun deleteRebuildableSmsTransactions()
+
+    @Query("""SELECT * FROM transactions
+        WHERE is_deleted = 0 AND sms_body IS NOT NULL
+        AND sms_sender IS NOT NULL AND sms_sender != '' AND sms_sender NOT LIKE '%PDF%'
+        AND attachments = '' AND (description IS NULL OR TRIM(description) = '')
+        AND id NOT IN (SELECT transaction_id FROM lend_borrow_transactions WHERE transaction_id IS NOT NULL)
+        AND id NOT IN (SELECT transaction_id FROM subscription_payments)
+    """)
+    suspend fun getRebuildableSmsTransactions(): List<TransactionEntity>
+
     @Query("DELETE FROM transactions") suspend fun deleteAllTransactions()
     
     @Query("DELETE FROM transactions WHERE is_sample = 1")
     suspend fun deleteSampleTransactions()
+
+    /** Select bank-owned legs, including manual destinations and paired legacy SMS rows. */
+    @Query("""
+        WITH owned AS (
+            SELECT * FROM transactions
+            WHERE (bank_name = :bankName AND account_number = :sourceAccountLast4)
+               OR id IN (SELECT transaction_id FROM account_balances
+                         WHERE bank_name = :bankName AND account_last4 = :sourceAccountLast4)
+        )
+        SELECT DISTINCT candidate.id FROM transactions candidate
+        WHERE (candidate.from_account = :sourceAccountLast4 OR candidate.to_account = :sourceAccountLast4)
+          AND ((candidate.from_account = :sourceAccountLast4 AND candidate.from_bank_name = :bankName)
+               OR (candidate.to_account = :sourceAccountLast4 AND candidate.to_bank_name = :bankName)
+               OR candidate.id IN (SELECT id FROM owned)
+               OR EXISTS (
+                   SELECT 1 FROM owned seed
+                   WHERE seed.transaction_type = 'TRANSFER' AND candidate.transaction_type = 'TRANSFER'
+                     AND seed.reference IS NOT NULL AND TRIM(seed.reference) != ''
+                     AND candidate.reference = seed.reference
+                     AND candidate.currency = seed.currency AND candidate.amount = seed.amount
+                     AND candidate.from_account IS seed.from_account AND candidate.to_account IS seed.to_account
+                     AND julianday(candidate.date_time) BETWEEN julianday(seed.date_time, '-5 minutes') AND julianday(seed.date_time, '+5 minutes')
+               ))
+    """)
+    suspend fun getAccountTransferLegRefIds(bankName: String, sourceAccountLast4: String): List<Long>
+
+    @Query("""
+        UPDATE transactions
+        SET from_account = CASE WHEN from_account = :sourceAccountLast4 AND (from_bank_name IS NULL OR from_bank_name = :sourceBankName) THEN :targetAccountLast4 ELSE from_account END,
+            to_account = CASE WHEN to_account = :sourceAccountLast4 AND (to_bank_name IS NULL OR to_bank_name = :sourceBankName) THEN :targetAccountLast4 ELSE to_account END,
+            from_bank_name = CASE WHEN from_account = :sourceAccountLast4 AND (from_bank_name IS NULL OR from_bank_name = :sourceBankName) THEN :targetBankName ELSE from_bank_name END,
+            to_bank_name = CASE WHEN to_account = :sourceAccountLast4 AND (to_bank_name IS NULL OR to_bank_name = :sourceBankName) THEN :targetBankName ELSE to_bank_name END,
+            updated_at   = :updatedAt
+        WHERE (from_account = :sourceAccountLast4 OR to_account = :sourceAccountLast4)
+          AND id IN (:transactionIds)
+    """)
+    suspend fun retargetTransferLegRefs(
+        transactionIds: List<Long>,
+        sourceBankName: String,
+        targetBankName: String,
+        sourceAccountLast4: String,
+        targetAccountLast4: String,
+        updatedAt: LocalDateTime
+    ): Int
 
     @Query("UPDATE transactions SET category = :newCategory WHERE merchant_name = :merchantName")
     suspend fun updateCategoryForMerchant(merchantName: String, newCategory: String)
@@ -218,6 +287,19 @@ interface TransactionDao {
             startDate: LocalDateTime,
             endDate: LocalDateTime
     ): List<TransactionEntity>
+
+    // CSV identity checks include tombstones so importing an old export cannot restore deleted rows.
+    @Query("""SELECT * FROM transactions
+        WHERE date_time >= :startDate AND date_time < :endDateExclusive""")
+    suspend fun getTransactionsForCsvIdentity(
+        startDate: LocalDateTime,
+        endDateExclusive: LocalDateTime
+    ): List<TransactionEntity>
+
+    @Query("""SELECT * FROM transactions WHERE is_deleted = 0
+        AND CAST(amount AS NUMERIC) = CAST(:amount AS NUMERIC)
+        AND date_time BETWEEN :dateStart AND :dateEnd""")
+    suspend fun getTransactionByAmountAndDate(amount: BigDecimal, dateStart: LocalDateTime, dateEnd: LocalDateTime): List<TransactionEntity>
 
     @Query(
             """

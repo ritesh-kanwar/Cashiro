@@ -2,10 +2,14 @@ package com.ritesh.cashiro.receiver
 
 object BankNotificationConfig {
     private val packageToAlias = mapOf(
+        "com.chase.intl" to "ChaseUK",
+        "com.avuscapital.trading212" to "Trading212",
         "com.avanza.ambitwizfbl" to "FaysalBank",
         "finansbank.enpara" to "Enpara",
         "com.enparabank.retail" to "Enpara"
     )
+
+    val notificationAliases: Set<String> = packageToAlias.values.toSet()
 
     private val allowedPackages: Set<String> = packageToAlias.keys
 

@@ -1,6 +1,9 @@
 package com.ritesh.cashiro.presentation.ui.features.subscriptions
 
 import com.ritesh.cashiro.utils.SubscriptionUtils
+import com.ritesh.cashiro.domain.usecase.MarkSubscriptionPaidUseCase
+import com.ritesh.cashiro.R
+import kotlinx.coroutines.CancellationException
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -35,6 +38,7 @@ class SubscriptionsViewModel @Inject constructor(
     private val subcategoryRepository: SubcategoryRepository,
     private val currencyConversionService: CurrencyConversionService,
     private val currencyRepository: CurrencyRepository,
+    private val markSubscriptionPaid: MarkSubscriptionPaidUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     
@@ -74,7 +78,7 @@ class SubscriptionsViewModel @Inject constructor(
                         val converted = if (sub.currency == targetCurrency) {
                             sub.amount
                         } else {
-                            currencyConversionService.convertAmount(
+                            currencyConversionService.convertAmountOrNull(
                                 amount = sub.amount,
                                 fromCurrency = sub.currency,
                                 toCurrency = targetCurrency
@@ -125,16 +129,39 @@ class SubscriptionsViewModel @Inject constructor(
     }
 
     fun selectSubscription(subscription: SubscriptionEntity?) {
-        _uiState.value = _uiState.value.copy(selectedSubscription = subscription)
+        _uiState.update { it.copy(selectedSubscription = subscription, paymentCandidates = emptyList()) }
     }
 
-    fun markAsPaid(subscription: SubscriptionEntity) {
+    fun clearPaymentMessage() { _uiState.update { it.copy(paymentMessage = null) } }
+    fun dismissPaymentCandidates() { _uiState.update { it.copy(paymentCandidates = emptyList()) } }
+
+    fun markAsPaid(subscription: SubscriptionEntity, linkedTransactionId: Long? = null, recordAnotherPayment: Boolean = false) {
+        if (_uiState.value.paymentInProgress) return
+        _uiState.update { it.copy(paymentInProgress = true) }
         viewModelScope.launch {
-            val today = java.time.LocalDate.now()
-            val nextDate = SubscriptionUtils.calculateNextPaymentDate(subscription.nextPaymentDate ?: today, subscription.billingCycle)
-            subscriptionRepository.updatePaymentStatus(subscription.id, nextDate, today)
-            selectSubscription(null)
+            try {
+                when (val result = markSubscriptionPaid.execute(subscription.id, subscription.nextPaymentDate,
+                    linkedTransactionId = linkedTransactionId, recordAnotherPayment = recordAnotherPayment)) {
+                    is MarkSubscriptionPaidUseCase.Result.ChooseExisting ->
+                        _uiState.update { it.copy(paymentCandidates = result.transactions) }
+                    is MarkSubscriptionPaidUseCase.Result.Paid -> {
+                        selectSubscription(null)
+                        _uiState.update { it.copy(paymentMessage = context.getString(
+                            if (result.linked) R.string.subscription_payment_linked else R.string.subscription_payment_recorded
+                        )) }
+                    }
+                    MarkSubscriptionPaidUseCase.Result.AlreadyPaid -> {
+                        selectSubscription(null)
+                        _uiState.update { it.copy(paymentMessage = context.getString(R.string.subscription_payment_already_recorded)) }
+                    }
+                }
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                _uiState.update { it.copy(paymentMessage = error.message ?: context.getString(R.string.subscription_payment_failed)) }
+            } finally {
+                _uiState.update { it.copy(paymentInProgress = false) }
+            }
         }
     }
-
 }

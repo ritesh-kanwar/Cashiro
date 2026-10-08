@@ -31,6 +31,7 @@ object CurrencyFormatter {
         "JPY" to Locale.JAPAN,
         "CNY" to Locale.CHINA,
         "NPR" to Locale.Builder().setLanguage("ne").setRegion("NP").build(),
+        "BDT" to Locale.Builder().setLanguage("bn").setRegion("BD").build(),
         "ETB" to Locale.Builder().setLanguage("am").setRegion("ET").build(),
         "THB" to Locale.Builder().setLanguage("th").setRegion("TH").build(),
         "MYR" to Locale.Builder().setLanguage("ms").setRegion("MY").build(),
@@ -145,7 +146,7 @@ object CurrencyFormatter {
 
         // Try to find a parser that can handle this bank name
         return try {
-            val parser = BankParserFactory.getParser(bankName)
+            val parser = BankParserFactory.getParserByName(bankName) ?: BankParserFactory.getParser(bankName)
             parser?.getCurrency() ?: "INR"
         } catch (e: Exception) {
             "INR"

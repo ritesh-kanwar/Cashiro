@@ -2,8 +2,8 @@ package com.ritesh.parser.core.bank
 
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.TransactionType
-import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.math.BigDecimal
 
 /**
  * South Indian Bank specific parser.
@@ -12,7 +12,7 @@ import java.time.LocalDateTime
  * - Balance updates
  * - Card transactions
  */
-class SouthIndianBankParser : BankParser() {
+class SouthIndianBankParser : BaseIndianBankParser() {
 
     override fun getBankName() = "South Indian Bank"
 
@@ -63,10 +63,7 @@ class SouthIndianBankParser : BankParser() {
         val balance = extractBalance(smsBody)
 
         // Parse date/time from message if available, otherwise use SMS timestamp
-        val dateTime = extractDateTime(smsBody) ?: LocalDateTime.ofInstant(
-            java.time.Instant.ofEpochMilli(timestamp),
-            java.time.ZoneId.systemDefault()
-        )
+        val dateTime = extractDateTime(smsBody) ?: LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(timestamp), java.time.ZoneId.systemDefault())
 
         return ParsedTransaction(
             amount = amount,
@@ -109,9 +106,21 @@ class SouthIndianBankParser : BankParser() {
                 ignoreCase = true
             )
         ) {
-            // Pattern for "Info: IMPS/FDRL/528005821348/EPIFI ACCOUN." - capture everything up to period
-            val impsPattern = Regex("""Info:\s*IMPS/[^/]+/[^/]+/([^.]+)""", RegexOption.IGNORE_CASE)
+            // Pattern for "Info: IMPS/FDRL/000000000001/EXAMPLE SHOP." - capture until period or next keyword
+            val impsPattern = Regex(
+                """Info:\s*IMPS/[^/]+/[^/]+/\s*([A-Za-z\s]+?)(?:\.|\s+(?:Final\s*Bal(?:ance)?\b|Final\b|Bal(?:ance)?\b))""",
+                RegexOption.IGNORE_CASE
+            )
             impsPattern.find(message)?.let { match ->
+                val merchant = match.groupValues[1].trim()
+                if (merchant.isNotEmpty()) {
+                    return cleanMerchantName(merchant)
+                }
+            }
+
+            // Fallback: capture everything up to period
+            val impsPattern2 = Regex("""Info:\s*IMPS/[^/]+/[^/]+/([^.]+)""", RegexOption.IGNORE_CASE)
+            impsPattern2.find(message)?.let { match ->
                 val merchant = match.groupValues[1].trim()
                 if (merchant.isNotEmpty()) {
                     return cleanMerchantName(merchant)
@@ -123,7 +132,7 @@ class SouthIndianBankParser : BankParser() {
         if (message.contains("UPI", ignoreCase = true)) {
             // Pattern for "Info:UPI/IPOS/number/MERCHANT NAME on" format
             val infoPattern =
-                Regex("""Info:UPI/[^/]+/[^/]+/([^/]+?)\s+on""", RegexOption.IGNORE_CASE)
+                Regex("""Info:\s*UPI/[^/]+/\d{12}/\s*([^/]+?)\s+on""", RegexOption.IGNORE_CASE)
             infoPattern.find(message)?.let { match ->
                 val merchant = match.groupValues[1].trim()
                 if (merchant.isNotEmpty()) {
@@ -224,21 +233,44 @@ class SouthIndianBankParser : BankParser() {
 
     override fun extractReference(message: String): String? {
         // Pattern for IMPS reference in "Info: IMPS/xxx/reference/merchant" format
+        // Handle variations with or without space after the last slash
         if (message.contains("IMPS", ignoreCase = true) && message.contains(
                 "Info:",
                 ignoreCase = true
             )
         ) {
-            val impsRefPattern = Regex("""Info:\s*IMPS/[^/]+/([^/]+)/""", RegexOption.IGNORE_CASE)
+            // More flexible pattern that handles variations
+            val impsRefPattern = Regex(
+                """Info:\s*IMPS/[^/]+/(\d+)(?:/\s*|\s+)""",
+                RegexOption.IGNORE_CASE
+            )
             impsRefPattern.find(message)?.let { match ->
                 val ref = match.groupValues[1].trim()
                 if (ref.isNotEmpty()) {
                     return ref
                 }
             }
+
+            // Fallback pattern: capture reference number between second and third slash
+            val impsRefPattern2 = Regex("""Info:\s*IMPS/[^/]+/([^/]+)/""", RegexOption.IGNORE_CASE)
+            impsRefPattern2.find(message)?.let { match ->
+                val ref = match.groupValues[1].trim()
+                if (ref.isNotEmpty() && ref.all { it.isDigit() }) {
+                    return ref
+                }
+            }
         }
 
-        // Pattern for RRN (e.g., "RRN:523273398527" or "RRN:567304295699.")
+        // Pattern for UPI reference in "Info: UPI/provider/rrn/..." format.
+        val upiInfoPattern = Regex(
+            """Info:\s*UPI/[^/]+/(\d{12})(?:/|\s|$)""",
+            RegexOption.IGNORE_CASE
+        )
+        upiInfoPattern.find(message)?.let { match ->
+            return match.groupValues[1].trim()
+        }
+
+        // Pattern for RRN (e.g., "RRN:000000000001" or "RRN:000000000002.")
         val rrnPattern = Regex("""RRN[:\s]*(\d{12})""", RegexOption.IGNORE_CASE)
         rrnPattern.find(message)?.let { match ->
             return match.groupValues[1].trim()
@@ -254,7 +286,8 @@ class SouthIndianBankParser : BankParser() {
     }
 
     override fun extractAccountLast4(message: String): String? {
-        // Pattern for "A/c X1234" or "A/c XX1234" or "A/c XXX1234"
+        super.extractAccountLast4(message)?.let { return it }
+        // Pattern for "A/c X1000" or "A/c XX1000" or "A/c XXX1000"
         val patterns = listOf(
             Regex("""A/c\s+[X*]*(\d{4})""", RegexOption.IGNORE_CASE),
             Regex("""Account\s+[X*]*(\d{4})""", RegexOption.IGNORE_CASE),
@@ -268,7 +301,7 @@ class SouthIndianBankParser : BankParser() {
             }
         }
 
-        return super.extractAccountLast4(message)
+        return null
     }
 
     override fun extractBalance(message: String): BigDecimal? {

@@ -110,13 +110,13 @@ constructor(
                 val amt = if (account.currency == baseCurrency) {
                     account.balance
                 } else {
-                    currencyConversionService.convertAmount(
+                    currencyConversionService.convertAmountOrNull(
                         amount = account.balance,
                         fromCurrency = account.currency,
                         toCurrency = baseCurrency
                     )
                 }
-                total = total.add(amt)
+                total = total.add(amt ?: BigDecimal.ZERO)
             }
             total
         }.onEach { total ->
@@ -148,16 +148,16 @@ constructor(
                 val amt = if (txn.currency == baseCurrency) {
                     txn.amount
                 } else {
-                    currencyConversionService.convertAmount(
+                    currencyConversionService.convertAmountOrNull(
                         amount = txn.amount,
                         fromCurrency = txn.currency,
                         toCurrency = baseCurrency
                     )
                 }
                 if (txn.transactionType == TransactionType.INCOME || txn.transactionType == TransactionType.BORROWED) {
-                    income = income.add(amt)
+                    income = income.add(amt ?: BigDecimal.ZERO)
                 } else if (txn.transactionType == TransactionType.EXPENSE || txn.transactionType == TransactionType.LENT) {
-                    expense = expense.add(amt)
+                    expense = expense.add(amt ?: BigDecimal.ZERO)
                 }
             }
 

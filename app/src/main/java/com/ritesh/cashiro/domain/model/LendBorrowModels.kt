@@ -51,7 +51,9 @@ data class LendBorrowTransactionItem(
     val accountId: Long? = null,
     val category: String? = null,
     val merchant: String? = null,
-    val attachments: List<String> = emptyList()
+    val attachments: List<String> = emptyList(),
+    val currency: String = "INR",
+    val originalAmount: BigDecimal = amount
 )
 
 /**

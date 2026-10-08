@@ -22,7 +22,7 @@ data class PdfAnalysisResult(
 data class PdfTransactionImportItem(
     val parsed: com.ritesh.parser.core.ParsedTransaction,
     val duplicateMatch: TransactionEntity? = null,
-    val initialDecision: TransactionImportDecision = if (duplicateMatch != null) TransactionImportDecision.SKIP else TransactionImportDecision.IMPORT_NEW
+    val initialDecision: TransactionImportDecision = if (duplicateMatch != null) TransactionImportDecision.OVERRIDE_EXISTING else TransactionImportDecision.IMPORT_NEW
 )
 
 enum class TransactionImportDecision { IMPORT_NEW, SKIP, OVERRIDE_EXISTING }
@@ -31,8 +31,10 @@ data class PdfAccountMatch(
     val last4: String,
     val bankNameInPdf: String,
     // Existing account in the DB that matches, or null if no match.
-    val existingAccount: AccountBalanceEntity?
+    val existingAccount: AccountBalanceEntity?,
+    val currency: String = "INR"
 ) {
+    val key: String get() = pdfAccountKey(bankNameInPdf, currency, last4)
     val hasExistingMatch: Boolean get() = existingAccount != null
 }
 
@@ -46,6 +48,8 @@ data class DataPrivacyUiState(
     val exportedBackupFile: File? = null,
     val backupConfiguration: BackupConfiguration = BackupConfiguration(),
 
+    val isCsvProcessing: Boolean = false,
+
     // PDF import flow
     val isPdfProcessing: Boolean = false,
     val pdfAnalysisResult: PdfAnalysisResult? = null,
@@ -56,3 +60,5 @@ data class DataPrivacyUiState(
     val showMainAccountSelection: Boolean = false,
     val mainAccountSelectionAccounts: List<AccountBalanceEntity> = emptyList()
 )
+
+internal fun pdfAccountKey(bank: String, currency: String, suffix: String): String = "$bank|$currency|$suffix"

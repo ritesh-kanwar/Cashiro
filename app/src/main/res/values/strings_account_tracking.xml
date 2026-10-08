@@ -1,0 +1,9 @@
+<resources>
+    <string name="account_tracking_title">Account tracking</string>
+    <string name="account_tracking_description">Ignore an account to skip its new transaction messages and balance updates and remove its transactions from the list. Existing records and overview totals are kept. Use Hide to exclude an account from overview balances.</string>
+    <string name="account_tracking_ignored">Account ignored</string>
+    <string name="account_tracking_active">Tracking transactions</string>
+    <string name="account_tracking_ignore">Ignore</string>
+    <string name="account_tracking_resume">Resume tracking</string>
+    <string name="account_tracking_undo">Undo</string>
+</resources>

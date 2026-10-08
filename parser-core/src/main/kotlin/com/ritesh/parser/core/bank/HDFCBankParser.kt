@@ -262,6 +262,10 @@ class HDFCBankParser : BankParser() {
         return super.extractMerchant(message, sender)
     }
 
+    override fun detectIsCard(message: String): Boolean =
+        Regex("""\bblock\s?(?:p?cc|dc)\b""", RegexOption.IGNORE_CASE).containsMatchIn(message) ||
+            super.detectIsCard(message)
+
     override fun extractTransactionType(message: String): TransactionType? {
         val lowerMessage = message.lowercase()
 
@@ -273,7 +277,9 @@ class HDFCBankParser : BankParser() {
         return when {
             // Credit card transactions - ONLY if message contains CC or PCC indicators
             // Any transaction with BLOCK CC or BLOCK PCC is a credit card transaction
-            lowerMessage.contains("block cc") || lowerMessage.contains("block pcc") -> TransactionType.CREDIT
+            Regex("""\bblock\s?p?cc\b""").containsMatchIn(lowerMessage) -> TransactionType.CREDIT
+
+            lowerMessage.contains("deposited in") -> TransactionType.INCOME
 
             // Legacy pattern for older format that explicitly says "spent on card"
             lowerMessage.contains("spent on card") && !lowerMessage.contains("block dc") -> TransactionType.CREDIT
@@ -334,7 +340,7 @@ class HDFCBankParser : BankParser() {
         }
 
         // Pattern for "BLOCK DC ####" format
-        val blockDCPattern = Regex("""BLOCK\s+DC\s+(\d{4})""", RegexOption.IGNORE_CASE)
+        val blockDCPattern = Regex("""BLOCK\s*(?:DC|P?CC)\s+(\d{4})\b""", RegexOption.IGNORE_CASE)
         blockDCPattern.find(message)?.let { match ->
             return match.groupValues[1]
         }
@@ -468,11 +474,16 @@ class HDFCBankParser : BankParser() {
             amount = amount,
             nextDeductionDate = dateStr,
             merchant = merchant,
-            umn = umn
+            umn = umn,
+            accountLast4 = extractAccountLast4(message)
         )
     }
 
     override fun isTransactionMessage(message: String): Boolean {
+        if (message.contains("due on", ignoreCase = true) &&
+            !Regex("""\b(debited|deducted|credited|deposited|withdrawn|spent|received|transferred|sent|charged|used|refunded|reversed|paid|purchased)\b""", RegexOption.IGNORE_CASE).containsMatchIn(message)
+        ) return false
+
         // Skip E-Mandate notifications
         if (isEMandateNotification(message)) {
             return false
@@ -542,6 +553,7 @@ class HDFCBankParser : BankParser() {
             "spent", "received", "transferred", "paid",
             "sent", // HDFC uses "Sent Rs.X From HDFC Bank"
             "deducted", // Add support for "deducted from" pattern
+            "used on",
             "txn" // HDFC uses "Txn Rs.X" for card transactions
         )
 
@@ -593,7 +605,8 @@ class HDFCBankParser : BankParser() {
             amount = amount,
             nextDeductionDate = debitDate,
             merchant = merchant,
-            umn = null // Future debits don't have UMN
+            umn = null,
+            accountLast4 = extractAccountLast4(message)
         )
     }
 
@@ -604,7 +617,8 @@ class HDFCBankParser : BankParser() {
         override val amount: BigDecimal,
         override val nextDeductionDate: String?,
         override val merchant: String,
-        override val umn: String?
+        override val umn: String?,
+        override val accountLast4: String? = null
     ) : MandateInfo {
         // HDFC uses dd/MM/yy format
         override val dateFormat = "dd/MM/yy"

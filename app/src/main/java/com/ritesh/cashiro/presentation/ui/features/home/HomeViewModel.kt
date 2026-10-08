@@ -247,13 +247,13 @@ class HomeViewModel @Inject constructor(
                     val amt = if (account.currency == selectedCurrency) {
                         account.balance
                     } else {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             amount = account.balance,
                             fromCurrency = account.currency,
                             toCurrency = selectedCurrency
                         )
                     }
-                    assetBalanceInSelectedCurrency = assetBalanceInSelectedCurrency.add(amt)
+                    assetBalanceInSelectedCurrency = assetBalanceInSelectedCurrency.add(amt ?: BigDecimal.ZERO)
                 }
 
                 var liabilityBalanceInSelectedCurrency = BigDecimal.ZERO
@@ -261,13 +261,13 @@ class HomeViewModel @Inject constructor(
                     val amt = if (card.currency == selectedCurrency) {
                         card.balance
                     } else {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             amount = card.balance,
                             fromCurrency = card.currency,
                             toCurrency = selectedCurrency
                         )
                     }
-                    liabilityBalanceInSelectedCurrency = liabilityBalanceInSelectedCurrency.add(amt)
+                    liabilityBalanceInSelectedCurrency = liabilityBalanceInSelectedCurrency.add(amt ?: BigDecimal.ZERO)
                 }
 
                 val totalBalanceInSelectedCurrency = assetBalanceInSelectedCurrency - liabilityBalanceInSelectedCurrency
@@ -278,13 +278,13 @@ class HomeViewModel @Inject constructor(
                     val amt = if (card.currency == selectedCurrency) {
                         availableInCardCurrency
                     } else {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             amount = availableInCardCurrency,
                             fromCurrency = card.currency,
                             toCurrency = selectedCurrency
                         )
                     }
-                    totalAvailableCreditInSelectedCurrency = totalAvailableCreditInSelectedCurrency.add(amt)
+                    totalAvailableCreditInSelectedCurrency = totalAvailableCreditInSelectedCurrency.add(amt ?: BigDecimal.ZERO)
                 }
 
                 _uiState.update { 
@@ -321,11 +321,11 @@ class HomeViewModel @Inject constructor(
                     val convertedAmount = if (tx.currency == selectedCurrency) {
                         tx.amount
                     } else {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             amount = tx.amount,
                             fromCurrency = tx.currency,
                             toCurrency = selectedCurrency
-                        ) ?: tx.amount
+                        ) ?: return@forEach
                     }
 
                     when (tx.transactionType) {
@@ -391,9 +391,9 @@ class HomeViewModel @Inject constructor(
                 // Calculate converted amounts for shown transactions if transaction currency differs from selected currency
                 val converted = transactions
                     .filter { it.currency != selectedCurrency }
-                    .associate { tx ->
-                        tx.id to (currencyConversionService.convertAmount(tx.amount, tx.currency, selectedCurrency) ?: tx.amount)
-                    }
+                    .mapNotNull { tx ->
+                        currencyConversionService.convertAmountOrNull(tx.amount, tx.currency, selectedCurrency)?.let { tx.id to it }
+                    }.toMap()
                 
                 _uiState.update { it.copy(
                     recentTransactions = transactions,
@@ -421,13 +421,13 @@ class HomeViewModel @Inject constructor(
                     val amt = if (subscription.currency == targetCurrency) {
                         subscription.amount
                     } else {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             amount = subscription.amount,
                             fromCurrency = subscription.currency,
                             toCurrency = targetCurrency
                         )
                     }
-                    totalAmount = totalAmount.add(amt)
+                    totalAmount = totalAmount.add(amt ?: BigDecimal.ZERO)
                 }
 
                 _uiState.update {
@@ -450,29 +450,7 @@ class HomeViewModel @Inject constructor(
             ) { budgets, targetCurrency, _ ->
                 // Convert budgets to match the selected main currency for display
                 val convertedBudgets = budgets.map { budgetWithSpending ->
-                    if (budgetWithSpending.budget.currency != targetCurrency) {
-                        val convertedAmount = currencyConversionService.convertAmount(
-                            budgetWithSpending.budget.amount,
-                            budgetWithSpending.budget.currency,
-                            targetCurrency
-                        ) ?: budgetWithSpending.budget.amount
-
-                        val convertedSpending = currencyConversionService.convertAmount(
-                            budgetWithSpending.currentSpending,
-                            budgetWithSpending.budget.currency,
-                            targetCurrency
-                        ) ?: budgetWithSpending.currentSpending
-
-                        budgetWithSpending.copy(
-                            budget = budgetWithSpending.budget.copy(
-                                amount = convertedAmount,
-                                currency = targetCurrency
-                            ),
-                            currentSpending = convertedSpending
-                        )
-                    } else {
-                        budgetWithSpending
-                    }
+                    budgetWithSpending.inCurrency(targetCurrency, currencyConversionService)
                 }
                 
                 _uiState.update { 
@@ -511,13 +489,13 @@ class HomeViewModel @Inject constructor(
                             val amt = if (account.currency == selectedCurrency) {
                                 balanceValue
                             } else {
-                                currencyConversionService.convertAmount(
+                                currencyConversionService.convertAmountOrNull(
                                     amount = balanceValue,
                                     fromCurrency = account.currency,
                                     toCurrency = selectedCurrency
                                 )
                             }
-                            dayTotal = dayTotal.add(amt)
+                            dayTotal = dayTotal.add(amt ?: BigDecimal.ZERO)
                         }
                         dayTotal
                     }
@@ -718,22 +696,22 @@ class HomeViewModel @Inject constructor(
             var assetBalanceInSelectedCurrency = BigDecimal.ZERO
             for (account in regularAccounts) {
                 val amt = if (account.currency == selectedCurrency) account.balance
-                else currencyConversionService.convertAmount(account.balance, account.currency, selectedCurrency)
-                assetBalanceInSelectedCurrency = assetBalanceInSelectedCurrency.add(amt)
+                else currencyConversionService.convertAmountOrNull(account.balance, account.currency, selectedCurrency)
+                assetBalanceInSelectedCurrency = assetBalanceInSelectedCurrency.add(amt ?: BigDecimal.ZERO)
             }
             var liabilityBalanceInSelectedCurrency = BigDecimal.ZERO
             for (card in creditCards) {
                 val amt = if (card.currency == selectedCurrency) card.balance
-                else currencyConversionService.convertAmount(card.balance, card.currency, selectedCurrency)
-                liabilityBalanceInSelectedCurrency = liabilityBalanceInSelectedCurrency.add(amt)
+                else currencyConversionService.convertAmountOrNull(card.balance, card.currency, selectedCurrency)
+                liabilityBalanceInSelectedCurrency = liabilityBalanceInSelectedCurrency.add(amt ?: BigDecimal.ZERO)
             }
             val totalBalanceInSelectedCurrency = assetBalanceInSelectedCurrency - liabilityBalanceInSelectedCurrency
             var totalAvailableCreditInSelectedCurrency = BigDecimal.ZERO
             for (card in creditCards) {
                 val availableInCardCurrency = (card.creditLimit ?: BigDecimal.ZERO) - card.balance
                 val amt = if (card.currency == selectedCurrency) availableInCardCurrency
-                else currencyConversionService.convertAmount(availableInCardCurrency, card.currency, selectedCurrency)
-                totalAvailableCreditInSelectedCurrency = totalAvailableCreditInSelectedCurrency.add(amt)
+                else currencyConversionService.convertAmountOrNull(availableInCardCurrency, card.currency, selectedCurrency)
+                totalAvailableCreditInSelectedCurrency = totalAvailableCreditInSelectedCurrency.add(amt ?: BigDecimal.ZERO)
             }
 
             _uiState.update { 
@@ -860,9 +838,9 @@ class HomeViewModel @Inject constructor(
                 income += breakdown.income
                 expenses += breakdown.expenses
             } else {
-                total += currencyConversionService.convertAmount(breakdown.total, currency, selectedCurrency)
-                income += currencyConversionService.convertAmount(breakdown.income, currency, selectedCurrency)
-                expenses += currencyConversionService.convertAmount(breakdown.expenses, currency, selectedCurrency)
+                total += currencyConversionService.convertAmountOrNull(breakdown.total, currency, selectedCurrency) ?: BigDecimal.ZERO
+                income += currencyConversionService.convertAmountOrNull(breakdown.income, currency, selectedCurrency) ?: BigDecimal.ZERO
+                expenses += currencyConversionService.convertAmountOrNull(breakdown.expenses, currency, selectedCurrency) ?: BigDecimal.ZERO
             }
         }
         return TransactionRepository.MonthlyBreakdown(total, income, expenses)

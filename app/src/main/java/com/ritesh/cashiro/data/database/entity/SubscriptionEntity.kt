@@ -15,6 +15,7 @@ data class SubscriptionEntity(
         @ColumnInfo(name = "next_payment_date") val nextPaymentDate: LocalDate?,
         @ColumnInfo(name = "state") val state: SubscriptionState = SubscriptionState.ACTIVE,
         @ColumnInfo(name = "bank_name") val bankName: String? = null,
+        @ColumnInfo(name = "account_last4") val accountLast4: String? = null,
         @ColumnInfo(name = "umn") val umn: String? = null, // Unique Mandate Number for E-Mandates
         @ColumnInfo(name = "category") val category: String? = null,
         @ColumnInfo(name = "subcategory") val subcategory: String? = null,

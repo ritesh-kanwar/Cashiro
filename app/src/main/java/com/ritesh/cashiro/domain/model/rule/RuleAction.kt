@@ -10,7 +10,9 @@ data class RuleAction(
 ) {
     fun validate(): Boolean {
         return when (actionType) {
-            ActionType.SET -> value.isNotBlank()
+            ActionType.SET -> if (field == TransactionField.TYPE) {
+                runCatching { com.ritesh.cashiro.data.database.entity.TransactionType.valueOf(value.uppercase()) }.isSuccess
+            } else value.isNotBlank()
             ActionType.APPEND, ActionType.PREPEND -> value.isNotBlank()
             ActionType.CLEAR -> true
             ActionType.ADD_TAG -> value.isNotBlank()
@@ -30,3 +32,16 @@ enum class ActionType {
     REMOVE_TAG,    // Remove a tag
     BLOCK          // Block the transaction from being saved
 }
+
+/** Actions supported by Cashiro's rule engine, including subcategory resolution. */
+fun supportedActionTypes(field: TransactionField): Set<ActionType> = when (field) {
+    TransactionField.CATEGORY, TransactionField.SUBCATEGORY -> setOf(ActionType.SET, ActionType.CLEAR)
+    TransactionField.MERCHANT, TransactionField.NARRATION -> setOf(
+        ActionType.SET, ActionType.APPEND, ActionType.PREPEND, ActionType.CLEAR
+    )
+    TransactionField.TYPE -> setOf(ActionType.SET)
+    else -> emptySet()
+}
+
+fun RuleAction.isExecutable(): Boolean =
+    actionType == ActionType.BLOCK || actionType in supportedActionTypes(field)

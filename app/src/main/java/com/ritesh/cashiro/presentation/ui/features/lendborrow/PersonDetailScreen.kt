@@ -1046,7 +1046,7 @@ fun SharedTransitionScope.LendBorrowTransactionListItem(
         },
         trailing = {
             Text(
-                text = CurrencyFormatter.formatCurrency(item.amount, currency),
+                text = CurrencyFormatter.formatCurrency(item.amount, item.currency),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = amountColor

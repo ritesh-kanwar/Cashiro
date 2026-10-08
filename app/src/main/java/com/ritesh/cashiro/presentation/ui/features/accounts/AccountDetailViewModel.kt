@@ -115,11 +115,11 @@ class AccountDetailViewModel @Inject constructor(
 
                 filteredTransactions.forEach { transaction ->
                     val convertedAmount = if (transaction.currency != mainCurrency) {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             amount = transaction.amount,
                             fromCurrency = transaction.currency,
                             toCurrency = mainCurrency
-                        ) ?: transaction.amount
+                        ) ?: return@forEach
                     } else {
                         transaction.amount
                     }
@@ -157,9 +157,9 @@ class AccountDetailViewModel @Inject constructor(
                 // Calculate converted amounts for the UI (TransactionItem) based on Main App Currency
                 val converted = filteredTransactions
                     .filter { it.currency != mainCurrency }
-                    .associate { tx ->
-                        tx.id to (currencyConversionService.convertAmount(tx.amount, tx.currency, mainCurrency) ?: tx.amount)
-                    }
+                    .mapNotNull { tx ->
+                        currencyConversionService.convertAmountOrNull(tx.amount, tx.currency, mainCurrency)?.let { tx.id to it }
+                    }.toMap()
 
                 _uiState.update { state ->
                     state.copy(
@@ -230,13 +230,13 @@ class AccountDetailViewModel @Inject constructor(
             }.collect { balanceHistory ->
                 val effectiveCurrency = currencyRepository.effectiveBaseCurrencyCode.first()
 
-                val chartData = balanceHistory.map { entity ->
+                val chartData = balanceHistory.mapNotNull { entity ->
                     val convertedBalance = if (entity.currency != effectiveCurrency) {
-                        currencyConversionService.convertAmount(
+                        currencyConversionService.convertAmountOrNull(
                             entity.balance,
                             entity.currency,
                             effectiveCurrency
-                        ) ?: entity.balance
+                        ) ?: return@mapNotNull null
                     } else entity.balance
 
                     BalancePoint(

@@ -47,6 +47,9 @@ interface RuleApplicationDao {
     @Query("DELETE FROM rule_applications WHERE applied_at < :beforeDate")
     suspend fun deleteOldApplications(beforeDate: LocalDateTime)
 
+    @Query("DELETE FROM rule_applications WHERE transaction_id NOT IN (SELECT CAST(id AS TEXT) FROM transactions)")
+    suspend fun deleteOrphanedApplications()
+
     @Query("DELETE FROM rule_applications")
     suspend fun deleteAllApplications()
 }

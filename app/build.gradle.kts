@@ -136,6 +136,8 @@ android {
         includeInBundle = false
     }
 
+    sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
+
     testOptions {
         unitTests.isReturnDefaultValues = true
     }

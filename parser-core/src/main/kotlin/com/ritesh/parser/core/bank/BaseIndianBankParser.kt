@@ -157,11 +157,13 @@ abstract class BaseIndianBankParser : BankParser() {
         val umnPattern = Regex("""UMN[:\s]+([^.\s]+)""", RegexOption.IGNORE_CASE)
         val umn = umnPattern.find(message)?.groupValues?.get(1)
 
+        val accountLast4 = extractAccountLast4(message)
         return object : MandateInfo {
             override val amount = amount
             override val nextDeductionDate = dateStr
             override val merchant = merchant
             override val umn = umn
+            override val accountLast4 = accountLast4
             override val dateFormat = "dd-MMM-yy" // Default fallback
         }
     }

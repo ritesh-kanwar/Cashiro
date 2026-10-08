@@ -1,5 +1,10 @@
 package com.ritesh.cashiro.presentation.ui.features.settings.rules
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import com.ritesh.cashiro.data.rules.RuleSharingCodec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -92,6 +97,27 @@ fun RulesScreen(
     val isLoading = uiState.isLoading
     val batchApplyProgress = uiState.batchApplyProgress
     val batchApplyResult = uiState.batchApplyResult
+    val sharingMessage by rulesViewModel.sharingMessage.collectAsStateWithLifecycle()
+    val isSharing by rulesViewModel.isSharing.collectAsStateWithLifecycle()
+    var showSharingMenu by remember { mutableStateOf(false) }
+    val exportRulesLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument(RuleSharingCodec.MIME_TYPE)
+    ) { uri -> uri?.let(rulesViewModel::exportRules) }
+    val importRulesLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let(rulesViewModel::importRules) }
+
+    sharingMessage?.let { message ->
+        AlertDialog(
+            onDismissRequest = rulesViewModel::clearSharingMessage,
+            title = { Text("Rule sharing") },
+            text = { Text(message) },
+            confirmButton = {
+                TextButton(onClick = rulesViewModel::clearSharingMessage) { Text("OK") }
+            }
+        )
+    }
+
 
     var showBatchApplyDialog by remember { mutableStateOf(false) }
     var selectedRuleForBatch by remember { mutableStateOf<TransactionRule?>(null) }
@@ -112,24 +138,39 @@ fun RulesScreen(
                 hasActionButton = true,
                 navigationContent = { NavigationContent(onNavigateBack) },
                 actionContent = {
-                    // Add reset button for advanced users
                     var showResetDialog by remember { mutableStateOf(false) }
-
-                    IconButton(
-                        onClick = { showResetDialog = true },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            contentColor = MaterialTheme.colorScheme.onBackground
-                        ),
-                        shapes =  IconButtonDefaults.shapes(),
-                        modifier = Modifier.padding(end = 16.dp)
-                    ) {
-                        Icon(
-                            Icons.Rounded.Refresh,
-                            contentDescription = stringResource(R.string.reset_to_defaults)
-                        )
+                    Box {
+                        IconButton(
+                            onClick = { showSharingMenu = true },
+                            enabled = !isSharing,
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                                contentColor = MaterialTheme.colorScheme.onBackground
+                            ),
+                            shapes = IconButtonDefaults.shapes(),
+                            modifier = Modifier.padding(end = 16.dp)
+                        ) {
+                            Icon(Icons.Rounded.MoreVert, contentDescription = "Rule options")
+                        }
+                        DropdownMenu(expanded = showSharingMenu, onDismissRequest = { showSharingMenu = false }) {
+                            DropdownMenuItem(text = { Text("Export rules") }, onClick = {
+                                showSharingMenu = false
+                                if (RuleSharingCodec.exportable(rules).isEmpty()) {
+                                    rulesViewModel.reportNothingToExport()
+                                } else {
+                                    exportRulesLauncher.launch("cashiro-rules.json")
+                                }
+                            })
+                            DropdownMenuItem(text = { Text("Import rules") }, onClick = {
+                                showSharingMenu = false
+                                importRulesLauncher.launch(arrayOf("*/*"))
+                            })
+                            DropdownMenuItem(text = { Text(stringResource(R.string.reset_to_defaults)) }, onClick = {
+                                showSharingMenu = false
+                                showResetDialog = true
+                            })
+                        }
                     }
-
                     if (showResetDialog) {
                         RulesResetDialog(
                             onDismiss = { showResetDialog = false },

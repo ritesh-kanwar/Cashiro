@@ -16,6 +16,9 @@ interface UnrecognizedSmsDao {
     @Insert(onConflict = androidx.room.OnConflictStrategy.IGNORE)
     suspend fun insert(sms: UnrecognizedSmsEntity): Long
     
+    @Insert(onConflict = androidx.room.OnConflictStrategy.IGNORE)
+    suspend fun insertAll(messages: List<UnrecognizedSmsEntity>)
+
     @Query("SELECT * FROM unrecognized_sms WHERE reported = 0 AND is_deleted = 0 ORDER BY received_at DESC")
     fun getAllUnreported(): Flow<List<UnrecognizedSmsEntity>>
     

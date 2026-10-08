@@ -727,7 +727,8 @@ class SBIBankParser : BankParser() {
             amount = amount,
             nextDeductionDate = null, // SBI doesn't provide next deduction date in creation message
             merchant = merchant,
-            umn = umn
+            umn = umn,
+            accountLast4 = extractAccountLast4(message)
         )
     }
 
@@ -739,7 +740,8 @@ class SBIBankParser : BankParser() {
         override val amount: BigDecimal,
         override val nextDeductionDate: String?,
         override val merchant: String,
-        override val umn: String?
+        override val umn: String?,
+        override val accountLast4: String? = null
     ) : MandateInfo {
         // SBI uses dd/MM/yy format
         override val dateFormat = "dd/MM/yy"

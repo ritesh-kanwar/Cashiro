@@ -49,22 +49,22 @@ class LendBorrowRepository @Inject constructor(
                 var activeTxCount = 0
 
                 personTxns.forEach { tx ->
-                    val convertedAmount = if (tx.currency == baseCurrency) {
-                        tx.amount
-                    } else {
-                        currencyConversionService.convertAmount(
-                            amount = tx.amount,
-                            fromCurrency = tx.currency,
-                            toCurrency = baseCurrency
-                        ) ?: tx.amount
-                    }
-
                     if (!tx.isSettled) {
                         activeTxCount++
                         if (tx.dueDate != null && tx.dueDate.isBefore(now)) {
                             hasOverdue = true
                         }
                     }
+                    val convertedAmount = if (tx.currency == baseCurrency) {
+                        tx.amount
+                    } else {
+                        currencyConversionService.convertAmountOrNull(
+                            amount = tx.amount,
+                            fromCurrency = tx.currency,
+                            toCurrency = baseCurrency
+                        ) ?: return@forEach
+                    }
+
                     when (tx.type) {
                         LendBorrowType.LENT -> totalLent += convertedAmount
                         LendBorrowType.BORROWED -> totalBorrowed += convertedAmount
@@ -391,28 +391,27 @@ class LendBorrowRepository @Inject constructor(
         )
     }
 
-    private suspend fun LendBorrowTransactionEntity.toDomain(baseCurrency: String) = LendBorrowTransactionItem(
-        id = id,
-        personId = personId,
-        transactionId = transactionId,
-        type = type,
-        amount = if (currency == baseCurrency) amount else {
-            currencyConversionService.convertAmount(
-                amount = amount,
-                fromCurrency = currency,
-                toCurrency = baseCurrency
-            ) ?: amount
-        },
-        title = title,
-        dueDate = dueDate,
-        isSettled = isSettled,
-        date = date,
-        createdAt = createdAt,
-        updatedAt = updatedAt,
-        isSample = isSample,
-        accountId = accountId,
-        category = category,
-        merchant = merchant,
-        attachments = attachments
-    )
+    private suspend fun LendBorrowTransactionEntity.toDomain(baseCurrency: String): LendBorrowTransactionItem {
+        val converted = currencyConversionService.convertAmountOrNull(amount, currency, baseCurrency)
+        return LendBorrowTransactionItem(
+            id = id,
+            personId = personId,
+            transactionId = transactionId,
+            type = type,
+            amount = converted ?: amount,
+            originalAmount = amount,
+            currency = if (converted != null) baseCurrency else currency,
+            title = title,
+            dueDate = dueDate,
+            isSettled = isSettled,
+            date = date,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            isSample = isSample,
+            accountId = accountId,
+            category = category,
+            merchant = merchant,
+            attachments = attachments
+        )
+    }
 }

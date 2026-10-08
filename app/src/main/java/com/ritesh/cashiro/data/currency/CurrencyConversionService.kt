@@ -2,14 +2,12 @@ package com.ritesh.cashiro.data.currency
 
 import com.ritesh.cashiro.data.database.dao.ExchangeRateDao
 import com.ritesh.cashiro.data.database.entity.ExchangeRateEntity
-import com.ritesh.cashiro.data.preferences.UserPreferencesRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -22,14 +20,13 @@ import javax.inject.Singleton
 @Singleton
 class CurrencyConversionService @Inject constructor(
     private val exchangeRateDao: ExchangeRateDao,
-    private val exchangeRateProvider: ExchangeRateProvider,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val exchangeRateProvider: ExchangeRateProvider
 ) {
-    private val backgroundScope = CoroutineScope(Dispatchers.IO)
-
-    // Cache rates for performance
-    private val rateCache = mutableMapOf<String, BigDecimal>()
-    private var lastCacheUpdate: LocalDateTime = LocalDateTime.MIN
+    private val fetchMutex = Mutex()
+    @Volatile private var fetchGeneration = 0L
+    private val responses = mutableMapOf<String, ExchangeRateResponseWithMetadata>()
+    private val failedFetches = mutableMapOf<String, Long>()
+    private val receivedAt = mutableMapOf<String, Long>()
 
     // Emits a new value whenever a custom rate is saved or reset, so ViewModels can react
     private val _rateChangeTrigger = MutableStateFlow(0L)
@@ -38,22 +35,15 @@ class CurrencyConversionService @Inject constructor(
     /**
      * Convert amount from one currency to another
      */
-    suspend fun convertAmount(
+    suspend fun convertAmountOrNull(
         amount: BigDecimal,
         fromCurrency: String,
         toCurrency: String,
         forceRefresh: Boolean = false
-    ): BigDecimal {
-        if (fromCurrency.equals(toCurrency, ignoreCase = true)) {
-            return amount
-        }
-
-        val rate = getExchangeRate(fromCurrency, toCurrency, forceRefresh)
-        return if (rate != null) {
-            amount.multiply(rate).setScale(2, RoundingMode.HALF_UP)
-        } else {
-            amount // Return original amount if conversion fails
-        }
+    ): BigDecimal? {
+        if (fromCurrency.trim().equals(toCurrency.trim(), ignoreCase = true)) return amount
+        val rate = getExchangeRate(fromCurrency, toCurrency, forceRefresh) ?: return null
+        return amount.multiply(rate).setScale(2, RoundingMode.HALF_UP)
     }
 
     /**
@@ -64,91 +54,86 @@ class CurrencyConversionService @Inject constructor(
         toCurrency: String,
         forceRefresh: Boolean = false
     ): BigDecimal? {
-        val cacheKey = "${fromCurrency.uppercase()}_${toCurrency.uppercase()}"
-
-        // Check cache first (unless forced refresh)
-        if (!forceRefresh && isCacheValid()) {
-            rateCache[cacheKey]?.let { return it }
-        }
-
-        // Check database for custom rates first (always takes priority)
-        if (!forceRefresh) {
-            val customRate = exchangeRateDao.getCustomRate(fromCurrency.uppercase(), toCurrency.uppercase())
-            if (customRate != null) {
-                updateCache(cacheKey, customRate.rate)
-                return customRate.rate
+        val requestedGeneration = fetchGeneration
+        return fetchMutex.withLock {
+            val from = fromCurrency.trim().uppercase(java.util.Locale.ROOT)
+            val to = toCurrency.trim().uppercase(java.util.Locale.ROOT)
+            if (from == to) return@withLock BigDecimal.ONE
+            // Custom rates take precedence even during a requested refresh.
+            exchangeRateDao.getCustomRate(from, to)?.rate?.takeIf { it.signum() > 0 }?.let { return@withLock it }
+            exchangeRateDao.getCustomRate(to, from)?.rate?.takeIf { it.signum() > 0 }?.let {
+                return@withLock BigDecimal.ONE.divide(it, MathContext(10))
             }
-
-            val reverseCustomRate = exchangeRateDao.getCustomRate(toCurrency.uppercase(), fromCurrency.uppercase())
-            if (reverseCustomRate != null) {
-                try {
-                    val invertedRate = BigDecimal.ONE.divide(reverseCustomRate.rate, MathContext(10))
-                    updateCache(cacheKey, invertedRate)
-                    return invertedRate
-                } catch (_: ArithmeticException) {
+            if (!forceRefresh) {
+                exchangeRateDao.getExchangeRate(from, to)?.rate?.takeIf { it.signum() > 0 }?.let { return@withLock it }
+                exchangeRateDao.getExchangeRate(to, from)?.rate?.takeIf { it.signum() > 0 }?.let {
+                    return@withLock BigDecimal.ONE.divide(it, MathContext(10))
                 }
             }
-        }
-
-        // Check database for fresh rates
-        val currentTime = LocalDateTime.now()
-        val dbRate = exchangeRateDao.getExchangeRate(fromCurrency, toCurrency, currentTime)
-
-        if (dbRate != null && !forceRefresh) {
-            // Rate is still valid (expires_at > currentTime), use it
-            updateCache(cacheKey, dbRate.rate)
-            return dbRate.rate
-        }
-
-        // Check if we have any expired rate that we might be able to use if rates aren't stale overall
-        if (!forceRefresh) {
-            val expiredRate = exchangeRateDao.getExchangeRate(
-                fromCurrency,
-                toCurrency,
-                currentTime.minusHours(24) // Look back up to 24 hours for expired rates
-            )
-
-            if (expiredRate != null && !areOverallRatesStale()) {
-                // Use expired rate if overall rates aren't stale, but fetch fresh ones soon
-                updateCache(cacheKey, expiredRate.rate)
-                // Trigger background refresh for next time
-                backgroundScope.launch {
-                    refreshExchangeRates(listOf(fromCurrency, toCurrency, "USD"))
+            val response = fetchResponse("USD", forceRefresh && requestedGeneration == fetchGeneration)
+            response?.let {
+                val fromRate = if (from == "USD") BigDecimal.ONE else it.rates[from]
+                val toRate = if (to == "USD") BigDecimal.ONE else it.rates[to]
+                if (fromRate != null && fromRate.signum() > 0 && toRate != null && toRate.signum() > 0) {
+                    return@withLock toRate.divide(fromRate, MathContext(10))
                 }
-                return expiredRate.rate
             }
-        }
-
-        // Check reverse pair (e.g., custom rate stored as INR→USD when looking for USD→INR)
-        val reverseRate = exchangeRateDao.getExchangeRate(toCurrency, fromCurrency, currentTime)
-        if (reverseRate != null && !forceRefresh) {
-            try {
-                val invertedRate = BigDecimal.ONE.divide(reverseRate.rate, MathContext(10))
-                updateCache(cacheKey, invertedRate)
-                return invertedRate
-            } catch (_: ArithmeticException) {
-                // Division by zero or non-terminating decimal — fall through to API
+            // Offline or unsupported pairs may still have a usable historical rate.
+            exchangeRateDao.getExchangeRateIgnoringExpiry(from, to)?.rate?.takeIf { it.signum() > 0 }?.let { return@withLock it }
+            exchangeRateDao.getExchangeRateIgnoringExpiry(to, from)?.rate?.takeIf { it.signum() > 0 }?.let {
+                return@withLock BigDecimal.ONE.divide(it, MathContext(10))
             }
+            val fromUsd = if (from == "USD") BigDecimal.ONE else exchangeRateDao.getExchangeRateIgnoringExpiry("USD", from)?.rate
+            val toUsd = if (to == "USD") BigDecimal.ONE else exchangeRateDao.getExchangeRateIgnoringExpiry("USD", to)?.rate
+            if (fromUsd != null && fromUsd.signum() > 0 && toUsd != null && toUsd.signum() > 0) toUsd.divide(fromUsd, MathContext(10)) else null
         }
+    }
 
-        // Fetch from API if not found, forced refresh, or rates are stale
-        return fetchAndCacheRate(fromCurrency, toCurrency)
+    /** One response serves concurrent requests for different pairs, including unsupported codes. */
+    private suspend fun fetchResponse(base: String, force: Boolean = false): ExchangeRateResponseWithMetadata? {
+        val now = System.currentTimeMillis() / 1000
+        if (!force) responses[base]?.takeIf { it.nextUpdateTimeUnix > now || now - (receivedAt[base] ?: 0L) < 300 }?.let { return it }
+        if (!force && failedFetches[base]?.let { now - it < 300 } == true) return responses[base]
+        val response = try {
+            exchangeRateProvider.fetchAllExchangeRatesWithMetadata(base)
+        } catch (e: CancellationException) { throw e } catch (_: Exception) { null }
+        fetchGeneration++
+        if (response == null || !response.baseCurrency.equals(base, ignoreCase = true)) {
+            failedFetches[base] = now
+            return responses[base]
+        }
+        val normalized = response.copy(rates = response.rates.mapKeys { it.key.trim().uppercase(java.util.Locale.ROOT) }.filterValues { it.signum() > 0 })
+        if (normalized.rates.isEmpty()) {
+            failedFetches[base] = now
+            return responses[base]
+        }
+        responses[base] = normalized
+        receivedAt[base] = now
+        val customPairs = exchangeRateDao.getCustomRatesForCurrency(base).map { it.toCurrency }.toSet()
+        val entities = normalized.rates.filter { (currency, rate) -> currency !in customPairs && rate.signum() > 0 }.map { (currency, rate) ->
+            ExchangeRateEntity(fromCurrency = base, toCurrency = currency, rate = rate, provider = response.provider,
+                updatedAt = LocalDateTime.ofInstant(Instant.ofEpochSecond(response.lastUpdateTimeUnix), ZoneId.systemDefault()),
+                expiresAt = LocalDateTime.ofInstant(Instant.ofEpochSecond(response.nextUpdateTimeUnix), ZoneId.systemDefault()),
+                updatedAtUnix = response.lastUpdateTimeUnix, expiresAtUnix = response.nextUpdateTimeUnix)
+        }
+        exchangeRateDao.insertExchangeRates(entities)
+        failedFetches.remove(base)
+        return normalized
     }
 
     /**
      * Check if we have a valid rate for this currency pair
      */
     suspend fun hasValidRate(fromCurrency: String, toCurrency: String): Boolean {
-        if (fromCurrency.equals(toCurrency, ignoreCase = true)) {
+        if (fromCurrency.trim().equals(toCurrency.trim(), ignoreCase = true)) {
             return true
         }
 
-        val cacheKey = "${fromCurrency.uppercase()}_${toCurrency.uppercase()}"
-        if (isCacheValid() && rateCache.containsKey(cacheKey)) {
-            return true
-        }
+        val from = fromCurrency.trim().uppercase(java.util.Locale.ROOT)
+        val to = toCurrency.trim().uppercase(java.util.Locale.ROOT)
+        return exchangeRateDao.getExchangeRate(from, to)?.rate?.signum() == 1 ||
+            exchangeRateDao.getExchangeRate(to, from)?.rate?.signum() == 1
 
-        return exchangeRateDao.hasValidRate(fromCurrency, toCurrency) > 0
     }
 
     /**
@@ -169,79 +154,24 @@ class CurrencyConversionService @Inject constructor(
     /**
      * Refresh exchange rates for specific currencies using USD as base
      */
-    suspend fun refreshExchangeRates(currencies: List<String>) {
-        // Use USD as the base currency for the API since it's most commonly supported
-        val apiBaseCurrency = "USD"
-
-        // Check if we need to refresh by looking at the newest rate in our database
-        if (!shouldRefreshRates(apiBaseCurrency)) {
-            println("Currency rates are fresh, skipping refresh")
-            return // Rates are still fresh, no need to refresh
-        }
-        println("Currency rates are stale, refreshing from API")
-        fetchAndSaveAllRates(apiBaseCurrency, currencies)
+    suspend fun refreshExchangeRates(currencies: List<String>) = fetchMutex.withLock {
+        val codes = currencies.map { it.trim().uppercase(java.util.Locale.ROOT) }.distinct().filter { it != "USD" }
+        if (codes.all { exchangeRateDao.getExchangeRate("USD", it) != null }) return@withLock
+        fetchResponse("USD")
+        Unit
     }
 
-    /**
-     * Fetch all relevant rates from the API and save to the database.
-     */
-    suspend fun fetchAndSaveAllRates(baseCurrency: String, targetCurrencies: List<String> = emptyList()) {
-        val response = exchangeRateProvider.fetchAllExchangeRatesWithMetadata(baseCurrency)
-
-        if (response != null) {
-            val allRates = response.rates
-            val nextUpdateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochSecond(response.nextUpdateTimeUnix),
-                ZoneId.systemDefault()
-            )
-            val lastUpdateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochSecond(response.lastUpdateTimeUnix),
-                ZoneId.systemDefault()
-            )
-
-            val entities = mutableListOf<ExchangeRateEntity>()
-
-            // If targetCurrencies is empty, we'll cache all received rates (usually ~150-200)
-            val sourceRates = if (targetCurrencies.isEmpty()) allRates.keys else targetCurrencies
-
-            sourceRates.forEach { toCurrency ->
-                val rate = allRates[toCurrency.uppercase()] ?: allRates[toCurrency.lowercase()]
-                if (rate != null) {
-                    entities.add(
-                        ExchangeRateEntity(
-                            fromCurrency = baseCurrency.uppercase(),
-                            toCurrency = toCurrency.uppercase(),
-                            rate = rate,
-                            provider = response.provider,
-                            updatedAt = lastUpdateTime,
-                            updatedAtUnix = response.lastUpdateTimeUnix,
-                            expiresAt = nextUpdateTime,
-                            expiresAtUnix = response.nextUpdateTimeUnix
-                        )
-                    )
-                }
-            }
-
-            if (entities.isNotEmpty()) {
-                val customRates = exchangeRateDao.getCustomRatesForCurrency(baseCurrency.uppercase())
-                val customPairs = customRates.map { it.fromCurrency.uppercase() to it.toCurrency.uppercase() }.toSet()
-
-                val filteredEntities = entities.filterNot { entity ->
-                    (entity.fromCurrency.uppercase() to entity.toCurrency.uppercase()) in customPairs
-                }
-
-                if (filteredEntities.isNotEmpty()) {
-                    exchangeRateDao.insertExchangeRates(filteredEntities)
-                }
-            }
-        }
+    suspend fun fetchAndSaveAllRates(baseCurrency: String, targetCurrencies: List<String> = emptyList()) = fetchMutex.withLock {
+        fetchResponse(baseCurrency.trim().uppercase(java.util.Locale.ROOT), force = true)
+        Unit
     }
 
-    suspend fun saveCustomRate(fromCurrency: String, toCurrency: String, rate: BigDecimal) {
+    suspend fun saveCustomRate(fromCurrency: String, toCurrency: String, rate: BigDecimal) = fetchMutex.withLock {
+        require(rate.signum() > 0) { "Exchange rate must be positive" }
         val now = LocalDateTime.now()
         val entity = ExchangeRateEntity(
-            fromCurrency = fromCurrency.uppercase(),
-            toCurrency = toCurrency.uppercase(),
+            fromCurrency = fromCurrency.trim().uppercase(java.util.Locale.ROOT),
+            toCurrency = toCurrency.trim().uppercase(java.util.Locale.ROOT),
             rate = rate,
             provider = "custom",
             updatedAt = now,
@@ -251,13 +181,11 @@ class CurrencyConversionService @Inject constructor(
             isCustom = true
         )
         exchangeRateDao.upsertCustomRate(entity)
-        rateCache.clear()
         _rateChangeTrigger.value++
     }
 
-    suspend fun resetCustomRate(fromCurrency: String, toCurrency: String) {
-        exchangeRateDao.resetCustomRate(fromCurrency.uppercase(), toCurrency.uppercase())
-        rateCache.clear()
+    suspend fun resetCustomRate(fromCurrency: String, toCurrency: String) = fetchMutex.withLock {
+        exchangeRateDao.resetCustomRate(fromCurrency.trim().uppercase(java.util.Locale.ROOT), toCurrency.trim().uppercase(java.util.Locale.ROOT))
         _rateChangeTrigger.value++
     }
 
@@ -265,81 +193,9 @@ class CurrencyConversionService @Inject constructor(
      * Retrieve stored conversions for a base currency from the local database.
      */
     suspend fun getStoredConversions(baseCurrency: String): Pair<List<ExchangeRateEntity>, Long> {
-        val rates = exchangeRateDao.getAllRatesForCurrency(baseCurrency.uppercase())
+        val rates = exchangeRateDao.getAllRatesForCurrency(baseCurrency.trim().uppercase(java.util.Locale.ROOT))
         val lastUpdated = rates.maxByOrNull { it.updatedAtUnix }?.updatedAtUnix ?: 0L
         return Pair(rates, lastUpdated)
-    }
-
-    /**
-     * Get the base currency for the app
-     */
-    private suspend fun getBaseCurrency(): String {
-        return userPreferencesRepository.baseCurrency.first()
-    }
-
-    /**
-     * Fetch exchange rate from API and cache it
-     */
-    private suspend fun fetchAndCacheRate(fromCurrency: String, toCurrency: String): BigDecimal? {
-        try {
-            // Use the metadata method to get proper expiry times even for individual rates
-            // We'll use USD as base since that's what the API uses and then convert
-            val baseCurrency = "USD"
-            val response = exchangeRateProvider.fetchAllExchangeRatesWithMetadata(baseCurrency)
-
-            if (response != null) {
-                val allRates = response.rates
-                val nextUpdateTime = LocalDateTime.ofInstant(
-                    Instant.ofEpochSecond(response.nextUpdateTimeUnix),
-                    ZoneId.systemDefault()
-                )
-                val lastUpdateTime = LocalDateTime.ofInstant(
-                    Instant.ofEpochSecond(response.lastUpdateTimeUnix),
-                    ZoneId.systemDefault()
-                )
-
-                // Calculate the rate we need
-                val rate = if (fromCurrency == baseCurrency) {
-                    allRates[toCurrency]
-                } else if (toCurrency == baseCurrency) {
-                    allRates[fromCurrency]?.let { fromRate ->
-                        BigDecimal.ONE.divide(fromRate, MathContext(10))
-                    }
-                } else {
-                    // Cross-currency: fromCurrency -> USD -> toCurrency
-                    val fromToUsd = allRates[fromCurrency]
-                    val usdToTo = allRates[toCurrency]
-                    if (fromToUsd != null && usdToTo != null) {
-                        usdToTo.divide(fromToUsd, MathContext(10))
-                    } else {
-                        null
-                    }
-                }
-
-                if (rate != null) {
-                    val entity = ExchangeRateEntity(
-                        fromCurrency = fromCurrency,
-                        toCurrency = toCurrency,
-                        rate = rate,
-                        provider = response.provider,
-                        updatedAt = lastUpdateTime,
-                        updatedAtUnix = response.lastUpdateTimeUnix,
-                        expiresAt = nextUpdateTime, // Use the API's actual next update time
-                        expiresAtUnix = response.nextUpdateTimeUnix
-                    )
-
-                    exchangeRateDao.insertExchangeRate(entity)
-                    val cacheKey = "${fromCurrency.uppercase()}_${toCurrency.uppercase()}"
-                    updateCache(cacheKey, rate)
-                    return rate
-                }
-            }
-        } catch (e: Exception) {
-            // Log error but don't crash
-            println("Failed to fetch exchange rate for $fromCurrency to $toCurrency: ${e.message}")
-        }
-
-        return null
     }
 
     /**
@@ -382,21 +238,6 @@ class CurrencyConversionService @Inject constructor(
     }
 
     /**
-     * Update cache with new rate
-     */
-    private fun updateCache(key: String, rate: BigDecimal) {
-        rateCache[key] = rate
-        lastCacheUpdate = LocalDateTime.now()
-    }
-
-    /**
-     * Check if cache is still valid (less than 1 hour old)
-     */
-    private fun isCacheValid(): Boolean {
-        return lastCacheUpdate.isAfter(LocalDateTime.now().minusHours(1))
-    }
-
-    /**
      * Clear expired rates from database
      */
     suspend fun cleanupExpiredRates() {
@@ -421,12 +262,12 @@ class CurrencyConversionService @Inject constructor(
         val convertedAmounts = mutableMapOf<String, BigDecimal>()
 
         transactions.forEach { transaction ->
-            val convertedAmount = convertAmount(
+            val convertedAmount = convertAmountOrNull(
                 amount = transaction.amount,
                 fromCurrency = transaction.currency,
                 toCurrency = baseCurrency
             )
-            convertedAmounts[transaction.id] = convertedAmount
+            if (convertedAmount != null) convertedAmounts[transaction.id] = convertedAmount
         }
 
         return convertedAmounts

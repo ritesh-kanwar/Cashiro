@@ -115,6 +115,21 @@ fun ManageAccountsScreen(
     blurEffects: Boolean,
 ) {
     val uiState by manageAccountsViewModel.uiState.collectAsState()
+    val duplicate = com.ritesh.cashiro.data.preferences.BankAccountMergeStore.duplicatePairs(uiState.accounts)
+        .firstOrNull { (source, target) ->
+            "${source.bankName}|${source.currency}|${source.accountLast4}|${target.accountLast4}" !in uiState.dismissedDuplicatePairs &&
+                "${source.bankName}_${source.accountLast4}" !in uiState.hiddenAccounts &&
+                "${target.bankName}_${target.accountLast4}" !in uiState.hiddenAccounts
+        }
+    duplicate?.takeUnless { uiState.isLoading }?.let { (source, target) ->
+        val key = "${source.bankName}|${source.currency}|${source.accountLast4}|${target.accountLast4}"
+        DuplicateAccountDialog(source, target,
+            onMerge = {
+                manageAccountsViewModel.repairDuplicateAccounts(source, target)
+            },
+            onKeepSeparate = { manageAccountsViewModel.dismissDuplicatePair(key) }
+        )
+    }
     val defaultCurrency by manageAccountsViewModel.defaultCurrencyForNewAccounts.collectAsState()
     var showUpdateDialog by remember { mutableStateOf(false) }
     var selectedAccount by remember { mutableStateOf<Pair<String, String>?>(null) }
@@ -160,6 +175,10 @@ fun ManageAccountsScreen(
             // Show the label only when the list is scrolled to the top
             showFloatingLabel = firstVisibleItem == 0
         }
+    }
+
+    LaunchedEffect(showEditSheet) {
+        if (showEditSheet) snackbarHostState.currentSnackbarData?.dismiss()
     }
 
     // Show snackbar messages
@@ -287,6 +306,32 @@ fun ManageAccountsScreen(
                     ),
                     verticalArrangement = Arrangement.spacedBy(Spacing.md)
                 ) {
+                    item {
+                        SectionHeader(title = stringResource(R.string.account_tracking_title), modifier = Modifier.padding(start = 8.dp))
+                        Text(stringResource(R.string.account_tracking_description), style = MaterialTheme.typography.bodySmall)
+                    }
+                    items(uiState.accounts, key = { "tracking_${it.bankName}_${it.currency}_${it.accountLast4}" }) { account ->
+                        val ignored = manageAccountsViewModel.isAccountIgnored(account)
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text("${account.bankName} • ${account.accountLast4} • ${account.currency}")
+                                Text(stringResource(if (ignored) R.string.account_tracking_ignored else R.string.account_tracking_active), style = MaterialTheme.typography.bodySmall)
+                            }
+                            val ignoredMessage = stringResource(R.string.account_tracking_ignored)
+                            val undoLabel = stringResource(R.string.account_tracking_undo)
+                            TextButton(onClick = {
+                                snackbarHostState.currentSnackbarData?.dismiss()
+                                manageAccountsViewModel.setAccountIgnored(account, !ignored)
+                                if (!ignored) scope.launch {
+                                    val result = snackbarHostState.showSnackbar(ignoredMessage, actionLabel = undoLabel,
+                                        duration = androidx.compose.material3.SnackbarDuration.Long)
+                                    if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
+                                        manageAccountsViewModel.setAccountIgnored(account, false)
+                                    }
+                                }
+                            }) { Text(stringResource(if (ignored) R.string.account_tracking_resume else R.string.account_tracking_ignore)) }
+                        }
+                    }
                     // Separate visible and hidden accounts
                     val visibleRegularAccounts = uiState.accounts.filter {
                         !it.isCreditCard && !it.isWallet && !manageAccountsViewModel.isAccountHidden(

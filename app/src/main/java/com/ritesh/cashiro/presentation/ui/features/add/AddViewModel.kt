@@ -138,6 +138,8 @@ constructor(
     private val _subscriptionAttachments = MutableStateFlow<List<String>>(emptyList())
     val subscriptionAttachments: StateFlow<List<String>> = _subscriptionAttachments.asStateFlow()
 
+    private var initializationJob: kotlinx.coroutines.Job? = null
+
     init {
         initializeData()
     }
@@ -147,10 +149,11 @@ constructor(
         updateTransactionSubcategories("Miscellaneous")
         updateSubscriptionSubcategories("Subscription")
 
-        // Pre-select main account
-        viewModelScope.launch {
+        // Pre-select main account before applying an external draft.
+        initializationJob?.cancel()
+        initializationJob = viewModelScope.launch {
             val effectiveCurrency = currencyRepository.effectiveBaseCurrencyCode.first()
-            accounts.filter { it.isNotEmpty() }.first().let { availableAccounts ->
+            accountBalanceRepository.getAllLatestBalances().first().let { availableAccounts ->
                 val mainAccountKey = sharedPrefs.getString("main_account", null)
                 if (mainAccountKey != null) {
                     val mainAccount = availableAccounts.find { 
@@ -167,6 +170,15 @@ constructor(
                 _transactionUiState.update { it.copy(currency = effectiveCurrency) }
                 _subscriptionUiState.update { it.copy(currency = effectiveCurrency) }
             }
+        }
+    }
+
+    suspend fun prefillSharedText(text: String) {
+        initializationJob?.join()
+        val boundedText = text.take(1000)
+        _transactionUiState.update { state ->
+            val amount = SharedTextAmount.amountForCurrency(boundedText, state.currency)
+            state.copy(amount = amount?.toPlainString().orEmpty(), notes = boundedText)
         }
     }
 
@@ -479,15 +491,13 @@ constructor(
                         )
                     }
                     
-                    // Pre-select account if possible
-                    accounts.filter { it.isNotEmpty() }.first().let { availableAccounts ->
-                        val matchedAccount = availableAccounts.find { 
-                            it.bankName == subscription.bankName
-                        }
-                        if (matchedAccount != null) {
-                            _subscriptionUiState.update { it.copy(selectedAccount = matchedAccount) }
-                        }
-                    }
+                    // Funding accounts are identified by bank, suffix and currency.
+                    val matchedAccount = if (subscription.bankName != null && subscription.accountLast4 != null) {
+                        accountBalanceRepository.getLatestBalance(
+                            subscription.bankName, subscription.accountLast4, subscription.currency
+                        )
+                    } else null
+                    _subscriptionUiState.update { it.copy(selectedAccount = matchedAccount) }
                     
                     // Update subcategories for the loaded category
                     updateSubscriptionSubcategories(subscription.category ?: "Subscription")
@@ -649,6 +659,7 @@ constructor(
                             category = state.category,
                             subcategory = state.subcategory,
                             bankName = state.selectedAccount?.bankName,
+                            accountLast4 = state.selectedAccount?.accountLast4,
                             currency = state.currency,
                             smsBody = state.notes.takeIf { it.isNotBlank() },
                             updatedAt = java.time.LocalDateTime.now()
@@ -691,6 +702,7 @@ constructor(
                             category = state.category,
                             subcategory = state.subcategory,
                             bankName = state.selectedAccount?.bankName,
+                            accountLast4 = state.selectedAccount?.accountLast4,
                             autoRenewal = false, // Not implemented yet
                             paymentReminder = false, // Not implemented yet
                             currency = state.currency,

@@ -48,6 +48,8 @@ fun SharedTransitionScope.AddScreen(
     initialTab: Int = 0,
     subscriptionId: Long? = null,
     transactionType: String? = null,
+    sharedText: String? = null,
+    sharedTextRequestId: String? = null,
     blurEffects: Boolean,
 ) {
     val hazeState = remember { HazeState() }
@@ -58,11 +60,15 @@ fun SharedTransitionScope.AddScreen(
     val coroutineScope = rememberCoroutineScope()
 
     // Reset state when screen is opened to avoid stale data from previous entries
-    LaunchedEffect(subscriptionId, transactionType) {
+    LaunchedEffect(subscriptionId, transactionType, sharedTextRequestId) {
         if (subscriptionId == null && transactionType == null) {
             addViewModel.resetAllStates()
         }
         
+        if (sharedText != null) {
+            addViewModel.prefillSharedText(sharedText)
+        }
+
         if (subscriptionId != null) {
             addViewModel.loadSubscriptionForEdit(subscriptionId)
         }

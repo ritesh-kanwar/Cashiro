@@ -9,6 +9,8 @@ import java.time.LocalDate
 
 data class TransactionDetailUiState(
     val transaction: TransactionEntity? = null,
+    val balanceDiscrepancy: com.ritesh.cashiro.utils.BalanceDiscrepancy? = null,
+    val isAddingBalanceAdjustment: Boolean = false,
     val primaryCurrency: String = "INR",
     val convertedAmount: BigDecimal? = null,
     val isEditMode: Boolean = false,

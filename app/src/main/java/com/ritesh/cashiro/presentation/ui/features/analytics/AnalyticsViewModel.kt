@@ -181,9 +181,9 @@ class AnalyticsViewModel @Inject constructor(
                     }
 
                     // Convert all transaction amounts to the target currency
-                    currencyTargetList.map { tx ->
+                    currencyTargetList.mapNotNull { tx ->
                         if (tx.currency != targetCurrency) {
-                            val convertedAmt = currencyConversionService.convertAmount(tx.amount, tx.currency, targetCurrency) ?: tx.amount
+                            val convertedAmt = currencyConversionService.convertAmountOrNull(tx.amount, tx.currency, targetCurrency) ?: return@mapNotNull null
                             tx.copy(amount = convertedAmt, currency = targetCurrency)
                         } else {
                             tx
@@ -248,13 +248,13 @@ class AnalyticsViewModel @Inject constructor(
                 // Calculate converted totals for top merchants if needed
                 val currentCurrency = filterState.currency
                 val merchantConversions = if (currentCurrency != null && currentCurrency != baseCurrency) {
-                    merchantBreakdown.associate { merchant ->
-                        merchant.name to (currencyConversionService.convertAmount(
+                    merchantBreakdown.mapNotNull { merchant ->
+                        currencyConversionService.convertAmountOrNull(
                             merchant.amount,
                             currentCurrency,
                             baseCurrency
-                        ) ?: merchant.amount)
-                    }
+                        )?.let { merchant.name to it }
+                    }.toMap()
                 } else emptyMap()
 
                 AnalyticsUiState(

@@ -1,6 +1,10 @@
 package com.ritesh.cashiro.presentation.ui.features.accounts
 
 import android.content.Context
+import androidx.room.withTransaction
+import com.ritesh.cashiro.data.database.CashiroDatabase
+import com.ritesh.cashiro.data.preferences.BankAccountMergeStore
+import kotlinx.coroutines.sync.withLock
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,6 +31,8 @@ import androidx.core.content.edit
 data class ManageAccountsUiState(
     val accounts: List<AccountBalanceEntity> = emptyList(),
     val hiddenAccounts: Set<String> = emptySet(),
+    val ignoredAccounts: Set<String> = emptySet(),
+    val dismissedDuplicatePairs: Set<String> = emptySet(),
     val balanceHistory: List<AccountBalanceEntity> = emptyList(),
     val linkedCards: Map<String, List<CardEntity>> = emptyMap(),
     val orphanedCards: List<CardEntity> = emptyList(),
@@ -64,7 +70,10 @@ constructor(
     private val accountBalanceRepository: AccountBalanceRepository,
     private val cardRepository: CardRepository,
     private val transactionRepository: TransactionRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val database: CashiroDatabase,
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val bankAccountMerges: BankAccountMergeStore,
+    private val ignoredAccounts: com.ritesh.cashiro.data.preferences.IgnoredAccountsStore
 ) : ViewModel() {
 
     private val sharedPrefs = context.getSharedPreferences("account_prefs", Context.MODE_PRIVATE)
@@ -85,10 +94,18 @@ constructor(
     init {
         loadAccounts()
         loadHiddenAccounts()
+        viewModelScope.launch { ignoredAccounts.keysFlow.collect { keys -> _uiState.update { it.copy(ignoredAccounts = keys) } } }
         loadMainAccount()
         loadCards()
         initializeDefaultWallet()
         initFormCurrency()
+    }
+
+    fun isAccountIgnored(account: AccountBalanceEntity): Boolean =
+        ignoredAccounts.isIgnored(account.bankName, account.currency, account.accountLast4)
+
+    fun setAccountIgnored(account: AccountBalanceEntity, ignored: Boolean) {
+        ignoredAccounts.setIgnored(account.bankName, account.currency, account.accountLast4, ignored)
     }
 
     private fun initFormCurrency() {
@@ -171,7 +188,14 @@ constructor(
 
     private fun loadHiddenAccounts() {
         val hidden = sharedPrefs.getStringSet("hidden_accounts", emptySet()) ?: emptySet()
-        _uiState.update { it.copy(hiddenAccounts = hidden) }
+        val dismissed = sharedPrefs.getStringSet("dismissed_duplicate_pairs", emptySet()).orEmpty().toSet()
+        _uiState.update { it.copy(hiddenAccounts = hidden, dismissedDuplicatePairs = dismissed) }
+    }
+
+    fun dismissDuplicatePair(key: String) {
+        val dismissed = _uiState.value.dismissedDuplicatePairs + key
+        sharedPrefs.edit { putStringSet("dismissed_duplicate_pairs", dismissed) }
+        _uiState.update { it.copy(dismissedDuplicatePairs = dismissed) }
     }
 
     private fun loadMainAccount() {
@@ -562,10 +586,14 @@ constructor(
             try {
                 // Unlink any cards linked to this account
                 val linkedCards = _uiState.value.linkedCards[accountLast4] ?: emptyList()
-                linkedCards.forEach { card -> cardRepository.unlinkCard(card.id) }
+                linkedCards.filter { it.bankName == bankName }.forEach { card -> cardRepository.unlinkCard(card.id) }
 
                 // Delete all balance records for this account
-                val deletedCount = accountBalanceRepository.deleteAccount(bankName, accountLast4)
+                val deletedCount = BankAccountMergeStore.mutationMutex.withLock {
+                    val count = accountBalanceRepository.deleteAccount(bankName, accountLast4)
+                    bankAccountMerges.forgetAccount(bankName, accountLast4)
+                    count
+                }
 
                 // Remove from hidden accounts if present
                 val key = "${bankName}_${accountLast4}"
@@ -618,13 +646,20 @@ constructor(
                     ?: latestBalance?.currency
                     ?: resolveDefaultCurrency()
 
+                if (latestBalance != null && (effectiveCurrency != latestBalance.currency ||
+                        isCreditCard != latestBalance.isCreditCard || isWallet != latestBalance.isWallet)) {
+                    BankAccountMergeStore.mutationMutex.withLock { bankAccountMerges.forgetAccount(oldBankName, accountLast4) }
+                }
                 // Update bank name if changed
                 if (newBankName != oldBankName) {
-                    accountBalanceRepository.updateAccountBankName(
-                        oldBankName,
-                        accountLast4,
-                        newBankName
-                    )
+                    BankAccountMergeStore.mutationMutex.withLock {
+                        database.withTransaction {
+                            retargetTransferLegs(oldBankName, accountLast4, newBankName, accountLast4)
+                            transactionRepository.updateAccountForTransactions(oldBankName, accountLast4, newBankName, accountLast4)
+                            accountBalanceRepository.updateAccountBankName(oldBankName, accountLast4, newBankName)
+                        }
+                        bankAccountMerges.forgetAccount(oldBankName, accountLast4)
+                    }
 
                     // Update hidden accounts preference if bank name changed
                     val oldKey = "${oldBankName}_${accountLast4}"
@@ -644,6 +679,7 @@ constructor(
                     }
                 }
 
+                latestBalance?.let { ignoredAccounts.move(it, it.copy(bankName = newBankName, currency = effectiveCurrency)) }
                 // Insert new balance record with updated values
                 accountBalanceRepository.insertBalance(
                     AccountBalanceEntity(
@@ -673,67 +709,67 @@ constructor(
         }
     }
 
-    fun mergeAccounts(targetAccount: AccountBalanceEntity, sourceAccounts: List<AccountBalanceEntity>, newBalance: BigDecimal?
-    ) {
+    private suspend fun retargetTransferLegs(sourceBank: String, sourceSuffix: String, targetBank: String, targetSuffix: String) {
+        val dao = database.transactionDao()
+        dao.getAccountTransferLegRefIds(sourceBank, sourceSuffix).chunked(500).forEach { ids ->
+            dao.retargetTransferLegRefs(ids, sourceBank, targetBank, sourceSuffix, targetSuffix, LocalDateTime.now())
+        }
+    }
+
+    fun repairDuplicateAccounts(source: AccountBalanceEntity, target: AccountBalanceEntity) {
+        val pair = BankAccountMergeStore.duplicatePairs(_uiState.value.accounts).firstOrNull {
+            it.first.bankName == source.bankName && it.first.accountLast4 == source.accountLast4 &&
+                it.second.bankName == target.bankName && it.second.accountLast4 == target.accountLast4
+        } ?: return
+        mergeAccounts(pair.second, listOf(pair.first), null)
+    }
+
+    fun mergeAccounts(targetAccount: AccountBalanceEntity, sourceAccounts: List<AccountBalanceEntity>, newBalance: BigDecimal?) {
         viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isLoading = true) }
-
-                //Reassign transactions
-                sourceAccounts.forEach { source ->
-                    transactionRepository.updateAccountForTransactions(
-                        oldBankName = source.bankName,
-                        oldAccountNumber = source.accountLast4,
-                        newBankName = targetAccount.bankName,newAccountNumber = targetAccount.accountLast4
-                    )
+                require(sourceAccounts.isNotEmpty()) { "Select at least one source account" }
+                BankAccountMergeStore.mutationMutex.withLock {
+                    val target = accountBalanceRepository.getLatestBalance(targetAccount.bankName, targetAccount.accountLast4)
+                        ?: error("Target account no longer exists")
+                    val sources = sourceAccounts.distinctBy { it.bankName to it.accountLast4 }.map { source ->
+                        accountBalanceRepository.getLatestBalance(source.bankName, source.accountLast4)
+                            ?: error("Source account no longer exists")
+                    }
+                    require(sources.none { it.bankName == target.bankName && it.accountLast4 == target.accountLast4 }) { "Choose different accounts" }
+                    require(sources.all { it.currency == target.currency }) { "Accounts must use the same currency" }
+                    require(sources.all { it.isCreditCard == target.isCreditCard && it.isWallet == target.isWallet }) { "Accounts must have the same type" }
+                    database.withTransaction {
+                        sources.forEach { source ->
+                            retargetTransferLegs(source.bankName, source.accountLast4, target.bankName, target.accountLast4)
+                            transactionRepository.updateAccountForTransactions(source.bankName, source.accountLast4, target.bankName, target.accountLast4)
+                            (_uiState.value.linkedCards[source.accountLast4] ?: emptyList())
+                                .filter { it.bankName == source.bankName && it.currency == source.currency }
+                                .forEach { card ->
+                                    if (source.bankName == target.bankName) cardRepository.linkCardToAccount(card.id, target.accountLast4)
+                                    else cardRepository.unlinkCard(card.id)
+                                }
+                            accountBalanceRepository.deleteAccount(source.bankName, source.accountLast4)
+                        }
+                        if (newBalance != null) accountBalanceRepository.insertBalance(target.copy(
+                            id = 0, balance = newBalance, timestamp = LocalDateTime.now(),
+                            transactionId = null, smsSource = null, sourceType = "MERGE"
+                        ))
+                    }
+                    sources.forEach { ignoredAccounts.move(it, target); bankAccountMerges.onMerge(it, target) }
+                    val sourceKeys = sources.map { "${it.bankName}_${it.accountLast4}" }.toSet()
+                    val targetKey = "${target.bankName}_${target.accountLast4}"
+                    val hidden = _uiState.value.hiddenAccounts - sourceKeys
+                    val main = if (_uiState.value.mainAccountKey in sourceKeys) targetKey else _uiState.value.mainAccountKey
+                    sharedPrefs.edit().putStringSet("hidden_accounts", hidden).putString("main_account", main).apply()
+                    _uiState.update { it.copy(hiddenAccounts = hidden, mainAccountKey = main) }
                 }
-
-                // Update target balance if requested
-                if (newBalance != null) {
-                    accountBalanceRepository.insertBalance(AccountBalanceEntity(
-                        bankName = targetAccount.bankName,
-                        accountLast4 = targetAccount.accountLast4,
-                        balance = newBalance,
-                        creditLimit = targetAccount.creditLimit,
-                        timestamp = LocalDateTime.now(),
-                        isCreditCard = targetAccount.isCreditCard,
-                        sourceType = "MERGE",
-                        iconResId = targetAccount.iconResId,
-                        iconName = targetAccount.iconName,
-                        currency = targetAccount.currency,
-                        color = targetAccount.color
-                    )
-                    )
-                }
-
-                // Delete source accounts
-                sourceAccounts.forEach { source ->
-                    // Unlink cards
-                    val linkedCards = _uiState.value.linkedCards[source.accountLast4] ?: emptyList()
-                    linkedCards.forEach { card -> cardRepository.unlinkCard(card.id) }
-
-                    // Delete account balances
-                    accountBalanceRepository.deleteAccount(source.bankName, source.accountLast4)
-                }
-
-                // Reload data
-                loadAccounts()
-                loadCards()
-
-                _uiState.update {
-                    it.copy(isLoading = false, successMessage = "Accounts merged successfully")
-                }
-                delay(3000)
-                _uiState.update { it.copy(successMessage = null) }
+                _uiState.update { it.copy(isLoading = false, successMessage = "Accounts merged successfully") }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = "Failed to merge accounts: ${e.message}"
-                    )
-                }
+                _uiState.update { it.copy(isLoading = false, errorMessage = "Failed to merge accounts: ${e.message}") }
             }
         }
     }
 }
-

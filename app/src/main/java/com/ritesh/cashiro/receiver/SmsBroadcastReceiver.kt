@@ -32,6 +32,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
     @InstallIn(SingletonComponent::class)
     interface SmsBroadcastReceiverEntryPoint {
         fun smsTransactionProcessor(): SmsTransactionProcessor
+        fun detectBalanceDiscrepancy(): com.ritesh.cashiro.domain.usecase.DetectBalanceDiscrepancyUseCase
         fun transactionRepository(): com.ritesh.cashiro.data.repository.TransactionRepository
     }
 
@@ -106,8 +107,8 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                     // Show notification if app is not in foreground
                     if (!isAppInForeground(context)) {
                         // Get transaction details for notification
-                        val parser = com.ritesh.parser.core.bank.BankParserFactory.getParser(sender)
-                        val parsedTransaction = parser?.parse(body, sender, timestamp)
+                        val parsedTransaction = com.ritesh.parser.core.bank.BankParserFactory.getParsers(sender)
+                            .firstNotNullOfOrNull { it.parse(body, sender, timestamp) }
 
                         if (parsedTransaction != null) {
                             // Get entry point to access repository
@@ -120,6 +121,13 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                             // Fetch the saved transaction to get its category
                             val savedTransaction = repository.getTransactionById(result.transactionId)
 
+                            val balanceMismatch = try {
+                                savedTransaction?.let { entryPoint.detectBalanceDiscrepancy().execute(it) } != null
+                            } catch (e: kotlinx.coroutines.CancellationException) {
+                                throw e
+                            } catch (_: Exception) {
+                                false
+                            }
                             showTransactionNotification(
                                 context = context,
                                 transactionId = result.transactionId,
@@ -128,6 +136,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                                 type = parsedTransaction.type.name,
                                 bankName = parsedTransaction.bankName ?: "Bank",
                                 category = savedTransaction?.category ?: "Miscellaneous",
+                                balanceMismatch = balanceMismatch,
                                 repository = repository
                             )
                         }
@@ -158,6 +167,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
         type: String,
         bankName: String,
         category: String,
+        balanceMismatch: Boolean,
         repository: com.ritesh.cashiro.data.repository.TransactionRepository
     ) {
         receiverScope.launch {
@@ -199,7 +209,8 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                 }
 
                 val title = "$typeEmoji $amount - $merchant"
-                val content = "$category • $bankName"
+                val content = if (balanceMismatch) context.getString(R.string.balance_discrepancy_notification)
+                    else "$category • $bankName"
 
                 // Get top 3 categories by usage (personalized for user)
                 val topCategories = try {
@@ -219,19 +230,27 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
 
+                if (balanceMismatch) {
+                    notificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                        .setPublicVersion(NotificationCompat.Builder(context, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.cashiro)
+                            .setContentTitle(context.getString(R.string.app_name))
+                            .setContentText(context.getString(R.string.balance_discrepancy_notification))
+                            .setContentIntent(pendingIntent)
+                            .setAutoCancel(true)
+                            .build())
+                }
+
                 // Add quick action buttons for top categories (only if different from current)
                 val notificationId = transactionId.toInt()
                 topCategories.filter { it != category }.take(3).forEachIndexed { index, topCategory ->
-                    val categoryIntent = Intent(context, NotificationActionReceiver::class.java).apply {
-                        action = NotificationActionReceiver.ACTION_CHANGE_CATEGORY
-                        putExtra(NotificationActionReceiver.EXTRA_TRANSACTION_ID, transactionId)
-                        putExtra(NotificationActionReceiver.EXTRA_NOTIFICATION_ID, notificationId)
-                        putExtra(NotificationActionReceiver.EXTRA_NEW_CATEGORY, topCategory)
-                    }
+                    val categoryIntent = categoryNotificationActionIntent(
+                        context, transactionId, index, topCategory
+                    )
 
                     val categoryPendingIntent = PendingIntent.getBroadcast(
                         context,
-                        transactionId.toInt() + index + 1, // Unique request code
+                        0, // The data URI identifies the full transaction ID and action slot.
                         categoryIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )

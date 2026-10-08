@@ -130,7 +130,7 @@ fun AddEditLendBorrowTransactionSheet(
     }
     var selectedType by remember { mutableStateOf(transactionToEdit?.type ?: initialType ?: LendBorrowType.LENT) }
     var amountText by remember {
-        mutableStateOf(transactionToEdit?.amount?.stripTrailingZeros()?.toPlainString()
+        mutableStateOf(transactionToEdit?.originalAmount?.stripTrailingZeros()?.toPlainString()
             ?: initialAmount?.stripTrailingZeros()?.toPlainString()
             ?: "0")
     }

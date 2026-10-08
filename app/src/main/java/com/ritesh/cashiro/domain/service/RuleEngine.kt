@@ -65,29 +65,7 @@ class RuleEngine @Inject constructor(
         rules: List<TransactionRule>,
         type: TransactionType
     ): Pair<TransactionEntity, List<RuleApplication>> {
-        // Pre-filter rules that apply to this transaction type
-        val applicableRules = rules.filter { rule ->
-            val hasTypeCondition = rule.conditions.any { it.field == TransactionField.TYPE }
-            if (!hasTypeCondition) {
-                true // Rule applies to all transaction types
-            } else {
-                // Check if any TYPE condition matches this transaction's type
-                rule.conditions.any { condition ->
-                    condition.field == TransactionField.TYPE &&
-                    when (condition.operator) {
-                        ConditionOperator.EQUALS -> condition.value.equals(type.name, ignoreCase = true)
-                        ConditionOperator.IN -> condition.value.split(",")
-                            .map { it.trim() }
-                            .any { it.equals(type.name, ignoreCase = true) }
-                        ConditionOperator.NOT_EQUALS -> !condition.value.equals(type.name, ignoreCase = true)
-                        ConditionOperator.NOT_IN -> !condition.value.split(",")
-                            .map { it.trim() }
-                            .any { it.equals(type.name, ignoreCase = true) }
-                        else -> false
-                    }
-                }
-            }
-        }
+        val applicableRules = rules.filter { it.conditions.mayMatchType(type) }
 
         return evaluateRules(transaction, smsText, applicableRules)
     }
@@ -124,19 +102,7 @@ class RuleEngine @Inject constructor(
         smsText: String?,
         conditions: List<RuleCondition>
     ): Boolean {
-        // An empty conditions list means "match all transactions" (catch-all rule)
-        if (conditions.isEmpty()) return true
-
-        // KISS: Simply AND all conditions together
-        // Each condition must be true for the rule to apply
-        for (condition in conditions) {
-            val conditionResult = evaluateCondition(transaction, smsText, condition)
-            if (!conditionResult) {
-                return false // If any condition is false, rule doesn't match
-            }
-        }
-
-        return true // All conditions matched
+        return conditions.matchesConditions { evaluateCondition(transaction, smsText, it) }
     }
 
     private fun evaluateCondition(
@@ -147,8 +113,12 @@ class RuleEngine @Inject constructor(
         val fieldValue = getFieldValue(transaction, smsText, condition.field)
 
         return when (condition.operator) {
-            ConditionOperator.EQUALS -> fieldValue.equals(condition.value, ignoreCase = true)
-            ConditionOperator.NOT_EQUALS -> !fieldValue.equals(condition.value, ignoreCase = true)
+            ConditionOperator.EQUALS -> if (condition.field == TransactionField.AMOUNT) {
+                numericEquality(fieldValue, condition.value)
+            } else fieldValue.equals(condition.value, ignoreCase = true)
+            ConditionOperator.NOT_EQUALS -> if (condition.field == TransactionField.AMOUNT) {
+                numericEquality(fieldValue, condition.value, negate = true)
+            } else !fieldValue.equals(condition.value, ignoreCase = true)
             ConditionOperator.CONTAINS -> fieldValue.contains(condition.value, ignoreCase = true)
             ConditionOperator.NOT_CONTAINS -> !fieldValue.contains(condition.value, ignoreCase = true)
             ConditionOperator.STARTS_WITH -> fieldValue.startsWith(condition.value, ignoreCase = true)

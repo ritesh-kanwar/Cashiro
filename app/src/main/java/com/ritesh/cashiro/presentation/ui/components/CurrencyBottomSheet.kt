@@ -33,6 +33,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ritesh.cashiro.R
 import com.ritesh.cashiro.data.currency.model.CurrencyConversion
 import com.ritesh.cashiro.data.model.Currency
+import com.ritesh.cashiro.data.model.CurrencyPickerOptions
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.ui.semantics.Role
 import com.ritesh.cashiro.presentation.accounts.CurrencyViewModel
 import com.ritesh.cashiro.presentation.effects.BlurredAnimatedVisibility
 import com.ritesh.cashiro.presentation.effects.rememberOverscrollFlingBehavior
@@ -145,13 +148,11 @@ contentDescription = stringResource(R.string.search),
                             flingBehavior = rememberOverscrollFlingBehavior { scrollState }
                         )
                 ) {
-                    val sourceCurrencies =
-                        (if (uiState.currencies.isNotEmpty()) uiState.currencies else Currency.SUPPORTED_CURRENCIES)
-                            .sortedBy { it.name }
-                    val filteredCurrencies = sourceCurrencies.filter {
-                        it.code.contains(searchQuery.text, ignoreCase = true) ||
-                                it.name.contains(searchQuery.text, ignoreCase = true) ||
-                                it.symbol.contains(searchQuery.text, ignoreCase = true)
+                    val sourceCurrencies = remember(uiState.currencies, selectedCurrency) {
+                        CurrencyPickerOptions.catalog(custom = uiState.currencies, selectedCode = selectedCurrency)
+                    }
+                    val filteredCurrencies = remember(sourceCurrencies, searchQuery.text) {
+                        CurrencyPickerOptions.matching(sourceCurrencies, searchQuery.text)
                     }
 
                     if (filteredCurrencies.isEmpty()) {
@@ -164,12 +165,10 @@ contentDescription = stringResource(R.string.search),
                     } else {
                         // Display currencies in a FlowRow
                         val displayedCurrencies =
-                            if (showAllCurrencies || searchQuery.text.isNotEmpty()) {
+                            if (showAllCurrencies || searchQuery.text.isNotBlank()) {
                                 filteredCurrencies
                             } else {
-                                filteredCurrencies.filter { currency ->
-                                    Currency.POPULAR_CURRENCY_CODES.contains(currency.code)
-                                }.take(15)
+                                CurrencyPickerOptions.quickAccess(filteredCurrencies, selectedCurrency)
                             }
 
                         FlowRow(
@@ -198,7 +197,7 @@ contentDescription = stringResource(R.string.search),
                         }
 
                         // View All Currencies button
-                        if (!showAllCurrencies && searchQuery.text.isEmpty() && filteredCurrencies.size > 15) {
+                        if (!showAllCurrencies && searchQuery.text.isBlank() && displayedCurrencies.size < filteredCurrencies.size) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -401,7 +400,7 @@ fun CurrencyCard(
         modifier = Modifier
             .sizeIn(minWidth = 90.dp, minHeight = 70.dp, maxHeight = 90.dp, maxWidth = 110.dp)
             .clip(RoundedCornerShape(Dimensions.Radius.md))
-            .clickable(onClick = onCurrencyCardClick)
+            .selectable(selected = isSelected, role = Role.RadioButton, onClick = onCurrencyCardClick)
             .padding(vertical = 5.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)

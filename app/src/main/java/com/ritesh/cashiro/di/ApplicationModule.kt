@@ -54,13 +54,11 @@ object ApplicationModule {
     @Singleton
     fun provideCurrencyConversionService(
         exchangeRateDao: ExchangeRateDao,
-        exchangeRateProvider: ExchangeRateProvider,
-        userPreferencesRepository: UserPreferencesRepository
+        exchangeRateProvider: ExchangeRateProvider
     ): CurrencyConversionService {
         return CurrencyConversionService(
             exchangeRateDao = exchangeRateDao,
-            exchangeRateProvider = exchangeRateProvider,
-            userPreferencesRepository = userPreferencesRepository
+            exchangeRateProvider = exchangeRateProvider
         )
     }
 }

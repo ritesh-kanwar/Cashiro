@@ -30,6 +30,8 @@ abstract class BankParser {
      */
     open fun getCurrency(): String = "INR"
 
+    open fun isMobileWallet(): Boolean = false
+
     companion object {
         private const val MAX_SMS_LENGTH = 5000
 
@@ -95,7 +97,8 @@ abstract class BankParser {
             timestamp = timestamp,
             bankName = getBankName(),
             isFromCard = detectIsCard(smsBody),
-            currency = getCurrency()
+            currency = getCurrency(),
+            isMobileWallet = isMobileWallet()
         )
     }
 

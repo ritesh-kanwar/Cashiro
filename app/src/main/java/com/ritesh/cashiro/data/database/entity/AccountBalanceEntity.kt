@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @Entity(
     tableName = "account_balances",
     indices = [
-        Index(value = ["bank_name", "account_last4", "timestamp"], unique = true),
+        Index(value = ["bank_name", "account_last4", "currency", "timestamp"], unique = true),
         Index(value = ["bank_name", "account_last4"]),
         Index(value = ["timestamp"]
         )

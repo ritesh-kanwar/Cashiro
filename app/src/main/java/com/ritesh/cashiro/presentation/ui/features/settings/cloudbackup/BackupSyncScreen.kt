@@ -194,6 +194,11 @@ fun BackupSyncScreen(
         onResult = { uri -> uri?.let { dataPrivacyViewModel.analyzePdfStatement(it) } }
     )
 
+    val csvImportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri -> uri?.let { dataPrivacyViewModel.importCsv(it) } }
+    )
+
     val cashewImportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri -> uri?.let { dataPrivacyViewModel.importCashew(it) } }
@@ -913,7 +918,7 @@ fun BackupSyncScreen(
                         // Import PDF Statement
                         ListItem(
                             headline = { Text(stringResource(R.string.import_pdf_statement)) },
-                            supporting = { Text(stringResource(R.string.import_pdf_statement_sub)) },
+                            supporting = { Text(stringResource(R.string.supported_pdf_statement_sub)) },
                             leading = {
                                 Box(
                                     modifier = Modifier
@@ -939,6 +944,10 @@ fun BackupSyncScreen(
                             shape = ListItemPosition.Middle.toShape(),
                             padding = PaddingValues(0.dp)
                         )
+
+                        com.ritesh.cashiro.presentation.ui.features.settings.dataprivacy.CsvImportEntry {
+                            csvImportLauncher.launch(arrayOf("text/csv", "text/comma-separated-values", "application/csv", "application/vnd.ms-excel", "text/plain"))
+                        }
 
                         // Import from Cashew
                         ListItem(
@@ -993,7 +1002,7 @@ fun BackupSyncScreen(
                                     verticalArrangement = Arrangement.spacedBy(Spacing.xs)
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.pdf_support_warning_title),
+                                        text = stringResource(R.string.supported_pdf_providers),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onErrorContainer,
                                         fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
@@ -1422,6 +1431,8 @@ fun BackupSyncScreen(
     }
 
     // PDF Processing / Error dialog
+    com.ritesh.cashiro.presentation.ui.features.settings.dataprivacy.CsvImportProgressDialog(dataPrivacyUiState.isCsvProcessing)
+
     if (dataPrivacyUiState.isPdfProcessing || dataPrivacyUiState.pdfProcessingError != null) {
         PdfProcessingDialog(
             isVisible = dataPrivacyUiState.isPdfProcessing,

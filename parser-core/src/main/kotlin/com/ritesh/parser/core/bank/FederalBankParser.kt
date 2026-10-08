@@ -24,6 +24,7 @@ class FederalBankParser : BankParser() {
         return normalizedSender.contains("FEDBNK") ||
                 normalizedSender.contains("FEDERAL") ||
                 normalizedSender.contains("FEDFIB") ||
+                normalizedSender.contains("FEDSMS") ||
                 normalizedSender.contains("FEDSCP") ||
                 // DLT patterns for transactions (-S suffix)
                 normalizedSender.matches(Regex("^[A-Z]{2}-FEDBNK-S$")) ||
@@ -388,6 +389,7 @@ class FederalBankParser : BankParser() {
     }
 
     override fun isTransactionMessage(message: String): Boolean {
+        if (FinancialMessageSafety.hasExplicitFailure(message)) return false
         val lowerMessage = message.lowercase()
 
         // Skip OTP and promotional messages
@@ -402,6 +404,11 @@ class FederalBankParser : BankParser() {
         if (isMandateCreationNotification(message) || isDeclinedMandatePayment(message)) {
             return false
         }
+
+        if (lowerMessage.contains("txn of") &&
+            (lowerMessage.contains("rewards") || lowerMessage.contains("was successful")) &&
+            !lowerMessage.contains("failed") && !lowerMessage.contains("declined")
+        ) return true
 
         // Federal Bank specific transaction keywords
         val federalKeywords =
@@ -449,6 +456,9 @@ class FederalBankParser : BankParser() {
         return super.extractAccountLast4(message)
     }
 
+    override fun extractReference(message: String): String? =
+        super.extractReference(message)?.takeIf { ref -> ref.any(Char::isDigit) }
+
     override fun extractBalance(message: String): BigDecimal? {
         // Don't extract credit limit as balance
         return super.extractBalance(message)
@@ -461,8 +471,7 @@ class FederalBankParser : BankParser() {
             // Credit card transactions - now using detectIsCard
             detectIsCreditCard(message) &&
                     (lowerMessage.contains("spent") ||
-                            (lowerMessage.contains("txn") &&
-                                    lowerMessage.contains("successful"))) -> TransactionType.CREDIT
+                            (lowerMessage.contains("txn of") || lowerMessage.contains("was successful"))) -> TransactionType.CREDIT
 
             // E-mandate payments (only successful ones)
             (lowerMessage.contains("e-mandate") || lowerMessage.contains("payment of")) &&
@@ -546,7 +555,8 @@ class FederalBankParser : BankParser() {
                 amount = amount,
                 nextDeductionDate = startDate,
                 merchant = merchant,
-                umn = umn
+                umn = umn,
+            accountLast4 = extractAccountLast4(message)
         )
     }
 
@@ -595,7 +605,8 @@ class FederalBankParser : BankParser() {
                 amount = amount,
                 nextDeductionDate = dueDate,
                 merchant = merchant,
-                umn = null
+                umn = null,
+                accountLast4 = extractAccountLast4(message)
         )
     }
 
@@ -603,7 +614,8 @@ class FederalBankParser : BankParser() {
             override val amount: BigDecimal,
             override val nextDeductionDate: String?,
             override val merchant: String,
-            override val umn: String?
+            override val umn: String?,
+        override val accountLast4: String? = null
     ) : MandateInfo {
         override val dateFormat = "dd-MM-yyyy"
     }

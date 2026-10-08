@@ -275,7 +275,8 @@ class IndianBankParser : BankParser() {
             return IndianMandateInfo(
                 amount = BigDecimal(amount),
                 nextDeductionDate = dateStr,
-                merchant = cleanMerchantName(merchant)
+                merchant = cleanMerchantName(merchant),
+                accountLast4 = extractAccountLast4(message)
             )
         }
 
@@ -286,7 +287,8 @@ class IndianBankParser : BankParser() {
         override val amount: BigDecimal,
         override val nextDeductionDate: String?,
         override val merchant: String,
-        override val umn: String? = null
+        override val umn: String? = null,
+        override val accountLast4: String? = null
     ) : MandateInfo {
         // Indian Bank uses d-MMM-yy format
         override val dateFormat = "d-MMM-yy"

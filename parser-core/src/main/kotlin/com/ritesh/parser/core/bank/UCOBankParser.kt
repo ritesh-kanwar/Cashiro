@@ -3,15 +3,6 @@ package com.ritesh.parser.core.bank
 import com.ritesh.parser.core.TransactionType
 import java.math.BigDecimal
 
-/**
- * Parser for UCO Bank SMS messages
- *
- * Supported formats:
- * - Debit: "A/c XX1111 Debited with Rs.2000.00 on 21-09-2025 by UCO-UPI.Avl Bal Rs.11111.11. Report Dispute https://spgrs.ucoonline.in/Home_Page.jsp"
- * - Credit: "A/c XX1111 Credited with Rs.2,000.00 on 21-09-2025 by UCO-UPI.Avl Bal Rs.11111.11. Report Dispute https://spgrs.ucoonline.in/Home_Page.jsp -UCO Bank"
- *
- * Sender patterns: XX-UCOBNK-S (where XX can be any two letters)
- */
 class UCOBankParser : BankParser() {
 
     override fun getBankName() = "UCO Bank"
@@ -21,27 +12,29 @@ class UCOBankParser : BankParser() {
         return normalizedSender.contains("UCOBNK") ||
                 normalizedSender.contains("UCOBANK") ||
                 normalizedSender.contains("UCO BANK") ||
-                // DLT patterns with any two-letter prefix followed by -UCOBNK-S
                 normalizedSender.matches(Regex("^[A-Z]{2}-UCOBNK-[ST]$")) ||
-                // Other variations
                 normalizedSender.matches(Regex("^[A-Z]{2}-UCOBNK$")) ||
                 normalizedSender.matches(Regex("^[A-Z]{2}-UCOBANK$"))
     }
 
     override fun extractAmount(message: String): BigDecimal? {
-        // UCO Bank format: "Rs.2000.00" or "Rs.2,000.00"
-        val amountPattern = Regex("""Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE)
-        amountPattern.find(message)?.let { match ->
-            val amount = match.groupValues[1].replace(",", "")
-            return try {
-                BigDecimal(amount)
-            } catch (e: NumberFormatException) {
-                null
-            }
+        DEBIT_CREDIT_AMOUNT.find(message)?.let { match ->
+            return toAmount(match.groupValues[1])
         }
 
-        // Fall back to base class patterns
-        return super.extractAmount(message)
+        val beforeBalance = BALANCE_CLAUSE.find(message)?.let { message.substring(0, it.range.first) } ?: message
+        ANY_AMOUNT.find(beforeBalance)?.let { match ->
+            return toAmount(match.groupValues[1])
+        }
+
+        return super.extractAmount(beforeBalance)
+    }
+
+    private fun toAmount(raw: String): BigDecimal? = try {
+        val cleaned = raw.replace(",", "")
+        BigDecimal(if (cleaned.startsWith(".")) "0$cleaned" else cleaned)
+    } catch (e: NumberFormatException) {
+        null
     }
 
     override fun extractTransactionType(message: String): TransactionType? {
@@ -55,47 +48,40 @@ class UCOBankParser : BankParser() {
     }
 
     override fun extractMerchant(message: String, sender: String): String? {
-        // UCO Bank format: "by UCO-UPI" or "by <merchant>"
         val merchantPattern = Regex("""by\s+([^.]+?)(?:\.Avl|$)""", RegexOption.IGNORE_CASE)
         merchantPattern.find(message)?.let { match ->
             val merchant = match.groupValues[1].trim()
 
-            // Handle UCO-UPI transactions
             if (merchant.contains("UCO-UPI", ignoreCase = true)) {
                 return "UPI Transfer"
             }
 
-            // Clean up common suffixes
             return cleanMerchantName(merchant)
         }
 
-        // Fall back to base class extraction
         return super.extractMerchant(message, sender)
     }
 
     override fun extractAccountLast4(message: String): String? {
-        // UCO Bank format: "A/c XX1111"
+        super.extractAccountLast4(message)?.let { return it }
         val accountPatterns = listOf(
-            Regex("""A/c\s+[X]{2}(\d{4})""", RegexOption.IGNORE_CASE),
-            Regex("""Account\s+[X]{2}(\d{4})""", RegexOption.IGNORE_CASE),
-            Regex("""Acc\s+[X]{2}(\d{4})""", RegexOption.IGNORE_CASE),
-            // Also handle variations with asterisks
-            Regex("""A/c\s+[*]{2}(\d{4})""", RegexOption.IGNORE_CASE)
+            Regex("""A/c\s+([X*\d]+)""", RegexOption.IGNORE_CASE),
+            Regex("""Account\s+([X*\d]+)""", RegexOption.IGNORE_CASE),
+            Regex("""Acc\s+([X*\d]+)""", RegexOption.IGNORE_CASE)
         )
 
         for (pattern in accountPatterns) {
             pattern.find(message)?.let { match ->
-                return match.groupValues[1]
+                return extractLast4Digits(match.groupValues[1])
             }
         }
 
-        return super.extractAccountLast4(message)
+        return null
     }
 
     override fun extractBalance(message: String): BigDecimal? {
-        // UCO Bank format: "Avl Bal Rs.11111.11"
         val balancePatterns = listOf(
-            Regex("""Avl\s+Bal\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
+            Regex("""Avl\s+Bal(?:\s+in\s+your\s+A/c\s+is)?\s*[:.]?\s*Rs\.?\s*([0-9,]+(?:\.\d{2})?)""", RegexOption.IGNORE_CASE),
             Regex(
                 """Available\s+Balance\s+Rs\.?\s*([0-9,]+(?:\.\d{2})?)""",
                 RegexOption.IGNORE_CASE
@@ -118,7 +104,6 @@ class UCOBankParser : BankParser() {
     }
 
     override fun extractReference(message: String): String? {
-        // Look for any transaction reference patterns specific to UCO Bank
         val refPatterns = listOf(
             Regex("""ref[:#]?\s*([\w]+)""", RegexOption.IGNORE_CASE),
             Regex("""txn[:#]?\s*([\w]+)""", RegexOption.IGNORE_CASE),
@@ -132,5 +117,16 @@ class UCOBankParser : BankParser() {
         }
 
         return super.extractReference(message)
+    }
+
+    private companion object {
+        private const val AMOUNT = """(\d[\d,]*(?:\.\d{1,2})?|\.\d{1,2})"""
+
+        val DEBIT_CREDIT_AMOUNT = Regex(
+            """(?:debited|credited)\s+with\s+Rs\.?\s*$AMOUNT""",
+            RegexOption.IGNORE_CASE
+        )
+        val ANY_AMOUNT = Regex("""Rs\.?\s*$AMOUNT""", RegexOption.IGNORE_CASE)
+        val BALANCE_CLAUSE = Regex("""Avl\s+Bal|Available\s+Balance""", RegexOption.IGNORE_CASE)
     }
 }

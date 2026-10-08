@@ -12,6 +12,7 @@ interface RuleRepository {
     suspend fun getActiveRulesByTypes(types: List<TransactionType>): List<TransactionRule>
     suspend fun getRuleById(ruleId: String): TransactionRule?
     suspend fun insertRule(rule: TransactionRule)
+    suspend fun insertRules(rules: List<TransactionRule>)
     suspend fun updateRule(rule: TransactionRule)
     suspend fun deleteRule(ruleId: String)
     suspend fun deleteAllRules()

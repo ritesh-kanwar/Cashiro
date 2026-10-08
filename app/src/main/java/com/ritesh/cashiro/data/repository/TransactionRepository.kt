@@ -21,6 +21,9 @@ class TransactionRepository @Inject constructor(
     fun getAllTransactions(): Flow<List<TransactionEntity>> = transactionDao.getAllTransactions()
         .map { list -> list.filter { it.transactionType != TransactionType.BALANCE_UPDATE } }
 
+    suspend fun getTransactionByAmountAndDate(amount: BigDecimal, dateStart: LocalDateTime, dateEnd: LocalDateTime): List<TransactionEntity> =
+        transactionDao.getTransactionByAmountAndDate(amount, dateStart, dateEnd)
+
     fun getTransactionCount(): Flow<Int> = transactionDao.getTransactionCount()
 
     suspend fun getTransactionById(id: Long): TransactionEntity? =
@@ -182,9 +185,10 @@ class TransactionRepository @Inject constructor(
     }
 
     private suspend fun reverseBalanceForDeletion(transaction: TransactionEntity) {
+        if (transaction.transactionHash.startsWith("manual_balance_adjustment_v1_")) return
         val bankName = transaction.bankName ?: return
         val accountLast4 = transaction.accountNumber ?: return
-        val latestBalance = accountBalanceRepository.getLatestBalance(bankName, accountLast4) ?: return
+        val latestBalance = accountBalanceRepository.getLatestBalance(bankName, accountLast4, transaction.currency) ?: return
         val currentBalance = latestBalance.balance
 
         val reversedBalance = when (transaction.transactionType) {
@@ -212,9 +216,10 @@ class TransactionRepository @Inject constructor(
     }
 
     private suspend fun applyBalanceForTransaction(transaction: TransactionEntity) {
+        if (transaction.transactionHash.startsWith("manual_balance_adjustment_v1_")) return
         val bankName = transaction.bankName ?: return
         val accountLast4 = transaction.accountNumber ?: return
-        val latestBalance = accountBalanceRepository.getLatestBalance(bankName, accountLast4) ?: return
+        val latestBalance = accountBalanceRepository.getLatestBalance(bankName, accountLast4, transaction.currency) ?: return
         val currentBalance = latestBalance.balance
 
         val newBalance = when (transaction.transactionType) {

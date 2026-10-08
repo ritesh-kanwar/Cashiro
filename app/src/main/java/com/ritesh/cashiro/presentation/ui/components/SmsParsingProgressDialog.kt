@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.work.Data
 import androidx.work.WorkInfo
 import com.ritesh.cashiro.R
 import com.ritesh.cashiro.presentation.ui.theme.LocalBlurEffects
@@ -51,6 +52,9 @@ import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeEffectScope
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
+
+private val WorkInfo.scanData: Data
+    get() = if (state == WorkInfo.State.SUCCEEDED) outputData else progress
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalHazeApi::class,
     ExperimentalMaterial3ExpressiveApi::class
@@ -113,9 +117,9 @@ fun SmsParsingProgressDialog(
                     ProgressDetails(workInfo = workInfo)
 
                     // Progress Bar
-                    if (workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0) > 0) {
-                        val progress = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0).toFloat() /
-                                workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 1).toFloat()
+                    if (workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0) > 0) {
+                        val progress = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0).toFloat() /
+                                workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 1).toFloat()
 
                         LinearWavyProgressIndicator(
                             progress = { progress },
@@ -174,14 +178,14 @@ fun SmsParsingProgressDialog(
 
 @Composable
 private fun ProgressDetails(workInfo: WorkInfo) {
-    val totalMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0)
-    val processedMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0)
-    val parsedTransactions = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PARSED, 0)
-    val savedTransactions = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_SAVED, 0)
-    val timeElapsed = workInfo.progress.getLong(OptimizedSmsReaderWorker.PROGRESS_TIME_ELAPSED, 0L)
-    val estimatedTimeRemaining = workInfo.progress.getLong(OptimizedSmsReaderWorker.PROGRESS_ESTIMATED_TIME_REMAINING, 0L)
-    val currentBatch = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_CURRENT_BATCH, 0)
-    val totalBatches = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL_BATCHES, 0)
+    val totalMessages = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0)
+    val processedMessages = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0)
+    val parsedTransactions = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_PARSED, 0)
+    val savedTransactions = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_SAVED, 0)
+    val timeElapsed = workInfo.scanData.getLong(OptimizedSmsReaderWorker.PROGRESS_TIME_ELAPSED, 0L)
+    val estimatedTimeRemaining = workInfo.scanData.getLong(OptimizedSmsReaderWorker.PROGRESS_ESTIMATED_TIME_REMAINING, 0L)
+    val currentBatch = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_CURRENT_BATCH, 0)
+    val totalBatches = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL_BATCHES, 0)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -373,8 +377,8 @@ fun SmsParsingProgressIndicator(
     modifier: Modifier = Modifier
 ) {
     if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING) {
-        val totalMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0)
-        val processedMessages = workInfo.progress.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0)
+        val totalMessages = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_TOTAL, 0)
+        val processedMessages = workInfo.scanData.getInt(OptimizedSmsReaderWorker.PROGRESS_PROCESSED, 0)
 
         if (totalMessages > 0) {
             Column(

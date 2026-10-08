@@ -1,0 +1,12 @@
+<resources>
+    <string name="subscription_payment_recorded">Payment recorded.</string>
+    <string name="subscription_payment_linked">Existing payment linked. No extra charge was added.</string>
+    <string name="subscription_payment_already_recorded">This payment cycle has already been recorded.</string>
+    <string name="subscription_payment_failed">Could not record this payment. Please try again.</string>
+    <string name="subscription_payment_match_title">Link an existing payment?</string>
+    <string name="subscription_payment_match_body">These transactions match this subscription. Select the payment to avoid recording it twice.</string>
+    <string name="subscription_payment_another">Record another payment</string>
+    <string name="subscription_payment_cancel">Cancel</string>
+    <string name="subscription_payment_unfunded">This will record an expense without changing an account balance. Edit the subscription to choose a funding account.</string>
+    <string name="subscription_payment_funded">Paid from %1$s ••%2$s (%3$s)</string>
+</resources>

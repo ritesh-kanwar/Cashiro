@@ -92,7 +92,7 @@ fun PdfImportSheet(
     val accountDecisions = remember(analysisResult) {
         mutableStateMapOf<String, AccountImportDecision>().apply {
             analysisResult.accountMatches.forEach { match ->
-                put(match.last4, if (match.hasExistingMatch) AccountImportDecision.MERGE_WITH_EXISTING else AccountImportDecision.CREATE_NEW)
+                put(match.key, if (match.hasExistingMatch) AccountImportDecision.MERGE_WITH_EXISTING else AccountImportDecision.CREATE_NEW)
             }
         }
     }
@@ -218,8 +218,8 @@ fun PdfImportSheet(
                     items(analysisResult.accountMatches) { match ->
                         PdfAccountDecisionCard(
                             match = match,
-                            currentDecision = accountDecisions[match.last4] ?: AccountImportDecision.CREATE_NEW,
-                            onDecisionChanged = { accountDecisions[match.last4] = it }
+                            currentDecision = accountDecisions[match.key] ?: AccountImportDecision.CREATE_NEW,
+                            onDecisionChanged = { accountDecisions[match.key] = it }
                         )
                     }
 
@@ -322,7 +322,7 @@ fun PdfImportSheet(
                                     )
                                 ) {
                                     Text(
-                                        "Override All",
+                                        "Enrich All",
                                         style = MaterialTheme.typography.labelLarge
                                     )
                                 }
@@ -572,7 +572,7 @@ fun TransactionImportItemCard(
                         onClick = { onDecisionChanged(TransactionImportDecision.SKIP) }
                     )
                     DecisionButton(
-                        text = "Override",
+                        text = "Enrich",
                         selected = currentDecision == TransactionImportDecision.OVERRIDE_EXISTING,
                         modifier = Modifier.weight(1f),
                         onClick = { onDecisionChanged(TransactionImportDecision.OVERRIDE_EXISTING) }

@@ -1,6 +1,7 @@
 package com.ritesh.cashiro.presentation.ui.features.subscriptions
 
 import com.ritesh.cashiro.data.database.entity.SubscriptionEntity
+import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import java.math.BigDecimal
 
 data class SubscriptionsUiState(
@@ -12,5 +13,8 @@ data class SubscriptionsUiState(
     val lastHiddenSubscription: SubscriptionEntity? = null,
     val selectedSubscription: SubscriptionEntity? = null,
     val convertedAmounts: Map<Long, BigDecimal> = emptyMap(),
-    val conversionFailureCount: Int = 0
+    val conversionFailureCount: Int = 0,
+    val paymentInProgress: Boolean = false,
+    val paymentCandidates: List<TransactionEntity> = emptyList(),
+    val paymentMessage: String? = null
 )

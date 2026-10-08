@@ -45,6 +45,9 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionsViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
+    private val ignoredAccounts: com.ritesh.cashiro.data.preferences.IgnoredAccountsStore,
+    private val accountMergeStore: com.ritesh.cashiro.data.preferences.BankAccountMergeStore,
+    private val cardRepository: com.ritesh.cashiro.data.repository.CardRepository,
     private val categoryRepository: CategoryRepository,
     private val subcategoryRepository: SubcategoryRepository,
     private val accountBalanceRepository: AccountBalanceRepository,
@@ -364,9 +367,9 @@ class TransactionsViewModel @Inject constructor(
                      
                      // Calculate converted amounts for shown transactions if transaction currency differs from base (main) currency
                      val converted = currencyFilteredTransactions.filter { !it.currency.equals(baseCurrencyCode, ignoreCase = true) }
-                         .associate { tx ->
-                             tx.id to currencyConversionService.convertAmount(tx.amount, tx.currency, baseCurrencyCode)
-                         }
+                         .mapNotNull { tx ->
+                        currencyConversionService.convertAmountOrNull(tx.amount, tx.currency, baseCurrencyCode)?.let { tx.id to it }
+                    }.toMap()
 
                      // Create person mapping
                      val personMap = persons.associateBy { it.id }
@@ -662,7 +665,7 @@ class TransactionsViewModel @Inject constructor(
                     if (linkedEntry != null) {
                         val newBalance = (linkedEntry.balance - oldEffect + newEffect).max(BigDecimal.ZERO)
                         accountBalanceRepository.updateBalance(linkedEntry.copy(balance = newBalance))
-                        accountBalanceRepository.recalculateBalancesAfter(bankName, accountLast4, timestamp, newBalance)
+                        accountBalanceRepository.recalculateBalancesAfter(bankName, accountLast4, timestamp, newBalance, txn.currency)
                     }
                 }
             }
@@ -818,7 +821,11 @@ class TransactionsViewModel @Inject constructor(
         typeFilter: Set<TransactionTypeFilter>
     ): Flow<List<TransactionEntity>> {
         // Start with the base flow
-        val baseFlow = transactionRepository.getAllTransactions()
+        val baseFlow = combine(transactionRepository.getAllTransactions(), ignoredAccounts.keysFlow,
+            cardRepository.getAllCards(), accountBalanceRepository.getAllLatestBalances()) { transactions, ignored, cards, balances ->
+            val expanded = com.ritesh.cashiro.data.preferences.IgnoredAccountsStore.linkedCardKeys(ignored, cards, balances, accountMergeStore.mappings())
+            transactions.filterNot { ignoredAccounts.matchesKeys(expanded, it.bankName, it.currency, it.accountNumber) }
+        }
         
         // Apply period filter
         val periodFilteredFlow = when (period) {

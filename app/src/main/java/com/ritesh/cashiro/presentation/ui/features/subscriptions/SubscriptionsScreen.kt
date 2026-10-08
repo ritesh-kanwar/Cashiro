@@ -6,6 +6,10 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.AlertDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
@@ -137,6 +141,13 @@ fun SubscriptionsScreen(
     val subcategoriesMap by subscriptionsViewModel.subcategoriesMap.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(uiState.paymentMessage) {
+        uiState.paymentMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            subscriptionsViewModel.clearPaymentMessage()
+        }
+    }
+
     LaunchedEffect(uiState.lastHiddenSubscription) {
         uiState.lastHiddenSubscription?.let { subscription ->
             val result = snackbarHostState.showSnackbar(
@@ -211,7 +222,37 @@ fun SubscriptionsScreen(
             )
         }
 
-        if (selectedSubscription != null) {
+        if (selectedSubscription != null && uiState.paymentCandidates.isNotEmpty()) {
+            AlertDialog(
+                onDismissRequest = { subscriptionsViewModel.dismissPaymentCandidates() },
+                title = { Text(stringResource(R.string.subscription_payment_match_title)) },
+                text = {
+                    Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
+                        Text(stringResource(R.string.subscription_payment_match_body))
+                        uiState.paymentCandidates.forEach { transaction ->
+                            TextButton(
+                                enabled = !uiState.paymentInProgress,
+                                onClick = { subscriptionsViewModel.markAsPaid(selectedSubscription, linkedTransactionId = transaction.id) }
+                            ) {
+                                Text("${transaction.dateTime.toLocalDate()} · ${transaction.merchantName} · ${transaction.currency} ${transaction.amount}")
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(enabled = !uiState.paymentInProgress, onClick = {
+                        subscriptionsViewModel.markAsPaid(selectedSubscription, recordAnotherPayment = true)
+                    }) { Text(stringResource(R.string.subscription_payment_another)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { subscriptionsViewModel.dismissPaymentCandidates() }) {
+                        Text(stringResource(R.string.subscription_payment_cancel))
+                    }
+                }
+            )
+        }
+
+        if (selectedSubscription != null && uiState.paymentCandidates.isEmpty()) {
             PaymentStatusBottomSheet(
                 subscription = selectedSubscription,
                 categoryEntity = categoriesMap[selectedSubscription.category],
@@ -220,6 +261,7 @@ fun SubscriptionsScreen(
                 targetCurrency = uiState.targetCurrency,
                 onDismiss = { subscriptionsViewModel.selectSubscription(null) },
                 onMarkAsPaid = { subscriptionsViewModel.markAsPaid(selectedSubscription) },
+                paymentInProgress = uiState.paymentInProgress,
                 onEdit = {
                     subscriptionsViewModel.selectSubscription(null)
                     onEditSubscription(selectedSubscription.id)
@@ -743,6 +785,7 @@ private fun PaymentStatusBottomSheet(
     targetCurrency: String? = null,
     onDismiss: () -> Unit,
     onMarkAsPaid: () -> Unit,
+    paymentInProgress: Boolean = false,
     onEdit: () -> Unit
 ) {
     var showSmsBody by remember { mutableStateOf(false) }
@@ -870,6 +913,15 @@ private fun PaymentStatusBottomSheet(
 
             Spacer(modifier = Modifier.height(Spacing.lg))
 
+            Text(
+                text = if (subscription.accountLast4 != null) stringResource(
+                    R.string.subscription_payment_funded, subscription.bankName.orEmpty(), subscription.accountLast4, subscription.currency
+                ) else stringResource(R.string.subscription_payment_unfunded),
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(Spacing.md))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.md)
@@ -882,6 +934,7 @@ private fun PaymentStatusBottomSheet(
                 }
                 
                 Button(
+                    enabled = !paymentInProgress,
                     onClick = onMarkAsPaid,
                     modifier = Modifier.weight(1f).height(56.dp)
                 ) {

@@ -70,6 +70,17 @@ class MainActivity : AppCompatActivity() {
     var addTransactionType by mutableStateOf<String?>(null)
         private set
 
+    var sharedText by mutableStateOf<String?>(null)
+        private set
+    var sharedTextRequestId by mutableStateOf<String?>(null)
+        private set
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("pending_shared_text", sharedText)
+        outState.putString("pending_share_id", sharedTextRequestId)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Install splash screen before super.onCreate()
         val splashScreen = installSplashScreen()
@@ -87,6 +98,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Handle intent if activity is launched from notification or shortcut/tile
+        sharedText = savedInstanceState?.getString("pending_shared_text")
+        sharedTextRequestId = savedInstanceState?.getString("pending_share_id")
         handleIntent(intent)
 
         // Schedule daily reminders
@@ -112,6 +125,12 @@ class MainActivity : AppCompatActivity() {
                     addTransactionTab = null
                     addTransactionType = null
                 },
+                sharedText = sharedText,
+                sharedTextRequestId = sharedTextRequestId,
+                onSharedTextHandled = {
+                    sharedText = null
+                    sharedTextRequestId = null
+                },
                 appLockViewModel = appLockViewModel,
                 themeViewModel = themeViewModel,
             )
@@ -121,10 +140,16 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         // Handle intent when activity is already running
+        setIntent(intent)
         handleIntent(intent)
     }
 
     private fun handleIntent(intent: Intent?) {
+        SharedTextIntent.read(intent)?.let { text ->
+            sharedText = text
+            sharedTextRequestId = java.util.UUID.randomUUID().toString()
+            intent?.removeExtra(Intent.EXTRA_TEXT)
+        }
         when (intent?.action) {
             SmsBroadcastReceiver.ACTION_EDIT_TRANSACTION -> {
                 val transactionId = intent.getLongExtra(SmsBroadcastReceiver.EXTRA_TRANSACTION_ID, -1)

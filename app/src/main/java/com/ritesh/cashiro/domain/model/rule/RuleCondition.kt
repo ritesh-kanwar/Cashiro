@@ -12,14 +12,16 @@ data class RuleCondition(
     fun validate(): Boolean {
         return value.isNotBlank() && when (field) {
             TransactionField.AMOUNT -> {
-                // For amount fields, ensure value is numeric for comparison operators
                 when (operator) {
-                    ConditionOperator.LESS_THAN,
-                    ConditionOperator.GREATER_THAN,
-                    ConditionOperator.LESS_THAN_OR_EQUAL,
-                    ConditionOperator.GREATER_THAN_OR_EQUAL -> value.toBigDecimalOrNull() != null
-                    else -> true
+                    ConditionOperator.IN, ConditionOperator.NOT_IN ->
+                        value.split(",").all { it.trim().toBigDecimalOrNull() != null }
+                    else -> value.toBigDecimalOrNull() != null
                 }
+            }
+            TransactionField.TYPE -> when (operator) {
+                ConditionOperator.EQUALS, ConditionOperator.NOT_EQUALS ->
+                    runCatching { com.ritesh.cashiro.data.database.entity.TransactionType.valueOf(value.uppercase()) }.isSuccess
+                else -> true
             }
             else -> true
         }
@@ -61,4 +63,14 @@ enum class ConditionOperator {
 enum class LogicalOperator {
     AND,
     OR
+}
+
+/** The operators offered by Cashiro's condition editor. */
+fun supportedOperators(field: TransactionField): List<ConditionOperator> = when (field) {
+    TransactionField.AMOUNT -> listOf(
+        ConditionOperator.LESS_THAN, ConditionOperator.GREATER_THAN, ConditionOperator.EQUALS
+    )
+    else -> listOf(
+        ConditionOperator.CONTAINS, ConditionOperator.EQUALS, ConditionOperator.STARTS_WITH
+    )
 }

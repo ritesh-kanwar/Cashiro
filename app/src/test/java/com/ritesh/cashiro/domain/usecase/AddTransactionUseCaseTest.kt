@@ -371,7 +371,7 @@ class AddTransactionUseCaseTest {
         balanceDao: FakeAccountBalanceDao
     ): Pair<AddTransactionUseCase, TransactionRepository> {
         val context = ContextWrapper(null)
-        val accountBalanceRepo = AccountBalanceRepository(balanceDao, context)
+        val accountBalanceRepo = AccountBalanceRepository(balanceDao, context, com.ritesh.cashiro.data.preferences.BankAccountMergeStore(context))
         val dao = FakeTransactionDao()
         transactionDao = dao
         val transactionRepo = TransactionRepository(dao, accountBalanceRepo)
@@ -384,6 +384,8 @@ class AddTransactionUseCaseTest {
     }
 
     private class FakeTransactionDao : TransactionDao {
+        override suspend fun getAccountTransferLegRefIds(bankName: String, sourceAccountLast4: String): List<Long> = error("Not used by this fixture")
+        override suspend fun retargetTransferLegRefs(transactionIds: List<Long>, sourceBankName: String, targetBankName: String, sourceAccountLast4: String, targetAccountLast4: String, updatedAt: LocalDateTime): Int = error("Not used by this fixture")
         var insertedTransactions = mutableListOf<TransactionEntity>()
         private var nextId = 1L
 
@@ -393,7 +395,8 @@ class AddTransactionUseCaseTest {
             return id
         }
 
-        override suspend fun getTransactionByHash(transactionHash: String): TransactionEntity? = null
+        override suspend fun getDeletedBySms(smsBody: String, smsSender: String?): TransactionEntity? = null
+    override suspend fun getTransactionByHash(transactionHash: String): TransactionEntity? = null
 
         override fun getAllTransactions(): Flow<List<TransactionEntity>> = flowOf(emptyList())
         override fun getTransactionCount(): Flow<Int> = flowOf(0)
@@ -419,6 +422,9 @@ class AddTransactionUseCaseTest {
         override suspend fun updateTransaction(transaction: TransactionEntity) = Unit
         override suspend fun deleteTransaction(transaction: TransactionEntity) = Unit
         override suspend fun deleteTransactionById(transactionId: Long) = Unit
+        override suspend fun deleteRebuildableSmsTransactions() = Unit
+        override suspend fun getRebuildableSmsTransactions(): List<TransactionEntity> = error("Rescan is not used by this fixture")
+        override suspend fun getTransactionByAmountAndDate(amount: BigDecimal, dateStart: LocalDateTime, dateEnd: LocalDateTime): List<TransactionEntity> = emptyList()
         override suspend fun deleteAllTransactions() = Unit
         override suspend fun deleteSampleTransactions() = Unit
         override suspend fun updateCategoryForMerchant(merchantName: String, newCategory: String) = Unit
@@ -446,6 +452,9 @@ class AddTransactionUseCaseTest {
         ): List<TransactionEntity> = emptyList()
         override suspend fun getTransactionsBetweenDatesList(
             startDate: LocalDateTime, endDate: LocalDateTime
+        ): List<TransactionEntity> = emptyList()
+        override suspend fun getTransactionsForCsvIdentity(
+            startDate: LocalDateTime, endDateExclusive: LocalDateTime
         ): List<TransactionEntity> = emptyList()
         override fun getTransactionsByAccount(
             bankName: String, accountLast4: String
@@ -497,6 +506,9 @@ class AddTransactionUseCaseTest {
     }
 
     private class FakeAccountBalanceDao : AccountBalanceDao() {
+        override suspend fun getBalancesForTransaction(transactionId: Long): List<AccountBalanceEntity> = emptyList()
+        override suspend fun deleteBalancesForTransaction(transactionId: Long) = Unit
+        override suspend fun deletePhantomGPayAccounts(): Int = 0
         private val balances = mutableMapOf<Pair<String, String>, MutableList<AccountBalanceEntity>>()
         private var nextId = 1L
 
@@ -520,24 +532,32 @@ class AddTransactionUseCaseTest {
         }
 
         override suspend fun getAccountLast4sEndingWith(bankName: String, suffix: String): List<String> = emptyList()
+        override suspend fun getLatestBalanceForCurrency(bankName: String, accountLast4: String, currency: String): AccountBalanceEntity? =
+            balances[Pair(bankName, accountLast4)]?.filter { it.currency == currency }?.maxByOrNull { it.timestamp }
+
         override suspend fun getLatestBalanceOnOrBefore(
             bankName: String,
             accountLast4: String,
-            timestamp: LocalDateTime
+            timestamp: LocalDateTime,
+            currency: String
         ): AccountBalanceEntity? {
             val key = Pair(bankName, accountLast4)
             return balances[key]
-                ?.filter { !it.timestamp.isAfter(timestamp) }
+                ?.filter { it.currency == currency && !it.timestamp.isAfter(timestamp) }
                 ?.maxByOrNull { it.timestamp }
         }
         override suspend fun getBalancesAfterWithTransactions(
             bankName: String,
             accountLast4: String,
-            timestamp: LocalDateTime
+            timestamp: LocalDateTime,
+            currency: String
         ): List<AccountBalanceTransactionInfo> = emptyList()
         override fun getLatestBalanceFlow(bankName: String, accountLast4: String): Flow<AccountBalanceEntity?> = flowOf(null)
         override fun getAllLatestBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
         override fun getAllBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
+        override suspend fun deleteRebuildableBalances() = Unit
+        override suspend fun getRebuildableBalances(): List<AccountBalanceEntity> = error("Rescan is not used by this fixture")
+        override suspend fun deleteBalancesByIds(ids: List<Long>) { balances.values.forEach { rows -> rows.removeAll { it.id in ids } } }
         override suspend fun deleteAllBalances() = Unit
         override suspend fun deleteSampleBalances() = Unit
         override fun getCurrentMonthLatestBalances(): Flow<List<AccountBalanceEntity>> = flowOf(emptyList())
@@ -592,13 +612,14 @@ class AddTransactionUseCaseTest {
             bankName: String,
             accountLast4: String,
             timestamp: LocalDateTime,
-            startingBalance: BigDecimal
+            startingBalance: BigDecimal,
+            currency: String
         ) = Unit
 
         override suspend fun getAccountByLast4(accountLast4: String): AccountBalanceEntity? = null
 
-        override suspend fun getEarliestBalance(bankName: String, accountLast4: String): AccountBalanceEntity? {
-            return balances[Pair(bankName, accountLast4)]?.minByOrNull { it.timestamp }
+        override suspend fun getEarliestBalance(bankName: String, accountLast4: String, currency: String): AccountBalanceEntity? {
+            return balances[Pair(bankName, accountLast4)]?.filter { it.currency == currency }?.minByOrNull { it.timestamp }
         }
     }
 }

@@ -42,7 +42,7 @@ fun ParsedTransaction.toEntity(): TransactionEntity {
         smsBody = smsBody,
         bankName = bankName,
         smsSender = sender,
-        accountNumber = accountLast4,
+        accountNumber = accountIdentity,
         balanceAfter = balance,
         transactionHash = transactionHash?.takeIf { it.isNotBlank() } ?: generateTransactionId(),
         isRecurring = false, // Will be determined later
@@ -109,3 +109,6 @@ fun com.ritesh.parser.core.TransactionType.toEntityType(): TransactionType {
         com.ritesh.parser.core.TransactionType.BALANCE_UPDATE -> TransactionType.BALANCE_UPDATE
     }
 }
+/** Wallet messages without account digits share one stable account per provider and currency. */
+val ParsedTransaction.accountIdentity: String?
+    get() = accountLast4 ?: if (isMobileWallet) "wallet_$currency" else null

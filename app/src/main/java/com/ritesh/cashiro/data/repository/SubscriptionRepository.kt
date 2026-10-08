@@ -3,6 +3,7 @@ package com.ritesh.cashiro.data.repository
 import com.ritesh.cashiro.data.database.dao.SubscriptionDao
 import com.ritesh.cashiro.data.database.entity.SubscriptionEntity
 import com.ritesh.cashiro.data.database.entity.SubscriptionState
+import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.parser.core.bank.HDFCBankParser
 import com.ritesh.parser.core.bank.IndianBankParser
 import com.ritesh.parser.core.bank.SBIBankParser
@@ -10,6 +11,7 @@ import com.ritesh.parser.core.bank.FederalBankParser
 import com.ritesh.parser.core.MandateInfo
 import com.ritesh.cashiro.presentation.common.icons.CategoryMapping
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -40,8 +42,13 @@ class SubscriptionRepository @Inject constructor(
     suspend fun getSubscriptionById(id: Long): SubscriptionEntity? = 
         subscriptionDao.getSubscriptionById(id)
     
-    suspend fun insertSubscription(subscription: SubscriptionEntity): Long = 
-        subscriptionDao.insertSubscription(subscription)
+    suspend fun insertSubscription(subscription: SubscriptionEntity): Long {
+        if (subscription.id != 0L && subscriptionDao.getSubscriptionById(subscription.id) != null) {
+            subscriptionDao.updateSubscription(subscription)
+            return subscription.id
+        }
+        return subscriptionDao.insertSubscription(subscription)
+    }
     
     suspend fun updateSubscription(subscription: SubscriptionEntity) = 
         subscriptionDao.updateSubscription(subscription)
@@ -93,6 +100,20 @@ class SubscriptionRepository @Inject constructor(
         }
     }
     
+    /** Funding identity prevents a same-merchant payment from advancing a different account's subscription. */
+    suspend fun matchTransactionToSubscription(transaction: TransactionEntity): SubscriptionEntity? =
+        subscriptionDao.getSubscriptionsByStateList(SubscriptionState.ACTIVE).filter { subscription ->
+            transaction.transactionType in setOf(
+                com.ritesh.cashiro.data.database.entity.TransactionType.EXPENSE,
+                com.ritesh.cashiro.data.database.entity.TransactionType.CREDIT
+            ) && subscription.merchantName.equals(transaction.merchantName, ignoreCase = true) &&
+                areAmountsEqual(subscription.amount, transaction.amount) &&
+                subscription.currency.equals(transaction.currency, ignoreCase = true) &&
+                (subscription.bankName.isNullOrBlank() || subscription.bankName == "Manual Entry" ||
+                    subscription.bankName.equals(transaction.bankName, ignoreCase = true)) &&
+                (subscription.accountLast4 == null || subscription.accountLast4 == transaction.accountNumber)
+        }.singleOrNull()
+
     /**
      * Updates the next payment date after a subscription charge
      */
@@ -159,15 +180,15 @@ class SubscriptionRepository @Inject constructor(
             }
         } ?: LocalDate.now().plusDays(30)
 
-        // For banks that provide UMN (HDFC, SBI, Federal), use it as primary identifier
+        val bankSubscriptions = subscriptionDao.getAllSubscriptions().first().filter {
+            it.bankName.equals(bankName, ignoreCase = true) && it.currency == "INR"
+        }
         val existing = if (mandateInfo.umn != null) {
-            subscriptionDao.getSubscriptionByUmn(mandateInfo.umn!!)
+            bankSubscriptions.singleOrNull { it.umn == mandateInfo.umn }
         } else {
-            // For other banks or when no UMN, use merchant and amount matching
-            subscriptionDao.getSubscriptionByMerchantAndAmount(
-                mandateInfo.merchant,
-                mandateInfo.amount
-            )
+            bankSubscriptions.singleOrNull {
+                it.merchantName == mandateInfo.merchant && it.amount.compareTo(mandateInfo.amount) == 0
+            }
         }
 
         Log.d(TAG, "Unified Mandate lookup - Bank: $bankName, Merchant: ${mandateInfo.merchant}, " +
@@ -205,6 +226,7 @@ class SubscriptionRepository @Inject constructor(
                 nextPaymentDate = nextPaymentDate,
                 merchantName = mandateInfo.merchant,
                 umn = mandateInfo.umn ?: existing.umn, // Update UMN if provided
+                accountLast4 = existing.accountLast4 ?: mandateInfo.accountLast4,
                 state = if (shouldReactivate) SubscriptionState.ACTIVE else existing.state,
                 smsBody = smsBody ?: existing.smsBody, // Update SMS body if provided
                 updatedAt = java.time.LocalDateTime.now()
@@ -219,13 +241,18 @@ class SubscriptionRepository @Inject constructor(
                 nextPaymentDate = nextPaymentDate,
                 state = SubscriptionState.ACTIVE,
                 bankName = bankName,
+                accountLast4 = mandateInfo.accountLast4,
                 umn = mandateInfo.umn,
                 category = determineCategory(mandateInfo.merchant),
                 smsBody = smsBody
             )
         }
 
-        return subscriptionDao.insertSubscription(subscription)
+        return if (existing != null) {
+            // UPDATE retains the payment ledger; REPLACE would cascade-delete it.
+            subscriptionDao.updateSubscription(subscription)
+            existing.id
+        } else subscriptionDao.insertSubscription(subscription)
     }
 
     suspend fun updatePaymentStatus(id: Long, nextPaymentDate: LocalDate, lastPaidDate: LocalDate?) =

@@ -1,6 +1,22 @@
 package com.ritesh.cashiro.data.manager
 
+import com.ritesh.cashiro.data.preferences.IgnoredAccountsStore
+import com.ritesh.cashiro.data.mapper.accountIdentity
+import com.ritesh.cashiro.data.mapper.isSourceCard
 import android.util.Log
+import androidx.room.withTransaction
+import com.ritesh.cashiro.data.database.CashiroDatabase
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import com.ritesh.cashiro.data.preferences.BankAccountMergeStore
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
+import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.domain.model.rule.TransactionRule
+import com.ritesh.cashiro.receiver.BankNotificationConfig
 import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.parser.core.bank.BankParserFactory
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
@@ -28,19 +44,38 @@ class SmsTransactionProcessor @Inject constructor(
     private val subscriptionRepository: SubscriptionRepository,
     private val ruleRepository: RuleRepository,
     private val ruleEngine: RuleEngine,
-    private val balanceUpdateProcessor: BalanceUpdateProcessor
+    private val database: CashiroDatabase,
+    @ApplicationContext private val context: Context,
+    private val balanceUpdateProcessor: BalanceUpdateProcessor,
+    private val bankAccountMerges: BankAccountMergeStore,
+    private val ignoredAccounts: IgnoredAccountsStore,
+    private val cardRepository: com.ritesh.cashiro.data.repository.CardRepository
 ) {
     companion object {
         private const val TAG = "SmsTransactionProcessor"
+        private val notificationBanks = BankNotificationConfig.notificationAliases.flatMap { BankParserFactory.getParsers(it) }.map { it.getBankName() }.toSet()
     }
 
     /**
      * Result of processing an SMS message
      */
+    data class ScanContext(
+        val merchantCategories: Map<String, String>,
+        val rulesByType: Map<TransactionType, List<TransactionRule>>
+    )
+
+    suspend fun loadScanContext(): ScanContext = coroutineScope {
+        val mappings = async { merchantMappingRepository.getAllMappings().first().associate { it.merchantName to it.category } }
+        val rules = async { TransactionType.entries.associateWith { ruleRepository.getActiveRulesByType(it) } }
+        ScanContext(mappings.await(), rules.await())
+    }
+
     data class ProcessingResult(
         val success: Boolean,
         val transactionId: Long? = null,
-        val reason: String? = null
+        val reason: String? = null,
+        val blocked: Boolean = false,
+        val persistenceFailed: Boolean = false
     )
 
     /**
@@ -64,6 +99,18 @@ class SmsTransactionProcessor @Inject constructor(
                 reason = "No parser found for sender: $sender"
             )
 
+            val mandateParser = parsers.filterIsInstance<com.ritesh.parser.core.bank.PNBBankParser>()
+                .firstOrNull { it.isUPIMandateNotification(body) }
+            if (mandateParser != null) {
+                val mandate = mandateParser.parseUPIMandateSubscription(body)
+                if (mandate != null && timestamp >= System.currentTimeMillis() - java.time.Duration.ofDays(30).toMillis()) {
+                    BankAccountMergeStore.mutationMutex.withLock {
+                        subscriptionRepository.createOrUpdateFromMandate(mandate, mandateParser.getBankName(), body)
+                    }
+                }
+                return ProcessingResult(false, reason = "Mandate notification")
+            }
+
             // Parse the SMS — try each matching parser in order, return first result
             val parsedTransaction = parsers.firstNotNullOfOrNull { parser ->
                 parser.parse(body, sender, timestamp)
@@ -76,6 +123,8 @@ class SmsTransactionProcessor @Inject constructor(
 
             // Save the transaction
             return saveParsedTransaction(parsedTransaction, body)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Log.e(TAG, "Error processing SMS", e)
             return ProcessingResult(false, reason = e.message)
@@ -92,13 +141,74 @@ class SmsTransactionProcessor @Inject constructor(
      */
     suspend fun saveParsedTransaction(
         parsedTransaction: ParsedTransaction,
-        smsBody: String
-    ): ProcessingResult {
+        smsBody: String,
+        scanContext: ScanContext? = null
+    ): ProcessingResult = BankAccountMergeStore.mutationMutex.withLock {
+        try {
+            database.withTransaction { saveResolvedTransaction(bankAccountMerges.resolve(parsedTransaction), smsBody, scanContext) }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e(TAG, "Unable to persist SMS transaction", e)
+            ProcessingResult(false, reason = "Unable to persist transaction", persistenceFailed = true)
+        }
+    }
+
+    suspend fun prepareForRescan() = BankAccountMergeStore.mutationMutex.withLock {
+        database.withTransaction {
+            // Preserve ignored history: those messages will intentionally not be reimported.
+            // For ambiguous card/account digits preserve both histories rather than lose either.
+            val ignored = IgnoredAccountsStore.linkedCardKeys(ignoredAccounts.keys(),
+                cardRepository.getAllCards().first(), emptyList(), bankAccountMerges.mappings())
+            database.transactionDao().getRebuildableSmsTransactions()
+                .filterNot { ignoredAccounts.matchesKeys(ignored, it.bankName, it.currency, it.accountNumber) }
+                .map { it.id }.chunked(500).forEach { database.transactionDao().deleteTransactionsByIds(it) }
+            database.accountBalanceDao().getRebuildableBalances()
+                .filterNot { ignoredAccounts.matchesKeys(ignored, it.bankName, it.currency, it.accountLast4) }
+                .map { it.id }.chunked(500).forEach { database.accountBalanceDao().deleteBalancesByIds(it) }
+            database.ruleApplicationDao().deleteOrphanedApplications()
+        }
+    }
+
+    suspend fun cleanupDuplicates(): Int = BankAccountMergeStore.mutationMutex.withLock {
+        database.withTransaction {
+            var removed = 0
+            TransactionDeduplication.duplicateClusters(transactionRepository.getAllTransactionsList()).forEach { cluster ->
+                var keeper = cluster.keeper
+                cluster.duplicates.forEach duplicate@ { duplicate ->
+                    if (database.lendBorrowDao().getTransactionByWalletId(duplicate.id) != null) return@duplicate
+                    if (database.subscriptionPaymentDao().forTransaction(duplicate.id) != null) return@duplicate
+                    val enriched = TransactionDeduplication.mergeUserMetadata(keeper, duplicate) ?: return@duplicate
+                    if (enriched != keeper) transactionRepository.updateTransaction(enriched)
+                    keeper = enriched
+                    database.accountBalanceDao().deleteTransactionBalancesAndRecalculate(duplicate.id)
+                    database.transactionDao().deleteTransactionById(duplicate.id)
+                    database.ruleApplicationDao().deleteApplicationsByTransaction(duplicate.id.toString())
+                    removed++
+                }
+            }
+            database.accountBalanceDao().deletePhantomGPayAccounts()
+            removed
+        }
+    }
+
+    private suspend fun saveResolvedTransaction(parsedTransaction: ParsedTransaction, smsBody: String, scanContext: ScanContext?): ProcessingResult {
         return try {
+            val linkedAccount = if (parsedTransaction.isSourceCard) {
+                parsedTransaction.accountIdentity?.let { cardRepository.getCard(parsedTransaction.bankName, it) }
+                    ?.takeIf { it.currency == parsedTransaction.currency }?.accountLast4
+            } else null
+            if (ignoredAccounts.isIgnored(parsedTransaction.bankName, parsedTransaction.currency,
+                    parsedTransaction.accountIdentity, linkedAccount)) {
+                return ProcessingResult(false, reason = "Account ignored", blocked = true)
+            }
             // Convert to entity
             val entity = parsedTransaction.toEntity()
 
             // Check if this transaction was previously deleted or is a duplicate
+            if (database.transactionDao().getDeletedBySms(smsBody, parsedTransaction.sender) != null) {
+                return ProcessingResult(false, reason = "Transaction was previously deleted")
+            }
             val existingTransaction = transactionRepository.getTransactionByHash(entity.transactionHash)
             if (existingTransaction != null) {
                 when (TransactionDeduplication.checkHash(existingTransaction)) {
@@ -114,14 +224,22 @@ class SmsTransactionProcessor @Inject constructor(
                 }
             }
 
+            if (entity.bankName in notificationBanks) {
+                val nearby = transactionRepository.getTransactionByAmountAndDate(entity.amount, entity.dateTime.minusMinutes(2), entity.dateTime.plusMinutes(2))
+                if (TransactionDeduplication.isBookedByOtherChannel(entity, nearby, BankNotificationConfig.notificationAliases)) {
+                    return ProcessingResult(false, reason = "Transaction already booked by another channel")
+                }
+            }
+
+            var replacement: TransactionEntity? = null
             // Check for UPI duplicate within the time window
             if (TransactionDeduplication.hasUpiReference(entity)) {
-                val windowEnd = entity.dateTime
-                val windowStart = windowEnd.minus(TransactionDeduplication.UPI_DUPLICATE_WINDOW)
+                val windowEnd = entity.dateTime.plus(TransactionDeduplication.UPI_DUPLICATE_WINDOW)
+                val windowStart = entity.dateTime.minus(TransactionDeduplication.UPI_DUPLICATE_WINDOW)
                 val upiCandidates = transactionRepository.getTransactionsByReferenceAndAmount(
                     reference = entity.reference!!,
                     amount = entity.amount,
-                    accountLast4 = entity.accountNumber,
+                    accountLast4 = null,
                     startDate = windowStart,
                     endDate = windowEnd
                 )
@@ -130,7 +248,7 @@ class SmsTransactionProcessor @Inject constructor(
                 }
                 if (candidateForReplacement != null) {
                     Log.d(TAG, "Replacing UPI transaction ${candidateForReplacement.id} with incoming from ${entity.bankName}")
-                    transactionRepository.deleteTransaction(candidateForReplacement, hardDelete = false)
+                    replacement = candidateForReplacement
                 } else {
                     val upiDuplicate = upiCandidates.any { existing ->
                         TransactionDeduplication.isSameUpiTransaction(existing, entity)
@@ -143,7 +261,8 @@ class SmsTransactionProcessor @Inject constructor(
             }
 
             // Check for custom merchant mapping
-            val customCategory = merchantMappingRepository.getCategoryForMerchant(entity.merchantName)
+            val customCategory = if (scanContext == null) merchantMappingRepository.getCategoryForMerchant(entity.merchantName)
+                else scanContext.merchantCategories[entity.merchantName]
             val entityWithMapping = if (customCategory != null) {
                 Log.d(TAG, "Found custom category mapping: ${entity.merchantName} -> $customCategory")
                 entity.copy(category = customCategory)
@@ -152,7 +271,8 @@ class SmsTransactionProcessor @Inject constructor(
             }
 
             // Apply rule engine to the transaction
-            val activeRules = ruleRepository.getActiveRulesByType(entityWithMapping.transactionType)
+            val activeRules = if (scanContext == null) ruleRepository.getActiveRulesByType(entityWithMapping.transactionType)
+                else scanContext.rulesByType[entityWithMapping.transactionType].orEmpty()
 
             // Check if this transaction should be blocked
             val blockingRule = ruleEngine.shouldBlockTransaction(
@@ -163,7 +283,7 @@ class SmsTransactionProcessor @Inject constructor(
 
             if (blockingRule != null) {
                 Log.d(TAG, "Transaction blocked by rule: ${blockingRule.name}")
-                return ProcessingResult(false, reason = "Blocked by rule: ${blockingRule.name}")
+                return ProcessingResult(false, reason = "Blocked by rule", blocked = true)
             }
 
             val (entityWithRules, ruleApplications) = ruleEngine.evaluateRules(
@@ -176,25 +296,38 @@ class SmsTransactionProcessor @Inject constructor(
                 Log.d(TAG, "Applied ${ruleApplications.size} rules to transaction")
             }
 
+            val resolvedForSubscription = accountBalanceRepository.resolveEntityAccountNumber(entityWithRules, parsedTransaction)
+            SubscriptionPaymentReconciliation.reconcile(database, accountBalanceRepository, resolvedForSubscription)?.let { id ->
+                return ProcessingResult(false, transactionId = id, reason = "Subscription payment already recorded")
+            }
+
             // Check if this transaction matches an active subscription
             val matchedSubscription = subscriptionRepository.matchTransactionToSubscription(
-                entityWithRules.merchantName,
-                entityWithRules.amount
+                resolvedForSubscription
             )
 
             val finalEntity = if (matchedSubscription != null) {
                 Log.d(TAG, "Transaction matched to active subscription: ${matchedSubscription.merchantName}")
-                subscriptionRepository.updateNextPaymentDateAfterCharge(
-                    matchedSubscription.id,
-                    entityWithRules.dateTime.toLocalDate()
-                )
                 entityWithRules.copy(isRecurring = true)
             } else {
                 entityWithRules
             }
             val finalEntityForInsert = accountBalanceRepository.resolveEntityAccountNumber(finalEntity, parsedTransaction)
 
-            val rowId = transactionRepository.insertTransaction(finalEntityForInsert)
+            val rowId = if (replacement != null) {
+                val existing = replacement
+                database.ruleApplicationDao().deleteApplicationsByTransaction(existing.id.toString())
+                database.accountBalanceDao().deleteTransactionBalancesAndRecalculate(existing.id)
+                transactionRepository.updateTransaction(finalEntityForInsert.copy(
+                    id = existing.id, transactionHash = existing.transactionHash,
+                    createdAt = existing.createdAt, attachments = existing.attachments,
+                    description = existing.description ?: finalEntityForInsert.description,
+                    subcategory = existing.subcategory ?: finalEntityForInsert.subcategory,
+                    isRecurring = existing.isRecurring || finalEntityForInsert.isRecurring,
+                    category = existing.category.takeUnless { it == "Miscellaneous" } ?: finalEntityForInsert.category
+                ))
+                existing.id
+            } else transactionRepository.insertTransaction(finalEntityForInsert)
             if (rowId != -1L) {
                 Log.d(TAG, "Saved new transaction with ID: $rowId${if (finalEntityForInsert.isRecurring) " (Recurring)" else ""}")
 
@@ -206,17 +339,25 @@ class SmsTransactionProcessor @Inject constructor(
                     ruleRepository.saveRuleApplications(applicationsWithId)
                 }
 
+                if (matchedSubscription != null) {
+                    SubscriptionPaymentReconciliation.recordCharge(database, matchedSubscription, rowId, finalEntityForInsert)
+                }
+
                 // Process balance updates
+                // Keep the row and its balance in one transaction, including cancellation rollback.
                 balanceUpdateProcessor.process(parsedTransaction, finalEntityForInsert, rowId)
+                database.accountBalanceDao().deletePhantomGPayAccounts()
 
                 return ProcessingResult(true, transactionId = rowId)
             } else {
                 Log.d(TAG, "Transaction already exists (duplicate): ${entity.transactionHash}")
                 return ProcessingResult(false, reason = "Duplicate transaction")
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Log.e(TAG, "Error saving transaction: ${e.message}")
-            return ProcessingResult(false, reason = e.message)
+            // Let the Room transaction roll back all related writes before the caller handles failure.
+            throw e
         }
     }
 

@@ -62,28 +62,7 @@ object DatabaseModule {
                 CashiroDatabase.DATABASE_NAME
             )
                 // Add manual migrations here when needed
-                .addMigrations(
-                    CashiroDatabase.MIGRATION_12_14,
-                    CashiroDatabase.MIGRATION_13_14,
-                    CashiroDatabase.MIGRATION_14_15,
-                    CashiroDatabase.MIGRATION_20_21,
-                    CashiroDatabase.MIGRATION_21_22,
-                    CashiroDatabase.MIGRATION_22_23,
-                    MIGRATION_48_49,
-                    MIGRATION_49_50,
-                    MIGRATION_50_51,
-                    MIGRATION_51_52,
-                    MIGRATION_52_53,
-                    MIGRATION_53_54,
-                    CashiroDatabase.MIGRATION_54_55,
-                    CashiroDatabase.MIGRATION_55_56,
-                    CashiroDatabase.MIGRATION_56_57,
-                    CashiroDatabase.MIGRATION_57_58,
-                    CashiroDatabase.MIGRATION_58_59,
-                    CashiroDatabase.MIGRATION_59_60,
-                    CashiroDatabase.MIGRATION_60_61,
-                    CashiroDatabase.MIGRATION_61_62
-                )
+                .addMigrations(*CashiroDatabase.ALL_MIGRATIONS)
 
                 // Enable auto-migrations
                 // Room will automatically detect schema changes between versions

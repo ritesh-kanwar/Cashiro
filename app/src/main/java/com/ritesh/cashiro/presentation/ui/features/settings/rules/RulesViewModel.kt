@@ -1,5 +1,13 @@
 package com.ritesh.cashiro.presentation.ui.features.settings.rules
 
+import android.content.Context
+import android.net.Uri
+import com.ritesh.cashiro.data.rules.RuleSharingCodec
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.first
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ritesh.cashiro.domain.model.rule.TransactionRule
@@ -24,6 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RulesViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val ruleRepository: RuleRepository,
     private val ruleTemplateService: RuleTemplateService,
     private val initializeRuleTemplatesUseCase: InitializeRuleTemplatesUseCase,
@@ -41,6 +50,88 @@ class RulesViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
+
+    private val _sharingMessage = MutableStateFlow<String?>(null)
+    val sharingMessage = _sharingMessage.asStateFlow()
+    private val _isSharing = MutableStateFlow(false)
+    val isSharing = _isSharing.asStateFlow()
+
+    fun clearSharingMessage() { _sharingMessage.value = null }
+
+    fun reportNothingToExport() {
+        _sharingMessage.value = "You don't have any custom rules to export yet."
+    }
+
+    fun exportRules(uri: Uri) {
+        if (_isSharing.value) return
+        _isSharing.value = true
+        viewModelScope.launch {
+            try {
+                val exportable = RuleSharingCodec.exportable(ruleRepository.getAllRules().first())
+                if (exportable.isEmpty()) {
+                    reportNothingToExport()
+                    return@launch
+                }
+                withContext(Dispatchers.IO) {
+                    val text = RuleSharingCodec.encode(exportable)
+                    context.contentResolver.openOutputStream(uri, "wt")?.use {
+                        it.write(text.toByteArray(Charsets.UTF_8))
+                    } ?: error("Cannot open export destination")
+                }
+                _sharingMessage.value = "Exported ${exportable.size} rule(s)."
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _sharingMessage.value = "Couldn't export rules. Please choose another destination."
+            } finally {
+                _isSharing.value = false
+            }
+        }
+    }
+
+    fun importRules(uri: Uri) {
+        if (_isSharing.value) return
+        _isSharing.value = true
+        viewModelScope.launch {
+            try {
+                val decoded = withContext(Dispatchers.IO) {
+                    val text = context.contentResolver.openInputStream(uri)?.use { stream ->
+                        // Read one extra byte to detect oversized files without allocating them whole.
+                        val bytes = ByteArray((RuleSharingCodec.MAX_FILE_BYTES + 1).toInt())
+                        var count = 0
+                        while (count < bytes.size) {
+                            val read = stream.read(bytes, count, bytes.size - count)
+                            if (read < 0) break
+                            if (read == 0) {
+                                val next = stream.read()
+                                if (next < 0) break
+                                bytes[count++] = next.toByte()
+                            } else count += read
+                        }
+                        require(count <= RuleSharingCodec.MAX_FILE_BYTES) { "Rules file is too large" }
+                        String(bytes, 0, count, Charsets.UTF_8)
+                    } ?: error("Cannot open rules file")
+                    RuleSharingCodec.decode(text)
+                }
+                val existingNames = ruleRepository.getAllRules().first()
+                    .map { it.name.trim().lowercase() }.toSet()
+                val fresh = decoded.rules.filterNot { it.name.lowercase() in existingNames }
+                // Room's collection insert is atomic: a failed insert leaves no partial rule set.
+                if (fresh.isNotEmpty()) ruleRepository.insertRules(fresh)
+                val duplicates = decoded.duplicatedInFile + decoded.rules.size - fresh.size
+                _sharingMessage.value = buildString {
+                    append("Imported ${fresh.size} rule(s).")
+                    if (duplicates > 0) append(" Skipped $duplicates duplicate name(s).")
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _sharingMessage.value = "Couldn't import rules. Choose a supported rules JSON file under 1 MB with valid conditions and actions."
+            } finally {
+                _isSharing.value = false
+            }
+        }
+    }
 
     // Categories for selection sheet
     val categories = getCategoriesUseCase.execute()

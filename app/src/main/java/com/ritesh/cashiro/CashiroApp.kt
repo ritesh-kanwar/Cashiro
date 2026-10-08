@@ -15,6 +15,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ritesh.cashiro.presentation.navigation.AppLock
 import com.ritesh.cashiro.presentation.navigation.Home
@@ -35,7 +36,10 @@ fun CashiroApp(
     onEditComplete: () -> Unit = {},
     addTransactionTab: Int? = null,
     addTransactionType: String? = null,
-    onAddComplete: () -> Unit = {}
+    onAddComplete: () -> Unit = {},
+    sharedText: String? = null,
+    sharedTextRequestId: String? = null,
+    onSharedTextHandled: () -> Unit = {}
 ) {
     val themeUiState by themeViewModel.themeUiState.collectAsStateWithLifecycle()
     val appLockUiState by appLockViewModel.uiState.collectAsStateWithLifecycle()
@@ -70,12 +74,12 @@ fun CashiroApp(
 
     // Observe lock state changes and navigate to lock screen if needed
     // But don't navigate when user is actively in Settings configuring app lock
-    LaunchedEffect(appLockUiState.isLocked, appLockUiState.isLockEnabled) {
+    LaunchedEffect(appLockUiState.isLocked, appLockUiState.isLockEnabled, sharedTextRequestId) {
         if (appLockUiState.isLocked && appLockUiState.isLockEnabled) {
             val currentRoute = navController.currentDestination?.route
             // Don't navigate if already on lock screen or in Settings (user is configuring)
             if (currentRoute != AppLock::class.qualifiedName &&
-                currentRoute != Settings::class.qualifiedName) {
+                (currentRoute != Settings::class.qualifiedName || sharedText != null)) {
                 navController.navigate(AppLock) {
                     // Don't add to back stack, force lock screen
                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
@@ -98,6 +102,20 @@ fun CashiroApp(
             navController.navigate(AddTransaction(initialTab = tab, type = addTransactionType))
             onAddComplete()
         }
+    }
+
+    // Wait for a lock check requested after this share and for lock/setup navigation to settle.
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val lockChecksAtShare = remember(sharedTextRequestId) { appLockUiState.checks }
+    LaunchedEffect(sharedTextRequestId) {
+        if (sharedText != null) appLockViewModel.refreshLockState()
+    }
+    LaunchedEffect(sharedTextRequestId, themeUiState.isOnboardingFinished, appLockUiState.checks, appLockUiState.isLocked, currentRoute) {
+        val text = sharedText ?: return@LaunchedEffect
+        val routeReady = currentRoute != null && currentRoute != AppLock::class.qualifiedName && currentRoute != OnBoarding::class.qualifiedName
+        if (!canOpenSharedDraft(themeUiState.isOnboardingFinished, appLockUiState.checks, lockChecksAtShare, appLockUiState.isLocked, routeReady)) return@LaunchedEffect
+        navController.navigate(AddTransaction(sharedText = text, sharedTextRequestId = sharedTextRequestId))
+        onSharedTextHandled()
     }
 
     CashiroTheme(

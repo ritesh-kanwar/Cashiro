@@ -33,6 +33,19 @@ data class BudgetWithSpending(
     val daysRemaining: Int,
     val daysInMonth: Int
 ) {
+    /** Convert every monetary field together, or retain the original currency. */
+    suspend fun inCurrency(currency: String, conversionService: CurrencyConversionService): BudgetWithSpending {
+        if (budget.currency.equals(currency, ignoreCase = true)) return this
+        val rate = conversionService.getExchangeRate(budget.currency, currency) ?: return this
+        fun convert(value: BigDecimal) = value.multiply(rate).setScale(2, RoundingMode.HALF_UP)
+        return copy(
+            budget = budget.copy(amount = convert(budget.amount), currency = currency),
+            currentSpending = convert(currentSpending),
+            categorySpending = categorySpending.mapValues { convert(it.value) },
+            categoryLimits = categoryLimits.map { it.copy(limitAmount = convert(it.limitAmount)) }
+        )
+    }
+
     val remaining: BigDecimal get() = budget.amount - currentSpending
     val percentUsed: Float get() = if (budget.amount > BigDecimal.ZERO) {
         (currentSpending.toFloat() / budget.amount.toFloat()).coerceIn(0f, 1f)
@@ -203,10 +216,10 @@ class BudgetRepository @Inject constructor(
         }
         
         // Convert currencies to match the budget's currency
-        transactions = transactions.map { txn ->
+        transactions = transactions.mapNotNull { txn ->
             if (txn.currency != budget.currency) {
-                val convertedAmount = currencyConversionService.convertAmount(txn.amount, txn.currency, budget.currency)
-                txn.copy(amount = convertedAmount ?: txn.amount, currency = budget.currency)
+                val convertedAmount = currencyConversionService.convertAmountOrNull(txn.amount, txn.currency, budget.currency)
+                convertedAmount?.let { txn.copy(amount = it, currency = budget.currency) }
             } else {
                 txn
             }
@@ -317,10 +330,10 @@ class BudgetRepository @Inject constructor(
         }
 
         // Convert currencies to match the budget's currency
-        transactions = transactions.map { txn ->
+        transactions = transactions.mapNotNull { txn ->
             if (txn.currency != budget.currency) {
-                val convertedAmount = currencyConversionService.convertAmount(txn.amount, txn.currency, budget.currency)
-                txn.copy(amount = convertedAmount ?: txn.amount, currency = budget.currency)
+                val convertedAmount = currencyConversionService.convertAmountOrNull(txn.amount, txn.currency, budget.currency)
+                convertedAmount?.let { txn.copy(amount = it, currency = budget.currency) }
             } else {
                 txn
             }
@@ -405,16 +418,7 @@ class BudgetRepository @Inject constructor(
                     }
                 }
 
-                // Convert currencies to match the budget's currency
-                filtered = filtered.map { txn ->
-                    if (txn.currency != budget.currency) {
-                        val convertedAmount = currencyConversionService.convertAmount(txn.amount, txn.currency, budget.currency)
-                        txn.copy(amount = convertedAmount ?: txn.amount, currency = budget.currency)
-                    } else {
-                        txn
-                    }
-                }
-                
+                // Keep ledger rows in their native currency; the UI adds available conversions.
                 filtered
             }
     }

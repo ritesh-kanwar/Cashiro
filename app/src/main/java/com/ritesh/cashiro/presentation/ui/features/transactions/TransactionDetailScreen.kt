@@ -1255,6 +1255,16 @@ private fun TransactionDetailContent(
                     }
                 }
 
+                val discrepancyState by viewModel.uiState.collectAsStateWithLifecycle()
+                discrepancyState.balanceDiscrepancy?.let { discrepancy ->
+                    Spacer(modifier = Modifier.height(16.dp))
+                    BalanceDiscrepancyCard(
+                        discrepancy = discrepancy,
+                        isAdding = discrepancyState.isAddingBalanceAdjustment,
+                        onAddAdjustment = viewModel::recordBalanceAdjustment
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(300.dp)) // for better scroll
             }
         }

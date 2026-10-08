@@ -120,7 +120,7 @@ class AiContextRepository @Inject constructor(
                 
                 val converted = if (transaction.currency != effectiveCurrency) {
                     try {
-                        currencyConversionService.convertAmount(transaction.amount, transaction.currency, effectiveCurrency)
+                        currencyConversionService.convertAmountOrNull(transaction.amount, transaction.currency, effectiveCurrency)
                     } catch (_: Exception) { null }
                 } else null
                 
@@ -270,7 +270,7 @@ class AiContextRepository @Inject constructor(
             
             val converted = if (transaction.currency != effectiveCurrency) {
                 try {
-                    currencyConversionService.convertAmount(transaction.amount, transaction.currency, effectiveCurrency)
+                    currencyConversionService.convertAmountOrNull(transaction.amount, transaction.currency, effectiveCurrency)
                 } catch (_: Exception) { null }
             } else null
             

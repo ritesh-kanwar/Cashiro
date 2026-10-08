@@ -38,7 +38,8 @@ class AppLockViewModel @Inject constructor(
                     it.copy(
                         isLockEnabled = isEnabled,
                         timeoutMinutes = timeoutMinutes,
-                        isLocked = shouldLock && isEnabled
+                        isLocked = shouldLock && isEnabled,
+                        checks = it.checks + 1
                     )
                 }
             }
@@ -123,7 +124,7 @@ class AppLockViewModel @Inject constructor(
     fun lockApp() {
         viewModelScope.launch {
             val shouldLock = appLockRepository.shouldLockApp()
-            _uiState.update { it.copy(isLocked = shouldLock) }
+            _uiState.update { it.copy(isLocked = shouldLock, checks = it.checks + 1) }
         }
     }
 
@@ -133,7 +134,7 @@ class AppLockViewModel @Inject constructor(
     fun refreshLockState() {
         viewModelScope.launch {
             val shouldLock = appLockRepository.shouldLockApp()
-            _uiState.update { it.copy(isLocked = shouldLock) }
+            _uiState.update { it.copy(isLocked = shouldLock, checks = it.checks + 1) }
         }
     }
 
@@ -152,6 +153,7 @@ class AppLockViewModel @Inject constructor(
 }
 
 data class AppLockUiState(
+    val checks: Long = 0,
     val isLockEnabled: Boolean = false,
     val isLocked: Boolean = false,
     val timeoutMinutes: Int = 1,

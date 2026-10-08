@@ -7,6 +7,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.client.plugins.contentnegotiation.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
@@ -55,8 +56,9 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
 
         return try {
             val rates = fetchAllExchangeRates(fromCurrency)
-            rates?.get(toCurrency.uppercase())
+            rates?.get(toCurrency.uppercase(java.util.Locale.ROOT))
         } catch (e: Exception) {
+                    if (e is CancellationException) throw e
             println("Failed to fetch exchange rate from API: ${e.message}")
             null
         }
@@ -68,7 +70,7 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
     }
 
     override suspend fun fetchAllExchangeRatesWithMetadata(baseCurrency: String): ExchangeRateResponseWithMetadata? {
-        val currencyCode = baseCurrency.lowercase()
+        val currencyCode = baseCurrency.lowercase(java.util.Locale.ROOT)
         val endpoint = "currencies/$currencyCode.json"
         
         return try {
@@ -84,6 +86,7 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                         responseBody = response.body<String>()
                     }
                 } catch (e: Exception) {
+                    if (e is CancellationException) throw e
                     println("Primary API failed, trying fallback: ${e.message}")
                 }
                 
@@ -97,6 +100,7 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                             responseBody = response.body<String>()
                         }
                     } catch (e: Exception) {
+                    if (e is CancellationException) throw e
                         println("Fallback API also failed: ${e.message}")
                     }
                 }
@@ -111,6 +115,7 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                     val lastUpdateTimeUnix = try {
                         LocalDate.parse(dateStr).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
                     } catch (e: Exception) {
+                    if (e is CancellationException) throw e
                         System.currentTimeMillis() / 1000
                     }
                     
@@ -120,17 +125,18 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                     val ratesMap = mutableMapOf<String, BigDecimal>()
                     
                     // Always ensure the base currency has a rate of 1.0
-                    ratesMap[baseCurrency.uppercase()] = BigDecimal.ONE.setScale(6, RoundingMode.HALF_UP)
+                    ratesMap[baseCurrency.uppercase(java.util.Locale.ROOT)] = BigDecimal.ONE.setScale(6, RoundingMode.HALF_UP)
                     
                     ratesObject.forEach { (key, value) ->
                         try {
-                            val code = key.uppercase()
+                            val code = key.uppercase(java.util.Locale.ROOT)
                             // Skip if already set by base override to maintain precision
-                            if (code != baseCurrency.uppercase()) {
+                            if (code != baseCurrency.uppercase(java.util.Locale.ROOT)) {
                                 ratesMap[code] = BigDecimal(value.jsonPrimitive.content)
                                     .setScale(6, RoundingMode.HALF_UP)
                             }
                         } catch (e: Exception) {
+                    if (e is CancellationException) throw e
                             // Skip invalid rates
                         }
                     }
@@ -140,13 +146,14 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                         nextUpdateTimeUnix = nextUpdateTimeUnix,
                         lastUpdateTimeUnix = lastUpdateTimeUnix,
                         provider = "fawazahmed0/currency-api",
-                        baseCurrency = baseCurrency.uppercase()
+                        baseCurrency = baseCurrency.uppercase(java.util.Locale.ROOT)
                     )
                 } else {
                     null
                 }
             }
         } catch (e: Exception) {
+                    if (e is CancellationException) throw e
             println("Failed to fetch exchange rates: ${e.message}")
             null
         }
@@ -168,7 +175,8 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                     if (response.status.value in 200..299) {
                         responseBody = response.body<String>()
                     }
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                    if (e is CancellationException) throw e}
                 
                 // Try Fallback URL
                 if (responseBody == null) {
@@ -177,7 +185,8 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                         if (response.status.value in 200..299) {
                             responseBody = response.body<String>()
                         }
-                    } catch (e: Exception) {}
+                    } catch (e: Exception) {
+                    if (e is CancellationException) throw e}
                 }
 
                 if (responseBody != null) {
@@ -189,6 +198,7 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
                 }
             }
         } catch (e: Exception) {
+                    if (e is CancellationException) throw e
             println("Failed to fetch currencies mapping: ${e.message}")
             null
         }
@@ -196,7 +206,7 @@ class FreeExchangeRateProvider @Inject constructor() : ExchangeRateProvider {
 
     override suspend fun getSupportedCurrencies(): List<String> {
         val currencies = fetchAllCurrencies()
-        return currencies?.keys?.map { it.uppercase() }?.toList() ?: listOf(
+        return currencies?.keys?.map { it.uppercase(java.util.Locale.ROOT) }?.toList() ?: listOf(
             "AED", "USD", "EUR", "GBP", "INR", "THB", "MYR", "SGD", "KWD", "KRW",
             "CAD", "AUD", "JPY", "CNY", "NPR", "ETB"
         )

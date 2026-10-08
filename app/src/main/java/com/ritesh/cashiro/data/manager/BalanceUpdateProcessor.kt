@@ -6,7 +6,9 @@ import com.ritesh.parser.core.ParsedTransaction
 import com.ritesh.cashiro.data.database.entity.CardType
 import com.ritesh.cashiro.data.database.entity.TransactionEntity
 import com.ritesh.cashiro.data.database.entity.TransactionType
+import com.ritesh.cashiro.data.mapper.accountIdentity
 import com.ritesh.cashiro.data.mapper.toEntityType
+import com.ritesh.cashiro.data.mapper.isSourceCard
 import com.ritesh.cashiro.data.repository.AccountBalanceRepository
 import com.ritesh.cashiro.data.repository.CardRepository
 import com.ritesh.cashiro.utils.PiiRedactor
@@ -30,12 +32,29 @@ class BalanceUpdateProcessor @Inject constructor(
         entity: TransactionEntity,
         rowId: Long
     ) {
-        val parsedAccountLast4 = parsedTransaction.accountLast4?.takeIf { it.isNotBlank() }
+        val sourceAccount = if (parsedTransaction.isSourceCard || parsedTransaction.isMobileWallet) parsedTransaction.accountIdentity else
+            parsedTransaction.accountLast4?.let {
+                accountBalanceRepository.resolveAccountLast4(parsedTransaction.bankName, it, parsedTransaction.currency)
+            }
+        val sameAccount = entity.bankName == parsedTransaction.bankName &&
+            entity.accountNumber == sourceAccount && entity.currency == parsedTransaction.currency
+        if (!parsedTransaction.isSourceCard && !sameAccount) {
+            val bank = entity.bankName ?: return
+            val suffix = entity.accountNumber ?: return
+            accountBalanceRepository.insertTransactionBalance(
+                bankName = bank, accountLast4 = suffix, amount = entity.amount,
+                transactionType = entity.transactionType, explicitBalance = null,
+                timestamp = entity.dateTime, transactionId = rowId, creditLimit = null,
+                isCreditCard = false, smsSource = null, currency = entity.currency
+            )
+            return
+        }
+        val parsedAccountLast4 = sourceAccount?.takeIf { it.isNotBlank() }
         val resolvedAccountLast4 = entity.accountNumber?.takeIf { it.isNotBlank() }
         val fallbackAccountLast4 = parsedAccountLast4 ?: resolvedAccountLast4
         if (fallbackAccountLast4 == null) return
 
-        val isFromCard = parsedTransaction.isFromCard
+        val isFromCard = parsedTransaction.isSourceCard
 
         val targetAccountLast4: String? = if (isFromCard) {
             var card = cardRepository.getCard(parsedTransaction.bankName, fallbackAccountLast4)
@@ -83,15 +102,16 @@ class BalanceUpdateProcessor @Inject constructor(
             accountBalanceRepository.insertTransactionBalance(
                 bankName = parsedTransaction.bankName,
                 accountLast4 = targetAccountLast4,
-                amount = parsedTransaction.amount,
-                transactionType = parsedTransaction.type.toEntityType(),
+                amount = entity.amount,
+                transactionType = entity.transactionType,
                 explicitBalance = parsedTransaction.balance,
                 timestamp = entity.dateTime,
                 transactionId = if (rowId != -1L) rowId else null,
                 creditLimit = parsedTransaction.creditLimit,
                 isCreditCard = isCreditCard,
                 smsSource = sanitizeSmsSource(parsedTransaction),
-                currency = parsedTransaction.currency
+                currency = parsedTransaction.currency,
+                isWallet = parsedTransaction.isMobileWallet
             )
 
             if (BuildConfig.DEBUG) {

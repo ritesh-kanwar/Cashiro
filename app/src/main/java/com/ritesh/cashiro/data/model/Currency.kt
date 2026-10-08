@@ -14,6 +14,11 @@ data class Currency(
          */
         val SUPPORTED_CURRENCIES = listOf(
             Currency("INR", "Indian Rupee", "₹"),
+            Currency("BDT", "Bangladeshi Taka", "৳"),
+            Currency("NGN", "Nigerian Naira", "₦"),
+            Currency("LKR", "Sri Lankan Rupee", "Rs"),
+            Currency("EGP", "Egyptian Pound", "E£"),
+            Currency("IRR", "Iranian Rial", "﷼"),
             Currency("USD", "US Dollar", "$"),
             Currency("EUR", "Euro", "€"),
             Currency("GBP", "British Pound", "£"),

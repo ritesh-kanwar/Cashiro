@@ -144,7 +144,10 @@ data class DatabaseSnapshot(
     val lendBorrowPersons: List<LendBorrowPersonEntity> = emptyList(),
 
     @SerializedName("lend_borrow_transactions")
-    val lendBorrowTransactions: List<LendBorrowTransactionEntity> = emptyList()
+    val lendBorrowTransactions: List<LendBorrowTransactionEntity> = emptyList(),
+
+    @SerializedName("subscription_payments")
+    val subscriptionPayments: List<SubscriptionPaymentEntity>? = emptyList()
 )
 
 data class WebhookProfileBackup(
@@ -310,7 +313,11 @@ data class AppPreferences(
     val hasShownReviewPrompt: Boolean,
     
     @SerializedName("last_review_prompt_time")
-    val lastReviewPromptTime: Long?
+    val lastReviewPromptTime: Long?,
+    @SerializedName("bank_account_merges")
+    val bankAccountMerges: Map<String, String>? = null,
+    @SerializedName("ignored_accounts")
+    val ignoredAccounts: Set<String>? = null
 )
 
 /**
